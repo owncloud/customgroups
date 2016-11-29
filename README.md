@@ -30,7 +30,7 @@ It is then possible to share files or folders with these groups.
 * Create custom group and add other users as members
 * Share file/folder with said groups
 
-Authors:
+## Authors:
 
 [Vincent Petry](https://github.com/PVince81/) :: PVince81 at owncloud dot com
 
