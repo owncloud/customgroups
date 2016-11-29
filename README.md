@@ -3,11 +3,6 @@
 This apps makes it possible for users to create their own custom groups and manage their members.
 It is then possible to share files or folders with these groups.
 
-##Details
-
-The idea is to check for virus at upload-time, notifying the user (on screen and/or email) and
-remove the file if it's infected.
-
 ## QA metrics on master branch:
 
 [![Build Status](https://travis-ci.org/owncloud/customgroups.svg?branch=master)](https://travis-ci.org/owncloud/customgroups/branches)
