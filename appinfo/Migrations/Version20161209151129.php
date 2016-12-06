@@ -50,8 +50,8 @@ class Version20161209151129 implements ISchemaMigration {
 			'length' => 64,
 			'notnull' => true,
 		]);
-		$table->addColumn('is_admin', 'bigint', [
-			'length' => 20,
+		$table->addColumn('role', 'integer', [
+			'length' => 4,
 			'notnull' => true,
 			'default' => 0,
 		]);

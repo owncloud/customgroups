@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -29,10 +29,17 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	const GROUP_ID_PREFIX = 'customgroup_';
 
 	/**
+	 * Custom groups handler
+	 *
 	 * @var CustomGroupsDatabaseHandler
 	 */
 	private $handler;
 
+	/**
+	 * Constructor
+	 *
+	 * @param CustomGroupsDatabaseHandler $handler custom groups handler
+	 */
 	public function __construct(
 		CustomGroupsDatabaseHandler $handler
 	) {
@@ -54,7 +61,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 *
 	 * @param string $uid uid of the user
 	 * @param string $gid gid of the group
-	 * @return bool
+	 * @return boolean true if user is in group, false otherwise
 	 */
 	public function inGroup($uid, $gid) {
 		$numericGroupId = $this->extractNumericGroupId($gid);
@@ -72,10 +79,10 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array an array of group names
 	 */
 	public function getUserGroups($uid) {
-		$groups = $this->handler->getUserGroups($uid);
-		return array_map(function($numericGroupId) {
-			return $this->formatGroupId($numericGroupId);
-		}, $groups);
+		$memberInfos = $this->handler->getUserMemberships($uid, null);
+		return array_map(function ($memberInfo) {
+			return $this->formatGroupId($memberInfo['group_id']);
+		}, $memberInfos);
 	}
 
 	/**
@@ -87,11 +94,10 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @param int $limit limit or -1 to disable
 	 * @param int $offset offset
 	 * @return array an array of group names
-	 *
 	 */
 	public function getGroups($search = '', $limit = -1, $offset = 0) {
 		$groups = $this->handler->searchGroups($search, $limit, $offset);
-		return array_map(function($groupInfo) {
+		return array_map(function ($groupInfo) {
 			return $this->formatGroupId($groupInfo['group_id']);
 		}, $groups);
 	}
@@ -129,13 +135,13 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	}
 
 	/**
-	 * Returns a list of all users in a group
+	 * Not supported, returns an empty array.
 	 *
-	 * @param string $gid
-	 * @param string $search
-	 * @param int $limit
-	 * @param int $offset
-	 * @return array an array of user ids
+	 * @param string $gid group id
+	 * @param string $search search string
+	 * @param int $limit limit
+	 * @param int $offset offset
+	 * @return array empty array
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0) {
 		// not exposed to regular user management

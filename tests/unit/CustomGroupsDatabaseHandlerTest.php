@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -80,6 +80,16 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertNull($this->handler->getGroup($groupId));
 
 		$this->assertFalse($this->handler->deleteGroup($groupId));
+	}
+
+	public function testUpdateGroup() {
+		$groupId = $this->handler->createGroup('my_group', 'My Group');
+		$this->assertTrue($this->handler->updateGroup($groupId, 'meine_gruppe', 'Meine Gruppe'));
+
+		$groupInfo = $this->handler->getGroup($groupId);
+
+		$this->assertEquals('meine_gruppe', $groupInfo['uri']);
+		$this->assertEquals('Meine Gruppe', $groupInfo['display_name']);
 	}
 
 	public function testSearchGroups() {
@@ -174,8 +184,8 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 	public function testAddToGroup() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
-		$this->assertTrue($this->handler->addToGroup('user2', $groupId, false));
-		$this->assertTrue($this->handler->addToGroup('user1', $groupId, true));
+		$this->assertTrue($this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER));
+		$this->assertTrue($this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN));
 
 		$members = $this->handler->getGroupMembers($groupId);
 
@@ -183,23 +193,23 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 
 		$this->assertEquals('user1', $members[0]['user_id']);
 		$this->assertEquals($groupId, $members[0]['group_id']);
-		$this->assertTrue($members[0]['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $members[0]['role']);
 
 		$this->assertEquals('user2', $members[1]['user_id']);
 		$this->assertEquals($groupId, $members[1]['group_id']);
-		$this->assertFalse($members[1]['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $members[1]['role']);
 
 		// add again returns false
-		$this->assertFalse($this->handler->addToGroup('user1', $groupId, true));
+		$this->assertFalse($this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN));
 	}
 
 	public function testRemoveFromGroup() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
 
-		$this->handler->addToGroup('user2', $groupId, false);
-		$this->handler->addToGroup('user1', $groupId, true);
-		$this->handler->addToGroup('user2', $groupId2, false);
+		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->addToGroup('user2', $groupId2, CustomGroupsDatabaseHandler::ROLE_MEMBER);
 
 		$this->assertTrue($this->handler->removeFromGroup('user2', $groupId));
 
@@ -208,7 +218,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 
 		$this->assertEquals('user1', $members[0]['user_id']);
 		$this->assertEquals($groupId, $members[0]['group_id']);
-		$this->assertTrue($members[0]['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $members[0]['role']);
 
 		// member still exists in the other group
 		$members2 = $this->handler->getGroupMembers($groupId2);
@@ -216,17 +226,38 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertCount(1, $members2);
 		$this->assertEquals('user2', $members2[0]['user_id']);
 		$this->assertEquals($groupId2, $members2[0]['group_id']);
-		$this->assertFalse($members2[0]['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $members2[0]['role']);
 
 		// remove again returns false
 		$this->assertFalse($this->handler->removeFromGroup('user2', $groupId));
 	}
 
+	public function testGetGroupMembersFilter() {
+		$groupId = $this->handler->createGroup('my_group', 'My Group');
+
+		$this->assertTrue($this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER));
+		$this->assertTrue($this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN));
+
+		$adminMembers = $this->handler->getGroupMembers($groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$nonAdminMembers = $this->handler->getGroupMembers($groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+
+		$this->assertCount(1, $adminMembers);
+		$this->assertCount(1, $nonAdminMembers);
+
+		$this->assertEquals('user1', $adminMembers[0]['user_id']);
+		$this->assertEquals($groupId, $adminMembers[0]['group_id']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $adminMembers[0]['role']);
+
+		$this->assertEquals('user2', $nonAdminMembers[0]['user_id']);
+		$this->assertEquals($groupId, $nonAdminMembers[0]['group_id']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $nonAdminMembers[0]['role']);
+	}
+
 	public function testDeleteRemovesMembers() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
-		$this->handler->addToGroup('user2', $groupId, false);
-		$this->handler->addToGroup('user1', $groupId, true);
+		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->assertTrue($this->handler->deleteGroup($groupId));
 
@@ -237,54 +268,77 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 	public function testGetGroupMemberInfo() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
-		$this->handler->addToGroup('user2', $groupId, false);
-		$this->handler->addToGroup('user1', $groupId, true);
+		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$member = $this->handler->getGroupMemberInfo($groupId, 'user1');
 
 		$this->assertEquals('user1', $member['user_id']);
 		$this->assertEquals($groupId, $member['group_id']);
-		$this->assertTrue($member['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $member['role']);
 	}
 
 	public function testSetGroupMemberInfo() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
-		$this->handler->addToGroup('user1', $groupId, true);
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', false));
+		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', CustomGroupsDatabaseHandler::ROLE_MEMBER));
 		$member = $this->handler->getGroupMemberInfo($groupId, 'user1');
-		$this->assertFalse($member['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $member['role']);
 
-		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', true));
+		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', CustomGroupsDatabaseHandler::ROLE_ADMIN));
 		$member = $this->handler->getGroupMemberInfo($groupId, 'user1');
-		$this->assertTrue($member['is_admin']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $member['role']);
 
 		// setting to same value also returns true
-		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', true));
+		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', CustomGroupsDatabaseHandler::ROLE_ADMIN));
 	}
 
 	public function testInGroup() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
-		$this->handler->addToGroup('user2', $groupId, false);
+		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
 
 		$this->assertTrue($this->handler->inGroup('user2', $groupId));
 		$this->assertFalse($this->handler->inGroup('user3', $groupId));
 	}
 
-	public function testGetUserGroups() {
+	public function testGetUserMemberships() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
 
-		$this->handler->addToGroup('user2', $groupId, false);
-		$this->handler->addToGroup('user1', $groupId, true);
-		$this->handler->addToGroup('user2', $groupId2, false);
+		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->addToGroup('user2', $groupId2, CustomGroupsDatabaseHandler::ROLE_MEMBER);
 
-		$groups = $this->handler->getUserGroups('user2');
+		$groups = $this->handler->getUserMemberships('user2');
 		$this->assertCount(2, $groups);
-		$this->assertEquals($groupId, $groups[0]);
-		$this->assertEquals($groupId2, $groups[1]);
+		$this->assertEquals($groupId, $groups[0]['group_id']);
+		$this->assertEquals('user2', $groups[0]['user_id']);
+		$this->assertEquals('my_group', $groups[0]['uri']);
+		$this->assertEquals('My Group', $groups[0]['display_name']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $groups[0]['role']);
+		$this->assertEquals($groupId2, $groups[1]['group_id']);
+		$this->assertEquals('user2', $groups[1]['user_id']);
+		$this->assertEquals('my_group2', $groups[1]['uri']);
+		$this->assertEquals('My Group Two', $groups[1]['display_name']);
+		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $groups[1]['role']);
 	}
 
+	public function testGetUserMembershipsFiltered() {
+		$groupId = $this->handler->createGroup('my_group', 'My Group');
+		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
+
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->handler->addToGroup('user1', $groupId2, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
+		$adminGroups = $this->handler->getUserMemberships('user1', CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->assertCount(1, $adminGroups);
+		$nonAdminGroups = $this->handler->getUserMemberships('user1', CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$this->assertCount(1, $nonAdminGroups);
+
+		$this->assertEquals($groupId, $nonAdminGroups[0]['group_id']);
+		$this->assertEquals($groupId2, $adminGroups[0]['group_id']);
+	}
 }

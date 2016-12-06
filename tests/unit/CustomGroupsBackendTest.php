@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -68,10 +68,10 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 
 	public function testGetUserGroups() {
 		$this->handler->expects($this->any())
-			->method('getUserGroups')
+			->method('getUserMemberships')
 			->will($this->returnValueMap([
-				['user1', [1, 2]],
-				['user2', [1, 3]],
+				['user1', null, [['group_id' => 1], ['group_id' => 2]]],
+				['user2', null, [['group_id' => 1], ['group_id' => 3]]],
 			]));
 
 		$this->assertEquals(

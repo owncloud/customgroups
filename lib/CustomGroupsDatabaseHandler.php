@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -29,17 +29,29 @@ use OCP\ILogger;
  */
 class CustomGroupsDatabaseHandler {
 
+	const ROLE_MEMBER = 0;
+	const ROLE_ADMIN = 1;
+
 	/**
+	 * Database connection
+	 *
 	 * @var IDBConnection
-	 */ 
+	 */
 	private $dbConn;
 
 	/**
+	 * Logger
+	 *
 	 * @var ILogger
 	 */ 
 	private $logger;
 
-
+	/**
+	 * Constructor
+	 *
+	 * @param IDBConnection $dbConn database connection
+	 * @param ILogger $logger logger
+	 */
 	public function __construct(IDBConnection $dbConn, ILogger $logger) {
 		$this->dbConn = $dbConn;
 		$this->logger = $logger;
@@ -50,7 +62,7 @@ class CustomGroupsDatabaseHandler {
 	 *
 	 * @param string $uid uid of the user
 	 * @param int $numericGroupId id of the group
-	 * @return bool
+	 * @return boolean true if the user is in group, false otherwise
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
 	public function inGroup($uid, $numericGroupId) {
@@ -69,27 +81,38 @@ class CustomGroupsDatabaseHandler {
 	}
 
 	/**
-	 * Get all groups a user belongs to
+	 * Get all group memberships of the given user
 	 *
 	 * @param string $uid Name of the user
-	 * @return array an array of numeric group ids
+	 * @param null|int $roleFilter optional role filter
+	 * @return array an array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getUserGroups($uid) {
+	public function getUserMemberships($uid, $roleFilter = null) {
 		$qb = $this->dbConn->getQueryBuilder();
-		$cursor = $qb->select('group_id')
-			->from('custom_group_member')
-			->where($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
-			->orderBy('group_id', 'ASC')
-			->execute();
+		$qb->select('m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name')
+			->from('custom_group_member', 'm')
+			->from('custom_group', 'g')
+			->where($qb->expr()->eq('g.group_id', 'm.group_id'))
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
+			->orderBy('m.group_id', 'ASC');
 
-		$groups = [];
+		if (!is_null($roleFilter)) {
+			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
+		}
+
+		$cursor = $qb->execute();
+
+		$results = [];
 		while ($row = $cursor->fetch()) {
-			$groups[] = (int)$row['group_id'];
+			$result = $this->formatMemberInfo($row);
+			$result['uri'] = $row['uri'];
+			$result['display_name'] = $row['display_name'];
+			$results[] = $result;
 		}
 		$cursor->closeCursor();
 
-		return $groups;
+		return $results;
 	}
 
 	/**
@@ -153,7 +176,8 @@ class CustomGroupsDatabaseHandler {
 	/**
 	 * Returns the info for a given group.
 	 *
-	 * @param string $gid group id
+	 * @param string $field field to filter by
+	 * @param string $numericGroupId numeric group id
 	 * @return array|null group info or null if not found
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
@@ -186,6 +210,7 @@ class CustomGroupsDatabaseHandler {
 	/**
 	 * Creates a new group
 	 *
+	 * @param string $uri group URI
 	 * @param string $displayName display name
 	 * @return int group id
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
@@ -197,7 +222,10 @@ class CustomGroupsDatabaseHandler {
 				'display_name' => $displayName,
 			]);
 		} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
-			$this->logger->logException($e, ['app' => 'customgroups', 'message' => 'Cannot create a group that already exists']);
+			$this->logger->logException($e, [
+				'app' => 'customgroups',
+				'message' => 'Cannot create a group that already exists'
+			]);
 			return null;
 		}
 
@@ -234,18 +262,39 @@ class CustomGroupsDatabaseHandler {
 	}
 
 	/**
+	 * Update group info
+	 *
+	 * @param int $gid numeric group id
+	 * @param int $uri group uri
+	 * @param string $displayName group display name
+	 * @return bool true if the info got updated, false otherwise
+	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
+	 */
+	public function updateGroup($gid, $uri, $displayName) {
+		$qb = $this->dbConn->getQueryBuilder();
+		$result = $qb->update('custom_group')
+			->set('uri', $qb->createNamedParameter($uri))
+			->set('display_name', $qb->createNamedParameter($displayName))
+			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
+			->execute();
+
+		return $result === 1;
+	}
+
+	/**
 	 * Add a user to a group.
 	 *
 	 * @param string $uid user id
 	 * @param int $gid numeric group id
-	 * @return bool true if user was added, false otherwise
+	 * @param int $role initial permission
+	 * @return boolean true if user was added, false otherwise
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function addToGroup($uid, $gid, $isAdmin = false) {
+	public function addToGroup($uid, $gid, $role = self::ROLE_MEMBER) {
 		$result = $this->dbConn->insertIfNotExist('*PREFIX*custom_group_member', [
 			'user_id' => $uid,
 			'group_id' => $gid,
-			'is_admin' => $isAdmin ? 1 : 0
+			'role' => $role
 		]);
 
 		return ($result === 1);
@@ -273,16 +322,23 @@ class CustomGroupsDatabaseHandler {
 	 * Returns the group members
 	 *
 	 * @param int $gid numeric group id
+	 * @param null|bool $roleFilter optional role filter, set to true or false to
+	 * filter by non-admin-only or admin-only
 	 * @return array array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getGroupMembers($gid) {
+	public function getGroupMembers($gid, $roleFilter = null) {
 		$qb = $this->dbConn->getQueryBuilder();
-		$cursor = $qb->select(['user_id', 'group_id', 'is_admin'])
+		$qb->select(['user_id', 'group_id', 'role'])
 			->from('custom_group_member')
 			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
-			->orderBy('user_id', 'ASC')
-			->execute();
+			->orderBy('user_id', 'ASC');
+
+		if (!is_null($roleFilter)) {
+			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
+		}
+
+		$cursor = $qb->execute();
 
 		$results = [];
 		while ($row = $cursor->fetch()) {
@@ -303,7 +359,7 @@ class CustomGroupsDatabaseHandler {
 	 */
 	public function getGroupMemberInfo($gid, $uid) {
 		$qb = $this->dbConn->getQueryBuilder();
-		$cursor = $qb->select(['user_id', 'group_id', 'is_admin'])
+		$cursor = $qb->select(['user_id', 'group_id', 'role'])
 			->from('custom_group_member')
 			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
@@ -325,14 +381,14 @@ class CustomGroupsDatabaseHandler {
 	 *
 	 * @param int $gid numeric group id
 	 * @param int $uid user id
-	 * @param bool $isAdmin whether the member is a group admin
+	 * @param int $role membership role
 	 * @return bool true if the info got updated, false otherwise
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function setGroupMemberInfo($gid, $uid, $isAdmin) {
+	public function setGroupMemberInfo($gid, $uid, $role) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$result = $qb->update('custom_group_member')
-			->set('is_admin', $qb->createNamedParameter($isAdmin ? 1 : 0))
+			->set('role', $qb->createNamedParameter($role))
 			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->execute();
@@ -346,11 +402,11 @@ class CustomGroupsDatabaseHandler {
 	 * @param array $row database row
 	 * @return array formatted array
 	 */
-	private function formatMemberInfo($row) {
+	private function formatMemberInfo(array $row) {
 		return [
 			'user_id' => $row['user_id'],
-			'group_id' => $row['group_id'],
-			'is_admin' => (int)$row['is_admin'] !== 0,
+			'group_id' => (int)$row['group_id'],
+			'role' => (int)$row['role'],
 		];
 	}
 }

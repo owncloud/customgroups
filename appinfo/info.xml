@@ -18,4 +18,12 @@
 	<dependencies>
 		<owncloud min-version="10.0" max-version="10.0" />
 	</dependencies>
+	<sabre>
+		<plugins>
+			<plugin>OCA\CustomGroups\Dav\CustomGroupsPlugin</plugin>
+		</plugins>
+		<collections>
+			<collection>OCA\CustomGroups\Dav\RootCollection</collection>
+		</collections>
+	</sabre>
 </info>
