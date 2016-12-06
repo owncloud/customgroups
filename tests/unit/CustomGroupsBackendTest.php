@@ -28,8 +28,6 @@ use OCP\GroupInterface;
 /**
  * Class CustomGroupsBackendTest
  *
- * @group DB
- *
  * @package OCA\CustomGroups\Tests\Unit
  */
 class CustomGroupsBackendTest extends \Test\TestCase {
