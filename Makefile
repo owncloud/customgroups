@@ -1,7 +1,8 @@
-# Makefile for building the project
+# Makefile
 
 OWNCLOUD_PATH=$(CURDIR)/../..
 OCC=$(OWNCLOUD_PATH)/occ
+PHPUNIT=$(OWNCLOUD_PATH)/lib/composer/phpunit/phpunit/phpunit
 
 app_name=customgroups
 project_dir=$(CURDIR)/../$(app_name)
@@ -57,7 +58,7 @@ test-codecheck-deprecations:
 .PHONY: test-php
 test-php: test-syntax
 	$(OCC) app:enable $(app_name)
-	cd tests/unit && phpunit --configuration phpunit.xml
+	cd tests/unit && $(PHPUNIT) --configuration phpunit.xml
 
 .PHONY: test-upload-coverage
 test-upload-coverage:

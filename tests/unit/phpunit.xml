@@ -5,6 +5,7 @@
 		 timeoutForSmallTests="900"
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
+		 beStrictAboutTestsThatDoNotTestAnything="true"
 		>
 	<testsuite name='ownCloud - CustomGroups App Tests'>
 		<directory suffix='Test.php'>.</directory>
