@@ -278,4 +278,7 @@ class CustomGroupsManagerTest extends \Test\TestCase {
 		$this->assertEquals($groupId2, $groups[1]);
 	}
 
+	public function testEmpty() {
+	}
+
 }

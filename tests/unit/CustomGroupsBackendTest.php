@@ -144,4 +144,6 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 		$this->assertEquals([], $this->backend->usersInGroup(self::GROUP_ID_PREFIX . '1'));
 	}
 
+	public function testEmpty2() {
+	}
 }
