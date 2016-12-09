@@ -25,19 +25,16 @@ class Version20161209151129 extends AbstractMigration {
 			'unsigned' => true,
 			'length' => 4,
 		]);
-		$table->addColumn('uri', 'text', [
+		$table->addColumn('uri', 'string', [
 			'length' => 255,
 			'notnull' => true,
 		]);
-		$table->addColumn('display_name', 'text', [
+		$table->addColumn('display_name', 'string', [
 			'length' => 64,
 			'notnull' => true,
 		]);
 		// TODO: find how to set sort to ascending
-		$table->addUniqueIndex(['uri'], 'cg_uri_index', [
-			// Doctrine ignores the length, MySQL is not happy
-			'length' => 255
-		]);
+		$table->addUniqueIndex(['uri'], 'cg_uri_index');
 		$table->setPrimaryKey(['group_id']);
 	}
 
@@ -49,7 +46,7 @@ class Version20161209151129 extends AbstractMigration {
 			'unsigned' => true,
 			'length' => 4,
 		]);
-		$table->addColumn('user_id', 'text', [
+		$table->addColumn('user_id', 'string', [
 			'length' => 64,
 			'notnull' => true,
 		]);
