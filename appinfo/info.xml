@@ -12,6 +12,7 @@
 	<types>
 		<authentication/>
 	</types>
+	<use-migrations>true</use-migrations>
 	<dependencies>
 		<owncloud min-version="9.2" max-version="9.2" />
 	</dependencies>
