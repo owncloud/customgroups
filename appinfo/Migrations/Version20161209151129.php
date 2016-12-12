@@ -23,6 +23,7 @@ class Version20161209151129 extends AbstractMigration {
 		$table->addColumn('group_id', 'integer', [
 			'autoincrement' => true,
 			'unsigned' => true,
+			'notnull' => true,
 			'length' => 4,
 		]);
 		$table->addColumn('uri', 'string', [
@@ -42,8 +43,8 @@ class Version20161209151129 extends AbstractMigration {
 		$prefix = $this->connection->getPrefix();
 		$table = $schema->createTable("${prefix}custom_group_member");
 		$table->addColumn('group_id', 'integer', [
-			'autoincrement' => true,
 			'unsigned' => true,
+			'notnull' => true,
 			'length' => 4,
 		]);
 		$table->addColumn('user_id', 'string', [
