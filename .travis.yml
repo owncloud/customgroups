@@ -32,7 +32,6 @@ script:
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then make test-codecheck; fi"
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then make test-codecheck; fi"
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '2' ]; then make test-codecheck-deprecations; fi"
-  - cd apps/$APP_NAME/
 
   # Run phpunit tests
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then make test-php; fi"
