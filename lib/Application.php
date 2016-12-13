@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,5 +19,20 @@
  *
  */
 
-$app = new \OCA\CustomGroups\Application();
-$app->registerGroupBackend();
+namespace OCA\CustomGroups;
+
+use OCP\AppFramework\App;
+
+class Application extends App {
+	public function __construct (array $urlParams = array()) {
+		parent::__construct('customgroups', $urlParams);
+	}
+
+	/**
+	 * Register the group manager
+	 */
+	public function registerGroupBackend() {
+		$backend = $this->getContainer()->query('\OCA\CustomGroups\CustomGroupsBackend');
+		$this->getContainer()->getServer()->getGroupManager()->addBackend($backend);
+	}
+}

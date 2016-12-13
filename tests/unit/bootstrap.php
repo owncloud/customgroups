@@ -1,8 +1,9 @@
 <?php
 /**
- * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Jörn Friedrich Dreyer <jfd@butonic.de>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -18,6 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+if (!defined('PHPUNIT_RUN')) {
+	define('PHPUNIT_RUN', 1);
+}
 
-$app = new \OCA\CustomGroups\Application();
-$app->registerGroupBackend();
+require_once __DIR__.'/../../../../lib/base.php';
+
+\OC::$composerAutoloader->addPsr4('Test\\', OC::$SERVERROOT . '/tests/lib/', true);
+
+// Fix for "Autoload path not allowed: .../customgroups/tests/testcase.php"
+\OC_App::loadApp('customgroups');
+
+if(!class_exists('PHPUnit_Framework_TestCase')) {
+	require_once('PHPUnit/Autoload.php');
+}
+
+OC_Hook::clear();

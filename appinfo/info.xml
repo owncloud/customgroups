@@ -2,6 +2,7 @@
 <info>
 	<id>customgroups</id>
 	<name>User-defined custom groups</name>
+	<namespace>CustomGroups</namespace>
 	<description>Let users create and manage custom groups for sharing.</description>
 	<website>https://github.com/owncloud/customgroups/</website>
 	<bugs>https://github.com/owncloud/customgroups/issues</bugs>
@@ -11,6 +12,7 @@
 	<version>0.1</version>
 	<types>
 		<authentication/>
+		<dav/>
 	</types>
 	<use-migrations>true</use-migrations>
 	<dependencies>

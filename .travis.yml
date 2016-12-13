@@ -1,0 +1,59 @@
+language: php
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+
+env:
+  global:
+    - CORE_BRANCH=master
+    - APP_NAME=customgroups
+  matrix:
+    - DB=sqlite
+
+branches:
+  only:
+    - master
+
+before_install:
+  - wget https://raw.githubusercontent.com/owncloud/administration/master/travis-ci/before_install.sh
+  - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+
+  # Add some output debugging information
+  - cd ../core
+  - ./occ check
+  - ./occ status
+  - ./occ app:list
+
+script:
+  - cd apps/$APP_NAME/
+
+  # Test the app
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then make test-codecheck; fi"
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then make test-codecheck; fi"
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '2' ]; then make test-codecheck-deprecations; fi"
+
+  # Run phpunit tests
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then make test-php; fi"
+
+  # Create and upload coverage report
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then make test-upload-coverage; fi"
+
+  # Run Javascript unit tests
+  - make test-js
+
+matrix:
+  include:
+    - php: 5.6
+      env: DB=mysql
+    - php: 5.6
+      env: DB=pgsql
+    - php: 5.6
+      env: DB=mysql;CODECHECK=1
+    - php: 5.6
+      env: DB=mysql;CODECHECK=2
+    - php: 5.6
+      env: DB=mysql;JSTESTS=1
+  allow_failures:
+    - env: DB=mysql;CODECHECK=2
+  fast_finish: true
