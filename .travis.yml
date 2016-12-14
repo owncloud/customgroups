@@ -4,6 +4,14 @@ php:
   - 7.0
   - 7.1
 
+cache:
+  directories:
+    - $HOME/.cache/bower
+    - $HOME/.composer/cache
+    - $HOME/.npm
+    - /tmp/phantomjs
+    - tools
+
 env:
   global:
     - CORE_BRANCH=master

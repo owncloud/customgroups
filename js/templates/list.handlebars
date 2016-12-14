@@ -1,0 +1,29 @@
+<div>{{pageTitle}}</div>
+
+<form name="customGroupsCreationForm">
+	<div>
+		<input type="text" name="groupName" placeholder="{{newGroupPlaceholder}}"/>
+		<input type="submit" value="{{newGroupSubmitLabel}}" />
+	</div>
+</form>
+<table class="grid">
+	<thead>
+		<tr>
+			<th>{{displayNameLabel}}</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	{{#groups}}
+		<tr data-id="{{id}}">
+			<td>{{displayName}}
+				<a href="#" class="action action-rename"><span class="icon icon-rename"></span><span class="hidden-visually">{{renameLabel}}</span></a>
+			</td>
+			<td><a href="#" class="action action-delete"><span class="icon icon-delete"></span><span class="hidden-visually">{{deleteLabel}}</span></a></td>
+		</tr>
+	{{/groups}}
+	</tbody>
+</table>
+{{#if empty}}
+<div class="empty">{{emptyMessage}}</div>
+{{/if}}

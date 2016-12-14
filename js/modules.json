@@ -1,0 +1,7 @@
+[
+	"App",
+	"CustomGroupModel",
+	"CustomGroupCollection",
+	"CustomGroupsView",
+	"templates/list.handlebars"
+]

@@ -26,4 +26,8 @@
 			<collection>OCA\CustomGroups\Dav\RootCollection</collection>
 		</collections>
 	</sabre>
+	<navigation>
+		<route>customgroups.page.index</route>
+		<order>100</order>
+	</navigation>
 </info>

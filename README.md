@@ -17,11 +17,16 @@ It is then possible to share files or folders with these groups.
 
 ## Requirements
 
-* ownCloud 10
+* ownCloud 10.0
+
+## Building the app
+
+* Make sure you have [Node JS](https://nodejs.org/) installed
+* Run `make` and find the tarball in the "build" directory
 
 ## Install
 
-* Install and enable the App
+* Extract the resulting tarball in the "apps" folder in ownCloud 
 
 ## Usage
 
