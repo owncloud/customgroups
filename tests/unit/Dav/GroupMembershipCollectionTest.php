@@ -97,7 +97,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			$this->groupManager
 		);
 		$this->node = new GroupMembershipCollection(
-			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			$this->handler,
 			$this->helper
 		);

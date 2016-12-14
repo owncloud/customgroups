@@ -25,9 +25,9 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
-use OCA\CustomGroups\Dav\UserMembershipCollection;
 use OCA\CustomGroups\Dav\MembershipHelper;
 use OCP\IGroupManager;
+use OCA\CustomGroups\Dav\GroupsCollection;
 
 /**
  * Class UsersCollectionTest
@@ -111,7 +111,7 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	public function testGetCurrentUser() {
 		$membershipCollection = $this->collection->getChild(self::USER);
-		$this->assertInstanceOf(UserMembershipCollection::class, $membershipCollection);
+		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
 		$this->assertEquals(self::USER, $membershipCollection->getName());
 	}
 
@@ -125,7 +125,7 @@ class UsersCollectionTest extends \Test\TestCase {
 	public function testGetAnotherUserAsAdmin() {
 		$this->groupManager->method('isAdmin')->with(self::USER)->willReturn(true);
 		$membershipCollection = $this->collection->getChild('another');
-		$this->assertInstanceOf(UserMembershipCollection::class, $membershipCollection);
+		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
 		$this->assertEquals('another', $membershipCollection->getName());
 	}
 

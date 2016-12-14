@@ -98,10 +98,10 @@ class UsersCollection implements ICollection {
 		// users can only query their own memberships
 		// but ownCloud admin can query membership of any user
 		if ($name === $this->helper->getUserId() || $this->helper->isUserSuperAdmin()) {
-			return new UserMembershipCollection(
-				$name,
+			return new GroupsCollection(
 				$this->groupsHandler,
-				$this->helper
+				$this->helper,
+				$name
 			);
 		}
 

@@ -34,7 +34,9 @@ use Sabre\DAV\Exception\PreconditionFailed;
 class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IProperties {
 	const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
+	const PROPERTY_GROUP_ID = '{http://owncloud.org/ns}group-id';
 	const PROPERTY_DISPLAY_NAME = '{http://owncloud.org/ns}display-name';
+	const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
 
 	/**
 	 * Custom groups handler
@@ -131,12 +133,17 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * @return array property values
 	 */
 	public function getProperties($properties) {
+		$result = [];
 		if ($properties === null || in_array(self::PROPERTY_DISPLAY_NAME, $properties)) {
-			return [
-				self::PROPERTY_DISPLAY_NAME => $this->groupInfo['display_name'],
-			];
+			$result[self::PROPERTY_DISPLAY_NAME] = $this->groupInfo['display_name'];
 		}
-		return [];
+		if ($properties === null || in_array(self::PROPERTY_GROUP_ID, $properties)) {
+			$result[self::PROPERTY_GROUP_ID] = $this->groupInfo['group_id'];
+		}
+		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
+			$result[self::PROPERTY_ROLE] = $this->groupInfo['role'];
+		}
+		return $result;
 	}
 
 	/**

@@ -110,7 +110,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 
 		// can't remove the last admin
-		if ($this->helper->isTheOnlyAdmin($groupId, $currentUserId)) {
+		if ($this->helper->isTheOnlyAdmin($groupId, $this->name)) {
 			throw new Forbidden("Cannot remove the last admin from the group \"$groupId\"");
 		}
 
