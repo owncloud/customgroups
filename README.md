@@ -9,19 +9,18 @@ It is then possible to share files or folders with these groups.
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
 
-## QA metrics on stable8 branch:
-
-[![Build Status](https://travis-ci.org/owncloud/customgroups.svg?branch=stable8)](https://travis-ci.org/owncloud/customgroups/branches)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/quality-score.png?b=stable8)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=stable8)
-[![Code Coverage](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/coverage.png?b=stable8)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=stable8)
-
 ## Requirements
 
-* ownCloud 10
+* ownCloud 10.0
+
+## Building the app
+
+* Make sure you have [Node JS](https://nodejs.org/) installed
+* Run `make` and find the tarball in the "build" directory
 
 ## Install
 
-* Install and enable the App
+* Extract the resulting tarball in the "apps" folder in ownCloud 
 
 ## Usage
 
@@ -29,6 +28,10 @@ It is then possible to share files or folders with these groups.
 * Go to the settings page
 * Create custom group and add other users as members
 * Share file/folder with said groups
+
+## Developing
+
+* Run `make help` to get information about the different targets.
 
 ## Authors:
 

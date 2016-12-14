@@ -91,7 +91,8 @@ class CustomGroupsPlugin extends ServerPlugin {
 		$this->server->xml->namespaceMap[self::NS_OWNCLOUD] = 'oc';
 		$ns = '{' . self::NS_OWNCLOUD . '}';
 		$this->server->resourceTypeMapping[MembershipNode::class] = $ns . 'customgroups-membership';
-		$this->server->resourceTypeMapping[GroupsCollection::class] = $ns . 'customgroups-group';
+		$this->server->resourceTypeMapping[GroupsCollection::class] = $ns . 'customgroups-groups';
+		$this->server->resourceTypeMapping[GroupMembershipCollection::class] = $ns . 'customgroups-group';
 		$this->server->protectedProperties[] = $ns . 'user-id';
 		$this->server->protectedProperties[] = $ns . 'group-uri';
 

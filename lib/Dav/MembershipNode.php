@@ -36,7 +36,6 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 
 	const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
 	const PROPERTY_USER_ID = '{http://owncloud.org/ns}user-id';
-	const PROPERTY_GROUP_URI = '{http://owncloud.org/ns}group-uri';
 
 	/**
 	 * Custom groups handler
@@ -181,9 +180,6 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 		if ($properties === null || in_array(self::PROPERTY_USER_ID, $properties)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
-		}
-		if ($properties === null || in_array(self::PROPERTY_GROUP_URI, $properties)) {
-			$result[self::PROPERTY_GROUP_URI] = $this->memberInfo['uri'];
 		}
 		return $result;
 	}
