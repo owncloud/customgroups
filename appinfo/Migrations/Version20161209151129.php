@@ -2,29 +2,29 @@
 
 namespace OCA\CustomGroups\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use OCP\Migration\ISchemaMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Create initial tables for the customgroups app
  */
-class Version20161209151129 extends AbstractMigration {
+class Version20161209151129 implements ISchemaMigration {
 	/**
 	 * @param Schema $schema
 	 */
-	public function up(Schema $schema) {
-		$this->createGroupsTable($schema);
-		$this->createMembersTable($schema);
+	public function changeSchema(Schema $schema, array $options) {
+		$prefix = $options['tablePrefix'];
+		$this->createGroupsTable($prefix, $schema);
+		$this->createMembersTable($prefix, $schema);
 	}
 
-	private function createGroupsTable(Schema $schema) {
-		$prefix = $this->connection->getPrefix();
+	private function createGroupsTable($prefix, Schema $schema) {
 		$table = $schema->createTable("${prefix}custom_group");
-		$table->addColumn('group_id', 'integer', [
+		$table->addColumn('group_id', 'bigint', [
 			'autoincrement' => true,
 			'unsigned' => true,
 			'notnull' => true,
-			'length' => 4,
+			'length' => 20,
 		]);
 		$table->addColumn('uri', 'string', [
 			'length' => 255,
@@ -39,20 +39,19 @@ class Version20161209151129 extends AbstractMigration {
 		$table->setPrimaryKey(['group_id']);
 	}
 
-	private function createMembersTable(Schema $schema) {
-		$prefix = $this->connection->getPrefix();
+	private function createMembersTable($prefix, Schema $schema) {
 		$table = $schema->createTable("${prefix}custom_group_member");
-		$table->addColumn('group_id', 'integer', [
+		$table->addColumn('group_id', 'bigint', [
 			'unsigned' => true,
 			'notnull' => true,
-			'length' => 4,
+			'length' => 20,
 		]);
 		$table->addColumn('user_id', 'string', [
 			'length' => 64,
 			'notnull' => true,
 		]);
-		$table->addColumn('is_admin', 'integer', [
-			'length' => 4,
+		$table->addColumn('is_admin', 'bigint', [
+			'length' => 20,
 			'notnull' => true,
 			'default' => 0,
 		]);
