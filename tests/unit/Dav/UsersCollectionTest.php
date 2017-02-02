@@ -122,6 +122,13 @@ class UsersCollectionTest extends \Test\TestCase {
 		$this->collection->getChild('another');
 	}
 
+	public function testGetAnotherUserAsAdmin() {
+		$this->groupManager->method('isAdmin')->with(self::USER)->willReturn(true);
+		$membershipCollection = $this->collection->getChild('another');
+		$this->assertInstanceOf(UserMembershipCollection::class, $membershipCollection);
+		$this->assertEquals('another', $membershipCollection->getName());
+	}
+
 	public function testUserExistsCurrent() {
 		$this->assertTrue($this->collection->childExists(self::USER));
 	}

@@ -95,8 +95,9 @@ class UsersCollection implements ICollection {
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChild($name) {
-		// admin can query membership of any user
-		if ($name === $this->helper->getUserId()) {
+		// users can only query their own memberships
+		// but ownCloud admin can query membership of any user
+		if ($name === $this->helper->getUserId() || $this->helper->isUserSuperAdmin()) {
 			return new UserMembershipCollection(
 				$name,
 				$this->groupsHandler,

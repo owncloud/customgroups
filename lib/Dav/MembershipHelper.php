@@ -128,11 +128,20 @@ class MembershipHelper {
 	 */
 	public function isUserAdmin($groupId) {
 		// ownCloud admin is always admin of any custom group
-		if ($this->groupManager->isAdmin($this->getUserId())) {
+		if ($this->isUserSuperAdmin()) {
 			return true;
 		}
 		$memberInfo = $this->getUserMemberInfo($groupId);
 		return (!is_null($memberInfo) && $memberInfo['role']);
+	}
+
+	/**
+	 * Returns whether the current user is an ownCloud admin
+	 *
+	 * @return boolean true if the user is an ownCloud admin, false otherwise
+	 */
+	public function isUserSuperAdmin() {
+		return ($this->groupManager->isAdmin($this->getUserId()));
 	}
 
 	/**
