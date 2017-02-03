@@ -19,20 +19,36 @@
  *
  */
 
-namespace OCA\CustomGroups;
+namespace OCA\CustomGroups\Dav;
 
-use OCP\AppFramework\App;
+use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use Sabre\DAV\Exception\NotFound;
+use Sabre\DAV\Exception\MethodNotAllowed;
+use Sabre\DAV\SimpleCollection;
 
-class Application extends App {
-	public function __construct (array $urlParams = array()) {
-		parent::__construct('customgroups', $urlParams);
-	}
-
+/**
+ * Root collection for the custom groups and members
+ */
+class RootCollection extends SimpleCollection {
 	/**
-	 * Register the group manager
+	 * Constructor
+	 *
+	 * @param MembershipHelper $helper membership helper
 	 */
-	public function registerGroupBackend() {
-		$backend = $this->getContainer()->query('\OCA\CustomGroups\CustomGroupsBackend');
-		$this->getContainer()->getServer()->getGroupManager()->addBackend($backend);
+	public function __construct(
+		CustomGroupsDatabaseHandler $groupsHandler,
+		MembershipHelper $helper
+	) {
+		$children = [
+			new GroupsCollection(
+				$groupsHandler,
+				$helper
+			),
+			new UsersCollection(
+				$groupsHandler,
+				$helper
+			),
+		];
+		parent::__construct('customgroups', $children);
 	}
 }
