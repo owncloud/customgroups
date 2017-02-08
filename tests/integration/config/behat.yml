@@ -1,6 +1,10 @@
 default:
   autoload:
-    '': %paths.base%/../features/bootstrap
+    #'': %paths.base%/../../../../../build/integration/features/bootstrap
+    #'': %paths.base%/../features/bootstrap
+     - '': %paths.base%/../../../../../build/integration/features/bootstrap
+     - '': %paths.base%/../features/bootstrap
+
   suites:
     default:
       paths:
@@ -14,7 +18,7 @@ default:
             regular_user_password: 123456
     Custom_Groups:
       paths:
-        - %paths.base%/../Custom_Groups_features
+        - %paths.base%/../custom_groups_features
       contexts:
         - CustomGroupsContext:
             baseUrl:  http://localhost:8080/ocs/
