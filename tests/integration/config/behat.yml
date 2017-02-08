@@ -1,9 +1,9 @@
 default:
   autoload:
-    #'': %paths.base%/../../../../../build/integration/features/bootstrap
-    #'': %paths.base%/../features/bootstrap
-     - '': %paths.base%/../../../../../build/integration/features/bootstrap
-     - '': %paths.base%/../features/bootstrap
+    #- %paths.base%/../../../../../build/integration/features/bootstrap
+    #- %paths.base%/../features/bootstrap
+     - %paths.base%/../vendor/autoload.php
+
 
   suites:
     default:
