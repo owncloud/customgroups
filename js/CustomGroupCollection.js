@@ -19,8 +19,24 @@
 		sync: OC.Backbone.davSync,
 		model: OCA.CustomGroups.CustomGroupModel,
 
+		_userId: null,
+
+		initialize: function(models, options) {
+			options = options || {};
+
+			this._userId = options.userId;
+		},
+
+		getUserId: function() {
+			return this._userId;
+		},
+
 		url: function() {
-			return OC.linkToRemote('dav') + '/customgroups/groups/';
+			if (!this._userId) {
+				return OC.linkToRemote('dav') + '/customgroups/groups/';
+			} else {
+				return OC.linkToRemote('dav') + '/customgroups/users/' + this._userId + '/';
+			}
 		}
 	});
 

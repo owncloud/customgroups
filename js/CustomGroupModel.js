@@ -20,24 +20,52 @@
 		/** @lends OCA.CustomGroups.CustomGroupModel.prototype */ {
 		sync: OC.Backbone.davSync,
 
+		hasInnerCollection: true,
+
 		url: function() {
-			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.id;
+			return this.get('href');
 		},
+
+		_innerCollection: null,
 
 		/**
 		 * Returns the members collection for this group
 		 *
 		 * @return {OC.Backbone.Collection} collection
 		 */
-		getInnerCollection: function() {
-			// TODO proper class + cache
-			return new OC.Backbone.Collection({
-				uri: this.id
-			});
+		getMembersCollection: function() {
+			var self = this;
+			if (!this._innerCollection) {
+				this._innerCollection = new OCA.CustomGroups.MembersCollection([], {
+					group: this
+				});
+				// group was part of a CustomGroupCollection ?
+				if (this.collection) {
+					// get owner
+					var userId = this.collection.getUserId();
+					if (userId) {
+						// detect removal of list owner
+						this._innerCollection.on('remove', function(model) {
+							if (model.get('userId') === userId) {
+								// remove current group from the list
+								self.collection.remove(self);
+							}
+						});
+					}
+				}
+			}
+			return this._innerCollection;
 		},
 
 		davProperties: {
-			'displayName': NS + 'display-name'
+			'id': NS + 'group-id',
+			'displayName': NS + 'display-name',
+			'role': NS + 'role'
+		},
+
+		parse: function(data) {
+			data.role = parseInt(data.role, 10);
+			return data;
 		}
 	});
 

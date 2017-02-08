@@ -298,10 +298,6 @@ class MembershipNodeTest extends \Test\TestCase {
 				MembershipNode::PROPERTY_USER_ID,
 				self::NODE_USER,
 			],
-			[
-				MembershipNode::PROPERTY_GROUP_URI,
-				'group1',
-			],
 		];
 	}
 

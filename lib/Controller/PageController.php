@@ -28,6 +28,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoCSRFRequired
+	 * @NoAdminRequired
 	 */
 	public function index() {
 		// TODO: cache or add to info.xml ?

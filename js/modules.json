@@ -3,5 +3,9 @@
 	"CustomGroupModel",
 	"CustomGroupCollection",
 	"CustomGroupsView",
-	"templates/list.handlebars"
+	"MemberModel",
+	"MembersCollection",
+	"MembersView",
+	"templates/list.handlebars",
+	"templates/membersList.handlebars"
 ]

@@ -1,0 +1,44 @@
+<h1>{{pageTitle}}</h1>
+
+<div class="group-name-title">
+	<span>{{groupName}}</span>
+	{{#if canAdmin}}
+	<a href="#" class="action-rename-group icon icon-rename" title="{{renameLabel}}"></a>
+	<a href="#" class="action-delete-group icon icon-delete" title="{{deleteLabel}}"></a>
+	{{/if}}
+</div>
+{{#if userIsMember}}
+<input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
+{{/if}}
+
+{{#if canAdmin}}
+<form name="customGroupsAddMemberForm">
+	<div>
+		<input type="text" name="memberUserId" placeholder="{{newMemberPlaceholder}}"/>
+		<input type="submit" value="{{newMemberSubmitLabel}}" />
+	</div>
+</form>
+{{/if}}
+<table class="grid">
+<thead>
+	<th>Member</th>
+	<th>Role</th>
+	<th></th>
+</thead>
+<tbody>
+{{#members}}
+	<tr class="group-member" data-id="{{id}}">
+	<td>{{displayName}}</td>
+	<td>{{roleDisplayName}}
+	{{#if ../canAdmin}}
+	<a href="#" class="action-change-member-role icon icon-rename" title="{{changeMemberRoleLabel}}"></a>
+	{{/if}}
+	</td>
+	<td>{{#if ../canAdmin}}<a href="#" class="action action-delete-member"><span class="icon icon-delete"></span><span class="hidden-visually">{{deleteMemberLabel}}</span></a>{{/if}}</td>
+	</tr>
+{{/members}}
+</tbody>
+</table>
+{{#if empty}}
+<div class="empty">{{emptyMessage}}</div>
+{{/if}}

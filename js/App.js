@@ -15,17 +15,41 @@
 			$('#app-navigation').removeClass('icon-loading');
 			$('#app-content .container').removeClass('icon-loading');
 
-			var collection = new OCA.CustomGroups.CustomGroupCollection();
-			var view = new OCA.CustomGroups.CustomGroupsView(collection);
+			var groupsCollection = new OCA.CustomGroups.CustomGroupCollection([], {
+				// admins can see all groups so don't set a user filter
+				userId: (OC.isUserAdmin() ? null : OC.getCurrentUser().uid)
+			});
+
+			var view = new OCA.CustomGroups.CustomGroupsView(groupsCollection);
 			view.render();
 
-			collection.fetch();
+			// TODO: empty view in case no group is selected
 
-			$('#app-content .container').append(view.$el);
+			groupsCollection.fetch();
+
+			$('#app-navigation').append(view.$el);
+
+			view.on('select', this._onSelectGroup, this);
+
+			this._onSelectGroup(null);
+		},
+
+		_onSelectGroup: function(group) {
+			var $container = $('#app-content .container').empty(); 
+			if (group !== null) {
+				var membersView = new OCA.CustomGroups.MembersView(group);
+				$container.append(membersView.$el);
+			} else {
+				// TODO: render page with hint about selecting a group
+			}
 		}
 	};
 
-	OCA.CustomGroups = _.extend({}, OCA.CustomGroups);
+	OCA.CustomGroups = _.extend({
+		ROLE_MEMBER: 0,
+		ROLE_ADMIN: 1
+	}, OCA.CustomGroups);
+
 	OCA.CustomGroups.App = App;
 
 })(OCA);

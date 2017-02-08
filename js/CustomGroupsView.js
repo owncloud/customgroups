@@ -19,9 +19,11 @@
 		/** @lends OCA.CustomGroups.CustomGroupsView.prototype */ {
 		sync: OC.Backbone.davSync,
 
+		_lastActive: null,
+
 		events: {
 			'submit form': '_onSubmitCreationForm',
-			'click .action-rename': '_onRename'
+			'click .select': '_onSelect'
 		},
 
 		initialize: function(collection) {
@@ -29,8 +31,9 @@
 
 			this.collection.on('request', this._onRequest, this);
 			this.collection.on('sync', this._onEndRequest, this);
+			this.collection.on('remove', this._onRemoveGroup, this);
 
-			_.bindAll(this, '_onSubmitCreationForm', '_onRename');
+			_.bindAll(this, '_onSubmitCreationForm');
 		},
 
 		_toggleLoading: function(state) {
@@ -49,29 +52,76 @@
 			this.render();
 		},
 
-		_onRename: function(ev) {
+		_onSelect: function(ev) {
 			ev.preventDefault();
-			var id = $(ev.target).closest('tr').attr('data-id');
+			var $el = $(ev.target).closest('li');
+			var id = $el.attr('data-id');
 			var model = this.collection.findWhere({'id': id});
-	
-			// TODO: use inline rename form
-			var newName = prompt('Enter new name', model.get('displayName'));
-			if (newName) {
-				// TODO: lock row during save
-				model.save({displayName: newName});
+			if (model) {
+				if (this._lastActive) {
+					this._lastActive.removeClass('active');
+				}
+				this._lastActive = $el.addClass('active');
+				this.trigger('select', model);
 			}
-			return false;
+		},
+
+		/**
+		 * Attempt creating a group with the given name.
+		 * If the uri already exists, try another one.
+		 *
+		 * @param {string} groupName group display name
+		 */
+		_createGroup: function(groupName, index) {
+			var self = this;
+			// TODO: check if the current user already has a group with this name
+
+			// it might happen that a group uri already exists for that name,
+			// so attempt multiple ones
+			this.collection.create({
+				wait: true,
+				href: this.collection.url() + '/' + this._formatUri(groupName, index)
+			}, {
+				success: function(model) {
+					// HACK: the backbone webdav adapter doesn't proppatch after creation, so set props again
+					// FIXME: doesn't work because the model doesn't have an id at this point...
+					//model.save({displayName: groupName});
+				},
+				error: function(model, response) {
+					if (response.status === 405) {
+						if (_.isUndefined(index)) {
+							// attempt again with index
+							index = 1;
+						}
+						self._createGroup(groupName, index + 1);
+						return;
+					}
+					OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
+				}
+			});
+			// FIXME: the new model must receive an id
 		},
 
 		_onSubmitCreationForm: function(ev) {
 			ev.preventDefault();
 			var groupName = this.$el.find('[name=groupName]').val();
-			var model = new OCA.CustomGroups.CustomGroupModel({
-				uri: this._formatUri(groupName),
-				displayName: groupName
-			});
-			model.save();
+
+			this._createGroup(groupName);
 			return false;
+		},
+
+		_onRemoveGroup: function(model, collection, options) {
+			var $groupEl = this.$el.find('ul li:nth-child(' + (options.index + 1) + ')');
+			if ($groupEl.hasClass('active')) {
+				// deselect
+				this.trigger('select', null);
+				this._lastActive = null;
+			}
+			$groupEl.remove();
+			if (!collection.length) {
+				// rerender empty list
+				this.render();
+			}
 		},
 
 		/**
@@ -80,8 +130,11 @@
 		 * @param {string} groupName display name
 		 * @return {string} group URI
 		 */
-		_formatUri: function(groupName) {
+		_formatUri: function(groupName, index) {
 			// TODO: strip unwanted chars
+			if (!_.isUndefined(index)) {
+				return groupName + index;
+			}
 			return groupName;
 		},
 
