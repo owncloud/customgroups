@@ -76,6 +76,30 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		}
 	}
 
+	/*Set the elements of a proppatch*/
+	public function sendProppatchToCustomGroup($user, $customGroup, $properties = null){
+		$client = $this->getSabreClient($user);
+		$appPath = '/customgroups/groups/';
+		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup;
+		$response = $client->proppatch($fullUrl, $properties, 1);
+		return $response;
+	}
+
+	/**
+	 * @When user :user renamed custom group :customGroup as :newName
+	 * @param user $user
+	 * @param string $customGroup
+	 * @param string $newName
+	 */
+	public function userRenamedCustomGroupAs($user, $customGroup, $newName) {
+		$properties = [
+						'{http://owncloud.org/ns}display-name' => (string)$newName
+					  ];
+		$this->response = $this->sendProppatchToCustomGroup($user, $customGroup, $properties);
+		$this->createdCustomGroups[$newName] = $this->createdCustomGroups[$customGroup];
+		unset($this->createdCustomGroups[$customGroup]);
+	}
+
 	/**
 	 * @BeforeScenario
 	 * @AfterScenario
