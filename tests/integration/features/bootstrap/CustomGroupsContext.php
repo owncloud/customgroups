@@ -16,11 +16,11 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	private $createdCustomGroups = [];
 
 	/**
-	 * @Given user :user created a group called :groupName
+	 * @Given user :user created a custom group called :groupName
 	 * @param string $user
 	 * @param string $groupName
 	 */
-	public function userCreatedAGroup($user, $groupName){
+	public function userCreatedACustomGroup($user, $groupName){
 		try {
 			$appPath = '/customgroups/groups/';
 			$this->response = $this->makeDavRequest($user, "MKCOL", $appPath . $groupName, null, null, "uploads");
@@ -32,11 +32,11 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given user :user deleted a group called :groupName
+	 * @Given user :user deleted a custom group called :groupName
 	 * @param string $user
 	 * @param string $groupName
 	 */
-	public function userDeletedAGroup($user, $groupName){
+	public function userDeletedACustomGroup($user, $groupName){
 		try {
 			$appPath = '/customgroups/groups/';
 			$this->response = $this->makeDavRequest($user, "DELETE", $appPath . $groupName, null, null, "uploads");
@@ -83,7 +83,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	public function cleanupCustomGroups()
 	{
 		foreach($this->createdCustomGroups as $customGroup) {
-			$this->userDeletedAGroup('admin', $customGroup);
+			$this->userDeletedACustomGroup('admin', $customGroup);
 		}
 	}
 
