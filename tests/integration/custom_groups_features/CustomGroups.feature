@@ -11,6 +11,14 @@ Scenario: Create a custom group
 		Then the HTTP status code should be "201"
 		And custom group "group0" exists
 
+Scenario: Create an already existing custom group
+		Given As an "admin"
+		And user "user0" exists
+		And user "user0" created a custom group called "group0"
+		And custom group "group0" exists
+		When user "user0" created a custom group called "group0"
+		Then the HTTP status code should be "405"
+
 Scenario: Delete a custom group
 		Given As an "admin"
 		And user "user0" exists
