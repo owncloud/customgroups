@@ -76,6 +76,23 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		}
 	}
 
+	/**
+	 * @Then custom group :customGroup doesn't exist
+	 * @param string $customGroup
+	 */
+	public function customGroupDoesntExists($customGroup){
+		$customGroupsList = $this->getCustomGroups("admin");
+		$exists = false;
+		foreach($customGroupsList as $customGroupPath => $customGroupName) {
+			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $customGroup)){
+				$exists = true;
+			}
+		}
+		if ($exists){
+			PHPUnit_Framework_Assert::fail("$customGroup" . " is in propfind answer");
+		}
+	}
+
 	/*Set the elements of a proppatch*/
 	public function sendProppatchToCustomGroup($user, $customGroup, $properties = null){
 		$client = $this->getSabreClient($user);
