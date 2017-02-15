@@ -117,6 +117,40 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		unset($this->createdCustomGroups[$customGroup]);
 	}
 
+	/*Function to retrieve all members of a group*/
+	public function getCustomGroupMembers($user, $group){
+		$client = $this->getSabreClient($user);
+		$properties = [
+						'{http://owncloud.org/ns}role'
+					  ];
+		$appPath = '/customgroups/groups/' . $group;
+		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath;
+		$response = $client->propfind($fullUrl, $properties, 1);
+		$this->response = $response;
+		return $response;
+	}
+
+	/**
+	 * @Then members of :customGroup requested by user :user are
+	 * @param \Behat\Gherkin\Node\TableNode|null $memberList
+	 * @param string $customGroup
+	 * @param string $user
+	 */
+	public function userIsMemberOfCustomGroup($memberList, $user, $customGroup){
+		$appPath = '/customgroups/groups/';
+		if ($memberList instanceof \Behat\Gherkin\Node\TableNode) {
+			$members = $memberList->getRows();
+			$membersSimplified = $this->simplifyArray($members);
+			$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
+			foreach ($membersSimplified as $member) {
+				$memberPath = '/' . $this->davPath . $appPath . $customGroup . '/' . $member;
+				if (!array_key_exists($memberPath, $respondedArray)){
+					PHPUnit_Framework_Assert::fail("$member path" . " is not in report answer");
+				}
+			}
+		}
+	}
+
 	/**
 	 * @BeforeScenario
 	 * @AfterScenario
