@@ -61,3 +61,38 @@ Scenario: Creator of a custom group can add members
 					| user0 |
 					| member1 |
 					| member2 |
+
+Scenario: Only a custom group admin can add members
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "member2" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" maked user "member1" member of custom group "group0"
+		When user "member1" maked user "member2" member of custom group "group0"
+		Then the HTTP status code should be "403"
+		And members of "group0" requested by user "user0" are
+					| user0 |
+					| member1 |
+
+Scenario: Only a custom group member can list members
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "not-member" exists
+		And user "user0" created a custom group called "group0"
+		When user "user0" maked user "member1" member of custom group "group0"
+		Then user "not-member" is not able to get members of custom group "group0"
+
+Scenario: A custom group member can list members
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "member2" exists
+		And user "user0" created a custom group called "group0"
+		When user "user0" maked user "member1" member of custom group "group0"
+		When user "user0" maked user "member2" member of custom group "group0"
+		Then members of "group0" requested by user "member1" are
+					| user0 |
+					| member1 |
+					| member2 |

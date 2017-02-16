@@ -125,9 +125,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 					  ];
 		$appPath = '/customgroups/groups/' . $group;
 		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath;
-		$response = $client->propfind($fullUrl, $properties, 1);
-		$this->response = $response;
-		return $response;
+		try {
+			$response = $client->propfind($fullUrl, $properties, 1);
+			$this->response = $response;
+			return $response;
+		} catch (\Sabre\DAV\Exception $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getHTTPCode();
+		}
 	}
 
 	/*Function to retrieve all members of a group*/
@@ -171,6 +176,17 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @Then user :user is not able to get members of custom group :customGroup
+	 * @param string $user
+	 * @param string $customGroup
+	 */
+	public function tryingToGetMembersOfCustomGroup($customGroup, $user){
+		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
+		PHPUnit_Framework_Assert::assertEquals($this->response, 403);
+		PHPUnit_Framework_Assert::assertEmpty($respondedArray);
 	}
 
 	/**
