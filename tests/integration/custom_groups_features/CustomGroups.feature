@@ -146,3 +146,14 @@ Scenario: Group admin cannot remove self if no other admin exists in the group
 		And members of "group0" requested by user "user0" are
 					| user0 |
 					| member1 |
+
+Scenario: A member of a custom group can leave the custom group himself
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" made user "member1" member of custom group "group0"
+		When user "member1" removed membership of user "member1" from custom group "group0"
+		Then the HTTP status code should be "204"
+		And members of "group0" requested by user "user0" are
+					| user0 |
