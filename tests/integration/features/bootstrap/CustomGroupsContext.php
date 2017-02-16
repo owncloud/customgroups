@@ -206,6 +206,22 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Given user :userRequesting removed membership of user :userRequested from custom group :customGroup
+	 * @param string $userRequesting
+	 * @param string $userRequested
+	 * @param string $customGroup
+	 */
+	public function removeMemberOfCustomGroup($userRequesting, $userRequested, $customGroup){
+		try {
+			$userPath = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
+			$this->response = $this->makeDavRequest($userRequesting, "DELETE", $userPath, null, null, "uploads");
+		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getResponse();
+		}
+	}
+
+	/**
 	 * @BeforeScenario
 	 * @AfterScenario
 	 */
