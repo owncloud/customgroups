@@ -27,6 +27,7 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Group memberships collection for a given group
@@ -141,7 +142,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			$result[self::PROPERTY_GROUP_ID] = $this->groupInfo['group_id'];
 		}
 		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
-			$result[self::PROPERTY_ROLE] = $this->groupInfo['role'];
+			$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->groupInfo['role']);
 		}
 		return $result;
 	}

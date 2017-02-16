@@ -28,6 +28,7 @@ use OCP\IUser;
 use Sabre\DAV\PropPatch;
 use OCA\CustomGroups\Dav\MembershipHelper;
 use OCP\IGroupManager;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Class MembershipNodeTest
@@ -278,12 +279,12 @@ class MembershipNodeTest extends \Test\TestCase {
 		return [
 			[
 				MembershipNode::PROPERTY_ROLE,
-				CustomGroupsDatabaseHandler::ROLE_ADMIN,
+				Roles::DAV_ROLE_ADMIN,
 				CustomGroupsDatabaseHandler::ROLE_ADMIN,
 			],
 			[
 				MembershipNode::PROPERTY_ROLE,
-				CustomGroupsDatabaseHandler::ROLE_MEMBER,
+				Roles::DAV_ROLE_MEMBER,
 				CustomGroupsDatabaseHandler::ROLE_MEMBER,
 			],
 			[
@@ -317,17 +318,19 @@ class MembershipNodeTest extends \Test\TestCase {
 	public function adminSetFlagProvider() {
 		return [
 			// admin can change flag for others
-			[false, CustomGroupsDatabaseHandler::ROLE_ADMIN, CustomGroupsDatabaseHandler::ROLE_ADMIN, 200, true],
-			[false, CustomGroupsDatabaseHandler::ROLE_ADMIN, CustomGroupsDatabaseHandler::ROLE_MEMBER, 200, true],
+			[false, CustomGroupsDatabaseHandler::ROLE_ADMIN, Roles::DAV_ROLE_ADMIN, 200, true],
+			[false, CustomGroupsDatabaseHandler::ROLE_ADMIN, Roles::DAV_ROLE_MEMBER, 200, true],
 			// non-admin cannot change anything
-			[false, CustomGroupsDatabaseHandler::ROLE_MEMBER, CustomGroupsDatabaseHandler::ROLE_ADMIN, 403, false],
-			[false, CustomGroupsDatabaseHandler::ROLE_MEMBER, CustomGroupsDatabaseHandler::ROLE_MEMBER, 403, false],
+			[false, CustomGroupsDatabaseHandler::ROLE_MEMBER, Roles::DAV_ROLE_ADMIN, 403, false],
+			[false, CustomGroupsDatabaseHandler::ROLE_MEMBER, Roles::DAV_ROLE_MEMBER, 403, false],
 			// non-member cannot change anything
-			[false, null, CustomGroupsDatabaseHandler::ROLE_ADMIN, 403, false],
-			[false, null, CustomGroupsDatabaseHandler::ROLE_MEMBER, 403, false],
+			[false, null, Roles::DAV_ROLE_ADMIN, 403, false],
+			[false, null, Roles::DAV_ROLE_MEMBER, 403, false],
 			// super-admin can change even as non-member
-			[true, null, CustomGroupsDatabaseHandler::ROLE_ADMIN, 200, true],
-			[true, null, CustomGroupsDatabaseHandler::ROLE_MEMBER, 200, true],
+			[true, null, Roles::DAV_ROLE_ADMIN, 200, true],
+			[true, null, Roles::DAV_ROLE_MEMBER, 200, true],
+			// set invalid property
+			[true, null, 'invalid', 400, false],
 		];
 	}
 
@@ -348,7 +351,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		if ($called) {
 			$this->handler->expects($this->once())
 				->method('setGroupMemberInfo')
-				->with(1, self::NODE_USER, $roleToSet)
+				->with(1, self::NODE_USER, Roles::davToBackend($roleToSet))
 				->willReturn(true);
 		} else {
 			$this->handler->expects($this->never())
@@ -389,7 +392,7 @@ class MembershipNodeTest extends \Test\TestCase {
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
 
-		$propPatch = new PropPatch([MembershipNode::PROPERTY_ROLE => 0]);
+		$propPatch = new PropPatch([MembershipNode::PROPERTY_ROLE => Roles::DAV_ROLE_MEMBER]);
 		$this->node->propPatch($propPatch);
 
 		$propPatch->commit();
@@ -414,7 +417,7 @@ class MembershipNodeTest extends \Test\TestCase {
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
 
-		$propPatch = new PropPatch([MembershipNode::PROPERTY_ROLE => 0]);
+		$propPatch = new PropPatch([MembershipNode::PROPERTY_ROLE => Roles::DAV_ROLE_MEMBER]);
 		$node->propPatch($propPatch);
 
 		$propPatch->commit();
