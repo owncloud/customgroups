@@ -55,8 +55,8 @@ Scenario: Creator of a custom group can add members
 		And user "member1" exists
 		And user "member2" exists
 		And user "user0" created a custom group called "group0"
-		When user "user0" maked user "member1" member of custom group "group0"
-		And user "user0" maked user "member2" member of custom group "group0"
+		When user "user0" made user "member1" member of custom group "group0"
+		And user "user0" made user "member2" member of custom group "group0"
 		Then members of "group0" requested by user "user0" are
 					| user0 |
 					| member1 |
@@ -68,8 +68,8 @@ Scenario: Only a custom group admin can add members
 		And user "member1" exists
 		And user "member2" exists
 		And user "user0" created a custom group called "group0"
-		And user "user0" maked user "member1" member of custom group "group0"
-		When user "member1" maked user "member2" member of custom group "group0"
+		And user "user0" made user "member1" member of custom group "group0"
+		When user "member1" made user "member2" member of custom group "group0"
 		Then the HTTP status code should be "403"
 		And members of "group0" requested by user "user0" are
 					| user0 |
@@ -81,7 +81,7 @@ Scenario: Only a custom group member can list members
 		And user "member1" exists
 		And user "not-member" exists
 		And user "user0" created a custom group called "group0"
-		When user "user0" maked user "member1" member of custom group "group0"
+		When user "user0" made user "member1" member of custom group "group0"
 		Then user "not-member" is not able to get members of custom group "group0"
 
 Scenario: A custom group member can list members
@@ -90,8 +90,8 @@ Scenario: A custom group member can list members
 		And user "member1" exists
 		And user "member2" exists
 		And user "user0" created a custom group called "group0"
-		When user "user0" maked user "member1" member of custom group "group0"
-		When user "user0" maked user "member2" member of custom group "group0"
+		When user "user0" made user "member1" member of custom group "group0"
+		When user "user0" made user "member2" member of custom group "group0"
 		Then members of "group0" requested by user "member1" are
 					| user0 |
 					| member1 |
@@ -102,7 +102,7 @@ Scenario: Only group admin can delete a custom group
 		And user "user0" exists
 		And user "member1" exists
 		And user "user0" created a custom group called "group0"
-		When user "user0" maked user "member1" member of custom group "group0"
+		When user "user0" made user "member1" member of custom group "group0"
 		When user "member1" deleted a custom group called "group0"
 		Then the HTTP status code should be "403"
 		And custom group "group0" exists
@@ -113,8 +113,8 @@ Scenario: Creator of a custom group can remove members
 		And user "member1" exists
 		And user "member2" exists
 		And user "user0" created a custom group called "group0"
-		And user "user0" maked user "member1" member of custom group "group0"
-		And user "user0" maked user "member2" member of custom group "group0"
+		And user "user0" made user "member1" member of custom group "group0"
+		And user "user0" made user "member2" member of custom group "group0"
 		When user "user0" removed membership of user "member1" from custom group "group0"
 		Then members of "group0" requested by user "user0" are
 					| user0 |
@@ -126,8 +126,8 @@ Scenario: Only an admin of a custom group can remove members
 		And user "member1" exists
 		And user "member2" exists
 		And user "user0" created a custom group called "group0"
-		And user "user0" maked user "member1" member of custom group "group0"
-		And user "user0" maked user "member2" member of custom group "group0"
+		And user "user0" made user "member1" member of custom group "group0"
+		And user "user0" made user "member2" member of custom group "group0"
 		When user "member2" removed membership of user "member1" from custom group "group0"
 		Then the HTTP status code should be "403"
 		And members of "group0" requested by user "user0" are
@@ -140,7 +140,7 @@ Scenario: Group admin cannot remove self if no other admin exists in the group
 		And user "user0" exists
 		And user "member1" exists
 		And user "user0" created a custom group called "group0"
-		And user "user0" maked user "member1" member of custom group "group0"
+		And user "user0" made user "member1" member of custom group "group0"
 		When user "user0" removed membership of user "user0" from custom group "group0"
 		Then the HTTP status code should be "403"
 		And members of "group0" requested by user "user0" are

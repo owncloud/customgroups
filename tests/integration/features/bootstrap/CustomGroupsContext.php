@@ -190,7 +190,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given user :userRequesting maked user :userRequested member of custom group :customGroup
+	 * @Given user :userRequesting made user :userRequested member of custom group :customGroup
 	 * @param string $userRequesting
 	 * @param string $userRequested
 	 * @param string $customGroup
