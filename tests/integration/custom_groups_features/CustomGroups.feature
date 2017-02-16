@@ -119,3 +119,18 @@ Scenario: Creator of a custom group can remove members
 		Then members of "group0" requested by user "user0" are
 					| user0 |
 					| member2 |
+
+Scenario: Only an admin of a custom group can remove members
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "member2" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" maked user "member1" member of custom group "group0"
+		And user "user0" maked user "member2" member of custom group "group0"
+		When user "member2" removed membership of user "member1" from custom group "group0"
+		Then the HTTP status code should be "403"
+		And members of "group0" requested by user "user0" are
+					| user0 |
+					| member1 |
+					| member2 |
