@@ -49,7 +49,7 @@ $(composer_deps): $(COMPOSER) composer.json composer.lock
 	php $(COMPOSER) install --no-dev && touch $@
 
 $(composer_dev_deps): $(COMPOSER) composer.json composer.lock
-	php $(COMPOSER) install --dev && touch $@
+	php $(COMPOSER) install && touch $@
 
 .PHONY: update-composer
 update-composer:

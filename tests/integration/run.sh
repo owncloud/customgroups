@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+mkdir -p output
+
 composer install
 
 OC_PATH=../../../../
@@ -8,7 +10,6 @@ CORE_INT_TESTS_PATH=build/integration/
 cd "$OC_PATH""$CORE_INT_TESTS_PATH"
 composer install
 cd -
-
 
 OCC=${OC_PATH}occ
 

@@ -19,12 +19,13 @@ endif
 .PHONY: help-test
 help-test:
 	@echo -e "Testing:\n"
-	@echo -e "test\t\tto run all test suites"
-	@echo -e "test-syntax\tto run syntax checks"
-	@echo -e "test-codecheck\tto run the code checker"
-	@echo -e "test-php\tto run PHP test suites"
-	@echo -e "test-js\t\tto run JS test suites (single run)"
-	@echo -e "test-js-watch\tto run JS test and watch for changes"
+	@echo -e "test\t\t\tto run all test suites"
+	@echo -e "test-syntax\t\tto run syntax checks"
+	@echo -e "test-codecheck\t\tto run the code checker"
+	@echo -e "test-php\t\tto run PHP test suites"
+	@echo -e "test-integration\tto run integration tests"
+	@echo -e "test-js\t\t\tto run JS test suites (single run)"
+	@echo -e "test-js-watch\t\tto run JS test and watch for changes"
 	@echo
 
 .PHONY: clean-test
@@ -36,7 +37,7 @@ test-syntax: test-syntax-php test-syntax-js
 
 .PHONY: test-syntax-php
 test-syntax-php:
-	for F in $(shell find . -name \*.php | grep -v 'lib/composer'); do \
+	for F in $(shell find . -name \*.php | grep -v -e 'lib/composer' -e 'vendor'); do \
 		php -l "$$F" > /dev/null || exit $?; \
 	done
 
@@ -62,6 +63,10 @@ $(clover_xml): test-php
 .PHONY: test-upload-coverage
 test-upload-coverage: $(OCULAR) $(clover_xml)
 	$(OCULAR) code-coverage:upload --format=php-clover $(clover_xml)
+
+.PHONY: test-integration
+test-integration: test-syntax-php
+	cd tests/integration && OCC="$(OCC)" ./run.sh
 
 .PHONY: test-js
 test-js: $(bower_deps) $(KARMA) $(all_src) test-syntax-js

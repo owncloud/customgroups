@@ -35,38 +35,28 @@ before_install:
 
 script:
   - cd apps/$APP_NAME/
-
-  # Run integration tests
-  - sh -c "if [ '$INTEGRATION' = '1' ]; then cd tests/integration; ./run.sh; fi"
-
-  # Test the app
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' -a '$INTEGRATION' != '1' ]; then make test-codecheck; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' -a '$INTEGRATION' != '1' ]; then make test-codecheck; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '2' -a '$INTEGRATION' != '1' ]; then make test-codecheck-deprecations; fi"
-
-  # Run phpunit tests
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$INTEGRATION' != '1' ]; then make test-php; fi"
-
-  # Create and upload coverage report
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$INTEGRATION' != '1' ]; then make test-upload-coverage; fi"
-
-  # Run Javascript unit tests
-  - make test-js
+  - make $TEST
 
 matrix:
   include:
+    # PHP unit tests + code coverage
     - php: 5.6
-      env: DB=mysql
+      env: DB=mysql;TEST=test-upload-coverage
+    # PHP unit tests
     - php: 5.6
-      env: DB=pgsql
+      env: DB=pgsql;TEST=test-php
+    # Code checker / syntax
     - php: 5.6
-      env: DB=mysql;CODECHECK=1
+      env: DB=mysql;TEST=test-codecheck
+    # Code checker (deprecations only, allowed to fail)
     - php: 5.6
-      env: DB=mysql;CODECHECK=2
+      env: DB=mysql;TEST=test-codecheck-deprecations
+    # Javascript tests
     - php: 5.6
-      env: DB=mysql;JSTESTS=1
+      env: DB=mysql;TEST=test-js
+    # Integration tests
     - php: 7.0
-      env: DB=mysql;INTEGRATION=1
+      env: DB=mysql;TEST=test-integration
   allow_failures:
-    - env: DB=mysql;CODECHECK=2
+    - env: DB=mysql;TEST=test-codecheck-deprecations
   fast_finish: true
