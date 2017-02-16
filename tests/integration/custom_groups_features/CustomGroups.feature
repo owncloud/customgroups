@@ -134,3 +134,15 @@ Scenario: Only an admin of a custom group can remove members
 					| user0 |
 					| member1 |
 					| member2 |
+
+Scenario: Group admin cannot remove self if no other admin exists in the group
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" maked user "member1" member of custom group "group0"
+		When user "user0" removed membership of user "user0" from custom group "group0"
+		Then the HTTP status code should be "403"
+		And members of "group0" requested by user "user0" are
+					| user0 |
+					| member1 |
