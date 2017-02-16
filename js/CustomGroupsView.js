@@ -79,13 +79,13 @@
 			// it might happen that a group uri already exists for that name,
 			// so attempt multiple ones
 			this.collection.create({
-				wait: true,
-				href: this.collection.url() + '/' + this._formatUri(groupName, index)
+				uri: this._formatUri(groupName, index),
+				displayName: groupName,
+				isNew: true
 			}, {
+				wait: true,
 				success: function(model) {
-					// HACK: the backbone webdav adapter doesn't proppatch after creation, so set props again
-					// FIXME: doesn't work because the model doesn't have an id at this point...
-					//model.save({displayName: groupName});
+					model.unset('isNew', {silent: true});
 				},
 				error: function(model, response) {
 					if (response.status === 405) {
@@ -99,7 +99,6 @@
 					OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
 				}
 			});
-			// FIXME: the new model must receive an id
 		},
 
 		_onSubmitCreationForm: function(ev) {

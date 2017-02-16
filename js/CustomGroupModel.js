@@ -21,12 +21,19 @@
 		sync: OC.Backbone.davSync,
 
 		hasInnerCollection: true,
+			
+		idAttribute: 'uri',
 
 		url: function() {
-			return this.get('href');
+			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.get('uri');
 		},
 
 		_innerCollection: null,
+
+		isNew: function() {
+			// we can't rely on the uri so use a dummy attribute
+			return !!this.get('isNew');
+		},
 
 		/**
 		 * Returns the members collection for this group
@@ -61,11 +68,6 @@
 			'id': NS + 'group-id',
 			'displayName': NS + 'display-name',
 			'role': NS + 'role'
-		},
-
-		parse: function(data) {
-			data.role = parseInt(data.role, 10);
-			return data;
 		}
 	});
 

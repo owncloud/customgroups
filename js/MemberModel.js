@@ -22,6 +22,10 @@
 
 		idAttribute: 'userId',
 
+		defaults: {
+			'role': OCA.CustomGroups.ROLE_MEMBER
+		},
+
 		url: function() {
 			return this.collection.group.get('href') + this.get('userId');
 		},
@@ -29,11 +33,6 @@
 		davProperties: {
 			'userId': NS + 'user-id',
 			'role': NS + 'role'
-		},
-
-		parse: function(data) {
-			data.role = parseInt(data.role, 10);
-			return data;
 		}
 	});
 

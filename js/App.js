@@ -46,8 +46,8 @@
 	};
 
 	OCA.CustomGroups = _.extend({
-		ROLE_MEMBER: 0,
-		ROLE_ADMIN: 1
+		ROLE_MEMBER: 'member',
+		ROLE_ADMIN: 'admin'
 	}, OCA.CustomGroups);
 
 	OCA.CustomGroups.App = App;
