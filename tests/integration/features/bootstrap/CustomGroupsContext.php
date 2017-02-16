@@ -40,7 +40,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		try {
 			$appPath = '/customgroups/groups/';
 			$this->response = $this->makeDavRequest($user, "DELETE", $appPath . $groupName, null, null, "uploads");
-		} catch (\GuzzleHttp\Exception\ServerException $e) {
+		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$this->response = $e->getResponse();
 		}
