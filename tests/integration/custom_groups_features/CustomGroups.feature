@@ -42,3 +42,9 @@ Scenario: Get members of a group
 		When user "user0" created a custom group called "group0"
 		Then members of "group0" requested by user "user0" are
 					| user0 |
+
+Scenario: Creator of a custom group becames admin automatically
+		Given As an "admin"
+		And user "user0" exists
+		When user "user0" created a custom group called "group0"
+		Then user "user0" is admin of custom group "group0"

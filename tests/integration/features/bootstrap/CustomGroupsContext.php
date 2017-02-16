@@ -130,13 +130,35 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		return $response;
 	}
 
+	/*Function to retrieve all members of a group*/
+	public function getUserRoleInACustomGroup($userRequesting, $userRequested, $group){
+		$client = $this->getSabreClient($userRequesting);
+		$properties = [
+						'{http://owncloud.org/ns}role'
+					  ];
+		$userPath = $this->davPath .'/customgroups/groups/' . $group . '/' . $userRequested;
+		$fullUrl = substr($this->baseUrl, 0, -4) . $userPath;
+		$response = $client->propfind($fullUrl, $properties, 1);
+		return $response['/' . $userPath]['{http://owncloud.org/ns}role'];
+	}
+
+	/**
+	 * @Then user :user is admin of custom group :customGroup
+	 * @param string $user
+	 * @param string $customGroup
+	 */
+	public function checkIfUserIsAdminOfCustomGroup($user, $customGroup){
+		$role = $this->getUserRoleInACustomGroup('admin', $user, $customGroup);
+		PHPUnit_Framework_Assert::assertEquals($role, 1);
+	}
+
 	/**
 	 * @Then members of :customGroup requested by user :user are
 	 * @param \Behat\Gherkin\Node\TableNode|null $memberList
 	 * @param string $customGroup
 	 * @param string $user
 	 */
-	public function userIsMemberOfCustomGroup($memberList, $user, $customGroup){
+	public function usersAreMemberOfCustomGroup($memberList, $user, $customGroup){
 		$appPath = '/customgroups/groups/';
 		if ($memberList instanceof \Behat\Gherkin\Node\TableNode) {
 			$members = $memberList->getRows();
