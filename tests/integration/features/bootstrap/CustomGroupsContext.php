@@ -84,10 +84,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	public function customGroupExistsWithDisplayName($customGroup, $displayName){
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
-		print_r($customGroupsList);
 		foreach($customGroupsList as $customGroupPath => $customGroupName) {
-			print_r($customGroup);
-			print_r(array_values($customGroupName));
 			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $displayName)){
 				$exists = true;
 			}
