@@ -104,6 +104,26 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
+	public function testListGroupsFiltered() {
+		$collection = new GroupsCollection($this->handler, $this->helper, 'user1');
+		$this->handler->expects($this->never())->method('getGroups');
+		$this->handler->expects($this->at(0))
+			->method('getUserMemberships')
+			->with('user1')
+			->will($this->returnValue([
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
+			]));
+
+		$nodes = $collection->getChildren();
+		$this->assertCount(2, $nodes);
+
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		$this->assertEquals('group1', $nodes[0]->getName());
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		$this->assertEquals('group2', $nodes[1]->getName());
+	}
+
 	public function testCreateGroup() {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('user1');

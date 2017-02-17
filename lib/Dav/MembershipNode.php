@@ -26,6 +26,7 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Membership node
@@ -110,7 +111,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 
 		// can't remove the last admin
-		if ($this->helper->isTheOnlyAdmin($groupId, $currentUserId)) {
+		if ($this->helper->isTheOnlyAdmin($groupId, $this->name)) {
 			throw new Forbidden("Cannot remove the last admin from the group \"$groupId\"");
 		}
 
@@ -164,7 +165,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 * @param PropPatch $propPatch PropPatch query
 	 */
 	public function propPatch(PropPatch $propPatch) {
-		$propPatch->handle(self::PROPERTY_ROLE, [$this, 'updateAdminFlag']);
+		$propPatch->handle(self::PROPERTY_ROLE, [$this, 'updateRole']);
 	}
 
 	/**
@@ -176,7 +177,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	public function getProperties($properties) {
 		$result = [];
 		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
-			$result[self::PROPERTY_ROLE] = $this->memberInfo['role'];
+			$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->memberInfo['role']);
 		}
 		if ($properties === null || in_array(self::PROPERTY_USER_ID, $properties)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
@@ -188,14 +189,20 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	}
 
 	/**
-	 * Update the admin flag.
+	 * Updates the role.
 	 * Returns 403 status code if the current user has insufficient permissions
 	 * or if the only group admin is trying to remove their own permission.
 	 *
-	 * @param int $rolePropValue role value
+	 * @param string $davRolePropValue DAV role string
 	 * @return boolean|int true or error status code
 	 */
-	public function updateAdminFlag($rolePropValue) {
+	public function updateRole($davRolePropValue) {
+		try {
+			$rolePropValue = Roles::davToBackend($davRolePropValue);
+		} catch (\InvalidArgumentException $e) {
+			// invalid role given
+			return 400;
+		}
 		$groupId = $this->memberInfo['group_id'];
 		$userId = $this->memberInfo['user_id'];
 		// only the group admin can change permissions
@@ -211,7 +218,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		$result = $this->groupsHandler->setGroupMemberInfo(
 			$groupId,
 			$userId,
-			($rolePropValue === CustomGroupsDatabaseHandler::ROLE_ADMIN)
+			$rolePropValue
 		);
 		$this->groupInfo['role'] = $rolePropValue;
 

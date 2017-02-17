@@ -46,6 +46,13 @@ class GroupsCollection implements ICollection {
 	private $helper;
 
 	/**
+	 * User id for which to use memberships or null for all groups
+	 *
+	 * @var string
+	 */
+	private $userId;
+
+	/**
 	 * Constructor
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
@@ -53,10 +60,12 @@ class GroupsCollection implements ICollection {
 	 */
 	public function __construct(
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		MembershipHelper $helper,
+		$userId = null
 	) {
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
+		$this->userId = $userId;
 	}
 
 	/**
@@ -107,7 +116,11 @@ class GroupsCollection implements ICollection {
 	 * @return GroupMembershipCollection[] custom group nodes
 	 */
 	public function getChildren() {
-		$allGroups = $this->groupsHandler->getGroups();
+		if ($this->userId !== null) {
+			$allGroups = $this->groupsHandler->getUserMemberships($this->userId);
+		} else {
+			$allGroups = $this->groupsHandler->getGroups();
+		}
 		return array_map(function ($groupInfo) {
 			return $this->createMembershipsCollection($groupInfo);
 		}, $allGroups);
@@ -140,6 +153,9 @@ class GroupsCollection implements ICollection {
 	 * @return string node name
 	 */
 	public function getName() {
+		if ($this->userId !== null) {
+			return $this->userId;
+		}
 		return 'groups';
 	}
 
