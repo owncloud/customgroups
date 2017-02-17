@@ -244,7 +244,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @Then /^the sabre HTTP status code answered should be "([^"]*)"$/
 	 * @param int $statusCode
 	 */
-	public function theHTTPStatusCodeShouldBe($statusCode) {
+	public function theSabreHTTPStatusCodeAnsweredShouldBe($statusCode) {
 		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->response);
 	}
 
