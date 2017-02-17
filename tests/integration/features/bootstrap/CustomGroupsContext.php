@@ -114,6 +114,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/*Set the elements of a proppatch*/
 	public function sendProppatchToCustomGroup($user, $customGroup, $properties = null){
 		$client = $this->getSabreClient($user);
+		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
 		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup;
 		$response = $client->proppatch($fullUrl, $properties, 1);
@@ -136,6 +137,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/*Function to retrieve all members of a group*/
 	public function getCustomGroupMembers($user, $group){
 		$client = $this->getSabreClient($user);
+		$client->setThrowExceptions(true);
 		$properties = [
 						'{http://owncloud.org/ns}role'
 					  ];
@@ -145,9 +147,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			$response = $client->propfind($fullUrl, $properties, 1);
 			$this->response = $response;
 			return $response;
-		} catch (\Sabre\DAV\Exception $e) {
+		} catch (\Sabre\HTTP\ClientHttpException $e) {
 			// 4xx and 5xx responses cause an exception
-			$this->response = $e->getHTTPCode();
+			$this->response = $e->getResponse();
 		}
 	}
 
@@ -201,7 +203,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 */
 	public function tryingToGetMembersOfCustomGroup($customGroup, $user){
 		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
-		PHPUnit_Framework_Assert::assertEquals($this->response, 403);
+		PHPUnit_Framework_Assert::assertEquals($this->response->getStatus(), 403);
 		PHPUnit_Framework_Assert::assertEmpty($respondedArray);
 	}
 
