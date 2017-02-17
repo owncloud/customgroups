@@ -142,7 +142,10 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			$result[self::PROPERTY_GROUP_ID] = $this->groupInfo['group_id'];
 		}
 		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
-			$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->groupInfo['role']);
+			// role is only set if the group info was queried from a specific user
+			if (isset($this->groupInfo['role'])) {
+				$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->groupInfo['role']);
+			}
 		}
 		return $result;
 	}
