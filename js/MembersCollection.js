@@ -13,27 +13,12 @@
 	 * @classdesc
 	 *
 	 */
-	var MembersCollection = OC.Backbone.Collection.extend(
+	var MembersCollection = OC.Backbone.WebdavChildrenCollection.extend(
 		/** @lends OCA.CustomGroups.MembersCollection.prototype */ {
-
-		sync: OC.Backbone.davSync,
 		model: OCA.CustomGroups.MemberModel,
 
-		usePUT: true,
-
-		initialize: function(models, options) {
-			options = options || {};
-
-			if (!options.group) {
-				throw 'Missing "group" option';
-			}
-			
-			// set empty model
-			this.group = options.group;
-		},
-
 		url: function() {
-			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.group.get('id') + '/';
+			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.collectionNode.get('id') + '/';
 		}
 	});
 

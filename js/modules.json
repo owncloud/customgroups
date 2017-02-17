@@ -1,11 +1,11 @@
 [
 	"App",
-	"CustomGroupModel",
-	"CustomGroupCollection",
-	"CustomGroupsView",
 	"MemberModel",
 	"MembersCollection",
 	"MembersView",
+	"CustomGroupModel",
+	"CustomGroupCollection",
+	"CustomGroupsView",
 	"templates/list.handlebars",
 	"templates/membersList.handlebars"
 ]

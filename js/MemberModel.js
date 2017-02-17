@@ -16,9 +16,8 @@
 	 * @classdesc
 	 *
 	 */
-	var MemberModel = OC.Backbone.Model.extend(
+	var MemberModel = OC.Backbone.WebdavNode.extend(
 		/** @lends OCA.CustomGroups.MemberModel.prototype */ {
-		sync: OC.Backbone.davSync,
 
 		defaults: {
 			'role': OCA.CustomGroups.ROLE_MEMBER
@@ -26,7 +25,7 @@
 
 		url: function() {
 			return OC.linkToRemote('dav') + '/customgroups/groups/' +
-				this.collection.group.get('id') + '/' +
+				this.collection.collectionNode.get('id') + '/' +
 				this.id;
 		},
 

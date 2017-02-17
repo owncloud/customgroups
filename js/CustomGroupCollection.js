@@ -13,10 +13,9 @@
 	 * @classdesc
 	 *
 	 */
-	var CustomGroupCollection = OC.Backbone.Collection.extend(
+	var CustomGroupCollection = OC.Backbone.WebdavChildrenCollection.extend(
 		/** @lends OCA.CustomGroups.CustomGroupCollection.prototype */ {
 
-		sync: OC.Backbone.davSync,
 		model: OCA.CustomGroups.CustomGroupModel,
 
 		_userId: null,

@@ -30,11 +30,14 @@
 
 		initialize: function(model) {
 			this.model = model;
-			this.collection = model.getMembersCollection();
+			this.collection = model.getChildrenCollection();
 
 			this.collection.on('request', this._onRequest, this);
 			this.collection.on('sync', this._onEndRequest, this);
 			this.collection.on('remove', this._onRemoveMember, this);
+
+			// TODO: only rerender header
+			this.model.on('change:displayName', this.render, this);
 
 			this.collection.fetch();
 
@@ -66,7 +69,6 @@
 		},
 
 		_onClickLeaveGroup: function() {
-			var self = this;
 			var currentUserMembership = this.collection.get(OC.getCurrentUser().uid);
 			if (confirm('Confirm leaving of group ' + this.model.get('displayName') + ' ?')) {
 				currentUserMembership.destroy({
@@ -85,7 +87,9 @@
 			var newName = prompt('Enter new name', this.model.get('displayName'));
 			if (newName) {
 				// TODO: lock row during save
-				this.model.save({displayName: newName});
+				this.model.save({
+					displayName: newName
+				});
 			}
 			return false;
 		},
@@ -116,6 +120,7 @@
 			this.collection.create({
 				id: userId
 			},  {
+				wait: true,
 				success: function() {
 					_.defer(function() {
 						$field.focus();
@@ -218,8 +223,8 @@
 				userIsMember: !_.isUndefined(this.model.get('role')),
 				canAdmin: isSuperAdmin || this.model.get('role') === OCA.CustomGroups.ROLE_ADMIN
 			};
-			if (this.collection.group) {
-				data.groupName = this.collection.group.get('displayName');
+			if (this.model) {
+				data.groupName = this.model.get('displayName');
 			}
 
 			this.$el.html(this.template(data));

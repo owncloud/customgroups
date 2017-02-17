@@ -99,11 +99,10 @@
 			this.collection.create({
 				id: this._formatUri(groupName, index),
 				displayName: groupName,
-				isNew: true
+				role: OCA.CustomGroups.ROLE_ADMIN
 			}, {
 				wait: true,
 				success: function(model) {
-					model.unset('isNew', {silent: true});
 					self.select(model);
 				},
 				error: function(model, response) {
