@@ -114,7 +114,7 @@
 			}
 
 			this.collection.create({
-				userId: userId
+				id: userId
 			},  {
 				success: function() {
 					_.defer(function() {
@@ -151,7 +151,7 @@
 			}
 
 			// TODO: use undo approach
-			if (confirm('Confirm deletion of member ' + model.get('userId') + ' ?')) {
+			if (confirm('Confirm deletion of member ' + model.id + ' ?')) {
 				model.destroy();
 			}
 		},

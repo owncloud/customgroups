@@ -14,7 +14,14 @@
 {{#if canAdmin}}
 <form name="customGroupsAddMemberForm">
 	<div>
-		<input type="text" name="memberUserId" placeholder="{{newMemberPlaceholder}}"/>
+		<input
+			type="text"
+			name="memberUserId"
+			placeholder="{{newMemberPlaceholder}}"
+			autocomplete="off"
+			autocapitalize="off"
+			autocorrect="off"
+		/>
 		<input type="submit" value="{{newMemberSubmitLabel}}" />
 	</div>
 </form>

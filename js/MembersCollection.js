@@ -33,7 +33,7 @@
 		},
 
 		url: function() {
-			return this.group.get('href');
+			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.group.get('id') + '/';
 		}
 	});
 

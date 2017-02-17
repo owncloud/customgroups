@@ -2,7 +2,14 @@
 
 <form name="customGroupsCreationForm">
 	<div>
-		<input type="text" name="groupName" placeholder="{{newGroupPlaceholder}}"/>
+		<input
+			type="text"
+			name="groupName"
+			placeholder="{{newGroupPlaceholder}}"
+			autocomplete="off"
+			autocapitalize="off"
+			autocorrect="off"
+		>
 		<input type="submit" value="{{newGroupSubmitLabel}}" />
 	</div>
 </form>

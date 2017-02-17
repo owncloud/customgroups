@@ -52,18 +52,36 @@
 			this.render();
 		},
 
-		_onSelect: function(ev) {
-			ev.preventDefault();
-			var $el = $(ev.target).closest('li');
-			var id = $el.attr('data-id');
-			var model = this.collection.findWhere({'id': id});
+		/**
+		 * Select by group id or model.
+		 *
+		 * @param {String|OCA.CustomGroups.CustomGroupModel} group group id or group model
+		 * @param {Object} [$el] optional DOM element of the entry
+		 */
+		select: function(group, $el) {
+			var model = group;
+			if (_.isString(model)) {
+				model = this.collection.findWhere({'id': model});
+			}
+
 			if (model) {
 				if (this._lastActive) {
 					this._lastActive.removeClass('active');
 				}
+
+				if (_.isUndefined($el)) {
+					$el = this.$el.find('li').filterAttr('data-id', model.id);
+				}
 				this._lastActive = $el.addClass('active');
 				this.trigger('select', model);
 			}
+		},
+
+		_onSelect: function(ev) {
+			ev.preventDefault();
+			var $el = $(ev.target).closest('li');
+			var id = $el.attr('data-id');
+			this.select(id, $el);
 		},
 
 		/**
@@ -79,13 +97,14 @@
 			// it might happen that a group uri already exists for that name,
 			// so attempt multiple ones
 			this.collection.create({
-				uri: this._formatUri(groupName, index),
+				id: this._formatUri(groupName, index),
 				displayName: groupName,
 				isNew: true
 			}, {
 				wait: true,
 				success: function(model) {
 					model.unset('isNew', {silent: true});
+					self.select(model);
 				},
 				error: function(model, response) {
 					if (response.status === 405) {

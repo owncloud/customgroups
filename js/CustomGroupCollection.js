@@ -37,6 +37,10 @@
 			} else {
 				return OC.linkToRemote('dav') + '/customgroups/users/' + this._userId + '/';
 			}
+		},
+
+		comparator: function(a, b) {
+			return OC.Util.naturalSortCompare(a.get('displayName'), b.get('displayName'));
 		}
 	});
 

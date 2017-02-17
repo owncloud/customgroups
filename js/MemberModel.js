@@ -20,18 +20,17 @@
 		/** @lends OCA.CustomGroups.MemberModel.prototype */ {
 		sync: OC.Backbone.davSync,
 
-		idAttribute: 'userId',
-
 		defaults: {
 			'role': OCA.CustomGroups.ROLE_MEMBER
 		},
 
 		url: function() {
-			return this.collection.group.get('href') + this.get('userId');
+			return OC.linkToRemote('dav') + '/customgroups/groups/' +
+				this.collection.group.get('id') + '/' +
+				this.id;
 		},
 
 		davProperties: {
-			'userId': NS + 'user-id',
 			'role': NS + 'role'
 		}
 	});

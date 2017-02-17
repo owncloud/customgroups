@@ -21,17 +21,15 @@
 		sync: OC.Backbone.davSync,
 
 		hasInnerCollection: true,
-			
-		idAttribute: 'uri',
-
+		
 		url: function() {
-			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.get('uri');
+			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.get('id');
 		},
 
 		_innerCollection: null,
 
 		isNew: function() {
-			// we can't rely on the uri so use a dummy attribute
+			// we can't rely on the id so use a dummy attribute
 			return !!this.get('isNew');
 		},
 
@@ -65,7 +63,6 @@
 		},
 
 		davProperties: {
-			'id': NS + 'group-id',
 			'displayName': NS + 'display-name',
 			'role': NS + 'role'
 		}
