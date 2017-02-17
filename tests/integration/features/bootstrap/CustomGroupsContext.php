@@ -77,6 +77,27 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Then custom group :customGroup exists with display name :displayName
+	 * @param string $customGroup
+	 * @param string $displayName
+	 */
+	public function customGroupExistsWithDisplayName($customGroup, $displayName){
+		$customGroupsList = $this->getCustomGroups("admin");
+		$exists = false;
+		print_r($customGroupsList);
+		foreach($customGroupsList as $customGroupPath => $customGroupName) {
+			print_r($customGroup);
+			print_r(array_values($customGroupName));
+			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $displayName)){
+				$exists = true;
+			}
+		}
+		if (!$exists){
+			PHPUnit_Framework_Assert::fail("$customGroup" . " is not in propfind answer");
+		}
+	}
+
+	/**
 	 * @Then custom group :customGroup doesn't exist
 	 * @param string $customGroup
 	 */
@@ -110,11 +131,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 */
 	public function userRenamedCustomGroupAs($user, $customGroup, $newName) {
 		$properties = [
-						'{http://owncloud.org/ns}display-name' => (string)$newName
+						'{http://owncloud.org/ns}display-name' => $newName
 					  ];
 		$this->response = $this->sendProppatchToCustomGroup($user, $customGroup, $properties);
-		$this->createdCustomGroups[$newName] = $this->createdCustomGroups[$customGroup];
-		unset($this->createdCustomGroups[$customGroup]);
 	}
 
 	/*Function to retrieve all members of a group*/
@@ -219,6 +238,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			// 4xx and 5xx responses cause an exception
 			$this->response = $e->getResponse();
 		}
+	}
+
+	/**
+	 * @Then /^the sabre HTTP status code answered should be "([^"]*)"$/
+	 * @param int $statusCode
+	 */
+	public function theHTTPStatusCodeShouldBe($statusCode) {
+		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->response);
 	}
 
 	/**
