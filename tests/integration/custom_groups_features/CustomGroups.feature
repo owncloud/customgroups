@@ -33,8 +33,17 @@ Scenario: Rename a custom group
 		And user "user0" created a custom group called "group0"
 		And custom group "group0" exists
 		When user "user0" renamed custom group "group0" as "renamed-group0"
-		#Then the sabre HTTP status code answered should be "200"
-		And custom group "group0" exists with display name "renamed-group0"
+		Then custom group "group0" exists with display name "renamed-group0"
+
+Scenario: Only a custom group admin can rename its custom group
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And custom group "group0" exists
+		And user "user0" made user "member1" member of custom group "group0"
+		When user "member1" renamed custom group "group0" as "renamed-group0"
+		Then custom group "group0" exists with display name "group0"
 
 Scenario: Get members of a group
 		Given As an "admin"
