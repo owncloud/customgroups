@@ -1,4 +1,23 @@
 <?php
+/**
+ * @author Sergio Bertolin <sbertolin@owncloud.com>
+ *
+ * @copyright Copyright (c) 2017, ownCloud GmbH
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -236,6 +255,47 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$this->response = $e->getResponse();
+		}
+	}
+
+	/*Function to retrieve all custom groups which a user is member of*/
+	public function getCustomGroupsOfAUser($userRequesting, $userRequested){
+		$client = $this->getSabreClient($userRequesting);
+		$client->setThrowExceptions(true);
+		$properties = [
+						'{http://owncloud.org/ns}role'
+					  ];
+		$userPath = $this->davPath .'/customgroups/users/' . $userRequested;
+		$fullUrl = substr($this->baseUrl, 0, -4) . $userPath;
+		try {
+			$response = $client->propfind($fullUrl, $properties, 1);
+			$this->response = $response;
+			return $response;
+		} catch (\Sabre\HTTP\ClientHttpException $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getResponse();
+		}
+	}
+
+	/**
+	 * @Then custom groups of :userRequested requested by user :userRequesting are
+	 * @param \Behat\Gherkin\Node\TableNode|null $customGroupList
+	 * @param string $userRequested
+	 * @param string $userRequesting
+	 */
+
+	public function customGroupsWhichAUserIsMemberOfAre($customGroupList, $userRequested, $userRequesting){
+		$appPath = '/customgroups/users/';
+		if ($customGroupList instanceof \Behat\Gherkin\Node\TableNode) {
+			$customGroups = $customGroupList->getRows();
+			$customGroupsSimplified = $this->simplifyArray($customGroups);
+			$respondedArray = $this->getCustomGroupsOfAUser($userRequesting, $userRequested);
+			foreach ($customGroupsSimplified as $customGroup) {
+				$groupPath = '/' . $this->davPath . $appPath . $userRequested . '/' . $customGroup . '/';
+				if (!array_key_exists($groupPath, $respondedArray)){
+					PHPUnit_Framework_Assert::fail("$customGroup path" . " is not in propfind answer");
+				}
+			}
 		}
 	}
 

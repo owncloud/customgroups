@@ -166,3 +166,18 @@ Scenario: A member of a custom group can leave the custom group himself
 		Then the HTTP status code should be "204"
 		And members of "group0" requested by user "user0" are
 					| user0 |
+
+Scenario: A user can list his groups
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" created a custom group called "group1"
+		And user "user0" created a custom group called "group2"
+		When user "user0" made user "member1" member of custom group "group0"
+		When user "user0" made user "member1" member of custom group "group1"
+		When user "user0" made user "member1" member of custom group "group2"
+		Then custom groups of "member1" requested by user "member1" are
+					| group0 |
+					| group1 |
+					| group2 |
