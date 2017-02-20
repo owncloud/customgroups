@@ -106,6 +106,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		foreach($customGroupsList as $customGroupPath => $customGroupName) {
 			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $displayName)){
 				$exists = true;
+				break;
 			}
 		}
 		if (!$exists){
@@ -136,8 +137,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
 		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup;
-		$response = $client->proppatch($fullUrl, $properties, 1);
-		return $response;
+		try {
+			$response = $client->proppatch($fullUrl, $properties, 1);
+			$this->response = $response;
+			return $response;
+		} catch (\Sabre\HTTP\ClientHttpException $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getResponse();
+		}
 	}
 
 	/*Set property of a group member*/
@@ -146,8 +153,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
 		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup . '/' . $userRequested;
-		$response = $client->proppatch($fullUrl, $properties, 1);
-		return $response;
+		try {
+			$response = $client->proppatch($fullUrl, $properties, 1);
+			$this->response = $response;
+			return $response;
+		} catch (\Sabre\HTTP\ClientHttpException $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getResponse();
+		}
 	}
 
 	/**

@@ -35,7 +35,7 @@ Scenario: Rename a custom group
 		When user "user0" renamed custom group "group0" as "renamed-group0"
 		Then custom group "group0" exists with display name "renamed-group0"
 
-Scenario: Only a custom group admin can rename its custom group
+Scenario: A non-admin member cannot rename its custom group
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -71,7 +71,7 @@ Scenario: Creator of a custom group can add members
 					| member1 |
 					| member2 |
 
-Scenario: Only a custom group admin can add members
+Scenario: A non-admin member of a custom group cannot add members
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -84,7 +84,7 @@ Scenario: Only a custom group admin can add members
 					| user0 |
 					| member1 |
 
-Scenario: Only a custom group member can list members
+Scenario: A non-member of a custom group cannot list its members
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -106,7 +106,7 @@ Scenario: A custom group member can list members
 					| member1 |
 					| member2 |
 
-Scenario: Only group admin can delete a custom group
+Scenario: A non-admin member of a custom group cannot delete a custom group
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -129,7 +129,7 @@ Scenario: Creator of a custom group can remove members
 					| user0 |
 					| member2 |
 
-Scenario: Only an admin of a custom group can remove members
+Scenario: A non-admin member of a custom group cannot remove members
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -246,3 +246,13 @@ Scenario: A member converted to admin can do the same as group admin
 		Then members of "group0" requested by user "user1" are
 					| user1 |
 					| user2 |
+
+Scenario: A group admin cannot remove his own admin permissions if there is no other admin in the group
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And custom group "group0" exists
+		And user "user0" made user "member1" member of custom group "group0"
+		When user "user0" changed role of "user1" to member in custom group "group0"
+		Then user "user0" is admin of custom group "group0"
