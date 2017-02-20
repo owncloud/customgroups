@@ -224,3 +224,25 @@ Scenario: Superadmin can do everything
 					| user0 |
 					| user2 |
 					| admin |
+
+Scenario: A member converted to admin can do the same as group admin
+		Given As an "admin"
+		And user "user0" exists
+		And user "user1" exists
+		And user "user2" exists
+		And user "user0" created a custom group called "group0"
+		And user "user0" created a custom group called "group1"
+		And user "user0" made user "user1" member of custom group "group0"
+		And user "user0" made user "user1" member of custom group "group1"
+		And user "user0" changed role of "user1" to admin in custom group "group0"
+		And user "user0" changed role of "user1" to admin in custom group "group1"
+		And user "user1" deleted a custom group called "group1"
+		And user "user1" made user "user2" member of custom group "group0"
+		And user "user1" renamed custom group "group0" as "renamed-group0"
+		And custom group "group0" exists with display name "renamed-group0"
+		And user "user1" changed role of "user2" to admin in custom group "group0"
+		And user "user2" is admin of custom group "group0"
+		When user "user1" removed membership of user "user0" from custom group "group0"
+		Then members of "group0" requested by user "user1" are
+					| user1 |
+					| user2 |
