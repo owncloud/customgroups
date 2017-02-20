@@ -140,6 +140,30 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		return $response;
 	}
 
+	/*Set property of a group member*/
+	public function sendProppatchToCustomGroupMember($userRequesting, $customGroup, $userRequested, $properties = null){
+		$client = $this->getSabreClient($userRequesting);
+		$client->setThrowExceptions(true);
+		$appPath = '/customgroups/groups/';
+		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup . '/' . $userRequested;
+		$response = $client->proppatch($fullUrl, $properties, 1);
+		return $response;
+	}
+
+	/**
+	 * @When /^user "([^"]*)" changed role of "([^"]*)" to (admin|member) in custom group "([^"]*)"$/
+	 * @param string $userRequesting
+	 * @param string $userRequested
+	 * @param string $role
+	 * @param string $customGroup
+	 */
+	public function userChangedRoleOfMember($userRequesting, $userRequested, $role, $customGroup) {
+		$properties = [
+						'{http://owncloud.org/ns}role' => $role
+					  ];
+		$this->response = $this->sendProppatchToCustomGroupMember($userRequesting, $customGroup, $userRequested, $properties);
+	}
+
 	/**
 	 * @When user :user renamed custom group :customGroup as :newName
 	 * @param user $user
@@ -185,13 +209,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then user :user is admin of custom group :customGroup
+	 * @Then /^user "([^"]*)" is (admin|member) of custom group "([^"]*)"$/
 	 * @param string $user
+	 * @param string $role
 	 * @param string $customGroup
 	 */
-	public function checkIfUserIsAdminOfCustomGroup($user, $customGroup){
+	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup){
 		$role = $this->getUserRoleInACustomGroup('admin', $user, $customGroup);
-		PHPUnit_Framework_Assert::assertEquals($role, 'admin');
+		PHPUnit_Framework_Assert::assertEquals($role, $role);
 	}
 
 	/**

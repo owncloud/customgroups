@@ -175,9 +175,31 @@ Scenario: A user can list his groups
 		And user "user0" created a custom group called "group1"
 		And user "user0" created a custom group called "group2"
 		When user "user0" made user "member1" member of custom group "group0"
-		When user "user0" made user "member1" member of custom group "group1"
-		When user "user0" made user "member1" member of custom group "group2"
+		And user "user0" made user "member1" member of custom group "group1"
+		And user "user0" made user "member1" member of custom group "group2"
 		Then custom groups of "member1" requested by user "member1" are
 					| group0 |
 					| group1 |
 					| group2 |
+
+Scenario: Change role of a member of a group
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And custom group "group0" exists
+		And user "user0" made user "member1" member of custom group "group0"
+		When user "user0" changed role of "member1" to admin in custom group "group0"
+		Then user "member1" is admin of custom group "group0"
+
+Scenario: Create a custom group and let another user as admin
+		Given As an "admin"
+		And user "user0" exists
+		And user "member1" exists
+		And user "user0" created a custom group called "group0"
+		And custom group "group0" exists
+		And user "user0" made user "member1" member of custom group "group0"
+		And user "user0" changed role of "member1" to admin in custom group "group0"
+		When user "user0" changed role of "user0" to member in custom group "group0"
+		Then user "member1" is admin of custom group "group0"
+		And user "user0" is member of custom group "group0"
