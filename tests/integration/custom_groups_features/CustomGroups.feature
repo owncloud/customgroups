@@ -203,3 +203,24 @@ Scenario: Create a custom group and let another user as admin
 		When user "user0" changed role of "user0" to member in custom group "group0"
 		Then user "member1" is admin of custom group "group0"
 		And user "user0" is member of custom group "group0"
+
+Scenario: Superadmin can do everything
+		Given As an "admin"
+		And user "user0" exists
+		And user "user1" exists
+		And user "user2" exists
+		And user "admin" created a custom group called "group0"
+		And user "admin" created a custom group called "group1"
+		And user "admin" deleted a custom group called "group1"
+		And user "admin" made user "user0" member of custom group "group0"
+		And user "admin" made user "user1" member of custom group "group0"
+		And user "admin" made user "user2" member of custom group "group0"
+		And user "admin" renamed custom group "group0" as "renamed-group0"
+		And custom group "group0" exists with display name "renamed-group0"
+		And user "admin" changed role of "user0" to admin in custom group "group0"
+		And user "user1" is admin of custom group "group0"
+		When user "admin" removed membership of user "user1" from custom group "group0"
+		Then members of "group0" requested by user "admin" are
+					| user0 |
+					| user2 |
+					| admin |
