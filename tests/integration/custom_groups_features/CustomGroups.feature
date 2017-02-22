@@ -256,3 +256,10 @@ Scenario: A group admin cannot remove his own admin permissions if there is no o
 		And user "user0" made user "member1" member of custom group "group0"
 		When user "user0" changed role of "user1" to member in custom group "group0"
 		Then user "user0" is admin of custom group "group0"
+
+Scenario: A non-existing user cannot be added to a custom group
+		Given As an "admin"
+		And user "user0" exists
+		And user "user0" created a custom group called "group0"
+		When user "user0" made user "non-existing-user" member of custom group "group0"
+		Then the HTTP status code should be "412"
