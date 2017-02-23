@@ -31,17 +31,31 @@
 
 			view.on('select', this._onSelectGroup, this);
 
-			this._onSelectGroup(null);
+			OC.Util.History.addOnPopStateHandler(_.bind(this._onPopState, this));
+		},
+
+		_onPopState: function(state) {
+			var groupId = state.group;
+			if (!groupId) {
+				this._onSelectGroup(null);
+			} else {
+				// TODO: need to wait for list to load before switching
+				this._onSelectGroup(groupId);
+			}
 		},
 
 		_onSelectGroup: function(group) {
 			var $container = $('#app-content .container').empty(); 
+			var state = {};
 			if (group !== null) {
 				var membersView = new OCA.CustomGroups.MembersView(group);
 				$container.append(membersView.$el);
+				state.group = group.id;
 			} else {
 				// TODO: render page with hint about selecting a group
 			}
+
+			OC.Util.History.pushState(state);
 		}
 	};
 

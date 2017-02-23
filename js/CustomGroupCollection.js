@@ -39,7 +39,17 @@
 		},
 
 		comparator: function(a, b) {
-			return OC.Util.naturalSortCompare(a.get('displayName'), b.get('displayName'));
+			var roleA = a.get('role');
+			var roleB = b.get('role');
+			if (roleA === roleB) {
+				return OC.Util.naturalSortCompare(a.get('displayName'), b.get('displayName'));
+			} else {
+				// sort by "admin" first, "member" next
+				if (roleA === OCA.CustomGroups.ROLE_ADMIN) {
+					return -1;
+				}
+				return 1;
+			}
 		}
 	});
 

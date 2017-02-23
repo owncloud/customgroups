@@ -19,6 +19,20 @@
 
 		url: function() {
 			return OC.linkToRemote('dav') + '/customgroups/groups/' + this.collectionNode.get('id') + '/';
+		},
+
+		comparator: function(a, b) {
+			var roleA = a.get('role');
+			var roleB = b.get('role');
+			if (roleA === roleB) {
+				return OC.Util.naturalSortCompare(a.get('id'), b.get('id'));
+			} else {
+				// sort by "admin" first, "member" next
+				if (roleA === OCA.CustomGroups.ROLE_ADMIN) {
+					return -1;
+				}
+				return 1;
+			}
 		}
 	});
 
