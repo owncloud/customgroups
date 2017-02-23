@@ -29,6 +29,7 @@ use Sabre\DAV\PropPatch;
 use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\Dav\MembershipHelper;
 use OCP\IGroupManager;
+use OCA\CustomGroups\Search;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -373,13 +374,39 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1)
+			->with(1, null, null)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],
 			]);
 
 		$memberInfos = $this->node->getChildren();
+
+		$this->assertCount(2, $memberInfos);
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);
+		$this->assertEquals(self::NODE_USER, $memberInfos[0]->getName());
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[1]);
+		$this->assertEquals('user3', $memberInfos[1]->getName());
+	}
+
+	/**
+	 * @dataProvider rolesProvider
+	 */
+	public function testSearchMembers($isSuperAdmin, $currentMemberInfo) {
+		$search = new Search('us', 16, 256);
+
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->handler->expects($this->any())
+			->method('getGroupMembers')
+			->with(1, null, $search)
+			->willReturn([
+				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
+				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],
+			]);
+
+		$memberInfos = $this->node->search($search);
 
 		$this->assertCount(2, $memberInfos);
 		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);

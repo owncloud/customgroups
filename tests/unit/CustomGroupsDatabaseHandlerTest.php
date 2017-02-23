@@ -23,6 +23,7 @@ namespace OCA\CustomGroups\Tests\unit;
 use OCP\IDBConnection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\ILogger;
+use OCA\CustomGroups\Search;
 
 /**
  * Class CustomGroupsDatabaseHandlerTest
@@ -97,7 +98,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$group2Id = $this->handler->createGroup('my_group_2', 'My Group Two');
 		$group3Id = $this->handler->createGroup('my_group_3', 'AA One');
 
-		$results = $this->handler->searchGroups('one');
+		$results = $this->handler->searchGroups(new Search('one'));
 		$this->assertCount(2, $results);
 
 		// results sorted by display_name
@@ -122,7 +123,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 			$groupIds[$i] = $this->handler->createGroup('my_group_' . $num, 'My Group ' . $num);
 		}
 
-		$results = $this->handler->searchGroups('Group', 3, 5);
+		$results = $this->handler->searchGroups(new Search('Group', 5, 3));
 		$this->assertCount(3, $results);
 
 		$this->assertEquals($groupIds[5], $results[0]['group_id']);
@@ -130,7 +131,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals($groupIds[7], $results[2]['group_id']);
 
 		// search beyond last page
-		$results = $this->handler->searchGroups('Group', 100, 5);
+		$results = $this->handler->searchGroups(new Search('Group', 5, 100));
 		$this->assertCount(25, $results);
 	}
 

@@ -28,6 +28,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
 use OCA\CustomGroups\Dav\Roles;
+use OCA\CustomGroups\Search;
 
 /**
  * Group memberships collection for a given group
@@ -214,12 +215,16 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChildren() {
+		return $this->search();
+	}
+
+	public function search(Search $search = null) {
 		$groupId = $this->groupInfo['group_id'];
 		if (!$this->helper->isUserMember($groupId)
 			&& !$this->helper->isUserAdmin($groupId)) {
 			throw new Forbidden("No permission to list members of group \"$groupId\"");
 		}
-		$members = $this->groupsHandler->getGroupMembers($groupId);
+		$members = $this->groupsHandler->getGroupMembers($groupId, null, $search);
 		return array_map(function ($memberInfo) {
 			return $this->createCustomGroupMemberNode($memberInfo);
 		}, $members);

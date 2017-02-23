@@ -23,6 +23,8 @@ namespace OCA\CustomGroups\Dav;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserSession;
+use OCA\CustomGroups\Search;
+use OCA\CustomGroups\Dav\ReportRequest;
 use OCA\CustomGroups\Dav\RootCollection;
 use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\Dav\GroupsCollection;
@@ -31,20 +33,14 @@ use OCA\CustomGroups\Dav\CustomGroupMemberNode;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Xml\Element\Response;
 use Sabre\DAV\Xml\Response\MultiStatus;
+use Sabre\DAV\PropFind;
 /**
  * Sabre plugin to handle custom groups
  */
 class CustomGroupsPlugin extends ServerPlugin {
 	const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
-	const REPORT_NAME = '{http://owncloud.org/ns}filter-members';
-
-	/**
-	 * Custom groups handler
-	 *
-	 * @var CustomGroupsDatabaseHandler
-	 */
-	protected $groupsHandler;
+	const REPORT_NAME = '{http://owncloud.org/ns}search-query';
 
 	/**
 	 * Sabre server
@@ -63,11 +59,9 @@ class CustomGroupsPlugin extends ServerPlugin {
 	/**
 	 * Custom groups plugin
 	 *
-	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
 	 * @param IUserSession $userSession user session
 	 */
-	public function __construct(CustomGroupsDatabaseHandler $groupsHandler, IUserSession $userSession) {
-		$this->groupsHandler = $groupsHandler;
+	public function __construct(IUserSession $userSession) {
 		$this->userSession = $userSession;
 	}
 
@@ -101,6 +95,8 @@ class CustomGroupsPlugin extends ServerPlugin {
 		$this->server->protectedProperties[] = $ns . 'user-id';
 		$this->server->protectedProperties[] = $ns . 'group-uri';
 
+		$this->server->xml->elementMap[self::REPORT_NAME] = ReportRequest::class;
+
 		$this->server->on('report', [$this, 'onReport']);
 	}
 
@@ -114,77 +110,49 @@ class CustomGroupsPlugin extends ServerPlugin {
 	 */
 	public function getSupportedReportSet($uri) {
 		$node = $this->server->tree->getNodeForPath($uri);
-		if (!$node instanceof RootCollection) {
+		if ($this->isSupportedNode($node)) {
 			return [self::REPORT_NAME];
 		}
 		return [];
+	}
+
+	private function isSupportedNode($node) {
+		return (
+			$node instanceof GroupsCollection
+			|| $node instanceof GroupMembershipCollection
+		);
 	}
 
 	/**
 	 * REPORT operations to look for comments
 	 *
 	 * @param string $reportName report name
-	 * @param array $report report data
+	 * @param ReportRequest $report report data
 	 * @param string $uri URI
 	 * @return bool true if processed
-	 * @throws BadRequest if missing properties
 	 */
 	public function onReport($reportName, $report, $uri) {
 		$node = $this->server->tree->getNodeForPath($uri);
-		if (!$node instanceof RootCollection || $reportName !== self::REPORT_NAME) {
+		if (!$this->isSupportedNode($node) || $reportName !== self::REPORT_NAME) {
 			return;
 		}
 
-		$requestedProps = [];
-		$filterRules = [];
-
-		$ns = '{' . self::NS_OWNCLOUD . '}';
-		foreach ($report as $reportProps) {
-			$name = $reportProps['name'];
-			if ($name === $ns . 'filter-rules') {
-				$filterRules = $reportProps['value'];
-			} else if ($name === '{DAV:}prop') {
-				// propfind properties
-				foreach ($reportProps['value'] as $propVal) {
-					$requestedProps[] = $propVal['name'];
-				}
-			}
-		}
-
-		$filterUserId = null;
-		$filterAdminFlag = null;
-		foreach ($filterRules as $filterRule) {
-			if ($filterRule['name'] === $ns . 'user-id') {
-				$filterUserId = $filterRule['value'];
-			} else if ($filterRule['name'] === $ns . 'role') {
-				$filterAdminFlag = $filterRule['value'];
-			}
-		}
-
-		if (is_null($filterUserId)) {
-			// an empty filter would return all existing users which would be useless
-			throw new BadRequest('Missing user-id property');
-		}
-
-		$memberInfos = $this->groupsHandler->getUserMemberships($filterUserId, $filterAdminFlag);
+		$results = $node->search($report->getSearch());
 
 		$responses = [];
-		foreach ($memberInfos as $memberInfo) {
-			$node = new CustomGroupMemberNode($memberInfo, $this->groupsHandler, $this->userSession);
-			$uri = $memberInfo['uri'];
-			$nodePath = $this->server->getRequestUri() . '/' . $uri . '/' . $node->getName();
-			$resultSet = $node->getProperties($requestedProps);
-			$responses[] = new Response(
-				$this->server->getBaseUri() . $nodePath,
-				[200 => $resultSet],
-				200
-			);
+		$nodeProps = [];
+		foreach ($results as $result) {
+			$nodePath = $this->server->getRequestUri() . '/' . $result->getName();
+			$propFind = new PropFind($nodePath, $report->getProperties());
+			$this->server->getPropertiesByNode($propFind, $result);
+
+			$resultSet = $propFind->getResultForMultiStatus();
+			$resultSet['href'] = $nodePath;
+
+			$nodeProps[] = $resultSet;
 		}
 
-		$xml = $this->server->xml->write(
-			'{DAV:}multistatus',
-			new MultiStatus($responses)
-		);
+		$xml = $this->server->generateMultiStatus($nodeProps);
 
 		$this->server->httpResponse->setStatus(207);
 		$this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
