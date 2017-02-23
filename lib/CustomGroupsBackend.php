@@ -79,10 +79,24 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array an array of group names
 	 */
 	public function getUserGroups($uid) {
+		return [];
+	}
+
+	/**
+	 * Get all groups a user belongs to
+	 *
+	 * @param string $uid Name of the user
+	 * @return array an array of group names
+	 */
+	public function getUserGroupsForSharing($uid) {
 		$memberInfos = $this->handler->getUserMemberships($uid, null);
 		return array_map(function ($memberInfo) {
 			return $this->formatGroupId($memberInfo['group_id']);
 		}, $memberInfos);
+	}
+
+	public function getGroups($search = '', $limit = -1, $offset = 0) {
+		return [];
 	}
 
 	/**
@@ -93,9 +107,10 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @param string $search search string
 	 * @param int $limit limit or -1 to disable
 	 * @param int $offset offset
+	 * @param string $scope
 	 * @return array an array of group names
 	 */
-	public function getGroups($search = '', $limit = -1, $offset = 0) {
+	public function getGroupsForSharing($search = '', $limit = -1, $offset = 0) {
 		$groups = $this->handler->searchGroups($search, $limit, $offset);
 		return array_map(function ($groupInfo) {
 			return $this->formatGroupId($groupInfo['group_id']);
