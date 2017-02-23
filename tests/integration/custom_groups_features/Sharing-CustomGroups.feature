@@ -4,6 +4,20 @@ Background:
 	Given using api version "1"
 	And using new dav path
 
+Scenario: Check that skeleton is properly set
+	Given As an "admin"
+	And user "user0" exists
+	Then user "user0" should see following elements
+		| /FOLDER/ |
+		| /PARENT/ |
+		| /PARENT/parent.txt |
+		| /textfile0.txt |
+		| /textfile1.txt |
+		| /textfile2.txt |
+		| /textfile3.txt |
+		| /textfile4.txt |
+		| /welcome.txt |
+
 Scenario: Creating a share with a group
 	Given As an "admin"
 	And user "user0" exists
