@@ -46,6 +46,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$this->response = $e->getResponse();
+			if ($this->response->getStatusCode() === 401 || $this->response->getStatusCode() >= 500) {
+				throw $e;
+			}
 		}
 		$this->createdCustomGroups[$groupName] = $groupName;
 	}

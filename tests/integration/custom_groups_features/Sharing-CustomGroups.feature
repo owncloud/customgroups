@@ -28,7 +28,7 @@ Scenario: Creating a share with a group
     And As an "user0"
     When sending "POST" to "/apps/files_sharing/api/v1/shares" with
       | path | welcome.txt |
-      | shareWith | sharing-group |
+      | shareWith | customgroup_sharing-group |
       | shareType | 1 |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
