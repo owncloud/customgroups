@@ -79,13 +79,7 @@ class UsersCollection implements ICollection {
 	 * @throws MethodNotAllowed if the group already exists
 	 */
 	public function createDirectory($name) {
-		$groupId = $this->groupsHandler->createGroup($name, $name);
-		if (is_null($groupId)) {
-			throw new MethodNotAllowed("Group with uri \"$name\" already exists");
-		}
-
-		// add current user as admin
-		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
+		throw new MethodNotAllowed('Cannot create user nodes');
 	}
 
 	/**

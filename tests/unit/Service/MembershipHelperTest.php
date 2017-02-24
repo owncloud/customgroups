@@ -27,6 +27,8 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUser;
 use OCA\CustomGroups\Service\MembershipHelper;
 use OCA\CustomGroups\Search;
+use OCP\Notification\IManager;
+use OCP\IURLGenerator;
 
 /**
  * Class MembershipHelperTest
@@ -62,12 +64,24 @@ class MembershipHelperTest extends \Test\TestCase {
 	 */
 	private $userSession;
 
+	/**
+	 * @var IManager
+	 */
+	private $notificationManager;
+
+	/**
+	 * @var IURLGenerator
+	 */
+	private $urlGenerator;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->notificationManager = $this->createMock(IManager::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 
 		// currently logged in user
 		$user = $this->createMock(IUser::class);
@@ -80,7 +94,9 @@ class MembershipHelperTest extends \Test\TestCase {
 			$this->handler,
 			$this->userSession,
 			$this->userManager,
-			$this->groupManager
+			$this->groupManager,
+			$this->notificationManager,
+			$this->urlGenerator
 		);
 	}
 

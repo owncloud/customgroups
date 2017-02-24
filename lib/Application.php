@@ -35,4 +35,20 @@ class Application extends App {
 		$backend = $this->getContainer()->query('\OCA\CustomGroups\CustomGroupsBackend');
 		$this->getContainer()->getServer()->getGroupManager()->addBackend($backend);
 	}
+
+	/**
+	 * Registers the notifier
+	 */
+	public function registerNotifier() {
+		$manager = $this->getContainer()->getServer()->getNotificationManager();
+		$manager->registerNotifier(function() use ($manager) {
+			return $this->getContainer()->query('\OCA\CustomGroups\Notifier');
+		}, function() {
+			$l = \OC::$server->getL10N('customgroups');
+			return [
+				'id' => 'customgroups',
+				'name' => $l->t('Custom groups'),
+			];
+		});
+	}
 }

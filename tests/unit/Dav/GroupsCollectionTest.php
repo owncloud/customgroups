@@ -29,6 +29,8 @@ use OCA\CustomGroups\Dav\GroupMembershipCollection;
 use OCA\CustomGroups\Service\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
+use OCP\IURLGenerator;
+use OCP\Notification\IManager;
 
 /**
  * Class GroupsCollectionTest
@@ -78,7 +80,9 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->handler,
 			$this->userSession,
 			$this->userManager,
-			$this->groupManager
+			$this->groupManager,
+			$this->createMock(IManager::class),
+			$this->createMock(IURLGenerator::class)
 		);
 		$this->collection = new GroupsCollection($this->handler, $this->helper);
 	}
