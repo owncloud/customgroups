@@ -56,36 +56,42 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 
 	public function testInGroup() {
 		$this->handler->expects($this->any())
-			->method('inGroup')
+			->method('inGroupByUri')
 			->will($this->returnValueMap([
-				['user1', 1, true],
-				['user2', 1, false],
+				['user1', 'one', true],
+				['user2', 'one', false],
 			]));
 
-		$this->assertTrue($this->backend->inGroup('user1', self::GROUP_ID_PREFIX . '1'));
-		$this->assertFalse($this->backend->inGroup('user2', self::GROUP_ID_PREFIX . '1'));
-		$this->assertFalse($this->backend->inGroup('user1', '1'));
+		$this->assertTrue($this->backend->inGroup('user1', self::GROUP_ID_PREFIX . 'one'));
+		$this->assertFalse($this->backend->inGroup('user2', self::GROUP_ID_PREFIX . 'one'));
+		$this->assertFalse($this->backend->inGroup('user1', 'one'));
 	}
 
 	public function testGetUserGroups() {
 		$this->handler->expects($this->any())
 			->method('getUserMemberships')
 			->will($this->returnValueMap([
-				['user1', null, [['group_id' => 1], ['group_id' => 2]]],
-				['user2', null, [['group_id' => 1], ['group_id' => 3]]],
+				['user1', null, [
+					['group_id' => 1, 'uri' => 'one'],
+					['group_id' => 2, 'uri' => 'two']]
+				],
+				['user2', null, [
+					['group_id' => 1, 'uri' => 'one'],
+					['group_id' => 3, 'uri' => 'three']]
+				],
 			]));
 
 		$this->assertEquals(
 			[
-				self::GROUP_ID_PREFIX . '1',
-				self::GROUP_ID_PREFIX . '2',
+				self::GROUP_ID_PREFIX . 'one',
+				self::GROUP_ID_PREFIX . 'two',
 			],
 			$this->backend->getUserGroups('user1')
 		);
 		$this->assertEquals(
 			[
-				self::GROUP_ID_PREFIX . '1',
-				self::GROUP_ID_PREFIX . '3',
+				self::GROUP_ID_PREFIX . 'one',
+				self::GROUP_ID_PREFIX . 'three',
 			],
 			$this->backend->getUserGroups('user2')
 		);
@@ -96,14 +102,14 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 			->method('searchGroups')
 			->with(new Search('ser', 5, 10))
 			->will($this->returnValue([
-				['group_id' => 1],
-				['group_id' => 2],
+				['group_id' => 1, 'uri' => 'one'],
+				['group_id' => 2, 'uri' => 'two'],
 			]));
 
 		$this->assertEquals(
 			[
-				self::GROUP_ID_PREFIX . '1',
-				self::GROUP_ID_PREFIX . '2',
+				self::GROUP_ID_PREFIX . 'one',
+				self::GROUP_ID_PREFIX . 'two',
 			],
 			$this->backend->getGroups('ser', 10, 5)
 		);
@@ -111,37 +117,37 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 
 	public function testGroupExists() {
 		$this->handler->expects($this->any())
-			->method('getGroup')
+			->method('getGroupByUri')
 			->will($this->returnValueMap([
-				[1, ['group_id' => 1, 'display_name' => 'Group One']],
-				[2, null],
+				['one', ['group_id' => 1, 'display_name' => 'Group One', 'uri' => 'one']],
+				['two', null],
 			]));
 
-		$this->assertTrue($this->backend->groupExists(self::GROUP_ID_PREFIX . '1'));
-		$this->assertFalse($this->backend->groupExists(self::GROUP_ID_PREFIX . '2'));
+		$this->assertTrue($this->backend->groupExists(self::GROUP_ID_PREFIX . 'one'));
+		$this->assertFalse($this->backend->groupExists(self::GROUP_ID_PREFIX . 'two'));
 		$this->assertFalse($this->backend->groupExists(1));
 	}
 
 	public function testGetGroupDetails() {
 		$this->handler->expects($this->any())
-			->method('getGroup')
+			->method('getGroupByUri')
 			->will($this->returnValueMap([
-				[1, ['group_id' => 1, 'display_name' => 'Group One']],
-				[2, null],
+				['one', ['group_id' => 1, 'display_name' => 'Group One', 'uri' => 'one']],
+				['two', null],
 			]));
 
-		$groupInfo = $this->backend->getGroupDetails(self::GROUP_ID_PREFIX . '1');
-		$this->assertEquals(self::GROUP_ID_PREFIX . '1', $groupInfo['gid']);
+		$groupInfo = $this->backend->getGroupDetails(self::GROUP_ID_PREFIX . 'one');
+		$this->assertEquals(self::GROUP_ID_PREFIX . 'one', $groupInfo['gid']);
 		$this->assertEquals('Group One', $groupInfo['displayName']);
 
-		$this->assertNull($this->backend->getGroupDetails(self::GROUP_ID_PREFIX . '2'));
+		$this->assertNull($this->backend->getGroupDetails(self::GROUP_ID_PREFIX . 'two'));
 		$this->assertNull($this->backend->getGroupDetails(1));
 	}
 
 	public function testUsersInGroup() {
 		$this->handler->expects($this->never())->method('getGroup');
 		$this->handler->expects($this->never())->method('getGroupMembers');
-		$this->assertEquals([], $this->backend->usersInGroup(self::GROUP_ID_PREFIX . '1'));
+		$this->assertEquals([], $this->backend->usersInGroup(self::GROUP_ID_PREFIX . 'one'));
 	}
 
 }

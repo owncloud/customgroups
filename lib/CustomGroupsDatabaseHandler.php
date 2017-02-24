@@ -66,12 +66,12 @@ class CustomGroupsDatabaseHandler {
 	 * @return boolean true if the user is in group, false otherwise
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function inGroup($uid, $numericGroupId) {
+	private function inGroupBy($uid, $field, $value) {
 		$qb = $this->dbConn->getQueryBuilder();
 
 		$cursor = $qb->select('user_id')
 			->from('custom_group_member')
-			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($numericGroupId)))
+			->where($qb->expr()->eq($field, $qb->createNamedParameter($value)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->execute();
 
@@ -79,6 +79,30 @@ class CustomGroupsDatabaseHandler {
 		$cursor->closeCursor();
 
 		return $result ? true : false;
+	}
+
+	/**
+	 * Checks whether the user is member of a group or not.
+	 *
+	 * @param string $uid uid of the user
+	 * @param int $numericGroupId id of the group
+	 * @return boolean true if the user is in group, false otherwise
+	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
+	 */
+	public function inGroup($uid, $numericGroupId) {
+		return $this->inGroupBy($uid, 'group_id', $numericGroupId);
+	}
+
+	/**
+	 * Checks whether the user is member of a group or not.
+	 *
+	 * @param string $uid uid of the user
+	 * @param string $uri uri
+	 * @return boolean true if the user is in group, false otherwise
+	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
+	 */
+	public function inGroupByUri($uid, $uri) {
+		return $this->inGroupBy($uid, 'uri', $numericGroupId);
 	}
 
 	/**
