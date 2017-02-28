@@ -85,12 +85,11 @@ class CustomGroupsDatabaseHandler {
 	 * Get all group memberships of the given user
 	 *
 	 * @param string $uid Name of the user
-	 * @param null|int $roleFilter optional role filter
 	 * @param Search $search search
 	 * @return array an array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getUserMemberships($uid, $roleFilter = null, $search = null) {
+	public function getUserMemberships($uid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->select('m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name')
 			->from('custom_group_member', 'm')
@@ -98,10 +97,6 @@ class CustomGroupsDatabaseHandler {
 			->where($qb->expr()->eq('g.group_id', 'm.group_id'))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->orderBy('m.group_id', 'ASC');
-
-		if (!is_null($roleFilter)) {
-			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
-		}
 
 		$this->applySearch($qb, $search, 'display_name');
 
@@ -315,22 +310,17 @@ class CustomGroupsDatabaseHandler {
 	 * Returns the group members
 	 *
 	 * @param int $gid numeric group id
-	 * @param null|bool $roleFilter optional role filter, set to true or false to
 	 * filter by non-admin-only or admin-only
 	 * @param Search $search search
 	 * @return array array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getGroupMembers($gid, $roleFilter = null, $search = null) {
+	public function getGroupMembers($gid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->select(['user_id', 'group_id', 'role'])
 			->from('custom_group_member')
 			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
 			->orderBy('user_id', 'ASC');
-
-		if (!is_null($roleFilter)) {
-			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
-		}
 
 		// TODO: also by display name
 		$this->applySearch($qb, $search, 'user_id');
@@ -428,6 +418,10 @@ class CustomGroupsDatabaseHandler {
 
 			if ($search->getOffset() !== null) {
 				$qb->setFirstResult($search->getOffset());
+			}
+
+			if ($search->getRoleFilter() !== null) {
+				$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($search->getRoleFilter())));
 			}
 		}
 		return $qb;

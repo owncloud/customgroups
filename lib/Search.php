@@ -50,6 +50,12 @@ class Search {
 	 */
 	private $limit;
 
+	/**
+	 * Role filter
+	 *
+	 * @var int
+	 */
+	private $roleFilter = null;
 
 	/**
 	 * Constructs a new search
@@ -67,7 +73,7 @@ class Search {
 	/**
 	 * Set search pattern or null for none
 	 *
-	 * @param string pattern pattern
+	 * @param string $pattern pattern
 	 */
 	public function setPattern($pattern) {
 		if ($pattern === '') {
@@ -125,5 +131,26 @@ class Search {
 	 */
 	public function getLimit() {
 		return $this->limit;
+	}
+
+	/**
+	 * Set role filter
+	 *
+	 * @param int $roleFilter role as integer
+	 */
+	public function setRoleFilter($roleFilter) {
+		if ($roleFilter === '') {
+			$roleFilter = null;
+		}
+		$this->roleFilter = $roleFilter;
+	}
+
+	/**
+	 * Returns the role filter
+	 *
+	 * @return int role filter
+	 */
+	public function getRoleFilter() {
+		return $this->roleFilter;
 	}
 }

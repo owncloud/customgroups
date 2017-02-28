@@ -374,7 +374,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, null, null)
+			->with(1, null)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],
@@ -400,7 +400,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, null, $search)
+			->with(1, $search)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],

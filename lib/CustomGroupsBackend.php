@@ -79,7 +79,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array an array of group names
 	 */
 	public function getUserGroups($uid) {
-		$memberInfos = $this->handler->getUserMemberships($uid, null, null);
+		$memberInfos = $this->handler->getUserMemberships($uid, null);
 		return array_map(function ($memberInfo) {
 			return $this->formatGroupId($memberInfo['group_id']);
 		}, $memberInfos);

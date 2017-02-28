@@ -71,8 +71,8 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 		$this->handler->expects($this->any())
 			->method('getUserMemberships')
 			->will($this->returnValueMap([
-				['user1', null, null, [['group_id' => 1], ['group_id' => 2]]],
-				['user2', null, null, [['group_id' => 1], ['group_id' => 3]]],
+				['user1', null, [['group_id' => 1], ['group_id' => 2]]],
+				['user2', null, [['group_id' => 1], ['group_id' => 3]]],
 			]));
 
 		$this->assertEquals(

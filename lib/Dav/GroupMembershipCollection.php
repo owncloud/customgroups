@@ -224,7 +224,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			&& !$this->helper->isUserAdmin($groupId)) {
 			throw new Forbidden("No permission to list members of group \"$groupId\"");
 		}
-		$members = $this->groupsHandler->getGroupMembers($groupId, null, $search);
+		$members = $this->groupsHandler->getGroupMembers($groupId, $search);
 		return array_map(function ($memberInfo) {
 			return $this->createCustomGroupMemberNode($memberInfo);
 		}, $members);

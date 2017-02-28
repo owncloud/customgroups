@@ -239,8 +239,12 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertTrue($this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER));
 		$this->assertTrue($this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN));
 
-		$adminMembers = $this->handler->getGroupMembers($groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$nonAdminMembers = $this->handler->getGroupMembers($groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$searchMembers = new Search();
+		$searchMembers->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$adminMembers = $this->handler->getGroupMembers($groupId, $searchAdmins);
+		$nonAdminMembers = $this->handler->getGroupMembers($groupId, $searchMembers);
 
 		$this->assertCount(1, $adminMembers);
 		$this->assertCount(1, $nonAdminMembers);
@@ -334,9 +338,14 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
 		$this->handler->addToGroup('user1', $groupId2, CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$adminGroups = $this->handler->getUserMemberships('user1', CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$searchMembers = new Search();
+		$searchMembers->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_MEMBER);
+
+		$adminGroups = $this->handler->getUserMemberships('user1', $searchAdmins);
 		$this->assertCount(1, $adminGroups);
-		$nonAdminGroups = $this->handler->getUserMemberships('user1', CustomGroupsDatabaseHandler::ROLE_MEMBER);
+		$nonAdminGroups = $this->handler->getUserMemberships('user1', $searchMembers);
 		$this->assertCount(1, $nonAdminGroups);
 
 		$this->assertEquals($groupId, $nonAdminGroups[0]['group_id']);

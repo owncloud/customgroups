@@ -130,7 +130,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
-			->with('user1', null, null)
+			->with('user1', null)
 			->will($this->returnValue([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
@@ -152,7 +152,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
-			->with('user1', null, $search)
+			->with('user1', $search)
 			->will($this->returnValue([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],

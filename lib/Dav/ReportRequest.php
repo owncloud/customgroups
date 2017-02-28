@@ -29,6 +29,7 @@ use Sabre\Xml\XmlDeserializable;
 use OCA\CustomGroups\Search;
 use OCP\IDBConnection;
 use OCP\ILogger;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Report request

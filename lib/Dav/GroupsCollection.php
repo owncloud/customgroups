@@ -128,7 +128,7 @@ class GroupsCollection implements ICollection {
 	 */
 	public function search(Search $search = null) {
 		if ($this->userId !== null) {
-			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, null, $search);
+			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {
 			$allGroups = $this->groupsHandler->getGroups($search);
 		}
