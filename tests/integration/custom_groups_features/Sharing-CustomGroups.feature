@@ -200,3 +200,34 @@ Scenario: sharing subfolder when parent already shared with custom group of shar
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 	And as "user1" the folder "/sub" exists
+
+Scenario: unshare from self using custom groups
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user0" created a custom group called "sharing-group"
+    And user "user0" made user "user1" member of custom group "sharing-group"
+    And file "/PARENT/parent.txt" of user "user0" is shared with group "customgroup_sharing-group"
+    And user "user0" stores etag of element "/PARENT"
+    And user "user1" stores etag of element "/"
+    And As an "user1"
+    When Deleting last share
+    Then etag of element "/" of user "user1" has changed
+    And etag of element "/PARENT" of user "user0" has not changed
+
+Scenario: Increasing permissions is allowed for owner
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And group "new-group" exists
+    And user "user0" belongs to group "new-group"
+    And user "user1" belongs to group "new-group"
+    And Assure user "user0" is subadmin of group "new-group"
+    And As an "user0"
+    And folder "/FOLDER" of user "user0" is shared with group "new-group"
+    And Updating last share with
+      | permissions | 0 |
+    When Updating last share with
+      | permissions | 31 |
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
