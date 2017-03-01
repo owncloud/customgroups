@@ -219,12 +219,10 @@ Scenario: Increasing permissions is allowed for owner
     Given As an "admin"
     And user "user0" exists
     And user "user1" exists
-    And group "new-group" exists
-    And user "user0" belongs to group "new-group"
-    And user "user1" belongs to group "new-group"
-    And Assure user "user0" is subadmin of group "new-group"
+    And user "user0" created a custom group called "sharing-group"
+    And user "user0" made user "user1" member of custom group "sharing-group"
     And As an "user0"
-    And folder "/FOLDER" of user "user0" is shared with group "new-group"
+    And folder "/FOLDER" of user "user0" is shared with group "customgroup_sharing-group"
     And Updating last share with
       | permissions | 0 |
     When Updating last share with
