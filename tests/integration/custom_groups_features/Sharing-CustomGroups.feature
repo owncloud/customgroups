@@ -103,3 +103,22 @@ Scenario: Share of folder and sub-folder to same user
       | /PARENT/parent.txt |
       | /CHILD/child.txt |
     And the HTTP status code should be "200"
+
+Scenario: Share a file by multiple channels
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user2" exists
+    And user "user1" created a custom group called "group1"
+	And user "user1" made user "user2" member of custom group "group1"
+    And user "user0" created a folder "/common"
+    And user "user0" created a folder "/common/sub"
+    And folder "common" of user "user0" is shared with group "customgroup_group1"
+    And file "textfile0.txt" of user "user1" is shared with user "user2"
+    And User "user1" moved file "/textfile0.txt" to "/common/textfile0.txt"
+    And User "user1" moved file "/common/textfile0.txt" to "/common/sub/textfile0.txt"
+    And As an "user2"
+    When Downloading file "/textfile0.txt" with range "bytes=9-17"
+    Then Downloaded content should be "test text"
+    And user "user2" should see following elements
+      | /common/sub/textfile0.txt |
