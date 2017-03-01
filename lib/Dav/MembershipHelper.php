@@ -25,6 +25,7 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use OCA\CustomGroups\Search;
 
 /**
  * Membership helper
@@ -163,7 +164,9 @@ class MembershipHelper {
 	 * @return bool true if it's the only admin, false otherwise
 	 */
 	public function isTheOnlyAdmin($groupId, $userId) {
-		$groupAdmins = $this->groupsHandler->getGroupMembers($groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$groupAdmins = $this->groupsHandler->getGroupMembers($groupId, $searchAdmins);
 		if (count($groupAdmins) > 1) {
 			return false;
 		}

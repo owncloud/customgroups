@@ -64,12 +64,12 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return boolean true if user is in group, false otherwise
 	 */
 	public function inGroup($uid, $gid) {
-		$numericGroupId = $this->extractNumericGroupId($gid);
-		if (is_null($numericGroupId)) {
+		$uri = $this->extractUri($gid);
+		if (is_null($uri)) {
 			return false;
 		}
 
-		return $this->handler->inGroup($uid, $numericGroupId);
+		return $this->handler->inGroupByUri($uid, $uri);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	public function getUserGroups($uid) {
 		$memberInfos = $this->handler->getUserMemberships($uid, null);
 		return array_map(function ($memberInfo) {
-			return $this->formatGroupId($memberInfo['group_id']);
+			return $this->formatGroupId($memberInfo['uri']);
 		}, $memberInfos);
 	}
 
@@ -98,7 +98,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	public function getGroups($search = '', $limit = -1, $offset = 0) {
 		$groups = $this->handler->searchGroups(new Search($search, $offset, $limit));
 		return array_map(function ($groupInfo) {
-			return $this->formatGroupId($groupInfo['group_id']);
+			return $this->formatGroupId($groupInfo['uri']);
 		}, $groups);
 	}
 
@@ -119,17 +119,17 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array|null group info or null if not found
 	 */
 	public function getGroupDetails($gid) {
-		$numericGroupId = $this->extractNumericGroupId($gid);
-		if (is_null($numericGroupId)) {
+		$uri = $this->extractUri($gid);
+		if (is_null($uri)) {
 			return null;
 		}
 
-		$group = $this->handler->getGroup($numericGroupId);
+		$group = $this->handler->getGroupByUri($uri);
 		if (is_null($group)) {
 			return null;
 		}
 		return [
-			'gid' => $this->formatGroupId($group['group_id']),
+			'gid' => $this->formatGroupId($group['uri']),
 			'displayName' => $group['display_name'],
 		];
 	}
@@ -149,34 +149,35 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	}
 
 	/**
-	 * Extracts the numeric id from the group id string with
-	 * the format "customgroup_$id"
+	 * Extracts the uri from the group id string with
+	 * the format "customgroup_$uri"
 	 *
-	 * @param string $gid group id in format "customgroup_$id"
-	 * @return extracted numeric id or null if the format did not match
+	 * @param string $gid group id in format "customgroup_$uri"
+	 * @return string|null extracted uri or null if the format did not match
 	 */
-	private function extractNumericGroupId($gid) {
+	private function extractUri($gid) {
 		$len = strlen(self::GROUP_ID_PREFIX);
 		$prefixPart = substr($gid, 0, $len);
 		if ($prefixPart !== self::GROUP_ID_PREFIX) {
 			return null;
 		}
 
-		$numericPart = substr($gid, $len);
+		$uri = substr($gid, $len);
 
-		if (!is_numeric($numericPart)) {
+		if ($uri === '') {
+			// invalid id
 			return null;
 		}
-		return (int)$numericPart;
+		return $uri;
 	}
 
 	/**
-	 * Formats the given numeric group id to a string
+	 * Formats the given uri to a string
 	 *
-	 * @param int $numericId numeric group id
-	 * @return formatted id in format "customgroup_$id"
+	 * @param int $uri numeric group id
+	 * @return string formatted id in format "customgroup_$uri"
 	 */
-	private function formatGroupId($numericId) {
-		return self::GROUP_ID_PREFIX . $numericId;
+	private function formatGroupId($uri) {
+		return self::GROUP_ID_PREFIX . $uri;
 	}
 }

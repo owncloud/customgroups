@@ -27,6 +27,9 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
+#Set up personalized skeleton
+$OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$CORE_INT_TESTS_PATH""skeleton"
+
 #Enable needed app
 $OCC app:enable files_external
 $OCC app:enable customgroups

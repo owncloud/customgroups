@@ -82,6 +82,31 @@ class CustomGroupsDatabaseHandler {
 	}
 
 	/**
+	 * Checks whether the user is member of a group or not.
+	 *
+	 * @param string $uid uid of the user
+	 * @param string $uri uri
+	 * @return boolean true if the user is in group, false otherwise
+	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
+	 */
+	public function inGroupByUri($uid, $uri) {
+		$qb = $this->dbConn->getQueryBuilder();
+
+		$cursor = $qb->select('user_id')
+			->from('custom_group_member', 'm')
+			->from('custom_group', 'g')
+			->where($qb->expr()->eq('g.group_id', 'm.group_id'))
+			->where($qb->expr()->eq('uri', $qb->createNamedParameter($uri)))
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
+			->execute();
+
+		$result = $cursor->fetch();
+		$cursor->closeCursor();
+
+		return $result ? true : false;
+	}
+
+	/**
 	 * Get all group memberships of the given user
 	 *
 	 * @param string $uid Name of the user
