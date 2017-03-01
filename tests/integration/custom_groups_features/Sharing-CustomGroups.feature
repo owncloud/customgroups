@@ -152,3 +152,51 @@ Scenario: Keep user custom group shares
     And user "user2" does not exist
     And user "user1" should see following elements
       | /myFOLDER/myTMP/ |
+
+Scenario: sharing again an own file while belonging to a custom group
+    Given As an "admin"
+    And user "user0" exists
+    And user "user0" created a custom group called "sharing-group"
+    And group "sharing-group" exists
+    And file "welcome.txt" of user "user0" is shared with group "customgroup_sharing-group"
+    And Deleting last share
+    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+      | path | welcome.txt |
+      | shareWith | customgroup_sharing-group |
+      | shareType | 1 |
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+
+Scenario: sharing subfolder when parent already shared
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user1" created a custom group called "sharing-group"
+    And user "user0" created a folder "/test"
+    And user "user0" created a folder "/test/sub"
+    And folder "/test" of user "user0" is shared with group "customgroup_sharing-group"
+    And As an "user0"
+    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+      | path | /test/sub |
+      | shareWith | user1 |
+      | shareType | 0 |
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+	And as "user1" the folder "/sub" exists
+
+Scenario: sharing subfolder when parent already shared with custom group of sharer
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user0" created a custom group called "sharing-group"
+    And user "user0" created a folder "/test"
+    And user "user0" created a folder "/test/sub"
+    And file "/test" of user "user0" is shared with group "customgroup_sharing-group"
+    And As an "user0"
+    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+      | path | /test/sub |
+      | shareWith | user1 |
+      | shareType | 0 |
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+	And as "user1" the folder "/sub" exists
