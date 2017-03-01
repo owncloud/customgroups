@@ -180,4 +180,14 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	private function formatGroupId($uri) {
 		return self::GROUP_ID_PREFIX . $uri;
 	}
+
+	/**
+	 * Returns true only if the scope is "sharing"
+	 *
+	 * @param string $scope
+	 * @return bool true if the scope is "sharing"
+	 */
+	public function isVisibleForScope($scope) {
+		return ($scope === 'sharing');
+	}
 }
