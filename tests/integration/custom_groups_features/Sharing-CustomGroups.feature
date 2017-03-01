@@ -77,4 +77,14 @@ Scenario: keep custom group permissions in sync
       | displayname_owner | user0 |
       | mimetype          | text/plain |
 
-
+Scenario: Sharee can see the custom group share
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user1" created a custom group called "group1"
+    And file "textfile0.txt" of user "user0" is shared with group "customgroup_group1"
+    And As an "user1"
+    When sending "GET" to "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And last share_id is included in the answer
