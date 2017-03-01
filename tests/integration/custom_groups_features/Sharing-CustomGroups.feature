@@ -88,3 +88,18 @@ Scenario: Sharee can see the custom group share
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And last share_id is included in the answer
+
+Scenario: Share of folder and sub-folder to same user
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user1" created a custom group called "group1"
+    And file "/PARENT" of user "user0" is shared with user "user1"
+    When file "/PARENT/CHILD" of user "user0" is shared with group "customgroup_group1"
+    Then user "user1" should see following elements
+      | /FOLDER/ |
+      | /PARENT/ |
+      | /CHILD/ |
+      | /PARENT/parent.txt |
+      | /CHILD/child.txt |
+    And the HTTP status code should be "200"
