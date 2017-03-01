@@ -26,6 +26,7 @@ use OCP\IGroupManager;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUser;
 use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Search;
 
 /**
  * Class MembershipHelperTest
@@ -214,9 +215,12 @@ class MembershipHelperTest extends \Test\TestCase {
 	 * @dataProvider isTheOnlyAdminDataProvider
 	 */
 	public function testIsTheOnlyAdmin($memberInfo, $expectedResult) {
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->once())
 			->method('getGroupMembers')
-			->with('group1', CustomGroupsDatabaseHandler::ROLE_ADMIN)
+			->with('group1', $searchAdmins)
 			->willReturn($memberInfo);
 
 		$this->assertEquals($expectedResult, $this->helper->isTheOnlyAdmin('group1', 'admin1'));

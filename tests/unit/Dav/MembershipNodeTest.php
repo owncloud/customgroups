@@ -29,6 +29,7 @@ use Sabre\DAV\PropPatch;
 use OCA\CustomGroups\Dav\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\Roles;
+use OCA\CustomGroups\Search;
 
 /**
  * Class MembershipNodeTest
@@ -239,9 +240,12 @@ class MembershipNodeTest extends \Test\TestCase {
 	public function testDeleteSelfAsLastAdmin() {
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
+		$searchAdmin = new Search(); 
+		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, CustomGroupsDatabaseHandler::ROLE_ADMIN)
+			->with(1, $searchAdmin)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
@@ -262,9 +266,12 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::NODE_USER)
 			->willReturn(true);
 
+		$searchAdmin = new Search(); 
+		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, CustomGroupsDatabaseHandler::ROLE_ADMIN)
+			->with(1, $searchAdmin)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
@@ -358,9 +365,12 @@ class MembershipNodeTest extends \Test\TestCase {
 				->method('setGroupMemberInfo');
 		}
 
+		$searchAdmin = new Search(); 
+		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, true)
+			->with(1, $searchAdmin)
 			->willReturn([
 				['group_id' => 1, 'user_id' => 'someotheradmin', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			]);
@@ -385,9 +395,12 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->handler->expects($this->never())
 			->method('setGroupMemberInfo');
 
+		$searchAdmin = new Search(); 
+		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, true)
+			->with(1, $searchAdmin)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
@@ -410,9 +423,12 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->handler->expects($this->never())
 			->method('setGroupMemberInfo');
 
+		$searchAdmin = new Search(); 
+		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
-			->with(1, true)
+			->with(1, $searchAdmin)
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
