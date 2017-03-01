@@ -24,6 +24,7 @@ use OCP\IDBConnection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\CustomGroupsBackend;
 use OCP\GroupInterface;
+use OCA\CustomGroups\Search;
 
 /**
  * Class CustomGroupsBackendTest
@@ -93,7 +94,7 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 	public function testGetGroups() {
 		$this->handler->expects($this->any())
 			->method('searchGroups')
-			->with('ser', 10, 5)
+			->with(new Search('ser', 5, 10))
 			->will($this->returnValue([
 				['group_id' => 1],
 				['group_id' => 2],

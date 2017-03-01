@@ -96,7 +96,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array an array of group names
 	 */
 	public function getGroups($search = '', $limit = -1, $offset = 0) {
-		$groups = $this->handler->searchGroups($search, $limit, $offset);
+		$groups = $this->handler->searchGroups(new Search($search, $offset, $limit));
 		return array_map(function ($groupInfo) {
 			return $this->formatGroupId($groupInfo['group_id']);
 		}, $groups);

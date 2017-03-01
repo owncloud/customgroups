@@ -23,6 +23,7 @@ namespace OCA\CustomGroups;
 
 use OCP\IDBConnection;
 use OCP\ILogger;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 
 /**
  * Database handler for custom groups
@@ -84,11 +85,11 @@ class CustomGroupsDatabaseHandler {
 	 * Get all group memberships of the given user
 	 *
 	 * @param string $uid Name of the user
-	 * @param null|int $roleFilter optional role filter
+	 * @param Search $search search
 	 * @return array an array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getUserMemberships($uid, $roleFilter = null) {
+	public function getUserMemberships($uid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->select('m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name')
 			->from('custom_group_member', 'm')
@@ -97,9 +98,7 @@ class CustomGroupsDatabaseHandler {
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->orderBy('m.group_id', 'ASC');
 
-		if (!is_null($roleFilter)) {
-			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
-		}
+		$this->applySearch($qb, $search, 'display_name');
 
 		$cursor = $qb->execute();
 
@@ -120,30 +119,17 @@ class CustomGroupsDatabaseHandler {
 	 * search string can appear anywhere within the display name
 	 * field.
 	 *
-	 * @param string $search search string
-	 * @param int $limit limit or -1 to disable
-	 * @param int $offset offset
+	 * @param Search $search search
 	 * @return array an array of group info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function searchGroups($search = '', $limit = -1, $offset = 0) {
+	public function searchGroups($search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->select(['group_id', 'uri', 'display_name'])
 			->from('custom_group')
 			->orderBy('display_name', 'ASC');
 
-		if ($search !== '') {
-			$likeString = '%' . $this->dbConn->escapeLikeParameter(strtolower($search)) . '%';
-			$qb->where($qb->expr()->like($qb->createFunction('LOWER(`display_name`)'), $qb->createNamedParameter($likeString)));
-		}
-
-		if ($limit > 0) {
-			$qb->setMaxResults($limit);
-		}
-
-		if ($offset !== 0) {
-			$qb->setFirstResult($offset);
-		}
+		$this->applySearch($qb, $search, 'display_name');
 
 		$cursor = $qb->execute();
 		$groups = $cursor->fetchAll();
@@ -200,11 +186,13 @@ class CustomGroupsDatabaseHandler {
 	/**
 	 * Returns the info for all groups.
 	 *
+	 * @param Search $search search
+	 *
 	 * @return array array of group info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getGroups() {
-		return $this->searchGroups();
+	public function getGroups($search = null) {
+		return $this->searchGroups($search);
 	}
 
 	/**
@@ -322,21 +310,20 @@ class CustomGroupsDatabaseHandler {
 	 * Returns the group members
 	 *
 	 * @param int $gid numeric group id
-	 * @param null|bool $roleFilter optional role filter, set to true or false to
 	 * filter by non-admin-only or admin-only
+	 * @param Search $search search
 	 * @return array array of member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	public function getGroupMembers($gid, $roleFilter = null) {
+	public function getGroupMembers($gid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->select(['user_id', 'group_id', 'role'])
 			->from('custom_group_member')
 			->where($qb->expr()->eq('group_id', $qb->createNamedParameter($gid)))
 			->orderBy('user_id', 'ASC');
 
-		if (!is_null($roleFilter)) {
-			$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($roleFilter)));
-		}
+		// TODO: also by display name
+		$this->applySearch($qb, $search, 'user_id');
 
 		$cursor = $qb->execute();
 
@@ -408,5 +395,35 @@ class CustomGroupsDatabaseHandler {
 			'group_id' => (int)$row['group_id'],
 			'role' => (int)$row['role'],
 		];
+	}
+
+	/**
+	 * Apply search to the given query
+	 *
+	 * @param IQueryBuilder $qb query builder
+	 * @param Search $search search
+	 * @param string $property property to apply search on
+	 * @return IQueryBuilder query builder
+	 */
+	private function applySearch(IQueryBuilder $qb, $search, $property = null) {
+		if ($search !== null) {
+			if ($search->getPattern() !== null && $property !== null) {
+				$likeString = '%' . $this->dbConn->escapeLikeParameter(strtolower($search->getPattern())) . '%';
+				$qb->andWhere($qb->expr()->like($qb->createFunction('LOWER(`' . $property . '`)'), $qb->createNamedParameter($likeString)));
+			}
+
+			if ($search->getLimit() !== null) {
+				$qb->setMaxResults($search->getLimit());
+			}
+
+			if ($search->getOffset() !== null) {
+				$qb->setFirstResult($search->getOffset());
+			}
+
+			if ($search->getRoleFilter() !== null) {
+				$qb->andWhere($qb->expr()->eq('role', $qb->createNamedParameter($search->getRoleFilter())));
+			}
+		}
+		return $qb;
 	}
 }

@@ -28,6 +28,7 @@ use OCP\IUser;
 use OCA\CustomGroups\Dav\GroupMembershipCollection;
 use OCA\CustomGroups\Dav\MembershipHelper;
 use OCP\IGroupManager;
+use OCA\CustomGroups\Search;
 
 /**
  * Class GroupsCollectionTest
@@ -90,6 +91,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	public function testListGroups() {
 		$this->handler->expects($this->at(0))
 			->method('getGroups')
+			->with(null)
 			->will($this->returnValue([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
@@ -104,18 +106,59 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
-	public function testListGroupsFiltered() {
+	public function testListGroupsSearchPattern() {
+		$search = new Search('gr', 16, 256);
+		$this->handler->expects($this->at(0))
+			->method('getGroups')
+			->with($search)
+			->will($this->returnValue([
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
+			]));
+
+		$nodes = $this->collection->search($search);
+		$this->assertCount(2, $nodes);
+
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		$this->assertEquals('group1', $nodes[0]->getName());
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		$this->assertEquals('group2', $nodes[1]->getName());
+	}
+
+	public function testListGroupsForUser() {
 		$collection = new GroupsCollection($this->handler, $this->helper, 'user1');
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
-			->with('user1')
+			->with('user1', null)
 			->will($this->returnValue([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
 			]));
 
 		$nodes = $collection->getChildren();
+		$this->assertCount(2, $nodes);
+
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		$this->assertEquals('group1', $nodes[0]->getName());
+		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		$this->assertEquals('group2', $nodes[1]->getName());
+	}
+
+	public function testListGroupsForUserSearchPattern() {
+		$search = new Search('gr', 16, 256);
+
+		$collection = new GroupsCollection($this->handler, $this->helper, 'user1');
+		$this->handler->expects($this->never())->method('getGroups');
+		$this->handler->expects($this->at(0))
+			->method('getUserMemberships')
+			->with('user1', $search)
+			->will($this->returnValue([
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
+			]));
+
+		$nodes = $collection->search($search);
 		$this->assertCount(2, $nodes);
 
 		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);

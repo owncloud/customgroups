@@ -22,9 +22,11 @@
 namespace OCA\CustomGroups\Dav;
 
 use Sabre\DAV\ICollection;
-use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
+
+use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Search;
 
 /**
  * Collection of custom groups
@@ -116,10 +118,19 @@ class GroupsCollection implements ICollection {
 	 * @return GroupMembershipCollection[] custom group nodes
 	 */
 	public function getChildren() {
+		return $this->search();
+	}
+
+	/**
+	 * Search nodes
+	 *
+	 * @param Search $search search
+	 */
+	public function search(Search $search = null) {
 		if ($this->userId !== null) {
-			$allGroups = $this->groupsHandler->getUserMemberships($this->userId);
+			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {
-			$allGroups = $this->groupsHandler->getGroups();
+			$allGroups = $this->groupsHandler->getGroups($search);
 		}
 		return array_map(function ($groupInfo) {
 			return $this->createMembershipsCollection($groupInfo);
