@@ -138,3 +138,17 @@ Scenario: Delete all custom group shares
     And the HTTP status code should be "200"
     And last share_id is not included in the answer
 
+Scenario: Keep user custom group shares 
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user2" exists
+    And user "user1" created a custom group called "group1"
+    And user "user1" made user "user2" member of custom group "group1"
+    And user "user0" created a folder "/TMP"
+    And folder "TMP" of user "user0" is shared with group "customgroup_group1"
+    And user "user1" created a folder "/myFOLDER"
+    And User "user1" moves file "/TMP" to "/myFOLDER/myTMP"
+    And user "user2" does not exist
+    And user "user1" should see following elements
+      | /myFOLDER/myTMP/ |
