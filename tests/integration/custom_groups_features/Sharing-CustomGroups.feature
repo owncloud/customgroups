@@ -122,3 +122,19 @@ Scenario: Share a file by multiple channels
     Then Downloaded content should be "test text"
     And user "user2" should see following elements
       | /common/sub/textfile0.txt |
+
+Scenario: Delete all custom group shares
+    Given As an "admin"
+    And user "user0" exists
+    And user "user1" exists
+    And user "user1" created a custom group called "group1"
+    And file "textfile0.txt" of user "user0" is shared with group "customgroup_group1"
+    And User "user1" moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
+    And As an "user0"
+    And Deleting last share
+    And As an "user1"
+    When sending "GET" to "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And last share_id is not included in the answer
+
