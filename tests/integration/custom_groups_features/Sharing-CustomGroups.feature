@@ -47,7 +47,7 @@ Scenario: Creating a new share with user who already received a share through th
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
-Scenario: keep custom group permissions in sync
+Scenario: Keep custom group permissions in sync
     Given As an "admin"
     Given user "user0" exists
     And user "user1" exists
@@ -153,7 +153,7 @@ Scenario: Keep user custom group shares
     And user "user1" should see following elements
       | /myFOLDER/myTMP/ |
 
-Scenario: sharing again an own file while belonging to a custom group
+Scenario: Sharing again an own file while belonging to a custom group
     Given As an "admin"
     And user "user0" exists
     And user "user0" created a custom group called "sharing-group"
@@ -167,7 +167,7 @@ Scenario: sharing again an own file while belonging to a custom group
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
-Scenario: sharing subfolder when parent already shared
+Scenario: Sharing subfolder when parent already shared
     Given As an "admin"
     And user "user0" exists
     And user "user1" exists
@@ -184,7 +184,7 @@ Scenario: sharing subfolder when parent already shared
     And the HTTP status code should be "200"
 	And as "user1" the folder "/sub" exists
 
-Scenario: sharing subfolder when parent already shared with custom group of sharer
+Scenario: Sharing subfolder when parent already shared with custom group of sharer
     Given As an "admin"
     And user "user0" exists
     And user "user1" exists
@@ -201,7 +201,7 @@ Scenario: sharing subfolder when parent already shared with custom group of shar
     And the HTTP status code should be "200"
 	And as "user1" the folder "/sub" exists
 
-Scenario: unshare from self using custom groups
+Scenario: Unshare from self using custom groups
     Given As an "admin"
     And user "user0" exists
     And user "user1" exists
