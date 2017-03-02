@@ -25,7 +25,7 @@
 
 			this.render();
 
-			this.collection.fetch();
+			this.collection.fetchNext();
 		},
 
 		template: function(data) {

@@ -25,7 +25,8 @@
 			'submit form': '_onSubmitCreationForm',
 			'click .select': '_onSelect',
 			'click .action-rename-group': '_onRenameGroup',
-			'click .action-delete-group': '_onDeleteGroup'
+			'click .action-delete-group': '_onDeleteGroup',
+			'click .load-more': '_onClickLoadMore'
 		},
 
 		initialize: function(collection) {
@@ -88,12 +89,19 @@
 		_onRequest: function() {
 			this._toggleLoading(true);
 			this.$('.empty').addClass('hidden');
+			this.$('.load-more').addClass('hidden');
 		},
 
 		_onEndRequest: function() {
 			this._toggleLoading(false);
 			this._updateEmptyState();
+			this.$('.load-more').toggleClass('hidden', this.collection.endReached);
 		},
+
+		_onClickLoadMore: function(ev) {
+			ev.preventDefault();
+			this.collection.fetchNext();
+ 		},
 
 		_updateEmptyState: function() {
 			this.$('.empty').toggleClass('hidden', !!this.collection.length);
@@ -270,7 +278,8 @@
 				newGroupSubmitLabel: t('customgroups', 'Create group'),
 				groupLabel: t('customgroups', 'Group'),
 				yourRoleLabel: t('customgroups', 'Your role'),
-				emptyMessage: t('customgroups', 'There are currently no user defined groups')
+				emptyMessage: t('customgroups', 'There are currently no user defined groups'),
++				loadMoreLabel: t('customgroups', 'Load more')
 			}));
 			this.$container = this.$('.group-list');
 			this.delegateEvents();

@@ -23,7 +23,8 @@
 			'submit form': '_onSubmitCreationForm',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
-			'click .action-leave-group': '_onClickLeaveGroup'
+			'click .action-leave-group': '_onClickLeaveGroup',
+			'click .load-more': '_onClickLoadMore'
 		},
 
 		initialize: function(model) {
@@ -39,7 +40,7 @@
 			this.model.on('change:displayName', this._renderHeader, this);
 
 			this.collection.reset([], {silent: true});
-			this.collection.fetch();
+			this.collection.fetchNext();
 
 			_.bindAll(
 				this,
@@ -69,12 +70,19 @@
 		_onRequest: function() {
 			this._toggleLoading(true);
 			this.$('.empty').addClass('hidden');
+			this.$('.load-more').addClass('hidden');
 		},
 
 		_onEndRequest: function() {
 			this._toggleLoading(false);
 			this.$('.empty').toggleClass('hidden', !!this.collection.length);
+			this.$('.load-more').toggleClass('hidden', this.collection.endReached);
 		},
+
+		_onClickLoadMore: function(ev) {
+			ev.preventDefault();
+			this.collection.fetchNext();
+ 		},
 
 		_onClickLeaveGroup: function() {
 			var currentUserMembership = this.collection.get(OC.getCurrentUser().uid);
@@ -209,6 +217,8 @@
 				OCA.CustomGroups.ROLE_MEMBER :
 				OCA.CustomGroups.ROLE_ADMIN;
 
+			var self = this;
+			var index = $row.index();
 			model.save({
 				role: newRole
 			});

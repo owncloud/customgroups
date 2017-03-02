@@ -13,7 +13,7 @@
 	 * @classdesc
 	 *
 	 */
-	var GroupsCollection = OC.Backbone.WebdavChildrenCollection.extend(
+	var GroupsCollection = OC.Backbone.WebdavChildrenPaginatedCollection.extend(
 		/** @lends OCA.CustomGroups.GroupsCollection.prototype */ {
 
 		model: OCA.CustomGroups.GroupModel,
