@@ -2,7 +2,7 @@
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,19 +19,30 @@
  *
  */
 
-style('customgroups', 'app');
-style('settings', 'settings');
-script('core', 'oc-backbone');
-script('core', 'oc-backbone-webdav');
-script('customgroups', 'vendor/handlebars/handlebars');
+namespace OCA\CustomGroups;
 
-foreach ($_['modules'] as $module) {
-	script('customgroups', $module);
+use OCP\Settings\ISettings;
+use OCP\Template;
+
+class SettingsPanel implements ISettings {
+
+	public function __construct() {
+	}
+
+	public function getPanel() {
+		// TODO: cache or add to info.xml ?
+		$modules = json_decode(file_get_contents(__DIR__ . '/../js/modules.json'));
+		$tmpl = new Template('customgroups', 'index');
+		$tmpl->assign('modules', $modules);
+		return $tmpl;
+	}
+
+	public function getPriority() {
+		return 0;
+	}
+
+	public function getSectionID() {
+		return 'customgroups';
+	}
+
 }
-?>
-
-<div id="customgroups" class="section">
-	<h2><?php p($l->t('User-defined groups'));?></h2>
-	<div class="groups-container icon-loading"></div>
-	<div class="members-container" id="app-sidebar"></div>
-</div>

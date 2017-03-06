@@ -1,22 +1,22 @@
 
 
 /* FIXME: must be in core somewhere */
-.app-customgroups .icon {
+#customgroups .icon {
 	display: inline-block;
 }
 
-.app-customgroups .group .display-name {
+#customgroups .group .display-name {
 	display: inline-block;
 	width: 100%;
 	margin-left: 10px;
 }
 
-.app-customgroups .group-name-title a,
-.app-customgroups .grid td a {
+#customgroups .group-name-title a,
+#customgroups .grid td a {
 	visibility: hidden;
 }
 
-.app-customgroups .group-name-title:hover a,
-.app-customgroups .grid tr:hover td a {
+#customgroups .group-name-title:hover a,
+#customgroups .grid tr:hover td a {
 	visibility: visible;
 }

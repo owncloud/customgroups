@@ -30,4 +30,7 @@
 		<route>customgroups.page.index</route>
 		<order>100</order>
 	</navigation>
+	<settings>
+		<personal>OCA\CustomGroups\SettingsPanel</personal>
+	</settings>
 </info>

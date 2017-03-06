@@ -12,8 +12,8 @@
 
 	var App = {
 		initialize: function() {
-			$('#app-navigation').removeClass('icon-loading');
-			$('#app-content .container').removeClass('icon-loading');
+			this.$groupsContainer = $('#customgroups .groups-container').removeClass('icon-loading');
+			this.$membersContainer = $('#customgroups .members-container').removeClass('icon-loading');
 
 			var groupsCollection = new OCA.CustomGroups.CustomGroupCollection([], {
 				// admins can see all groups so don't set a user filter
@@ -27,7 +27,7 @@
 
 			groupsCollection.fetch();
 
-			$('#app-navigation').append(view.$el);
+			this.$groupsContainer.append(view.$el);
 
 			view.on('select', this._onSelectGroup, this);
 
@@ -45,11 +45,11 @@
 		},
 
 		_onSelectGroup: function(group) {
-			var $container = $('#app-content .container').empty(); 
+			this.$membersContainer.empty();
 			var state = {};
 			if (group !== null) {
 				var membersView = new OCA.CustomGroups.MembersView(group);
-				$container.append(membersView.$el);
+				this.$membersContainer.append(membersView.$el);
 				state.group = group.id;
 			} else {
 				// TODO: render page with hint about selecting a group
