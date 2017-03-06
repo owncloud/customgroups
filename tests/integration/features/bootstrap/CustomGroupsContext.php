@@ -144,9 +144,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			$response = $client->proppatch($fullUrl, $properties, 1);
 			$this->response = $response;
 			return $response;
-		} catch (\Sabre\HTTP\ClientHttpException $e) {
-			// 4xx and 5xx responses cause an exception
-			$this->response = $e->getResponse();
+		} catch (\Sabre\HTTP\ClientException $e) {
+			$this->response = null;
+			return null;
 		}
 	}
 
