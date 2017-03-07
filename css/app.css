@@ -36,11 +36,11 @@
 /* FIXME: integrate with core styles */
 #customgroups .sidebar .close {
 	position: absolute;
-    top: 0;
-    right: 0;
-    padding: 15px;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    opacity: .5;
+	top: 0;
+	right: 0;
+	padding: 15px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	opacity: .5;
 }
 
 #customgroups .avatar {
