@@ -30,6 +30,7 @@ $(build_dir)/$(app_name): deps $(build_rules) $(all_src)
 	mkdir -p $@
 	cp -R $(all_src) $@
 	@echo Removing unwanted files...
+	rm -R $@/l10n/.tx
 	find $@ \( \
 		-name .gitkeep -o \
 		-name .gitignore -o \
