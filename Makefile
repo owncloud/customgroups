@@ -15,6 +15,7 @@ src_dirs=appinfo lib l10n js css templates
 all_src=$(src_files) $(src_dirs) $(doc_files)
 
 # rules to be extended by included files
+build_rules=
 test_rules=
 clean_rules=
 js_rules=
@@ -26,6 +27,7 @@ tools_path=$(shell pwd)/tools
 all: help-hint dist
 
 include rules/deps.mk
+include rules/sign.mk
 include rules/dist.mk
 include rules/tests.mk
 include rules/frontend.mk

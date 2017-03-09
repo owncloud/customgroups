@@ -4,7 +4,7 @@ HANDLEBARS=$(NODE_PREFIX)/node_modules/.bin/handlebars
 
 template_src=$(wildcard js/templates/*.handlebars)
 clean_rules+=clean-templates
-js_rules+=templates
+build_rules+=js-templates
 help_rules+=help-frontend
 js_namespace=OCA.$(app_namespace)
 
@@ -21,8 +21,8 @@ $(HANDLEBARS): $(nodejs_deps)
 %.handlebars.js: %.handlebars $(HANDLEBARS)
 	$(HANDLEBARS) -n "$(js_namespace).Templates" $< > $@
 
-.PHONY: templates
-templates: $(addsuffix .js, $(template_src))
+.PHONY: js-templates
+js-templates: $(addsuffix .js, $(template_src))
 
 .PHONY: clean-templates
 clean-templates:
