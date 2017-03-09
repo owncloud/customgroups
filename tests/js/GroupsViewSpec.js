@@ -275,7 +275,7 @@ describe('GroupsView test', function() {
 
 		beforeEach(function() {
 			promptStub = sinon.stub(window, 'prompt');
-			confirmStub = sinon.stub(window, 'confirm');
+			confirmStub = sinon.stub(OC.dialogs, 'confirm');
 
 			view.render();
 			model = collection.add({
@@ -315,13 +315,13 @@ describe('GroupsView test', function() {
 			});
 
 			it('destroy model with on confirm', function() {
-				confirmStub.returns(true);
 				view.$('.group:eq(0) .action-delete-group').click();
+				confirmStub.yield(true);
 				expect(model.destroy.calledOnce).toEqual(true);
 			});
 			it('does not destroy model on abort', function() {
-				confirmStub.returns(false);
 				view.$('.group:eq(0) .action-delete-group').click();
+				confirmStub.yield(false);
 				expect(model.destroy.notCalled).toEqual(true);
 			});
 		});

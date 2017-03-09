@@ -76,12 +76,18 @@
 				return false;
 			}
 
-			// TODO: use undo approach
-			if (window.confirm('Confirm deletion of group ' + model.get('displayName') + ' ?')) {
-				model.destroy({
-					wait: true
-				});
-			}
+			OC.dialogs.confirm(
+					t('customgroups', 'Are you sure that you want to delete the group "{groupName}" ?', {groupName: model.get('displayName')}),
+					t('customgroups', 'Confirm deletion of group'),
+				function confirmCallback(confirmation) {
+					if (confirmation) {
+						model.destroy({
+							wait: true
+						});
+					}
+				},
+				true
+			);
 			return false;
 		},
 

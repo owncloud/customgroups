@@ -78,18 +78,25 @@
 
 		_onClickLeaveGroup: function() {
 			var currentUserMembership = this.collection.get(OC.getCurrentUser().uid);
-			if (window.confirm('Confirm leaving of group ' + this.model.get('displayName') + ' ?')) {
-				currentUserMembership.destroy({
-					wait: true,
-					error: function(model, response) {
-						if (response.status === 403) {
-							OC.Notification.showTemporary(t('customgroups', 'Cannot leave group without an administrator'));
-						} else {
-							OC.Notification.showTemporary(t('customgroups', 'Could not leave group due to a server error'));
-						}
+			OC.dialogs.confirm(
+					t('customgroups', 'Are you sure that you want to leave the group "{name}" ?', {name: this.model.get('displayName')}),
+					t('customgroups', 'Confirm leaving group'),
+				function confirmCallback(confirmation) {
+					if (confirmation) {
+						currentUserMembership.destroy({
+							wait: true,
+							error: function(model, response) {
+								if (response.status === 403) {
+									OC.Notification.showTemporary(t('customgroups', 'Cannot leave group without an administrator'));
+								} else {
+									OC.Notification.showTemporary(t('customgroups', 'Could not leave group due to a server error'));
+								}
+							}
+						});
 					}
-				});
-			}
+				},
+				true
+			);
 		},
 
 		_onAddModel: function(model, collection, options) {
@@ -180,38 +187,72 @@
 				return;
 			}
 
-			// TODO: use undo approach
-			if (window.confirm('Confirm deletion of member ' + model.id + ' ?')) {
-				model.destroy();
-			}
+			// TODO: use displayName once available
+			OC.dialogs.confirm(
+					t('customgroups', 'Are you sure that you want to remove the member "{name}" ?', {name: model.id}),
+					t('customgroups', 'Confirm removal of member'),
+				function confirmCallback(confirmation) {
+					if (confirmation) {
+						model.destroy();
+					}
+				},
+				true
+			);
 		},
 
 		_onChangeMemberRole: function(ev) {
 			ev.preventDefault();
+			var self = this;
 			var $row = $(ev.target).closest('.group-member');
 			var id = $row.attr('data-id');
-
-			// changing own permissions ?
-			if (id === OC.getCurrentUser().uid) {
-				if (!window.confirm('Remove your admin powers ?')) {
-					return;
-				}
-			}
-
 			var model = this.collection.findWhere({'id': id});
 
 			if (!model) {
 				return;
 			}
 
-			// swap permissions
-			var newRole = (model.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
-				OCA.CustomGroups.ROLE_MEMBER :
-				OCA.CustomGroups.ROLE_ADMIN;
+			function action(rerender) {
+				// swap permissions
+				var newRole = (model.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
+					OCA.CustomGroups.ROLE_MEMBER :
+					OCA.CustomGroups.ROLE_ADMIN;
 
-			model.save({
-				role: newRole
-			});
+				model.save({
+					role: newRole
+				}, {
+					success: function() {
+						if (rerender) {
+							// refresh permission actions
+							self.render();
+							self.collection.reset([], {silent: true});
+							self.collection.fetch();
+						}
+					},
+					error: function(model, response) {
+						if (response.status === 403) {
+							OC.Notification.showTemporary(t('customgroups', 'Cannot leave group without an administrator'));
+						} else {
+							OC.Notification.showTemporary(t('customgroups', 'Could not delete member'));
+						}
+					}
+				});
+			}
+
+			// changing own permissions ?
+			if (model.id === OC.getCurrentUser().uid) {
+				OC.dialogs.confirm(
+						t('customgroups', 'Are you sure that you want to remove your own administrator permissions for the group "{name}" ?', {name: this.model.get('displayName')}),
+						t('customgroups', 'Confirm removal of member'),
+					function confirmCallback(confirmation) {
+						if (confirmation) {
+							action(true);
+						}
+					},
+					true
+				);
+			} else {
+				action();
+			}
 		},
 
 		_formatMember: function(member) {
