@@ -212,7 +212,7 @@ describe('MembersView test', function() {
 
 		beforeEach(function() {
 			view.render();
-			confirmStub = sinon.stub(window, 'confirm');
+			confirmStub = sinon.stub(OC.dialogs, 'confirm');
 			currentUserModel = collection.add({
 				id: 'currentUser',
 				role: OCA.CustomGroups.ROLE_ADMIN
@@ -233,24 +233,24 @@ describe('MembersView test', function() {
 
 		describe('leaving group', function() {
 			it('asks for confirmation before leaving group when clicking specific button', function() {
-				confirmStub.returns(true);
 				view.$('.action-leave-group').click();
+				confirmStub.yield(true);
 
 				expect(confirmStub.calledOnce).toEqual(true);
-				expect(confirmStub.getCall(0).args[0]).toContain('leaving');
+				expect(confirmStub.getCall(0).args[0]).toContain('leav');
 				expect(currentUserModel.destroy.calledOnce).toEqual(true);
 			});
 			it('asks for confirmation before leaving group when deleting self from list', function() {
-				confirmStub.returns(true);
 				view.$('.group-member:eq(0) .action-delete-member').click();
+				confirmStub.yield(true);
 
 				expect(confirmStub.calledOnce).toEqual(true);
-				expect(confirmStub.getCall(0).args[0]).toContain('leaving');
+				expect(confirmStub.getCall(0).args[0]).toContain('leav');
 				expect(currentUserModel.destroy.calledOnce).toEqual(true);
 			});
 			it('does not delete if aborted', function() {
-				confirmStub.returns(false);
 				view.$('.action-leave-group').click();
+				confirmStub.yield(false);
 
 				expect(currentUserModel.destroy.notCalled).toEqual(true);
 			});
@@ -266,8 +266,8 @@ describe('MembersView test', function() {
 			});
 
 			it('asks for confirmation when deleting member', function() {
-				confirmStub.returns(true);
 				view.$('.group-member:eq(1) .action-delete-member').click();
+				confirmStub.yield(true);
 
 				expect(confirmStub.calledOnce).toEqual(true);
 				expect(model.destroy.calledOnce).toEqual(true);
@@ -299,15 +299,15 @@ describe('MembersView test', function() {
 				expect(confirmStub.notCalled).toEqual(true);
 			});
 			it('asks for confirmation before removing own admin powers', function() {
-				confirmStub.returns(true);
 				view.$('.group-member:eq(0) .action-change-member-role').click();
+				confirmStub.yield(true);
 				expect(confirmStub.calledOnce).toEqual(true);
 
 				expect(currentUserModel.get('role')).toEqual(OCA.CustomGroups.ROLE_MEMBER);
 			});
 			it('does not remove admin role if aborted', function() {
 				view.$('.group-member:eq(0) .action-change-member-role').click();
-				confirmStub.returns(false);
+				confirmStub.yield(false);
 				expect(confirmStub.calledOnce).toEqual(true);
 
 				expect(currentUserModel.get('role')).toEqual(OCA.CustomGroups.ROLE_ADMIN);
