@@ -4,11 +4,10 @@
 help_rules+=help-dist
 clean_rules+=clean-build
 
-.PHONY: help-market
+.PHONY: help-dist
 help-dist:
 	@echo -e "Building:\n"
-	@echo -e "dist\t\tto build the distribution folder $(build_dir)/$(app_name)"
-	@echo -e "market\t\tto build the market tarball in $(build_dir)/$(app_name).tar.gz"
+	@echo -e "dist\t\tto build the distribution folder and tarball $(app_name).tar.bz2"
 	@echo -e "clean\t\tto clean everything"
 	@echo
 
@@ -16,11 +15,16 @@ help-dist:
 clean-build:
 	rm -Rf $(build_dir)
 
-.PHONY: market
-market: $(build_dir)/$(app_name).tar.gz
+.PHONY: dist
+dist: $(build_dir)/$(app_name).tar.bz2
 
 $(build_dir)/$(app_name).tar.gz: $(build_dir)/$(app_name)
 	cd $(build_dir); tar czf $@ $(app_name)
+	@echo Tarball was built in $@
+
+$(build_dir)/$(app_name).tar.bz2: $(build_dir)/$(app_name)
+	cd $(build_dir); tar cjf $@ $(app_name)
+	@echo Tarball was built in $@
 
 $(build_dir)/$(app_name): deps $(all_src)
 	mkdir -p $@
@@ -47,11 +51,12 @@ $(build_dir)/$(app_name): deps $(all_src)
 		-iname \*.sh -o \
 		-iname \*.exe \
 		\) -print | xargs rm -Rf
+	find $@/js/templates -name \*.handlebars -delete
 	touch $@
 
-.PHONY: dist
-dist: $(build_dir)/$(app_name)
-
 .PHONY: distclean
-distclean: clean
+distclean: clean-build
+
+.PHONY: clean-dist
+clean-dist: clean-build
 

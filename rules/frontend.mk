@@ -16,9 +16,6 @@ help-frontend:
 	@echo -e "clean-templates\tto clean generated templates"
 	@echo
 
-# add compiled templates to sources
-all_src+=$(addsuffix .js, $(template_src))
-
 $(HANDLEBARS): $(nodejs_deps)
 
 %.handlebars.js: %.handlebars $(HANDLEBARS)

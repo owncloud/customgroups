@@ -11,7 +11,6 @@ build_dir=$(CURDIR)/build
 # these can be extended by included files
 # to add for example generated files
 doc_files=README.md
-src_files=
 src_dirs=appinfo lib l10n js css templates
 all_src=$(src_files) $(src_dirs) $(doc_files)
 
@@ -24,8 +23,7 @@ help_rules=help-base
 tools_path=$(shell pwd)/tools
 
 .PHONY: all
-# build tarball
-all: help-hint $(build_dir)/$(app_name).tar.gz
+all: help-hint dist
 
 include rules/deps.mk
 include rules/dist.mk
