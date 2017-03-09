@@ -1,0 +1,24 @@
+<div class="group-name-title">
+	<span class="avatar"></span>
+	<span class="group-name-title-display">{{groupName}}</span>
+</div>
+<a class="close action-close icon-close" href="#" alt="{{closeLabel}}"></a>
+{{#if userIsMember}}
+<input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
+{{/if}}
+
+{{#if canAdmin}}
+<form name="customGroupsAddMemberForm">
+	<div>
+		<input
+			type="text"
+			name="memberUserId"
+			placeholder="{{newMemberPlaceholder}}"
+			autocomplete="off"
+			autocapitalize="off"
+			autocorrect="off"
+		/>
+		<input type="submit" value="{{newMemberSubmitLabel}}" />
+	</div>
+</form>
+{{/if}}

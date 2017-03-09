@@ -47,3 +47,9 @@ nbproject
 # test files
 clover.xml
 
+node_modules
+lib/composer
+js/vendor
+tools/*
+js/templates/*.handlebars.js
+tests/unit/results

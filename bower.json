@@ -1,0 +1,11 @@
+{
+  "name": "owncloud-customgroups",
+  "version": "0.1",
+  "homepage": "https://github.com/owncloud/customgroups/",
+  "license": "AGPL",
+  "private": true,
+  "ignore": [],
+  "dependencies": {
+    "handlebars": "4.0.5"
+  }
+}

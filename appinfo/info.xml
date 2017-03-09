@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
 	<id>customgroups</id>
-	<name>User-defined custom groups</name>
+	<name>Custom groups</name>
 	<namespace>CustomGroups</namespace>
 	<description>Let users create and manage custom groups for sharing.</description>
 	<website>https://github.com/owncloud/customgroups/</website>
@@ -26,4 +26,7 @@
 			<collection>OCA\CustomGroups\Dav\RootCollection</collection>
 		</collections>
 	</sabre>
+	<settings>
+		<personal>OCA\CustomGroups\SettingsPanel</personal>
+	</settings>
 </info>
