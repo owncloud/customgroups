@@ -269,12 +269,10 @@ describe('GroupsView test', function() {
 	});
 
 	describe('actions', function() {
-		var promptStub;
 		var confirmStub;
 		var model;
 
 		beforeEach(function() {
-			promptStub = sinon.stub(window, 'prompt');
 			confirmStub = sinon.stub(OC.dialogs, 'confirm');
 
 			view.render();
@@ -285,28 +283,41 @@ describe('GroupsView test', function() {
 			});
 		});
 		afterEach(function() { 
-			promptStub.restore();
 			confirmStub.restore();
 		});
 
 		describe('rename group', function() {
+			var $groupEl;
+
 			beforeEach(function() {
+				$groupEl = view.$('.group:eq(0)');
 				model.save = sinon.stub();
 			});
 
-			it('saves model with new name on confirm', function() {
-				promptStub.returns('Group Renamed');
-				view.$('.group:eq(0) .action-rename-group').click();
+			it('saves model with new name on blur', function() {
+				$groupEl.find('.action-rename-group').click();
+				$groupEl.find('input').val('Group Renamed').blur();
 				expect(model.save.calledOnce).toEqual(true);
 				expect(model.save.getCall(0).args[0]).toEqual({
 					displayName: 'Group Renamed'
 				});
-
+				expect($groupEl.find('input').length).toEqual(0);
+			});
+			it('saves model with new name on submit', function() {
+				$groupEl.find('.action-rename-group').click();
+				$groupEl.find('input').val('Group Renamed');
+				$groupEl.find('form').submit();
+				expect(model.save.calledOnce).toEqual(true);
+				expect(model.save.getCall(0).args[0]).toEqual({
+					displayName: 'Group Renamed'
+				});
+				expect($groupEl.find('input').length).toEqual(0);
 			});
 			it('does not save model on abort', function() {
-				promptStub.returns(null);
-				view.$('.group:eq(0) .action-rename-group').click();
+				$groupEl.find('.action-rename-group').click();
+				$groupEl.find('input').trigger($.Event('keyup', {keyCode: 27}));
 				expect(model.save.notCalled).toEqual(true);
+				expect($groupEl.find('input').length).toEqual(0);
 			});
 		});
 		describe('delete group', function() {
