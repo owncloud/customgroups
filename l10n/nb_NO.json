@@ -1,0 +1,26 @@
+{ "translations": {
+    "Are you sure that you want to delete the group \"{groupName}\" ?" : "Er du sikker på at du vil slette gruppen \"{groupName}\"?",
+    "Confirm deletion of group" : "Bekreft sletting av gruppe",
+    "Could not create group" : "Kunne ikke opprette gruppe",
+    "Rename" : "Gi nytt navn",
+    "Delete" : "Slett",
+    "Group admin" : "Gruppeadministrator",
+    "Member" : "Medlem",
+    "Display name" : "Visningsnavn",
+    "Group name" : "Gruppenavn",
+    "Create group" : "Opprett gruppe",
+    "Group" : "Gruppe",
+    "Your role" : "Din rolle",
+    "There are currently no user defined groups" : "Det er ingen brukerdefinerte grupper",
+    "Are you sure that you want to leave the group \"{name}\" ?" : "Er du sikker på at du vil forlate gruppen \"{name}\"?",
+    "Could not leave group due to a server error" : "Kunne ikke forlate gruppen på grunn av en server feil",
+    "User \"{userId}\" does not exist" : "Bruker \"{userId}\" eksisterer ikke",
+    "User \"{userId}\" is already a member of this group" : "Bruker \"{userId}\" er allerede medlem av denne gruppen",
+    "Could not add user to group" : "Kunne ikke legge til bruker i gruppen",
+    "Are you sure that you want to remove the member \"{name}\" ?" : "Er du sikker på at du vil fjerne medlem \"{name}\"?",
+    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Er du sikker på at du vil fjerne dine egne administratorrettigheter for gruppen \"{name}\"?",
+    "Add member" : "Legg til medlem",
+    "Leave this group" : "Forlat gruppen",
+    "Close" : "Lukk"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
