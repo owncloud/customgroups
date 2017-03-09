@@ -69,10 +69,10 @@ test-integration: test-syntax-php
 	cd tests/integration && OCC="$(OCC)" ./run.sh
 
 .PHONY: test-js
-test-js: $(bower_deps) $(KARMA) $(all_src) test-syntax-js
+test-js: $(bower_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js --single-run
 
-test-js-debug: $(bower_deps) $(KARMA) $(all_src) test-syntax-js
+test-js-debug: $(bower_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js
 
 $(PHPUNIT): $(composer_dev_deps)
