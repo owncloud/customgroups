@@ -28,7 +28,7 @@
   },
   "engine": "node >= 0.8",
   "scripts": {
-    "build": "make templates",
+    "build": "make js-templates",
     "watch": "npm-watch",
     "test": "node_modules/.bin/karma start tests/js/karma.config.js --single-run"
   },
