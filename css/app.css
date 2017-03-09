@@ -1,5 +1,4 @@
 
-
 /* FIXME: must be in core somewhere */
 #customgroups .icon {
 	display: inline-block;
@@ -36,11 +35,24 @@
 /* FIXME: integrate with core styles */
 #customgroups .sidebar .close {
 	position: absolute;
-	top: 0;
+	top: 9px;
 	right: 0;
 	padding: 15px;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	opacity: .5;
+}
+
+#customgroups .sidebar .group-name-title {
+	float: left;
+}
+
+#customgroups .sidebar .action-leave-group {
+	float: right;
+	margin-right: 35px;
+}
+
+#customgroups .sidebar form {
+	clear: both;
 }
 
 #customgroups .avatar {

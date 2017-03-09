@@ -2,10 +2,10 @@
 	<span class="avatar"></span>
 	<span class="group-name-title-display">{{groupName}}</span>
 </div>
-<a class="close action-close icon-close" href="#" alt="{{closeLabel}}"></a>
 {{#if userIsMember}}
 <input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
 {{/if}}
+<a class="close action-close icon-close" href="#" alt="{{closeLabel}}"></a>
 
 {{#if canAdmin}}
 <form name="customGroupsAddMemberForm">
