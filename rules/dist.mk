@@ -26,7 +26,7 @@ $(build_dir)/$(app_name).tar.bz2: $(build_dir)/$(app_name) $(signature_file)
 	cd $(build_dir); tar cjf $@ $(app_name)
 	@echo Tarball was built in $@
 
-$(build_dir)/$(app_name): deps $(build_rules) $(all_src)
+$(build_dir)/$(app_name): deps $(build_rules) $(all_src) js-templates
 	mkdir -p $@
 	cp -R $(all_src) $@
 	@echo Removing unwanted files...
