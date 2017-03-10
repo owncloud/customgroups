@@ -1,9 +1,12 @@
 <tr class="group select" data-id="{{id}}">
 	<td class="avatar-column"><div class="avatar"></div></td>
-	<td class="display-name"><span class="group-display-name">{{displayName}}</span>
-		{{#if canAdmin}}
-		<a href="#" class="action-rename-group icon icon-rename" title="{{renameLabel}}"></a>
-		{{/if}}
+	<td class="display-name">
+		<span class="display-name-container">
+			<span class="group-display-name">{{displayName}}</span>
+			{{#if canAdmin}}
+			<a href="#" class="action-rename-group icon icon-rename" title="{{renameLabel}}"></a>
+			{{/if}}
+		</span>
 	</td>
 	<td class="role-display-name">{{roleDisplayName}}</td>
 	<td>{{#if canAdmin}}<a href="#" class="action-delete-group icon icon-delete" title="{{deleteLabel}}"></a>{{/if}}</td>

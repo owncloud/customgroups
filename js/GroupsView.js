@@ -23,6 +23,9 @@
 
 		events: {
 			'submit form': '_onSubmitCreationForm',
+			'submit form.group-rename-form': '_onSubmitRename',
+			'keyup form.group-rename-form>input': '_onCancelRename',
+			'blur form.group-rename-form>input': '_onBlurRename',
 			'click .select': '_onSelect',
 			'click .action-rename-group': '_onRenameGroup',
 			'click .action-delete-group': '_onDeleteGroup'
@@ -50,6 +53,8 @@
 		},
 
 		_onRenameGroup: function(ev) {
+			var $groupEl = $(ev.target).closest('.group');
+			var $displayName = $groupEl.find('.display-name-container');
 			ev.preventDefault();
 
 			var model = this._findGroupModelForEvent(ev); 
@@ -57,15 +62,73 @@
 				return false;
 			}
 
-			// TODO: use inline rename form
-			var newName = window.prompt('Enter new name', model.get('displayName'));
-			if (newName) {
+			var oldName = model.get('displayName');
+
+			$groupEl.addClass('renaming');
+
+			$displayName.addClass('hidden');
+			$displayName.before(this.$renameForm);
+			this.$renameForm.removeClass('hidden');
+			this.$renameForm.find('input')
+				.val(oldName)
+				.focus()
+				.selectRange(0, oldName.length)
+				.attr('data-old-value', oldName);
+			return false;
+		},
+
+		_submitRename: function() {
+			var $groupEl = this.$renameForm.closest('.group');
+			var model = this.collection.findWhere({id: $groupEl.attr('data-id')});
+			var $displayName = $groupEl.find('.display-name-container');
+			var newName = this.$renameForm.find('input').removeAttr('data-old-value').val();
+			this.$renameForm.detach().addClass('hidden');
+
+			$displayName.removeClass('hidden');
+			$groupEl.removeClass('renaming');
+
+			if (!model) {
+				return false;
+			}
+
+			// TODO: spinner
+			var oldName = model.get('displayName');
+			if (newName && newName !== oldName) {
+				// set it temporarily, it will be re-rendered after finished saving
+				$displayName.find('.group-display-name').text(newName);
 				// TODO: lock row during save
 				model.save({
 					displayName: newName
+				}, {
+					error: function(model, response) {
+						$displayName.text(oldName);
+						OC.Notification.showTemporary(t('customgroups', 'Could not rename group'));
+					}
 				});
 			}
-			return false;
+		},
+
+		_onCancelRename: function(ev) {
+			if (ev.type === 'keyup' && ev.keyCode !== 27) {
+				// allow typing
+				return;
+			}
+
+			if (ev.keyCode === 27) {
+				ev.preventDefault();
+				var $field = this.$renameForm.find('input');
+				// restore old value
+				$field.val($field.attr('data-old-value')).blur();
+			}
+		},
+
+		_onSubmitRename: function() {
+			// usually triggered by enter key
+			this.$renameForm.find('input').blur();
+		},
+
+		_onBlurRename: function() {
+			this._submitRename();
 		},
 
 		_onDeleteGroup: function(ev) {
@@ -118,7 +181,12 @@
 				model = this.collection.findWhere({'id': model});
 			}
 
+			if (this._selected === model) {
+				return;
+			}
+
 			if (model) {
+				this._selected = model;
 				if (this._lastActive) {
 					this._lastActive.removeClass('active');
 				}
@@ -135,6 +203,10 @@
 			ev.preventDefault();
 			var $el = $(ev.target).closest('.group');
 			var id = $el.attr('data-id');
+			if ($el.hasClass('renaming')) {
+				// don't select while renaming
+				return;
+			}
 			this.select(id, $el);
 		},
 
@@ -279,6 +351,7 @@
 				emptyMessage: t('customgroups', 'There are currently no user defined groups')
 			}));
 			this.$container = this.$('.group-list');
+			this.$renameForm = this.$('.group-rename-form').detach();
 			this.delegateEvents();
 		}
 	});
