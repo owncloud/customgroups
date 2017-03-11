@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Benutzerdefinierte Gruppe",
+    "Could not rename group" : "Gruppe konnte nicht umbenannt werden",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Möchtest du die Gruppe \"{groupName}\" wirklich löschen?",
     "Confirm deletion of group" : "Bitte bestätige das Löschen der Gruppe",
     "Could not create group" : "Gruppe konnte nicht erstellt werden",

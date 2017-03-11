@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Grupe Vetjake",
+    "Could not rename group" : "Grupi s’u riemërtua dot",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Jeni i sigurt se doni të fshihet grupi \"{groupName}\" ?",
     "Confirm deletion of group" : "Ripohoni fshirje grupi",
     "Could not create group" : "Grupi s’u krijua dot",

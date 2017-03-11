@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Sérsniðnir hópar",
+    "Could not rename group" : "Gat ekki endurnefnt hóp",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ertu viss um að þú viljir eyða hópnum \"{groupName}\" ?",
     "Confirm deletion of group" : "Staðfesta eyðingu á hóp",
     "Could not create group" : "Gat ekki búið til hóp",

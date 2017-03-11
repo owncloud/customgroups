@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Aangepaste groepen",
+    "Could not rename group" : "Kon groep niet hernoemen",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Weet je zeker dat je de groep \"{groupName}\" wilt verwijderen?",
     "Confirm deletion of group" : "Bevestig verwijderen van groep",
     "Could not create group" : "Kon groep niet aanmaken",
