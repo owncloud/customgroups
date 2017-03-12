@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "קבוצות מותאמות אישית",
+    "Could not rename group" : "לא ניתן היה לשנות את שם הקבוצה",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "באם באמת למחוק את הקבוצה \"{groupName}\" ?",
     "Confirm deletion of group" : "אישור מחיקת קבוצה",
     "Could not create group" : "לא ניתן היה ליצור את הקבוצה",

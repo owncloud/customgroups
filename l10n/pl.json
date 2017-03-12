@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "Własna grupa",
+    "Could not rename group" : "Nie można zmienić nazwy grupy",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Czy na pewno chcesz usunąć grupę \"{groupName}\" ?",
     "Confirm deletion of group" : "Potwierdź usunięcie grupy",
     "Could not create group" : "Nie można stworzyć grupy",
@@ -12,8 +13,10 @@
     "Create group" : "Utwórz grupę",
     "Group" : "Grupa",
     "Your role" : "Twoja rola",
+    "There are currently no user defined groups" : "Nie ma obecnie żadnych grup tworzonych przez użytkownika",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Czy na pewno chcesz opuścić grupę \"{name}\" ?",
     "Confirm leaving group" : "Potwierdź opuszczenie grupy",
+    "Cannot leave group without an administrator" : "Nie można opuścić grupy bez administratora",
     "Could not leave group due to a server error" : "Nie można opuścić grupy z powodu błędu serwera",
     "User \"{userId}\" does not exist" : "Użytkownik \"{userId}\" nie istnieje",
     "User \"{userId}\" is already a member of this group" : "Użytkownik \"{userId}\" jest już członkiem tej grupy",
