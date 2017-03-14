@@ -22,6 +22,7 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#searchUsers', 'url' => '/members', 'verb' => 'GET'],
 	],
 	'resources' => []
 ];

@@ -37,7 +37,9 @@
 
 			this.model.on('change:displayName', this._renderHeader, this);
 
-			this.membersInput = new OCA.CustomGroups.MembersInputView();
+			this.membersInput = new OCA.CustomGroups.MembersInputView({
+				groupUri: this.model.id
+			});
 
 			this.collection.reset([], {silent: true});
 			this.collection.fetch();
