@@ -20,7 +20,7 @@
 		sync: OC.Backbone.davSync,
 
 		events: {
-			'submit form': '_onSubmitCreationForm',
+			'change .member-input-field': '_onAddMember',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
 			'click .action-leave-group': '_onClickLeaveGroup'
@@ -38,12 +38,13 @@
 
 			this.model.on('change:displayName', this._renderHeader, this);
 
+			this.membersInput = new OCA.CustomGroups.MembersInputView();
+
 			this.collection.reset([], {silent: true});
 			this.collection.fetch();
 
 			_.bindAll(
 				this,
-				'_onSubmitCreationForm',
 				'_onDeleteMember',
 				'_onChangeMemberRole',
 				'_onClickLeaveGroup'
@@ -131,10 +132,10 @@
 			$memberEl.remove();
 		},
 
-		_onSubmitCreationForm: function(ev) {
+		_onAddMember: function(ev) {
 			ev.preventDefault();
-			var $field = this.$('[name=memberUserId]');
-			var userId = $field.val();
+			var self = this;
+			var userId = self.membersInput.getValue();
 
 			if (!userId) {
 				return false;
@@ -145,7 +146,7 @@
 			},  {
 				wait: true,
 				success: function() {
-					$field.val('');
+					self.membersInput.setValue('');
 				},
 				error: function(model, response) {
 					if (response.status === 412) {
@@ -301,6 +302,9 @@
 				this.model.get('displayName'),
 				32
 			);
+
+			this.membersInput.render();
+			this.$('.add-member-container').append(this.membersInput.$el);
 		},
 
 		render: function() {

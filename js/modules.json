@@ -1,7 +1,9 @@
 [
 	"App",
+	"ShareeCollection",
 	"MemberModel",
 	"MembersCollection",
+	"MembersInputView",
 	"MembersView",
 	"GroupModel",
 	"GroupsCollection",
@@ -11,5 +13,6 @@
 	"templates/listItem.handlebars",
 	"templates/membersList.handlebars",
 	"templates/membersListHeader.handlebars",
-	"templates/membersListItem.handlebars"
+	"templates/membersListItem.handlebars",
+	"templates/membersInput.handlebars"
 ]

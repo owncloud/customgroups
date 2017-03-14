@@ -8,17 +8,5 @@
 <a class="close action-close icon-close" href="#" alt="{{closeLabel}}"></a>
 
 {{#if canAdmin}}
-<form name="customGroupsAddMemberForm">
-	<div>
-		<input
-			type="text"
-			name="memberUserId"
-			placeholder="{{newMemberPlaceholder}}"
-			autocomplete="off"
-			autocapitalize="off"
-			autocorrect="off"
-		/>
-		<input type="submit" value="{{newMemberSubmitLabel}}" />
-	</div>
-</form>
+<div class="add-member-container"></div>
 {{/if}}
