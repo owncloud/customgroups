@@ -68,16 +68,18 @@ describe('MembersView test', function() {
 		it('renders members as they are added', function() {
 			collection.add([{
 				id: 'user1',
+				userDisplayName: 'User One',
 				role: OCA.CustomGroups.ROLE_ADMIN
 			}, { 
 				id: 'user2',
+				userDisplayName: 'User Two',
 				role: OCA.CustomGroups.ROLE_MEMBER
 			}]);
 
 			expect(view.$('.group-member').length).toEqual(2);
-			expect(view.$('.group-member:eq(0) .user-display-name').text()).toEqual('user1');
+			expect(view.$('.group-member:eq(0) .user-display-name').text()).toEqual('User One');
 			expect(view.$('.group-member:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Group admin'));
-			expect(view.$('.group-member:eq(1) .user-display-name').text()).toEqual('user2');
+			expect(view.$('.group-member:eq(1) .user-display-name').text()).toEqual('User Two');
 			expect(view.$('.group-member:eq(1) .role-display-name').text()).toEqual(t('customgroups', 'Member'));
 
 			// avatar
@@ -139,16 +141,18 @@ describe('MembersView test', function() {
 		it('removes row when member deleted', function() {
 			var member1 = collection.add({
 				id: 'user1',
+				userDisplayName: 'User One',
 				role: OCA.CustomGroups.ROLE_ADMIN
 			});
 			var member2 = collection.add({
 				id: 'user2',
+				userDisplayName: 'User Two',
 				role: OCA.CustomGroups.ROLE_MEMBER
 			});
 
 			collection.remove(member1);
 			expect(view.$('.group-member').length).toEqual(1);
-			expect(view.$('.group-member:eq(0) .user-display-name').text()).toEqual('user2');
+			expect(view.$('.group-member:eq(0) .user-display-name').text()).toEqual('User Two');
 
 			collection.remove(member2);
 			expect(view.$('.group-member').length).toEqual(0);
