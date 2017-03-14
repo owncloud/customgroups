@@ -26,6 +26,7 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 /**
  * Collection of users

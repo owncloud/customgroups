@@ -23,12 +23,12 @@ namespace OCA\CustomGroups\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use OCA\CustomGroups\Search;
-use OCP\IUserManager;
 use OCP\IUser;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCP\IRequest;
 
 class PageController extends Controller {
 
@@ -38,14 +38,19 @@ class PageController extends Controller {
 	private $handler;
 
 	/**
-	 * @var IUserManager
+	 * @var MembershipHelper
 	 */
-	private $userManager;
+	private $helper;
 
-	public function __construct($appName, CustomGroupsDatabaseHandler $handler, IUserManager $userManager) {
-		parent::__construct($appName);
+	public function __construct(
+		$appName,
+		IRequest $request,
+		MembershipHelper $helper,
+		CustomGroupsDatabaseHandler $handler
+	) {
+		parent::__construct($appName, $request);
+		$this->helper = $helper;
 		$this->handler = $handler;
-		$this->userManager = $userManager;
 	}
 
 	/**
@@ -75,11 +80,7 @@ class PageController extends Controller {
 			);
 		}
 
-		$existingMembers = $this->getGroupMemberUserIds($groupInfo['group_id'], $pattern);
-
-		$results = $this->getEnoughMemberResults($pattern, $limit, $existingMembers);
-		$existingMembers = null;
-
+		$results = $this->helper->searchForNewMembers($groupInfo['group_id'], $pattern, $limit);
 		$results = array_map(function (IUser $entry) {
 			return [
 				'userId' => $entry->getUID(),
@@ -90,36 +91,4 @@ class PageController extends Controller {
 		return new DataResponse(['results' => array_values($results)], Http::STATUS_OK);
 	}
 
-	private function getGroupMemberUserIds($groupId, $pattern) {
-		$search = new Search($pattern);
-
-		$foundMembers = $this->handler->getGroupMembers($groupId, $search);
-		$existingMembers = [];
-		foreach ($foundMembers as $foundMember) {
-			$existingMembers[$foundMember['user_id']] = true;
-		}
-		return $existingMembers;
-	}
-
-	private function getEnoughMemberResults($pattern, $limit, $existingMembers) {
-		$totalResults = [];
-		$totalResultCount = 0;
-
-		$internalLimit = $limit;
-		$internalOffset = 0;
-		// loop until the $totalResults reaches $limit size or no more results exist
-		do {
-			$results = $this->userManager->searchDisplayName($pattern, $internalLimit, $internalOffset);
-			foreach ($results as $result) {
-				if (!isset($existingMembers[$result->getUID()])) {
-					$totalResults[] = $result;
-					$totalResultCount++;
-				}
-			}
-			$resultsCount = count($results);
-			$internalOffset += $resultsCount;
-		} while ($totalResultCount < $limit && $resultsCount > 0);
-
-		return $totalResults;
-	}
 }

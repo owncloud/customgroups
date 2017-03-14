@@ -27,6 +27,7 @@ use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
 use OCA\CustomGroups\Dav\Roles;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 /**
  * Membership node

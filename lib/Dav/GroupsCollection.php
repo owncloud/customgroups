@@ -27,6 +27,7 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Search;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 /**
  * Collection of custom groups

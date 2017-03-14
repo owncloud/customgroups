@@ -25,6 +25,7 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\SimpleCollection;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 /**
  * Root collection for the custom groups and members

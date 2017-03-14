@@ -26,7 +26,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
 use Sabre\DAV\PropPatch;
-use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Service\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
