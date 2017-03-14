@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "กำหนดกลุ่มเอง",
+    "Could not rename group" : "ไม่สามารถเปลี่ยนชื่อกลุ่มได้",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "คุณแน่ใจหรือว่าต้องการลบกลุ่ม \"{groupName}\" ?",
     "Confirm deletion of group" : "ยืนยันการลบกลุ่ม",
     "Could not create group" : "ไม่สามารถสร้างกลุ่ม",
