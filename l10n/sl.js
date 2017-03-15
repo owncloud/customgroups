@@ -18,6 +18,8 @@ OC.L10N.register(
     "There are currently no user defined groups" : "Trenutno še ni nobene uporabniško ustvarjene skupine.",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Ali ste prepričani, da želite zapustiti skupino »{name}«?",
     "Confirm leaving group" : "Potrdi zapuščanje skupine",
+    "Cannot leave group without an administrator" : "Ni mogoče zapustiti skupine brez odobritve skrbnika",
+    "Could not leave group due to a server error" : "Ni mogoče zapustiti skupine zaradi napake strežnika",
     "User \"{userId}\" does not exist" : "Uporabnik »{userId}« ne obstaja",
     "User \"{userId}\" is already a member of this group" : "Uporabnik »{userId}« je že član te skupine",
     "Could not add user to group" : "Ni mogoče dodati uporabnika v skupino",
