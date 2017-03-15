@@ -39,7 +39,7 @@ describe('MembersInputView test', function() {
 		var autocompleteOptions;
 
 		beforeEach(function() {
-			autocompleteStub = sinon.stub($.fn, 'autocomplete', function() {
+			autocompleteStub = sinon.stub($.fn, 'autocomplete').callsFake(function() {
 				$(this).data('ui-autocomplete', {});
 				return $(this);
 			});
