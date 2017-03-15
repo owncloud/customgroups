@@ -88,7 +88,7 @@ class PageController extends Controller {
 			];
 		}, $results);
 
-		return new DataResponse(['results' => array_values($results)], Http::STATUS_OK);
+		return new DataResponse(['results' => $results], Http::STATUS_OK);
 	}
 
 }

@@ -27,8 +27,9 @@
 
 		template: function() {
 			var $el = $('<div></div>');
-			$el.append($('<input class="member-input-field" type="text"/>')
-				.attr('placeholder', t('customgroups', 'Add user to this group')));
+			var $field = $('<input class="member-input-field" type="text"/>')
+				.attr('placeholder', t('customgroups', 'Add user to this group'));
+			$el.append($field);
 			$el.append('<span class="loading icon-loading-small hidden"></span>');
 			return $el;
 		},
@@ -87,26 +88,29 @@
 					pattern: search.term.trim(),
 					limit: 200
 				}
-			}).done(function (result) {
+			}).done(function (result, type, xhr) {
 					$loading.addClass('hidden');
 					$loading.removeClass('inlineblock');
 
-					if (result.message) {
-						OC.Notification.showTemporary(result.message);
+					if (xhr.status !== 200) {
+						if (result.message) {
+							OC.Notification.showTemporary(result.message);
+						} else {
+							OC.Notification.showTemporary(t('customgroups', 'An error occurred while searching users'));
+						}
 						response();
 						return;
 					}
 
-					result = result.results;
-
-					if (result.length > 0) {
-						result.sort(function (a, b) {
+					var entries = result.results;
+					if (entries.length > 0) {
+						entries.sort(function (a, b) {
 							return OC.Util.naturalSortCompare(a.displayName, b.displayName);
 						});
 						self.$field.removeClass('error')
 							.tooltip('hide')
 							.autocomplete("option", "autoFocus", true);
-						response(result);
+						response(entries);
 					} else {
 						var title = t('core', 'No users found for {search}', {search: self.$field.val()});
 						self.$field.addClass('error')
@@ -128,22 +132,22 @@
 			});
 		},
 
-		autocompleteRenderItem: function(ul, item) {
+		autocompleteRenderItem: function($ul, item) {
 			var text = item.displayName;
-			var insert = $("<div class='customgroups-autocomplete-item'/>");
-			var avatar = $("<div class='avatardiv'></div>").appendTo(insert);
-			avatar.avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
+			var $item = $("<div class='customgroups-autocomplete-item'/>");
+			var $avatar = $("<div class='avatardiv'></div>").appendTo($item);
+			$avatar.avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
 
 			$("<div class='autocomplete-item-text'></div>")
 				.text(text)
-				.appendTo(insert);
-			insert.attr('title', item.userId);
-			insert = $("<a>")
-				.append(insert);
+				.appendTo($item);
+			$item.attr('title', item.userId);
+			var $link = $("<a>")
+				.append($item);
 			return $("<li>")
 				.addClass('user')
-				.append(insert)
-				.appendTo(ul);
+				.append($link)
+				.appendTo($ul);
 		},
 
 		_onSelect: function(e, s) {
