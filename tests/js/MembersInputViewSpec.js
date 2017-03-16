@@ -15,12 +15,7 @@ describe('MembersInputView test', function() {
 	beforeEach(function() {
 		avatarStub = sinon.stub($.fn, 'avatar');
 
-		model = new OCA.CustomGroups.GroupModel({
-			id: 'group1',
-			displayName: 'Group One',
-			role: OCA.CustomGroups.ROLE_ADMIN
-		});
-		view = new OCA.CustomGroups.MembersInputView({groupId: 'group1'});
+		view = new OCA.CustomGroups.MembersInputView({groupUri: 'group1'});
 	});
 	afterEach(function() {
 		view.remove();
@@ -62,7 +57,7 @@ describe('MembersInputView test', function() {
 
 			expect(request.url).toEqual(
 				OC.generateUrl('/apps/customgroups/members' +
-				'?pattern=search+term&limit=200')
+				'?group=group1&pattern=search+term&limit=200')
 			);
 			expect(request.method).toEqual('GET');
 
