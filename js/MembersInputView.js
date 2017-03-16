@@ -25,13 +25,12 @@
 
 		className: 'member-input-view',
 
-		template: function() {
-			var $el = $('<div></div>');
-			var $field = $('<input class="member-input-field" type="text"/>')
-				.attr('placeholder', t('customgroups', 'Add user to this group'));
-			$el.append($field);
-			$el.append('<span class="loading icon-loading-small hidden"></span>');
-			return $el;
+		template: function(data) {
+			return OCA.CustomGroups.Templates.membersInput(data);
+		},
+
+		itemTemplate: function(data) {
+			return OCA.CustomGroups.Templates.membersInputItem(data);
 		},
 
 		/**
@@ -49,7 +48,9 @@
 		 * Renders this view
 		 */
 		render: function() {
-			this.$el.html(this.template());
+			this.$el.html(this.template({
+				placeholderText: t('customgroups', 'Add user to this group')
+			}));
 
 			this.$field = this.$('input');
 			this.$field.autocomplete({
@@ -133,21 +134,14 @@
 		},
 
 		autocompleteRenderItem: function($ul, item) {
-			var text = item.displayName;
-			var $item = $("<div class='customgroups-autocomplete-item'/>");
-			var $avatar = $("<div class='avatardiv'></div>").appendTo($item);
-			$avatar.avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
+			var $item = $(this.itemTemplate({
+				displayName: item.displayName,
+				userId: item.userId
+			}));
 
-			$("<div class='autocomplete-item-text'></div>")
-				.text(text)
-				.appendTo($item);
-			$item.attr('title', item.userId);
-			var $link = $("<a>")
-				.append($item);
-			return $("<li>")
-				.addClass('user')
-				.append($link)
-				.appendTo($ul);
+			$item.find('.avatardiv').avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
+			$ul.append($item);
+			return $item;
 		},
 
 		_onSelect: function(e, s) {

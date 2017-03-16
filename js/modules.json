@@ -13,5 +13,6 @@
 	"templates/membersList.handlebars",
 	"templates/membersListHeader.handlebars",
 	"templates/membersListItem.handlebars",
-	"templates/membersInput.handlebars"
+	"templates/membersInput.handlebars",
+	"templates/membersInputItem.handlebars"
 ]
