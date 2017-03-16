@@ -36,6 +36,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 
 	const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
 	const PROPERTY_USER_ID = '{http://owncloud.org/ns}user-id';
+	const PROPERTY_USER_DISPLAY_NAME = '{http://owncloud.org/ns}user-display-name';
 
 	/**
 	 * Custom groups handler
@@ -57,13 +58,6 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 * @var MembershipHelper
 	 */
 	private $helper;
-
-	/**
-	 * Membership info for the currently logged in user
-	 *
-	 * @var array
-	 */
-	private $userMemberInfo;
 
 	/**
 	 * Node name
@@ -180,6 +174,17 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 		if ($properties === null || in_array(self::PROPERTY_USER_ID, $properties)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
+		}
+		if ($properties === null || in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties)) {
+			// FIXME: extremely inefficient as it will query the display name
+			// for each user individually
+			$user = $this->helper->getUser($this->memberInfo['user_id']);
+			if ($user !== null) {
+				$result[self::PROPERTY_USER_DISPLAY_NAME] = $user->getDisplayName();
+			} else {
+				// possibly orphaned/deleted ?
+				$result[self::PROPERTY_USER_DISPLAY_NAME] = $this->memberInfo['user_id'];
+			}
 		}
 		return $result;
 	}

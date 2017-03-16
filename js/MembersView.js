@@ -189,7 +189,7 @@
 
 			// TODO: use displayName once available
 			OC.dialogs.confirm(
-					t('customgroups', 'Are you sure that you want to remove the member "{name}" ?', {name: model.id}),
+					t('customgroups', 'Are you sure that you want to remove the member "{name}" ?', {name: model.get('userDisplayName')}),
 					t('customgroups', 'Confirm removal of member'),
 				function confirmCallback(confirmation) {
 					if (confirmation) {
@@ -258,7 +258,7 @@
 		_formatMember: function(member) {
 			return {
 				id: member.id,
-				displayName: member.id,
+				displayName: member.get('userDisplayName'),
 				canAdmin: OC.isUserAdmin() || this.model.get('role') === OCA.CustomGroups.ROLE_ADMIN,
 				roleDisplayName: (member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
 					t('customgroups', 'Group admin') :
