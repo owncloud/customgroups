@@ -20,7 +20,6 @@
 		sync: OC.Backbone.davSync,
 
 		events: {
-			'submit form': '_onSubmitCreationForm',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
 			'click .action-leave-group': '_onClickLeaveGroup'
@@ -38,12 +37,15 @@
 
 			this.model.on('change:displayName', this._renderHeader, this);
 
+			this.membersInput = new OCA.CustomGroups.MembersInputView({
+				groupUri: this.model.id
+			});
+
 			this.collection.reset([], {silent: true});
 			this.collection.fetch();
 
 			_.bindAll(
 				this,
-				'_onSubmitCreationForm',
 				'_onDeleteMember',
 				'_onChangeMemberRole',
 				'_onClickLeaveGroup'
@@ -131,23 +133,27 @@
 			$memberEl.remove();
 		},
 
-		_onSubmitCreationForm: function(ev) {
-			ev.preventDefault();
-			var $field = this.$('[name=memberUserId]');
-			var userId = $field.val();
+		_onAddMember: function(data) {
+			var userId = data.userId;
+			var $field = this.$('.member-input-field');
 
 			if (!userId) {
 				return false;
 			}
+
+			$field.prop('disabled', true);
 
 			this.collection.create({
 				id: userId
 			},  {
 				wait: true,
 				success: function() {
-					$field.val('');
+					$field.prop('disabled', false);
+					$field.val('').focus();
 				},
 				error: function(model, response) {
+					$field.prop('disabled', false);
+					$field.val('').focus();
 					if (response.status === 412) {
 						OC.Notification.showTemporary(t(
 							'customgroups',
@@ -301,6 +307,10 @@
 				this.model.get('displayName'),
 				32
 			);
+
+			this.membersInput.render();
+			this.membersInput.on('select', this._onAddMember, this);
+			this.$('.add-member-container').append(this.membersInput.$el);
 		},
 
 		render: function() {

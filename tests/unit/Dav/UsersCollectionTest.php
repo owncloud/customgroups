@@ -25,7 +25,7 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
-use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Service\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\GroupsCollection;
 

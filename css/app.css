@@ -51,7 +51,7 @@
 	margin-right: 35px;
 }
 
-#customgroups .sidebar form {
+#customgroups .sidebar .add-member-container {
 	clear: both;
 }
 
@@ -65,4 +65,22 @@
 
 #customgroups .group-name-title .avatar {
 	margin-right: 8px;
+}
+
+#customgroups .member-input-field {
+	width: 90%;
+}
+
+.customgroups-autocomplete-item {
+	display: flex;
+}
+
+.customgroups-autocomplete-item .autocomplete-item-text {
+	margin-left: 10px;
+	margin-right: 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 32px;
+	vertical-align: middle;
 }

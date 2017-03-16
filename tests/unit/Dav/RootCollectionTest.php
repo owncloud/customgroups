@@ -24,7 +24,7 @@ use OCA\CustomGroups\Dav\RootCollection;
 use OCA\CustomGroups\Dav\UsersCollection;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 /**
  * Class RootCollectionTest

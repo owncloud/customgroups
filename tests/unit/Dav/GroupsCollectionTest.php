@@ -26,7 +26,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
 use OCA\CustomGroups\Dav\GroupMembershipCollection;
-use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Service\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 

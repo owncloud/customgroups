@@ -174,32 +174,34 @@ describe('MembersView test', function() {
 			view.render();
 		});
 
-		it('does not render form if the current user cannot admin this group', function() {
+		it('does not render input field if the current user cannot admin this group', function() {
 			model.set({role: OCA.CustomGroups.ROLE_MEMBER});
 			view.render();
-			expect(view.$('[name=customGroupsAddMemberForm]').length).toEqual(0);
+			expect(view.$('.member-input-field').length).toEqual(0);
 
 			model.set({role: OCA.CustomGroups.ROLE_ADMIN});
 			view.render();
-			expect(view.$('[name=customGroupsAddMemberForm]').length).toEqual(1);
+			expect(view.$('.member-input-field').length).toEqual(1);
 		});
 
 		it('creates member into collection', function() {
-			view.$('[name=memberUserId]').val('newuser');
-			view.$('[name=customGroupsAddMemberForm]').submit();
+			view.membersInput.trigger('select', {
+				userId: 'newuser'
+			});
 			expect(collection.create.calledOnce).toEqual(true);
 			expect(collection.create.getCall(0).args[0]).toEqual({
 				id: 'newuser'
 			});
 
 			collection.create.yieldTo('success');
-			expect(view.$('[name=memberUserId]').val()).toEqual('');
+			expect(view.$('.member-input-field').val()).toEqual('');
 		});
 
 		it('shows notification in case of error', function() {
 			var notificationStub = sinon.stub(OC.Notification, 'showTemporary');
-			view.$('[name=memberUserId]').val('newuser');
-			view.$('[name=customGroupsAddMemberForm]').submit();
+			view.membersInput.trigger('select', {
+				userId: 'newuser'
+			});
 
 			expect(collection.create.calledOnce).toEqual(true);
 			collection.create.yieldTo('error', collection, {status: 412} );

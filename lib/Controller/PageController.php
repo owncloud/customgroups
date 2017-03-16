@@ -23,8 +23,35 @@ namespace OCA\CustomGroups\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IUser;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCP\IRequest;
 
 class PageController extends Controller {
+
+	/**
+	 * @var CustomGroupsDatabaseHandler
+	 */
+	private $handler;
+
+	/**
+	 * @var MembershipHelper
+	 */
+	private $helper;
+
+	public function __construct(
+		$appName,
+		IRequest $request,
+		MembershipHelper $helper,
+		CustomGroupsDatabaseHandler $handler
+	) {
+		parent::__construct($appName, $request);
+		$this->helper = $helper;
+		$this->handler = $handler;
+	}
 
 	/**
 	 * @NoCSRFRequired
@@ -37,4 +64,31 @@ class PageController extends Controller {
 			'modules' => $modules
 		]);
 	}
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
+	public function searchUsers($group, $pattern, $limit = 200) {
+		$groupInfo = $this->handler->getGroupByUri($group);
+		if (is_null($groupInfo)) {
+			return new DataResponse(
+				[
+					'message' => (string)$this->l10n->t('Group with uri "%s" not found', [$group])
+				],
+				Http::STATUS_NOT_FOUND
+			);
+		}
+
+		$results = $this->helper->searchForNewMembers($groupInfo['group_id'], $pattern, $limit);
+		$results = array_map(function (IUser $entry) {
+			return [
+				'userId' => $entry->getUID(),
+				'displayName' => $entry->getDisplayName()
+			];
+		}, $results);
+
+		return new DataResponse(['results' => $results], Http::STATUS_OK);
+	}
+
 }

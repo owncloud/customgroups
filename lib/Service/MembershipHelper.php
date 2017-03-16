@@ -19,13 +19,14 @@
  *
  */
 
-namespace OCA\CustomGroups\Dav;
+namespace OCA\CustomGroups\Service;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
+use OCP\IUser;
 
 /**
  * Membership helper
@@ -33,6 +34,7 @@ use OCA\CustomGroups\Search;
  * Provides method related to the current user's membership and admin roles.
  */
 class MembershipHelper {
+
 	/**
 	 * Custom groups handler
 	 *
@@ -59,7 +61,7 @@ class MembershipHelper {
 	 *
 	 * @var IGroupManager
 	 */
-	private $groupsManager;
+	private $groupManager;
 
 	/**
 	 * Membership info for the currently logged in user
@@ -177,4 +179,58 @@ class MembershipHelper {
 		return true;
 	}
 
+	/**
+	 * Return the user ids of the members in the given group matching the given pattern
+	 *
+	 * @param int $groupId numeric group id
+	 * @param string $pattern pattern
+	 * @return array array of user ids as keys and true as value
+	 */
+	private function getGroupMemberUserIds($groupId, $pattern) {
+		$search = new Search($pattern);
+
+		$foundMembers = $this->groupsHandler->getGroupMembers($groupId, $search);
+		$existingMembers = [];
+		foreach ($foundMembers as $foundMember) {
+			$existingMembers[$foundMember['user_id']] = true;
+		}
+		return $existingMembers;
+	}
+
+	/**
+	 * Search for users that could be added as member of the given group.
+	 * This searches the whole user list by display name and excludes the
+	 * users that are already members of the given group.
+	 *
+	 * @param int $groupId numeric group id for which to find new members
+	 * @param string $pattern pattern to search for in display names
+	 * @param int $limit limit up to which to return results
+	 * @return IUser[] results
+	 */
+	public function searchForNewMembers($groupId, $pattern, $limit = 200) {
+		$existingMembers = $this->getGroupMemberUserIds($groupId, $pattern);
+
+		$totalResults = [];
+		$totalResultCount = 0;
+
+		$internalLimit = $limit;
+		$internalOffset = 0;
+		// loop until the $totalResults reaches $limit size or no more results exist
+		do {
+			$results = $this->userManager->searchDisplayName($pattern, $internalLimit, $internalOffset);
+			foreach ($results as $result) {
+				if ($totalResultCount >= $limit) {
+					break;
+				}
+				if (!isset($existingMembers[$result->getUID()])) {
+					$totalResults[] = $result;
+					$totalResultCount++;
+				}
+			}
+			$resultsCount = count($results);
+			$internalOffset += $resultsCount;
+		} while ($totalResultCount < $limit && $resultsCount >= $internalLimit);
+
+		return $totalResults;
+	}
 }

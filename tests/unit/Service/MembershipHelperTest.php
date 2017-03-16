@@ -18,20 +18,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-namespace OCA\CustomGroups\Tests\unit\Dav;
+namespace OCA\CustomGroups\Tests\unit\Service;
 
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUser;
-use OCA\CustomGroups\Dav\MembershipHelper;
+use OCA\CustomGroups\Service\MembershipHelper;
 use OCA\CustomGroups\Search;
 
 /**
  * Class MembershipHelperTest
  *
- * @package OCA\CustomGroups\Tests\Unit
+ * @package OCA\CustomGroups\Tests\unit\Service
  */
 class MembershipHelperTest extends \Test\TestCase {
 
@@ -224,5 +224,129 @@ class MembershipHelperTest extends \Test\TestCase {
 			->willReturn($memberInfo);
 
 		$this->assertEquals($expectedResult, $this->helper->isTheOnlyAdmin('group1', 'admin1'));
+	}
+
+	public function testSearchForNewMembers() {
+		$search = new Search('us');
+		
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $search)
+			->willReturn([
+				['user_id' => 'user1'],
+				['user_id' => 'user2'],
+			]);
+
+		$user1 = $this->createMock(IUser::class);
+		$user1->method('getUID')->willReturn('user1');
+		$user1->method('getDisplayName')->willReturn('User One');
+		$user2 = $this->createMock(IUser::class);
+		$user2->method('getUID')->willReturn('user2');
+		$user2->method('getDisplayName')->willReturn('User Two');
+		$user3 = $this->createMock(IUser::class);
+		$user3->method('getUID')->willReturn('user3');
+		$user3->method('getDisplayName')->willReturn('User Three');
+		$user4 = $this->createMock(IUser::class);
+		$user4->method('getUID')->willReturn('user4');
+		$user4->method('getDisplayName')->willReturn('User Four');
+
+		$this->userManager->expects($this->once())
+			->method('searchDisplayName')
+			->with('us', 150, 0)
+			->willReturn([$user1, $user2, $user3, $user4]);
+		$results = $this->helper->searchForNewMembers(1, 'us', 150);
+
+		$this->assertCount(2, $results);
+
+		$this->assertEquals('user3', $results[0]->getUID());
+		$this->assertEquals('user4', $results[1]->getUID());
+	}
+
+	public function testSearchForNewMembersBigPage() {
+		$search = new Search('us');
+
+		$users = [];
+		for ($i = 0; $i < 25; $i++) {
+			$user = $this->createMock(IUser::class);
+			$user->method('getUID')->willReturn('user' . $i);
+			$user->method('getDisplayName')->willReturn('User ' . $i);
+			$users[] = $user;
+		}
+		
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $search)
+			->willReturn([
+				['user_id' => 'user15'],
+				['user_id' => 'user16'],
+				['user_id' => 'user19'],
+			]);
+
+		$usersChunk = array_chunk($users, 20);
+
+		$this->userManager->expects($this->at(0))
+			->method('searchDisplayName')
+			->with('us', 20, 0)
+			->willReturn($usersChunk[0]);
+		$this->userManager->expects($this->at(1))
+			->method('searchDisplayName')
+			->with('us', 20, 20)
+			->willReturn($usersChunk[1]);
+
+		$results = $this->helper->searchForNewMembers(1, 'us', 20);
+
+		$this->assertCount(20, $results);
+
+		$this->assertEquals('user0', $results[0]->getUID());
+		$this->assertEquals('user1', $results[1]->getUID());
+		$this->assertEquals('user14', $results[14]->getUID());
+		$this->assertEquals('user17', $results[15]->getUID());
+		$this->assertEquals('user18', $results[16]->getUID());
+		$this->assertEquals('user20', $results[17]->getUID());
+		$this->assertEquals('user21', $results[18]->getUID());
+		$this->assertEquals('user22', $results[19]->getUID());
+	}
+
+	public function testSearchForNewMembersSmallLastPage() {
+		$search = new Search('us');
+
+		$users = [];
+		for ($i = 0; $i < 21; $i++) {
+			$user = $this->createMock(IUser::class);
+			$user->method('getUID')->willReturn('user' . $i);
+			$user->method('getDisplayName')->willReturn('User ' . $i);
+			$users[] = $user;
+		}
+		
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $search)
+			->willReturn([
+				['user_id' => 'user15'],
+				['user_id' => 'user16'],
+				['user_id' => 'user19'],
+			]);
+
+		$usersChunk = array_chunk($users, 20);
+
+		$this->userManager->expects($this->at(0))
+			->method('searchDisplayName')
+			->with('us', 20, 0)
+			->willReturn($usersChunk[0]);
+		$this->userManager->expects($this->at(1))
+			->method('searchDisplayName')
+			->with('us', 20, 20)
+			->willReturn($usersChunk[1]);
+
+		$results = $this->helper->searchForNewMembers(1, 'us', 20);
+
+		$this->assertCount(18, $results);
+
+		$this->assertEquals('user0', $results[0]->getUID());
+		$this->assertEquals('user1', $results[1]->getUID());
+		$this->assertEquals('user14', $results[14]->getUID());
+		$this->assertEquals('user17', $results[15]->getUID());
+		$this->assertEquals('user18', $results[16]->getUID());
+		$this->assertEquals('user20', $results[17]->getUID());
 	}
 }
