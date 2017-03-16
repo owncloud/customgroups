@@ -24,6 +24,7 @@
     "Are you sure that you want to remove the member \"{name}\" ?" : "Ali ste prepričani, da želite odstraniti člana »{name}«?",
     "Confirm removal of member" : "Potrdi odstranitev člana",
     "Could not delete member" : "Ni mogoče izbrisati člana",
+    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ali ste prepričani, da želite odstraniti skrbniška dovoljenja za skupino »{name}« ?",
     "Add member" : "Dodaj člana",
     "Leave this group" : "Zapusti skupino",
     "Close" : "Zapri"
