@@ -15,6 +15,8 @@ OC.L10N.register(
     "Group" : "Gruppe",
     "Your role" : "Di rolle",
     "There are currently no user defined groups" : "Det er ingen grupper definert av brukarar",
+    "No users found for {search}" : "Ingen brukar funnen for {search}",
+    "An error occurred. Please try again" : "Ein feil oppstod. Ver venleg prøv på ny",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Er du sikker på at du vil forlate gruppe \"{name}\" ?",
     "Confirm leaving group" : "Bekreft at du vil forlate gruppe",
     "Cannot leave group without an administrator" : "Kan ikkje forlate ei gruppe utan administrator",

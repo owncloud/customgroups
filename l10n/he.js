@@ -16,6 +16,10 @@ OC.L10N.register(
     "Group" : "קבוצה",
     "Your role" : "התפקיד שלך",
     "There are currently no user defined groups" : "אין כרגע קבוצות מוגדרות משתמשים",
+    "Add user to this group" : "הוספת משתמש לקבוצה זו",
+    "An error occurred while searching users" : "שגיאה אירעה בזמן חיפוש משתמשים",
+    "No users found for {search}" : "לא אותרו משתמשים עבור {search}",
+    "An error occurred. Please try again" : "אירעה שגיאה. יש לנסות שנית",
     "Are you sure that you want to leave the group \"{name}\" ?" : "האם באמת ברצונך לעזוב את הקבוצה \"{name}\" ?",
     "Confirm leaving group" : "אישור עזיבת הקבוצה",
     "Cannot leave group without an administrator" : "לא ניתן לעזוב את הקבוצה ללא מנהל",
@@ -29,6 +33,7 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "האם באמת ברצונך להסיר את הרשאות המנהל שלך עבור הקבוצה \"{name}\" ?",
     "Add member" : "הוספת חבר",
     "Leave this group" : "עזיבת קבוצה זו",
-    "Close" : "סגירה"
+    "Close" : "סגירה",
+    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה"
 },
 "nplurals=2; plural=(n != 1);");

@@ -15,6 +15,8 @@ OC.L10N.register(
     "Group" : "Skupina",
     "Your role" : "Vaše role",
     "There are currently no user defined groups" : "Momentálně zde nejsou žádné uživatelsky definované skupiny",
+    "No users found for {search}" : "Nebyli nalezeni žádní uživatelé pro {search}",
+    "An error occurred. Please try again" : "Došlo k chybě. Zkuste to prosím znovu",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Jste si jisti, že chcete opustit skupinu \"{name}\" ?",
     "Confirm leaving group" : "Potvrďte opuštění skupiny",
     "Cannot leave group without an administrator" : "Nelze opustit skupinu bez správce",

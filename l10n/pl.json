@@ -14,6 +14,8 @@
     "Group" : "Grupa",
     "Your role" : "Twoja rola",
     "There are currently no user defined groups" : "Nie ma obecnie żadnych grup tworzonych przez użytkownika",
+    "No users found for {search}" : "Nie znaleziono użytkowników dla {search}",
+    "An error occurred. Please try again" : "Wystąpił błąd. Proszę spróbować ponownie.",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Czy na pewno chcesz opuścić grupę \"{name}\" ?",
     "Confirm leaving group" : "Potwierdź opuszczenie grupy",
     "Cannot leave group without an administrator" : "Nie można opuścić grupy bez administratora",

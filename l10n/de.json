@@ -14,6 +14,10 @@
     "Group" : "Gruppe",
     "Your role" : "Deine Rolle",
     "There are currently no user defined groups" : "Derzeit gibt es keine von Nutzern erstellte Gruppen",
+    "Add user to this group" : "Benutzer zu dieser Gruppe hinzufügen",
+    "An error occurred while searching users" : "Beim Durchsuchen der Benutzer ist ein Fehler aufgetreten",
+    "No users found for {search}" : "Kein Benutzer gefunden für {search}",
+    "An error occurred. Please try again" : "Es ist ein Fehler aufgetreten. Bitte versuche es noch einmal",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Möchtest du die Gruppe \"{name}\" wirklich verlassen?",
     "Confirm leaving group" : "Bitte bestätige das Verlassen der Gruppe",
     "Cannot leave group without an administrator" : "Kann Gruppe nicht ohne Administrator verlassen",
@@ -27,6 +31,7 @@
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Möchtest du wirklich deine eigenen Administratorrechte für die Gruppe \"{name}\" entfernen?",
     "Add member" : "Mitglied hinzufügen",
     "Leave this group" : "Gruppe verlassen",
-    "Close" : "Schließen"
+    "Close" : "Schließen",
+    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

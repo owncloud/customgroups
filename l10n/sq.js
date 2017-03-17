@@ -16,6 +16,8 @@ OC.L10N.register(
     "Group" : "Grup",
     "Your role" : "Roli juaj",
     "There are currently no user defined groups" : "Hëpërhë s’ka grupe të përcaktuar nga përdorues",
+    "No users found for {search}" : "S’u gjet përdorues për {search}",
+    "An error occurred. Please try again" : "Ndodhi një gabim. Ju lutemi, riprovoni",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Jeni i sigurt se doni ta braktisni grupin \"{name}\" ?",
     "Confirm leaving group" : "Ripohoni braktisje grupi",
     "Cannot leave group without an administrator" : "S’mund të braktiset grup pa një përgjegjës",

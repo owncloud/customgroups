@@ -13,6 +13,8 @@
     "Group" : "Gruppo",
     "Your role" : "Tu rolo",
     "There are currently no user defined groups" : "Il non ha actualmente gruppos definite per usatores",
+    "No users found for {search}" : "Nulle usator trovate pro {search}",
+    "An error occurred. Please try again" : "Un error ha occurrite. Per favor, reproba",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Es tu secur de voler quitar le gruppo \"{name}\"?",
     "Confirm leaving group" : "Si, quitar",
     "Cannot leave group without an administrator" : "Impossible lassar le gruppo sin administrator",

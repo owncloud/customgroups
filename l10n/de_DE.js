@@ -16,6 +16,10 @@ OC.L10N.register(
     "Group" : "Gruppe",
     "Your role" : "Deine Rolle",
     "There are currently no user defined groups" : "Derzeit gibt es keine von Nutzern erstellte Gruppen",
+    "Add user to this group" : "Benutzer zu dieser Gruppe hinzufügen",
+    "An error occurred while searching users" : "Beim Durchsuchen der Benutzer ist ein Fehler aufgetreten",
+    "No users found for {search}" : "Keine Benutzer für {search} gefunden",
+    "An error occurred. Please try again" : "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Möchten Sie die Gruppe \"{name}\" wirklich verlassen?",
     "Confirm leaving group" : "Bitte bestätigen Sie das Verlassen der Gruppe",
     "Cannot leave group without an administrator" : "Kann Gruppe nicht ohne Administrator verlassen",
@@ -29,6 +33,7 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Möchten Sie wirklich Ihre eigenen Administratorrechte für die Gruppe \"{name}\" entfernen?",
     "Add member" : "Mitglied hinzufügen",
     "Leave this group" : "Gruppe verlassen",
-    "Close" : "Schließen"
+    "Close" : "Schließen",
+    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden"
 },
 "nplurals=2; plural=(n != 1);");

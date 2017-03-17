@@ -16,6 +16,8 @@ OC.L10N.register(
     "Group" : "Ryhmä",
     "Your role" : "Roolisi",
     "There are currently no user defined groups" : "Käyttäjän määrittelemiä ryhmiä ei juuri nyt ole olemassa",
+    "No users found for {search}" : "Haulla {search} ei löytynyt käyttäjiä",
+    "An error occurred. Please try again" : "Tapahtui virhe, yritä uudelleen",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Haluatko varmasti lähteä ryhmästä \"{name}\"?",
     "Confirm leaving group" : "Vahvista lähtö ryhmästä",
     "Cannot leave group without an administrator" : "Ilman ylläpitäjää olevasta ryhmästä ei voi lähteä",

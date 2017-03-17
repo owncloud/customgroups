@@ -16,6 +16,8 @@ OC.L10N.register(
     "Group" : "Hópur",
     "Your role" : "Hlutverk þitt",
     "There are currently no user defined groups" : "Það eru engir hópar skilgreindir af notandanum",
+    "No users found for {search}" : "Engir notendur fundust með {search}",
+    "An error occurred. Please try again" : "Villa kom upp. Endilega reyndu aftur",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Ertu viss um að þú viljir fara út úr hópnum \"{name}\" ?",
     "Confirm leaving group" : "Staðfesta að hætt sé í hóp",
     "Cannot leave group without an administrator" : "Gat ekki gengið úr hópi án kerfisstjóra",

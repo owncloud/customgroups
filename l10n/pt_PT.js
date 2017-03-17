@@ -15,6 +15,8 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Your role" : "A sua função",
     "There are currently no user defined groups" : "Não existem atualmentes utilizadores no grupo",
+    "No users found for {search}" : "Não foram encontrados utilizadores para {search}",
+    "An error occurred. Please try again" : "Ocorreu um erro. Por favor, tente de novo.",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Tem a certeza que quer sair do Grupo \"{name}\" ",
     "Confirm leaving group" : "Confirme a saída do Grupo",
     "Cannot leave group without an administrator" : "Não pode deixar o grupo sem um administrador",

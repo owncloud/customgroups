@@ -14,6 +14,8 @@
     "Group" : "กลุ่ม",
     "Your role" : "บทบาทของคุณ",
     "There are currently no user defined groups" : "ขณะนี้ยังไม่มีกลุ่มที่กำหนดโดยผู้ใช้",
+    "No users found for {search}" : "ไม่พบผู้ใช้ {search}",
+    "An error occurred. Please try again" : "มีข้อผิดพลาดเกิดขึ้นโปรดลองอีกครั้ง",
     "Are you sure that you want to leave the group \"{name}\" ?" : "คุณแน่ใจหรือว่าต้องการออกจากกลุ่ม \"{name}\" ?",
     "Confirm leaving group" : "ยืนยันการออกจากกลุ่ม",
     "Cannot leave group without an administrator" : "ไม่สามารถออกจากกลุ่มโดยไม่มีผู้ดูแลระบบ",
