@@ -186,11 +186,13 @@ describe('MembersView test', function() {
 
 		it('creates member into collection', function() {
 			view.membersInput.trigger('select', {
-				userId: 'newuser'
+				userId: 'newuser',
+				displayName: 'new user display name'
 			});
 			expect(collection.create.calledOnce).toEqual(true);
 			expect(collection.create.getCall(0).args[0]).toEqual({
-				id: 'newuser'
+				id: 'newuser',
+				userDisplayName: 'new user display name'
 			});
 
 			collection.create.yieldTo('success');

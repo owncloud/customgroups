@@ -144,7 +144,8 @@
 			$field.prop('disabled', true);
 
 			this.collection.create({
-				id: userId
+				id: userId,
+				userDisplayName: data.displayName || userId
 			},  {
 				wait: true,
 				success: function() {
