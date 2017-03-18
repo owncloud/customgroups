@@ -16,6 +16,8 @@ OC.L10N.register(
     "Group" : "Grup",
     "Your role" : "Roli juaj",
     "There are currently no user defined groups" : "Hëpërhë s’ka grupe të përcaktuar nga përdorues",
+    "Add user to this group" : "Shtoni përdorues te ky grup",
+    "An error occurred while searching users" : "Ndodhi një gabim teksa kërkohej për përdorues",
     "No users found for {search}" : "S’u gjet përdorues për {search}",
     "An error occurred. Please try again" : "Ndodhi një gabim. Ju lutemi, riprovoni",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Jeni i sigurt se doni ta braktisni grupin \"{name}\" ?",
@@ -31,6 +33,7 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Jeni i sigurt se doni të hiqen lejet tuaja si përgjegjës për grupin \"{name}\" ?",
     "Add member" : "Shtoni anëtar",
     "Leave this group" : "Braktiseni këtë grupi",
-    "Close" : "Mbylle"
+    "Close" : "Mbylle",
+    "Group with uri \"%s\" not found" : "S’u gjet grup me URI \"%s\""
 },
 "nplurals=2; plural=(n != 1);");

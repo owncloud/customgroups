@@ -14,6 +14,8 @@
     "Group" : "กลุ่ม",
     "Your role" : "บทบาทของคุณ",
     "There are currently no user defined groups" : "ขณะนี้ยังไม่มีกลุ่มที่กำหนดโดยผู้ใช้",
+    "Add user to this group" : "เพิ่มผู้ใช้ไปยังกลุ่มนี้",
+    "An error occurred while searching users" : "เกิดข้อผิดพลาดขณะค้นหาผู้ใช้",
     "No users found for {search}" : "ไม่พบผู้ใช้ {search}",
     "An error occurred. Please try again" : "มีข้อผิดพลาดเกิดขึ้นโปรดลองอีกครั้ง",
     "Are you sure that you want to leave the group \"{name}\" ?" : "คุณแน่ใจหรือว่าต้องการออกจากกลุ่ม \"{name}\" ?",
@@ -29,6 +31,7 @@
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "คุณแน่ใจหรือว่าต้องการลบสิทธิ์ของผู้ดูแลระบบของคุณสำหรับกลุ่ม \"{name}\"",
     "Add member" : "เพิ่มสมาชิก",
     "Leave this group" : "ออกจากกลุ่มนี้",
-    "Close" : "ปิด"
+    "Close" : "ปิด",
+    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ "
 },"pluralForm" :"nplurals=1; plural=0;"
 }
