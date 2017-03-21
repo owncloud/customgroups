@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Grupos personalizados",
+    "Could not rename group" : "Falha ao renomear grupo",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem a certeza que quer apagar o grupo \"{groupName}\"",
     "Confirm deletion of group" : "Confirme se pretende apagar o Grupo",
     "Could not create group" : "Não pode crear Grupo",
@@ -15,6 +16,8 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Your role" : "A sua função",
     "There are currently no user defined groups" : "Não existem atualmentes utilizadores no grupo",
+    "Add user to this group" : "Adicionar utilizador a este grupo",
+    "An error occurred while searching users" : "Ocorreu um erro ao procurar utilizadores",
     "No users found for {search}" : "Não foram encontrados utilizadores para {search}",
     "An error occurred. Please try again" : "Ocorreu um erro. Por favor, tente de novo.",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Tem a certeza que quer sair do Grupo \"{name}\" ",
@@ -30,6 +33,7 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Tem a certeza de que pretende remover as suas próprias permissões de administrador para o grupo \"{name}\"?",
     "Add member" : "Adicionar membro",
     "Leave this group" : "Sair deste grupo",
-    "Close" : "Fechar"
+    "Close" : "Fechar",
+    "Group with uri \"%s\" not found" : "Não foi encontrado o grupo com o URL \"%s\""
 },
 "nplurals=2; plural=(n != 1);");
