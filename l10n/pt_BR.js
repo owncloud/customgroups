@@ -16,6 +16,8 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Your role" : "Seu papel",
     "There are currently no user defined groups" : "Atualmente, não existem grupos definidos pelo usuário",
+    "Add user to this group" : "Adicionar usuário a este grupo",
+    "An error occurred while searching users" : "Ocorreu um erro ao procurar usuários",
     "No users found for {search}" : "Nenhum usuário encontrado para {search}",
     "An error occurred. Please try again" : "Ocorreu um erro. Por favor tente novamente",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Tem certeza de que deseja deixar o grupo \"{name}\"?",
