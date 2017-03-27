@@ -9,8 +9,9 @@
 	<repository type="git">http://github.com/owncloud/customgroups.git</repository>
 	<licence>AGPL</licence>
 	<author>Vincent Petry</author>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<category>collaboration</category>
+	<screenshot>https://github.com/owncloud/screenshots/raw/a28a6cf38ed8d18d98a02fb7ecac82d1a264a791/customgroups/customgroups-screenshot.png</screenshot>
 	<types>
 		<authentication/>
 		<dav/>
