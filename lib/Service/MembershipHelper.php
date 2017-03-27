@@ -27,6 +27,8 @@ use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 use OCP\IUser;
+use OCP\Notification\IManager;
+use OCP\IURLGenerator;
 
 /**
  * Membership helper
@@ -64,6 +66,20 @@ class MembershipHelper {
 	private $groupManager;
 
 	/**
+	 * Notification manager
+	 *
+	 * @var IManager
+	 */
+	private $notificationManager;
+
+	/**
+	 * URL generator
+	 *
+	 * @var IURLGenerator
+	 */
+	private $urlGenerator;
+
+	/**
 	 * Membership info for the currently logged in user
 	 *
 	 * @var array
@@ -77,17 +93,23 @@ class MembershipHelper {
 	 * @param IUserSession $userSession user session
 	 * @param IUserManager $userManager user manager
 	 * @param IGroupManager $groupManager group manager
+	 * @param IManager $notificationManager notification manager
+	 * @param IURLGenerator $urlGenerator URL generator
 	 */
 	public function __construct(
 		CustomGroupsDatabaseHandler $groupsHandler,
 		IUserSession $userSession,
 		IUserManager $userManager,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		IManager $notificationManager,
+		IURLGenerator $urlGenerator
 	) {
 		$this->groupsHandler = $groupsHandler;
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->notificationManager = $notificationManager;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -232,5 +254,24 @@ class MembershipHelper {
 		} while ($totalResultCount < $limit && $resultsCount >= $internalLimit);
 
 		return $totalResults;
+	}
+
+	/**
+	 * Notify the given user about the given group
+	 *
+	 * @param string $targetUserId user to notify
+	 * @param array $groupInfo group info
+	 */
+	public function notifyUser($targetUserId, $groupInfo) {
+		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
+		$notification = $this->notificationManager->createNotification();
+		$notification->setApp('customgroups')
+			->setDateTime(new \DateTime())
+			->setObject('customgroup', $groupInfo['group_id'])
+			->setSubject('added_member', [$this->getUserId(), $groupInfo['display_name']])
+			->setMessage('added_member', [$this->getUserId(), $groupInfo['display_name']])
+			->setUser($targetUserId)
+			->setLink($link);
+		$this->notificationManager->notify($notification);
 	}
 }

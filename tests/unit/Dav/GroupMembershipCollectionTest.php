@@ -30,6 +30,8 @@ use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\Service\MembershipHelper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
+use OCP\IURLGenerator;
+use OCP\Notification\IManager;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -91,12 +93,18 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				[strtoupper(self::NODE_USER), $nodeUser],
 			]));
 
-		$this->helper = new MembershipHelper(
-			$this->handler,
-			$this->userSession,
-			$this->userManager,
-			$this->groupManager
-		);
+		$this->helper = $this->getMockBuilder(MembershipHelper::class)
+			->setMethods(['notifyUser'])
+			->setConstructorArgs([
+				$this->handler,
+				$this->userSession,
+				$this->userManager,
+				$this->groupManager,
+				$this->createMock(IManager::class),
+				$this->createMock(IURLGenerator::class)
+			])
+			->getMock();
+
 		$this->node = new GroupMembershipCollection(
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			$this->handler,

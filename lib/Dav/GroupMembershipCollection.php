@@ -175,6 +175,8 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		if (!$this->groupsHandler->addToGroup($userId, $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER)) {
 			throw new PreconditionFailed("The user \"$userId\" is already member of this group");
 		}
+
+		$this->helper->notifyUser($userId, $this->groupInfo);
 	}
 
 	/**

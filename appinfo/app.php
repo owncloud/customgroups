@@ -21,3 +21,4 @@
 
 $app = new \OCA\CustomGroups\Application();
 $app->registerGroupBackend();
+$app->registerNotifier();
