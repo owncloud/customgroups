@@ -1,7 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
-    "Custom Groups" : "Aangepaste groepen",
+    "Custom Groups" : "Maatwerk groepen",
     "Could not rename group" : "Kon groep niet hernoemen",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Weet je zeker dat je de groep \"{groupName}\" wilt verwijderen?",
     "Confirm deletion of group" : "Bevestig verwijderen van groep",
@@ -34,6 +34,9 @@ OC.L10N.register(
     "Add member" : "Lid toevoegen",
     "Leave this group" : "Verlaat deze groep",
     "Close" : "Sluiten",
-    "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden"
+    "Custom groups" : "Aangepaste groepen",
+    "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden",
+    "Added to group \"%1$s\" by \"%2$s\"." : "Door \"%2$s\" toegevoegd aan groep \"%1$s\".",
+    "You have been added to the group \"%1$s\" by \"%2$s\"." : "U bent door \"%2$s\" toegevoegd aan groep \"%1$s\"."
 },
 "nplurals=2; plural=(n != 1);");

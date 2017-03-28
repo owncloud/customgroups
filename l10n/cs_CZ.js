@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Vyberte skupiny",
+    "Could not rename group" : "Skupinu nelze přejmenovat",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Jste si jisti, že chcete odstranit skupinu \"{groupName}\" ?",
     "Confirm deletion of group" : "Potvrďte odstranění skupiny",
     "Could not create group" : "Nelze vytvořit skupinu",
@@ -15,6 +16,8 @@ OC.L10N.register(
     "Group" : "Skupina",
     "Your role" : "Vaše role",
     "There are currently no user defined groups" : "Momentálně zde nejsou žádné uživatelsky definované skupiny",
+    "Add user to this group" : "Přidat uživatele do skupiny",
+    "An error occurred while searching users" : "Nastala chyba při hledání uživatele",
     "No users found for {search}" : "Nebyli nalezeni žádní uživatelé pro {search}",
     "An error occurred. Please try again" : "Došlo k chybě. Zkuste to prosím znovu",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Jste si jisti, že chcete opustit skupinu \"{name}\" ?",
@@ -30,6 +33,10 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Jste si jisti, že chcete odebrat své administrátorské oprávnění pro tuto skupinu \"{name}\" ?",
     "Add member" : "Přidat člena",
     "Leave this group" : "Opustit tuhle skupinu",
-    "Close" : "Zavřít"
+    "Close" : "Zavřít",
+    "Custom groups" : "Vlastní skupiny",
+    "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena",
+    "Added to group \"%1$s\" by \"%2$s\"." : "Přidán \"%1$s\" do skupiny \"%2$s\".",
+    "You have been added to the group \"%1$s\" by \"%2$s\"." : "\"%1$s\" Jste přidáni do skupiny \"%2$s\"."
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");

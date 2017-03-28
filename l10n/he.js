@@ -34,6 +34,9 @@ OC.L10N.register(
     "Add member" : "הוספת חבר",
     "Leave this group" : "עזיבת קבוצה זו",
     "Close" : "סגירה",
-    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה"
+    "Custom groups" : "קבוצות מותאמות אישית",
+    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה",
+    "Added to group \"%1$s\" by \"%2$s\"." : "נוסף לקבוצה \"%1$s\" על ידי \"%2$s\".",
+    "You have been added to the group \"%1$s\" by \"%2$s\"." : "נוספת לקבוצה \"%1$s\" על ידי \"%2$s\"."
 },
 "nplurals=2; plural=(n != 1);");
