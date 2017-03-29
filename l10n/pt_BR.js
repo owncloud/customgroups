@@ -33,6 +33,9 @@ OC.L10N.register(
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Tem a certeza de que pretende remover as suas próprias permissões de administrador para o grupo \"{name}\"?",
     "Add member" : "Adicionar membro",
     "Leave this group" : "Deixar este grupo",
-    "Close" : "Fechar"
+    "Close" : "Fechar",
+    "Custom groups" : "Grupos personalizados",
+    "Added to group \"%1$s\" by \"%2$s\"." : "Adicionado ao grupo \"%1$s\" por \"%2$s\".",
+    "You have been added to the group \"%1$s\" by \"%2$s\"." : "Você foi adicionado ao grupo \"%1$s\" por \"%2$s\"."
 },
 "nplurals=2; plural=(n > 1);");
