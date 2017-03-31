@@ -35,6 +35,7 @@ OC.L10N.register(
     "Leave this group" : "Deixar este grupo",
     "Close" : "Fechar",
     "Custom groups" : "Grupos personalizados",
+    "Group with uri \"%s\" not found" : "Grupo com uri \"%s\" não encontrado",
     "Added to group \"%1$s\" by \"%2$s\"." : "Adicionado ao grupo \"%1$s\" por \"%2$s\".",
     "You have been added to the group \"%1$s\" by \"%2$s\"." : "Você foi adicionado ao grupo \"%1$s\" por \"%2$s\"."
 },
