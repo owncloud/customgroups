@@ -34,6 +34,7 @@ OC.L10N.register(
     "Add member" : "Dodaj člana",
     "Leave this group" : "Zapusti skupino",
     "Close" : "Zapri",
+    "Custom groups" : "Skupine po meri",
     "Group with uri \"%s\" not found" : "Skupine z naslovom URI »%s« ni mogoče najti."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
