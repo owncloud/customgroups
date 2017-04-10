@@ -29,6 +29,8 @@ use OCA\CustomGroups\Service\MembershipHelper;
 use OCA\CustomGroups\Search;
 use OCP\Notification\IManager;
 use OCP\IURLGenerator;
+use OCP\Notification\INotification;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Class MembershipHelperTest
@@ -86,6 +88,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		// currently logged in user
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::CURRENT_USER);
+		$user->method('getDisplayName')->willReturn('User One');
 		$this->userSession->expects($this->any())
 			->method('getUser')
 			->willReturn($user);
@@ -364,5 +367,116 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertEquals('user17', $results[15]->getUID());
 		$this->assertEquals('user18', $results[16]->getUID());
 		$this->assertEquals('user20', $results[17]->getUID());
+	}
+
+	private function createExpectedNotification($messageId, $messageParams) {
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())
+			->method('setApp')
+			->with('customgroups')
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setUser')
+			->with('anotheruser')
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setLink')
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setDateTime')
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setObject')
+			->with('customgroup', 1)
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setSubject')
+			->with($messageId, $messageParams)
+			->willReturn($notification);
+		$notification->expects($this->once())
+			->method('setMessage')
+			->with($messageId, $messageParams)
+			->willReturn($notification);
+
+		return $notification;
+	}
+
+	public function testNotifyUser() {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn(self::CURRENT_USER);
+		$user->method('getDisplayName')->willReturn('User One');
+		$this->userManager->method('get')
+			->with(self::CURRENT_USER)
+			->willReturn($user);
+
+		$notification = $this->createExpectedNotification(
+			'added_member',
+			['User One', 'Group One']
+		);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->once())
+			->method('notify')
+			->with($notification);
+
+		$this->helper->notifyUser(
+			'anotheruser',
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
+		);
+	}
+
+	public function testNotifyUserRemoved() {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn(self::CURRENT_USER);
+		$user->method('getDisplayName')->willReturn('User One');
+		$this->userManager->method('get')
+			->with(self::CURRENT_USER)
+			->willReturn($user);
+
+		$notification = $this->createExpectedNotification(
+			'removed_member',
+			['User One', 'Group One']
+		);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->once())
+			->method('notify')
+			->with($notification);
+
+		$this->helper->notifyUserRemoved(
+			'anotheruser',
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
+		);
+	}
+
+	public function testNotifyUserRoleChange() {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn(self::CURRENT_USER);
+		$user->method('getDisplayName')->willReturn('User One');
+		$this->userManager->method('get')
+			->with(self::CURRENT_USER)
+			->willReturn($user);
+
+		$notification = $this->createExpectedNotification(
+			'changed_member_role',
+			['User One', 'Group One', Roles::BACKEND_ROLE_MEMBER]
+		);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->once())
+			->method('notify')
+			->with($notification);
+
+		$this->helper->notifyUserRoleChange(
+			'anotheruser',
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			['group_id' => 1, 'role' => Roles::BACKEND_ROLE_MEMBER]
+		);
 	}
 }

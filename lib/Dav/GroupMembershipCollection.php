@@ -280,6 +280,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		return new MembershipNode(
 			$memberInfo,
 			$memberInfo['user_id'],
+			$this->groupInfo,
 			$this->groupsHandler,
 			$this->helper
 		);

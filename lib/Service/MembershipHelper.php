@@ -262,14 +262,60 @@ class MembershipHelper {
 	 * @param string $targetUserId user to notify
 	 * @param array $groupInfo group info
 	 */
-	public function notifyUser($targetUserId, $groupInfo) {
+	public function notifyUser($targetUserId, array $groupInfo) {
 		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
+
+		$user = $this->getUser($this->getUserId());
+
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('customgroups')
 			->setDateTime(new \DateTime())
 			->setObject('customgroup', $groupInfo['group_id'])
-			->setSubject('added_member', [$this->getUserId(), $groupInfo['display_name']])
-			->setMessage('added_member', [$this->getUserId(), $groupInfo['display_name']])
+			->setSubject('added_member', [$user->getDisplayName(), $groupInfo['display_name']])
+			->setMessage('added_member', [$user->getDisplayName(), $groupInfo['display_name']])
+			->setUser($targetUserId)
+			->setLink($link);
+		$this->notificationManager->notify($notification);
+	}
+
+	/**
+	 * Notify the given user about a role change in given group.
+	 *
+	 * @param array $groupInfo group info
+	 * @param string $targetUserId user to notify
+	 * @param array $memberInfo membership info
+	 */
+	public function notifyUserRoleChange($targetUserId, array $groupInfo, array $memberInfo) {
+		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
+		$user = $this->getUser($this->getUserId());
+
+		$notification = $this->notificationManager->createNotification();
+		$notification->setApp('customgroups')
+			->setDateTime(new \DateTime())
+			->setObject('customgroup', $memberInfo['group_id'])
+			->setSubject('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $memberInfo['role']])
+			->setMessage('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $memberInfo['role']])
+			->setUser($targetUserId)
+			->setLink($link);
+		$this->notificationManager->notify($notification);
+	}
+
+	/**
+	 * Notify the given user that they were removed from a group
+	 *
+	 * @param string $targetUserId user to notify
+	 * @param array $groupInfo group info
+	 */
+	public function notifyUserRemoved($targetUserId, array $groupInfo) {
+		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups']);
+		$user = $this->getUser($this->getUserId());
+
+		$notification = $this->notificationManager->createNotification();
+		$notification->setApp('customgroups')
+			->setDateTime(new \DateTime())
+			->setObject('customgroup', $groupInfo['group_id'])
+			->setSubject('removed_member', [$user->getDisplayName(), $groupInfo['display_name']])
+			->setMessage('removed_member', [$user->getDisplayName(), $groupInfo['display_name']])
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);

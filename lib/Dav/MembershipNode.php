@@ -54,6 +54,13 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	private $memberInfo;
 
 	/**
+	 * Group info
+	 *
+	 * @var array
+	 */
+	private $groupInfo;
+
+	/**
 	 * Membership helper
 	 *
 	 * @var MembershipHelper
@@ -78,12 +85,14 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	public function __construct(
 		array $memberInfo,
 		$name,
+		array $groupInfo,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper
 	) {
 		$this->groupsHandler = $groupsHandler;
 		$this->name = $name;
 		$this->memberInfo = $memberInfo;
+		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
 	}
 
@@ -117,6 +126,11 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			// possibly the membership was deleted concurrently
 			throw new PreconditionFailed("Could not remove member \"$userId\" from group \"$groupId\"");
 		};
+
+		if ($currentUserId !== $userId) {
+			// only notify when the removal was done by another user
+			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
+		}
 	}
 
 	/**
@@ -222,7 +236,9 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			$userId,
 			$rolePropValue
 		);
-		$this->groupInfo['role'] = $rolePropValue;
+		$this->memberInfo['role'] = $rolePropValue;
+
+		$this->helper->notifyUserRoleChange($userId, $this->groupInfo, $this->memberInfo);
 
 		return $result;
 	}
