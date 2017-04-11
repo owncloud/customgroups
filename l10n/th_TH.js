@@ -35,8 +35,6 @@ OC.L10N.register(
     "Leave this group" : "ออกจากกลุ่มนี้",
     "Close" : "ปิด",
     "Custom groups" : "กำหนดกลุ่มเอง",
-    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ ",
-    "Added to group \"%1$s\" by \"%2$s\"." : "เพิ่มลงในกลุ่ม \"%1$s\" แล้วโดย \"%2$s\"",
-    "You have been added to the group \"%1$s\" by \"%2$s\"." : "คุณได้ถูกเพิ่มเข้าไปในกลุ่ม \"%1$s\" แล้วโดย \"%2$s\""
+    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ "
 },
 "nplurals=1; plural=0;");

@@ -35,8 +35,6 @@ OC.L10N.register(
     "Leave this group" : "Braktiseni këtë grupi",
     "Close" : "Mbylle",
     "Custom groups" : "Grupe vetjake",
-    "Group with uri \"%s\" not found" : "S’u gjet grup me URI \"%s\"",
-    "Added to group \"%1$s\" by \"%2$s\"." : "U shtua te grupi \"%1$s\" nga \"%2$s\".",
-    "You have been added to the group \"%1$s\" by \"%2$s\"." : "Jeni shtuar te grupi \"%1$s\" nga \"%2$s\"."
+    "Group with uri \"%s\" not found" : "S’u gjet grup me URI \"%s\""
 },
 "nplurals=2; plural=(n != 1);");

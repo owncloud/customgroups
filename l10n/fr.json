@@ -33,8 +33,6 @@
     "Leave this group" : "Quitter ce groupe",
     "Close" : "Fermer",
     "Custom groups" : "Groupes personnalisés",
-    "Group with uri \"%s\" not found" : "Groupe avec l'adresse \"%s\" non trouvé",
-    "Added to group \"%1$s\" by \"%2$s\"." : "Ajouté au groupe \"%1$s\" par \"%2$s\".",
-    "You have been added to the group \"%1$s\" by \"%2$s\"." : "Vous avez été ajouté au groupe \"%1$s\" par \"%2$s\"."
+    "Group with uri \"%s\" not found" : "Groupe avec l'adresse \"%s\" non trouvé"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

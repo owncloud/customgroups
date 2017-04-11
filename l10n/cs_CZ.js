@@ -35,8 +35,6 @@ OC.L10N.register(
     "Leave this group" : "Opustit tuhle skupinu",
     "Close" : "Zavřít",
     "Custom groups" : "Vlastní skupiny",
-    "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena",
-    "Added to group \"%1$s\" by \"%2$s\"." : "Přidán \"%1$s\" do skupiny \"%2$s\".",
-    "You have been added to the group \"%1$s\" by \"%2$s\"." : "\"%1$s\" Jste přidáni do skupiny \"%2$s\"."
+    "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");
