@@ -88,17 +88,22 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturn($user);
 
-		$this->helper = new MembershipHelper(
-			$this->handler,
-			$this->userSession,
-			$this->userManager,
-			$this->groupManager,
-			$this->createMock(IManager::class),
-			$this->createMock(IURLGenerator::class)
-		);
+		$this->helper = $this->getMockBuilder(MembershipHelper::class)
+			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved'])
+			->setConstructorArgs([
+				$this->handler,
+				$this->userSession,
+				$this->userManager,
+				$this->groupManager,
+				$this->createMock(IManager::class),
+				$this->createMock(IURLGenerator::class)
+			])
+			->getMock();
+
 		$this->node = new MembershipNode(
 			['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			self::NODE_USER,
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			$this->handler,
 			$this->helper
 		);
@@ -125,6 +130,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$node = new MembershipNode(
 			['group_id' => 1, 'uri' => 'group1', 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			'group1',
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			$this->handler,
 			$this->helper
 		);
@@ -137,6 +143,14 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
+
+		$this->helper->expects($this->once())
+			->method('notifyUserRemoved')
+			->with(
+				self::NODE_USER,
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
+			);
 
 		$this->node->delete();
 	}
@@ -191,6 +205,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$node = new MembershipNode(
 			$memberInfo,
 			self::NODE_USER,
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			$this->handler,
 			$helper
 		);
@@ -208,6 +223,10 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
+
+		// no notification in this case
+		$this->helper->expects($this->never())
+			->method('notifyUserRemoved');
 
 		$node->delete();
 	}
@@ -314,6 +333,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$node = new MembershipNode(
 			['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $roleValue, 'uri' => 'group1'],
 			self::NODE_USER,
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			$this->handler,
 			$this->helper
 		);
@@ -362,9 +382,18 @@ class MembershipNodeTest extends \Test\TestCase {
 				->method('setGroupMemberInfo')
 				->with(1, self::NODE_USER, Roles::davToBackend($roleToSet))
 				->willReturn(true);
+			$this->helper->expects($this->once())
+				->method('notifyUserRoleChange')
+				->with(
+					self::NODE_USER,
+					['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+					['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => Roles::davToBackend($roleToSet)]
+				);
 		} else {
 			$this->handler->expects($this->never())
 				->method('setGroupMemberInfo');
+			$this->helper->expects($this->never())
+				->method('notifyUserRoleChange');
 		}
 
 		$searchAdmin = new Search(); 

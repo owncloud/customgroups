@@ -248,6 +248,13 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->with(self::NODE_USER, 1, false)
 			->willReturn(true);
 
+		$this->helper->expects($this->once())
+			->method('notifyUser')
+			->with(
+				self::NODE_USER,
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
+			);
+
 		$this->node->createFile(self::NODE_USER);
 	}
 

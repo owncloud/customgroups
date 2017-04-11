@@ -25,6 +25,7 @@ use OCP\L10N\IFactory;
 use OCA\CustomGroups\Notifier;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\Notification\INotification;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Class NotifierTest
@@ -54,19 +55,19 @@ class NotifierTest extends \Test\TestCase {
 		);
 	}
 
-	public function testPrepare() {
+	public function testPrepareAddMember() {
 		$notification = $this->createMock(INotification::class);
 
 		$notification->method('getApp')->willReturn('customgroups');
 		$notification->method('getObjectType')->willReturn('customgroup');
 		$notification->method('getSubject')->willReturn('added_member');
 		$notification->method('getMessage')->willReturn('added_member');
-		$notification->method('getSubjectParameters')->willReturn(['group1', 'user1']);
-		$notification->method('getMessageParameters')->willReturn(['group1', 'user1']);
+		$notification->method('getSubjectParameters')->willReturn(['user1', 'group1']);
+		$notification->method('getMessageParameters')->willReturn(['user1', 'group1']);
 
 		$notification->expects($this->once())
 			->method('setParsedSubject')
-			->with('Added to group "group1" by "user1".');
+			->with('Added to group "group1".');
 		$notification->expects($this->once())
 			->method('setParsedMessage')
 			->with('You have been added to the group "group1" by "user1".');
@@ -74,4 +75,43 @@ class NotifierTest extends \Test\TestCase {
 		$notification = $this->notifier->prepare($notification, 'en_US');
 	}
 
+	public function testPrepareRemoveMember() {
+		$notification = $this->createMock(INotification::class);
+
+		$notification->method('getApp')->willReturn('customgroups');
+		$notification->method('getObjectType')->willReturn('customgroup');
+		$notification->method('getSubject')->willReturn('removed_member');
+		$notification->method('getMessage')->willReturn('removed_member');
+		$notification->method('getSubjectParameters')->willReturn(['user1', 'group1']);
+		$notification->method('getMessageParameters')->willReturn(['user1', 'group1']);
+
+		$notification->expects($this->once())
+			->method('setParsedSubject')
+			->with('Removed from group "group1".');
+		$notification->expects($this->once())
+			->method('setParsedMessage')
+			->with('You have been removed from the group "group1" by "user1".');
+
+		$notification = $this->notifier->prepare($notification, 'en_US');
+	}
+
+	public function testPrepareChangeRole() {
+		$notification = $this->createMock(INotification::class);
+
+		$notification->method('getApp')->willReturn('customgroups');
+		$notification->method('getObjectType')->willReturn('customgroup');
+		$notification->method('getSubject')->willReturn('changed_member_role');
+		$notification->method('getMessage')->willReturn('changed_member_role');
+		$notification->method('getSubjectParameters')->willReturn(['user1', 'group1', Roles::BACKEND_ROLE_ADMIN]);
+		$notification->method('getMessageParameters')->willReturn(['user1', 'group1', Roles::BACKEND_ROLE_ADMIN]);
+
+		$notification->expects($this->once())
+			->method('setParsedSubject')
+			->with('Role change in group "group1".');
+		$notification->expects($this->once())
+			->method('setParsedMessage')
+			->with('"user1" assigned the "Group admin" role for the group "group1" to you.');
+
+		$notification = $this->notifier->prepare($notification, 'en_US');
+	}
 }
