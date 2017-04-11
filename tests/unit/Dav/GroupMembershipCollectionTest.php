@@ -341,6 +341,21 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->childExists(self::NODE_USER);
 	}
 
+	public function testIsMemberAsNonMemberButSuperAdmin() {
+		$this->setCurrentUserSuperAdmin(true);
+		$this->setCurrentUserMemberInfo(null);
+
+		$this->handler->expects($this->any())
+			->method('inGroup')
+			->will($this->returnValueMap([
+				[self::NODE_USER, 1, true],
+				['user3', 1, false],
+			]));
+
+		$this->assertTrue($this->node->childExists(self::NODE_USER));
+		$this->assertFalse($this->node->childExists('user3'));
+	}
+
 	/**
 	 * @dataProvider rolesProvider
 	 */
