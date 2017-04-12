@@ -33,6 +33,13 @@
     "Leave this group" : "Gruppe verlassen",
     "Close" : "Schließen",
     "Custom groups" : "Benutzerdefinierte Gruppen",
-    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden"
+    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden",
+    "Added to group \"%2$s\"." : "Zur Gruppe \"%2$s\" hinzugefügt.",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "Du wurdest von \"%1$s\" zur Gruppe \"%2$s\" hinzugefügt.",
+    "Removed from group \"%2$s\"." : "Aus der Gruppe \"%2$s\" entfernt.",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Du wurdest von \"%1$s\" aus der Gruppe \"%2$s\" entfernt.",
+    "Role change in group \"%1$s\"." : "In der Gruppe \"%1$s\" wurde eine Rolle geändert.",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" hat die \"%3$s\" - Rolle der Gruppe \"%2$s\" dir zugewiesen.",
+    "Unknown role" : "Unbekannte Rolle"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
