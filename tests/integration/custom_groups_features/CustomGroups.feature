@@ -225,6 +225,25 @@ Scenario: Superadmin can do everything
 					| user2 |
 					| admin |
 
+Scenario: Superadmin can add a user to any custom group
+		Given As an "admin"
+		And user "user0" exists
+		And user "user1" exists
+		And user "user0" created a custom group called "group0"
+		When user "admin" made user "user1" member of custom group "group0"
+		Then the HTTP status code should be "201"
+		And members of "group0" requested by user "admin" are
+					| user0 |
+					| user1 |
+
+Scenario: Superadmin can rename any custom group
+		Given As an "admin"
+		And user "user0" exists
+		And user "user1" exists
+		And user "user0" created a custom group called "group0"
+		When user "admin" renamed custom group "group0" as "renamed-group0"
+		Then custom group "group0" exists with display name "renamed-group0"
+
 Scenario: A member converted to admin can do the same as group admin
 		Given As an "admin"
 		And user "user0" exists

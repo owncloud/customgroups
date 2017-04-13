@@ -242,7 +242,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 */
 	public function childExists($userId) {
 		$groupId = $this->groupInfo['group_id'];
-		if (!$this->helper->isUserMember($groupId)) {
+		if (!$this->helper->isUserMember($groupId) && !$this->helper->isUserAdmin($groupId)) {
 			throw new Forbidden("No permission to list members of group \"$groupId\"");
 		}
 		return $this->groupsHandler->inGroup($userId, $groupId);
