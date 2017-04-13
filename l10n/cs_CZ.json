@@ -33,6 +33,13 @@
     "Leave this group" : "Opustit tuhle skupinu",
     "Close" : "Zavřít",
     "Custom groups" : "Vlastní skupiny",
-    "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena"
+    "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena",
+    "Added to group \"%2$s\"." : "Přidáno do skupiny \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "Byli jste přidání ke skupině \"%2$s\" od \"%1$s\".",
+    "Removed from group \"%2$s\"." : "Odstraněno ze skupiny \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Byli jste ze skupiny \"%2$s\" odstraněni z \"%1$s\".",
+    "Role change in group \"%1$s\"." : "Změna role ve skupině \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "Je Vám přiřazen \"%1$s\" k roli \"%3$s\" ve skupině \"%2$s\".",
+    "Unknown role" : "Neznámá role"
 },"pluralForm" :"nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;"
 }

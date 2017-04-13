@@ -33,6 +33,13 @@
     "Leave this group" : "Verlaat deze groep",
     "Close" : "Sluiten",
     "Custom groups" : "Aangepaste groepen",
-    "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden"
+    "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden",
+    "Added to group \"%2$s\"." : "Toegevoegd aan groep \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "U bent door \"%1$s\" toegevoegd aan groep \"%2$s\".",
+    "Removed from group \"%2$s\"." : "Verwijderd uit groep \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "U bent door \"%1$s\" verwijderd uit groep \"%2$s\".",
+    "Role change in group \"%1$s\"." : "Rolwijziging in groep \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" kende de \"%3$s\" rol voor groep \"%2$s\" aan u toe.",
+    "Unknown role" : "Onbekende rol"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
