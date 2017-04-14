@@ -33,6 +33,12 @@
     "Leave this group" : "Braktiseni këtë grupi",
     "Close" : "Mbylle",
     "Custom groups" : "Grupe vetjake",
-    "Group with uri \"%s\" not found" : "S’u gjet grup me URI \"%s\""
+    "Group with uri \"%s\" not found" : "S’u gjet grup me URI \"%s\"",
+    "Added to group \"%2$s\"." : "U shtua te grupi \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "Jeni shtuar te grupi \"%2$s\" nga \"%1$s\".",
+    "Removed from group \"%2$s\"." : "U hoq prej grupit \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Jeni hequr prej grupit \"%2$s\" nga \"%1$s\".",
+    "Role change in group \"%1$s\"." : "Ndryshim roli në grupin \"%1$s\".",
+    "Unknown role" : "Rol i panjohur"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
