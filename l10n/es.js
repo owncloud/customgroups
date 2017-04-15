@@ -1,7 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
-    "Custom Groups" : "Grupos personalizados",
+    "Custom Groups" : "Grupos Personalizados",
     "Could not rename group" : "No se pudo renombrar al grupo",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Está seguro que desea eliminar el grupo \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmar eliminación del grupo",
@@ -35,6 +35,13 @@ OC.L10N.register(
     "Leave this group" : "Abandonar este grupo",
     "Close" : "Cerrar",
     "Custom groups" : "Grupos personalizados",
-    "Group with uri \"%s\" not found" : "El grupo con la URI \"%s\" no se ha encontrado"
+    "Group with uri \"%s\" not found" : "El grupo con la URI \"%s\" no se ha encontrado",
+    "Added to group \"%2$s\"." : "Añadido al grupo \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "Has sido agregado al grupo \"%2$s\" por \"%1$s\".",
+    "Removed from group \"%2$s\"." : "Eliminado del grupo \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Ha sido eliminado del grupo \"%2$s\" por \"%1$s\".",
+    "Role change in group \"%1$s\"." : "Cambio de roles en el grupo \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" le ha asignado el rol \"%3$s\" a usted para el grupo \"%2$s\".",
+    "Unknown role" : "Rol desconocido"
 },
 "nplurals=2; plural=(n != 1);");

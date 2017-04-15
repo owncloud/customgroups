@@ -33,6 +33,13 @@
     "Leave this group" : "עזיבת קבוצה זו",
     "Close" : "סגירה",
     "Custom groups" : "קבוצות מותאמות אישית",
-    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה"
+    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה",
+    "Added to group \"%2$s\"." : "נוסף לקבוצה \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "נוספת לקבוצה \"%2$s\" על ידי \"%1$s\".",
+    "Removed from group \"%2$s\"." : "הוסר מקבוצה \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "הוסרת מקבוצה \"%2$s\" על ידי \"%1$s\".",
+    "Role change in group \"%1$s\"." : "תפקיד שונה בקבוצה \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" הקצה תפקיד \"%3$s\" לקבוצה \"%2$s\" עבורך.",
+    "Unknown role" : "תפקיד לא ידוע"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
