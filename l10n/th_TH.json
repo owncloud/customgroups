@@ -33,6 +33,13 @@
     "Leave this group" : "ออกจากกลุ่มนี้",
     "Close" : "ปิด",
     "Custom groups" : "กำหนดกลุ่มเอง",
-    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ "
+    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ ",
+    "Added to group \"%2$s\"." : "เพิ่ม \"%2$s\" ลงในกลุ่มแล้ว",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "คุณได้ถูกเพิ่มในกลุ่ม \"%2$s\" โดย \"%1$s\"",
+    "Removed from group \"%2$s\"." : "ลบ \"%2$s\" ออกจากกลุ่มแล้ว",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "คุณถูกลบออกจากกลุ่ม \"%2$s\" โดย \"%1$s\"",
+    "Role change in group \"%1$s\"." : "มีการเปลี่ยนแปลงบทบาทในกลุ่ม \"%1$s\"",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" กำหนดบทบาท \"%3$s\" สำหรับกลุ่ม \"%2$s\" ให้กับคุณ",
+    "Unknown role" : "ยังไม่มีบทบาท"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
