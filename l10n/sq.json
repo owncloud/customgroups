@@ -39,6 +39,7 @@
     "Removed from group \"%2$s\"." : "U hoq prej grupit \"%2$s\".",
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Jeni hequr prej grupit \"%2$s\" nga \"%1$s\".",
     "Role change in group \"%1$s\"." : "Ndryshim roli në grupin \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" ju caktoi rolin \"%3$s\" për grupin \"%2$s\".",
     "Unknown role" : "Rol i panjohur"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
