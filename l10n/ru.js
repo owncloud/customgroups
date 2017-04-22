@@ -35,6 +35,13 @@ OC.L10N.register(
     "Leave this group" : "Покинуть эту группу",
     "Close" : "Закрыть",
     "Custom groups" : "Пользовательские группы",
-    "Group with uri \"%s\" not found" : "Не найдена группа с адресом \"%s\""
+    "Group with uri \"%s\" not found" : "Не найдена группа с адресом \"%s\"",
+    "Added to group \"%2$s\"." : "Добавлено в группу \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" добавил вас в группу \"%2$s\".",
+    "Removed from group \"%2$s\"." : "Удалён из группы \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" удалил вас из группы \"%2$s\".",
+    "Role change in group \"%1$s\"." : "Изменение роли в группе \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" присвоил вам роль \"%3$s\" в группе \"%2$s\".",
+    "Unknown role" : "Неизвестная роль"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
