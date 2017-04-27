@@ -33,6 +33,8 @@
     "Leave this group" : "Zapusti skupino",
     "Close" : "Zapri",
     "Custom groups" : "Skupine po meri",
-    "Group with uri \"%s\" not found" : "Skupine z naslovom URI »%s« ni mogoče najti."
+    "Group with uri \"%s\" not found" : "Skupine z naslovom URI »%s« ni mogoče najti.",
+    "Removed from group \"%2$s\"." : "Odstranjeno iz skupine \"%2$s\".",
+    "Unknown role" : "Neznana vloga"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }
