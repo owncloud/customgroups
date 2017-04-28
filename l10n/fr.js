@@ -35,6 +35,12 @@ OC.L10N.register(
     "Leave this group" : "Quitter ce groupe",
     "Close" : "Fermer",
     "Custom groups" : "Groupes personnalisés",
-    "Group with uri \"%s\" not found" : "Groupe avec l'adresse \"%s\" non trouvé"
+    "Group with uri \"%s\" not found" : "Groupe avec l'adresse \"%s\" non trouvé",
+    "Added to group \"%2$s\"." : "Ajouté au groupe \"%2$s\".",
+    "You have been added to the group \"%2$s\" by \"%1$s\"." : "Vous avez été ajouté au groupe \"%2$s\" par \"%1$s\".",
+    "Removed from group \"%2$s\"." : "Retiré du groupe \"%2$s\".",
+    "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Vous avez été supprimé du groupe \"%2$s\" par \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" vous a assigné le rôle \"%3$s\" pour le groupe \"%2$s\".",
+    "Unknown role" : "Rôle inconnu"
 },
 "nplurals=2; plural=(n > 1);");
