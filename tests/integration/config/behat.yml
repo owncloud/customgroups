@@ -16,6 +16,7 @@ default:
               - admin
               - admin
             regular_user_password: 123456
+            mailhog_url: http://127.0.0.1:8025/api/v2/messages
     Custom_Groups:
       paths:
         - %paths.base%/../custom_groups_features
@@ -26,6 +27,7 @@ default:
               - admin
               - admin
             regular_user_password: 123456
+            mailhog_url: http://127.0.0.1:8025/api/v2/messages
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
