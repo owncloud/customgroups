@@ -31,4 +31,7 @@
 	<settings>
 		<personal>OCA\CustomGroups\SettingsPanel</personal>
 	</settings>
+	<settings-sections>
+		<personal>OCA\CustomGroups\SettingsSection</personal>
+	</settings-sections>
 </info>
