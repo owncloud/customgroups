@@ -38,6 +38,7 @@
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Vous avez été ajouté au groupe \"%2$s\" par \"%1$s\".",
     "Removed from group \"%2$s\"." : "Retiré du groupe \"%2$s\".",
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Vous avez été supprimé du groupe \"%2$s\" par \"%1$s\".",
+    "Role change in group \"%1$s\"." : "Changement de rôle dans le groupe \"%1$s\"",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" vous a assigné le rôle \"%3$s\" pour le groupe \"%2$s\".",
     "Unknown role" : "Rôle inconnu"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
