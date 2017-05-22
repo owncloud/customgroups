@@ -9,7 +9,7 @@
 	<repository type="git">http://github.com/owncloud/customgroups.git</repository>
 	<licence>AGPL</licence>
 	<author>Vincent Petry</author>
-	<version>0.3</version>
+	<version>0.3.1</version>
 	<category>collaboration</category>
 	<screenshot>https://github.com/owncloud/screenshots/raw/a28a6cf38ed8d18d98a02fb7ecac82d1a264a791/customgroups/customgroups-screenshot.png</screenshot>
 	<types>
@@ -18,7 +18,7 @@
 	</types>
 	<use-migrations>true</use-migrations>
 	<dependencies>
-		<owncloud min-version="10.0" max-version="10.0" />
+		<owncloud min-version="10.0.1" max-version="10.0.99" />
 	</dependencies>
 	<sabre>
 		<plugins>
