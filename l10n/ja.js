@@ -35,6 +35,8 @@ OC.L10N.register(
     "Leave this group" : "グループから退室",
     "Close" : "閉じる",
     "Custom groups" : "グループの編集",
-    "Group with uri \"%s\" not found" : "無効なURI: グループ \"%s\" は見つかりません"
+    "Group with uri \"%s\" not found" : "無効なURI: グループ \"%s\" は見つかりません",
+    "Added to group \"%2$s\"." : "グループ \"%2$s\" に追加しました",
+    "Removed from group \"%2$s\"." : " グループ\"%2$s\"から削除しました"
 },
 "nplurals=1; plural=0;");

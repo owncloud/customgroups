@@ -6,7 +6,7 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Êtes-vous certain de vouloir supprimer le groupe \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmer la suppression du groupe",
     "Could not create group" : "Impossible de créer le groupe",
-    "Rename" : "Renommer",
+    "Rename" : "Renomer",
     "Delete" : "Supprimer",
     "Group admin" : "Administrateur du groupe",
     "Member" : "Membre",

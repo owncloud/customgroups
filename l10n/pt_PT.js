@@ -11,7 +11,7 @@ OC.L10N.register(
     "Group admin" : "Administração do Grupo",
     "Member" : "Membro",
     "Display name" : "Exibir nome",
-    "Group name" : "Grupo",
+    "Group name" : "Nome do Grupo",
     "Create group" : "Criar grupo",
     "Group" : "Grupo",
     "Your role" : "A sua função",
