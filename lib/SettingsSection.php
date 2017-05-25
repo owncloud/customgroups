@@ -27,7 +27,7 @@ class SettingsSection implements ISection {
 	}
 
 	public function getPriority() {
-		return 0;
+		return 10;
 	}
 
 	public function getIconName() {
