@@ -120,7 +120,10 @@
 
 		_postProcessRow: function($el, model) {
 			$el.find('[title]').tooltip();
-			$el.find('.avatar').avatar(model.id, 32);
+			/* jshint camelcase:false */
+			if (OC.config.enable_avatars) {
+				$el.find('.avatar').avatar(model.id, 32);
+			}
 		},
 
 		_onRemoveMember: function(model, collection, options) {
@@ -302,12 +305,15 @@
 			}
 			var $header = this.$('.header');
 			$header.html(this.headerTemplate(data));
-			$header.find('.avatar').imageplaceholder(
-				// combine uri with display name for seed
-				this.model.id + ':' + this.model.get('displayName'),
-				this.model.get('displayName'),
-				32
-			);
+			/* jshint camelcase:false */
+			if (OC.config.enable_avatars) {
+				$header.find('.avatar').imageplaceholder(
+					// combine uri with display name for seed
+					this.model.id + ':' + this.model.get('displayName'),
+					this.model.get('displayName'),
+					32
+				);
+			}
 
 			this.membersInput.render();
 			this.membersInput.on('select', this._onAddMember, this);

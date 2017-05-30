@@ -13,8 +13,12 @@ describe('GroupsView test', function() {
 	var collection;
 
 	var imageplaceholderStub;
+	var oldEnableAvatars;
 
 	beforeEach(function() {
+		/* jshint camelcase:false */
+		oldEnableAvatars = OC.config.enable_avatars;
+		OC.config.enable_avatars = true;
 		imageplaceholderStub = sinon.stub($.fn, 'imageplaceholder');
 
 		collection = new OCA.CustomGroups.GroupsCollection();
@@ -26,6 +30,8 @@ describe('GroupsView test', function() {
 		collection = null;
 
 		imageplaceholderStub.restore();
+		/* jshint camelcase:false */
+		OC.config.enable_avatars = oldEnableAvatars;
 	});
 
 	describe('rendering', function() {
