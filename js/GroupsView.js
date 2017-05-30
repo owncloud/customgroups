@@ -320,6 +320,18 @@
 			return groupName;
 		},
 
+		_formatRoleLabel: function(role) {
+			if (OC.isUserAdmin()) {
+				return t('customgroups', 'Administrator');
+			}
+			if (role === OCA.CustomGroups.ROLE_ADMIN) {
+				return t('customgroups', 'Group owner');
+			} else if (role === OCA.CustomGroups.ROLE_MEMBER) {
+				return t('customgroups', 'Member');
+			}
+			return '';
+		},
+
 		_formatItem: function(group) {
 			return {
 				id: group.id,
@@ -327,9 +339,7 @@
 				renameLabel: t('customgroups', 'Rename'),
 				deleteLabel: t('customgroups', 'Delete'),
 				canAdmin: OC.isUserAdmin() || group.get('role') === OCA.CustomGroups.ROLE_ADMIN,
-				roleDisplayName: (group.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
-					t('customgroups', 'Group admin') :
-					t('customgroups', 'Member')
+				roleDisplayName: this._formatRoleLabel(group.get('role'))
 			};
 		},
 

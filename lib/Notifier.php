@@ -116,7 +116,7 @@ class Notifier implements INotifier {
 		if ($role === Roles::BACKEND_ROLE_MEMBER) {
 			return $l->t('Member');
 		} else if ($role === Roles::BACKEND_ROLE_ADMIN) {
-			return $l->t('Group admin');
+			return $l->t('Group owner');
 		}
 		return $l->t('Unknown role');
 	}

@@ -50,7 +50,7 @@ describe('GroupsView test', function() {
 
 			expect(view.$('.group').length).toEqual(2);
 			expect(view.$('.group:eq(0) .group-display-name').text()).toEqual('Group One');
-			expect(view.$('.group:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Group admin'));
+			expect(view.$('.group:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Group owner'));
 			expect(view.$('.group:eq(1) .group-display-name').text()).toEqual('Group Two');
 			expect(view.$('.group:eq(1) .role-display-name').text()).toEqual(t('customgroups', 'Member'));
 
@@ -63,8 +63,20 @@ describe('GroupsView test', function() {
 			expect(imageplaceholderStub.getCall(1).args[0]).toEqual('group2:Group Two');
 			expect(imageplaceholderStub.getCall(1).args[1]).toEqual('Group Two');
 		});
+		it('renders role as "Administrator" for OC admins', function() {
+			var isAdminStub = sinon.stub(OC, 'isUserAdmin').returns(true);
+			collection.add([{
+				id: 'group1',
+				displayName: 'Group One',
+				role: OCA.CustomGroups.ROLE_MEMBER
+			}]);
 
-		it('renders admin actions when role is group admin', function() {
+			expect(view.$('.group:eq(0) .group-display-name').text()).toEqual('Group One');
+			expect(view.$('.group:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Administrator'));
+			isAdminStub.restore();
+		});
+
+		it('renders admin actions when role is group owner', function() {
 			collection.add({
 				id: 'group1',
 				displayName: 'Group One',
