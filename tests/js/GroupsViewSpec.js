@@ -32,7 +32,7 @@ describe('GroupsView test', function() {
 		beforeEach(function() {
 			view.render();
 		});
-		
+
 		it('renders empty list at first', function() {
 			expect(view.$('.group-list').length).toBeDefined();
 		});
@@ -204,6 +204,19 @@ describe('GroupsView test', function() {
 			collection = sinon.createStubInstance(OCA.CustomGroups.GroupsCollection);
 			view = new OCA.CustomGroups.GroupsView(collection);
 			view.render();
+		});
+
+		it('renders creation form when allowed', function() {
+			expect(view.$('[name=customGroupsCreationForm]').length).toEqual(1);
+		});
+
+		it('does not render creation form when creation is not allowed', function() {
+			view.remove();
+			collection = sinon.createStubInstance(OCA.CustomGroups.GroupsCollection);
+			view = new OCA.CustomGroups.GroupsView(collection, {canCreate: false});
+			view.render();
+
+			expect(view.$('[name=customGroupsCreationForm]').length).toEqual(0);
 		});
 
 		it('creates group into collection and selects it', function() {
