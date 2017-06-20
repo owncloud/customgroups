@@ -30,4 +30,4 @@ foreach ($_['modules'] as $module) {
 }
 ?>
 
-<div id="customgroups" class="section"></div>
+<div id="customgroups" class="section" data-cancreategroups="<?php p($_['canCreateGroups'] ? 'true' : 'false') ?>"></div>

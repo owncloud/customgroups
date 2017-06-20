@@ -23,10 +23,14 @@ namespace OCA\CustomGroups;
 
 use OCP\Settings\ISettings;
 use OCP\Template;
+use OCA\CustomGroups\Service\MembershipHelper;
 
 class SettingsPanel implements ISettings {
 
-	public function __construct() {
+	private $helper;
+
+	public function __construct(MembershipHelper $helper) {
+		$this->helper = $helper;
 	}
 
 	public function getPanel() {
@@ -34,6 +38,7 @@ class SettingsPanel implements ISettings {
 		$modules = json_decode(file_get_contents(__DIR__ . '/../js/modules.json'), true);
 		$tmpl = new Template('customgroups', 'index');
 		$tmpl->assign('modules', $modules);
+		$tmpl->assign('canCreateGroups', $this->helper->canCreateGroups());
 		return $tmpl;
 	}
 

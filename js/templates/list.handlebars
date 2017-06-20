@@ -1,9 +1,11 @@
+{{#canCreate}}
 <form name="customGroupsCreationForm">
 	<div>
 		<input type="text" name="groupName" placeholder="{{newGroupPlaceholder}}" autocomplete="off" autocapitalize="off" autocorrect="off">
 		<input type="submit" value="{{newGroupSubmitLabel}}" />
 	</div>
 </form>
+{{/canCreate}}
 <form name="customGroupsRenameForm" class="hidden group-rename-form">
 	<input type="text" value="" placeholder="{{newGroupPlaceholder}}" />
 </form>

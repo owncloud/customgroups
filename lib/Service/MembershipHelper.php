@@ -29,6 +29,7 @@ use OCA\CustomGroups\Search;
 use OCP\IUser;
 use OCP\Notification\IManager;
 use OCP\IURLGenerator;
+use OCP\IConfig;
 
 /**
  * Membership helper
@@ -87,6 +88,11 @@ class MembershipHelper {
 	private $userMemberInfo = [];
 
 	/**
+	 * @var IConfig
+	 */
+	private $config;
+
+	/**
 	 * Membership helper
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
@@ -95,6 +101,7 @@ class MembershipHelper {
 	 * @param IGroupManager $groupManager group manager
 	 * @param IManager $notificationManager notification manager
 	 * @param IURLGenerator $urlGenerator URL generator
+	 * @param IConfig $config config
 	 */
 	public function __construct(
 		CustomGroupsDatabaseHandler $groupsHandler,
@@ -102,7 +109,8 @@ class MembershipHelper {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		IManager $notificationManager,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
+		IConfig $config
 	) {
 		$this->groupsHandler = $groupsHandler;
 		$this->userSession = $userSession;
@@ -110,6 +118,7 @@ class MembershipHelper {
 		$this->groupManager = $groupManager;
 		$this->notificationManager = $notificationManager;
 		$this->urlGenerator = $urlGenerator;
+		$this->config = $config;
 	}
 
 	/**
@@ -319,5 +328,30 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
+	}
+
+	public function canCreateGroups() {
+		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', null) === 'true';
+
+		if (!$restrictToSubadmins) {
+			return true;
+		}
+
+		// ownCloud admin can
+		if ($this->isUserSuperAdmin()) {
+			return true;
+		}
+
+		// subadmin of at least one group can
+		$subAdminGroups = $this->groupManager->getSubAdmin()->getSubAdminsGroups($this->userSession->getUser());
+		if (!empty($subAdminGroups)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function canRenameGroups() {
+		return $this->canCreateGroups();
 	}
 }
