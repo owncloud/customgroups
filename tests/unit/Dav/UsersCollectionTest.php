@@ -30,6 +30,7 @@ use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
+use OCP\IConfig;
 
 /**
  * Class UsersCollectionTest
@@ -88,7 +89,8 @@ class UsersCollectionTest extends \Test\TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(IManager::class),
-			$this->createMock(IURLGenerator::class)
+			$this->createMock(IURLGenerator::class),
+			$this->createMock(IConfig::class)
 		);
 
 		$this->collection = new UsersCollection($this->handler, $this->helper);

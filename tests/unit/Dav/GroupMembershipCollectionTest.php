@@ -32,6 +32,7 @@ use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
+use OCP\IConfig;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -101,7 +102,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				$this->userManager,
 				$this->groupManager,
 				$this->createMock(IManager::class),
-				$this->createMock(IURLGenerator::class)
+				$this->createMock(IURLGenerator::class),
+				$this->createMock(IConfig::class)
 			])
 			->getMock();
 

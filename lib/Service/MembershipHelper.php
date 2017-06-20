@@ -330,28 +330,19 @@ class MembershipHelper {
 		$this->notificationManager->notify($notification);
 	}
 
+	/**
+	 * Returns whether the current user is allowed to create custom groups.
+	 *
+	 * @return bool true if allowed, false otherwise
+	 */
 	public function canCreateGroups() {
-		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', null) === 'true';
+		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', 'false') === 'true';
 
-		if (!$restrictToSubadmins) {
-			return true;
-		}
-
-		// ownCloud admin can
-		if ($this->isUserSuperAdmin()) {
-			return true;
-		}
-
-		// subadmin of at least one group can
-		$subAdminGroups = $this->groupManager->getSubAdmin()->getSubAdminsGroups($this->userSession->getUser());
-		if (!empty($subAdminGroups)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public function canRenameGroups() {
-		return $this->canCreateGroups();
+		// if the restriction is set, only admins or subadmins are allowed to create, not regular users
+		return (
+			!$restrictToSubadmins
+			|| $this->isUserSuperAdmin()
+			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser())
+		);
 	}
 }

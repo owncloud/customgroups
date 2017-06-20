@@ -31,6 +31,7 @@ use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
+use OCP\IConfig;
 
 /**
  * Class GroupsCollectionTest
@@ -82,7 +83,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(IManager::class),
-			$this->createMock(IURLGenerator::class)
+			$this->createMock(IURLGenerator::class),
+			$this->createMock(IConfig::class)
 		);
 		$this->collection = new GroupsCollection($this->handler, $this->helper);
 	}
@@ -183,6 +185,25 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->at(1))
 			->method('addToGroup')
 			->with('user1', 1, true);
+
+		$this->collection->createDirectory('group1');
+	}
+
+	/**
+	 * @expectedException \Sabre\DAV\Exception\Forbidden
+	 */
+	public function testCreateGroupNoPermission() {
+		$helper = $this->createMock(MembershipHelper::class);
+		$helper->expects($this->once())
+			->method('canCreateGroups')
+			->willReturn(false);
+
+		$this->collection = new GroupsCollection($this->handler, $helper);
+
+		$this->handler->expects($this->never())
+			->method('createGroup');
+		$this->handler->expects($this->never())
+			->method('addToGroup');
 
 		$this->collection->createDirectory('group1');
 	}
