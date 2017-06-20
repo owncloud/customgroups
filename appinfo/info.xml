@@ -29,9 +29,11 @@
 		</collections>
 	</sabre>
 	<settings>
+		<admin>OCA\CustomGroups\AdminPanel</admin>
 		<personal>OCA\CustomGroups\SettingsPanel</personal>
 	</settings>
 	<settings-sections>
+		<admin>OCA\CustomGroups\SettingsSection</admin>
 		<personal>OCA\CustomGroups\SettingsSection</personal>
 	</settings-sections>
 </info>
