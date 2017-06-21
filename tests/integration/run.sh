@@ -34,6 +34,7 @@ $OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$CORE_INT_TES
 #Enable needed app
 $OCC app:enable files_external
 $OCC app:enable customgroups
+$OCC app:enable testing
 
 vendor/bin/behat --strict -f junit -f pretty $SCENARIO_TO_RUN
 RESULT=$?
@@ -43,6 +44,7 @@ kill $PHPPID
 #Disable apps
 $OCC app:disable files_external
 $OCC app:disable customgroups
+$OCC app:enable testing
 
 if [ -z $HIDE_OC_LOGS ]; then
 	tail "${OC_PATH}/data/owncloud.log"
