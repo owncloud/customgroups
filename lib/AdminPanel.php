@@ -48,7 +48,7 @@ class AdminPanel implements ISettings {
 	}
 
 	public function getSectionID() {
-		return 'customgroups';
+		return 'sharing';
 	}
 
 }
