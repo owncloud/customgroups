@@ -24,6 +24,7 @@ namespace OCA\CustomGroups\Dav;
 use Sabre\DAV\ICollection;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
+use Sabre\DAV\Exception\Forbidden;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Search;
@@ -89,6 +90,9 @@ class GroupsCollection implements ICollection {
 	 * @throws MethodNotAllowed if the group already exists
 	 */
 	public function createDirectory($name) {
+		if (!$this->helper->canCreateGroups()) {
+			throw new Forbidden('No permission to create groups');
+		}
 		$groupId = $this->groupsHandler->createGroup($name, $name);
 		if (is_null($groupId)) {
 			throw new MethodNotAllowed("Group with uri \"$name\" already exists");

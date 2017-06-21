@@ -31,6 +31,7 @@ use OCP\Notification\IManager;
 use OCP\IURLGenerator;
 use OCP\Notification\INotification;
 use OCA\CustomGroups\Dav\Roles;
+use OCP\IConfig;
 
 /**
  * Class MembershipHelperTest
@@ -76,22 +77,35 @@ class MembershipHelperTest extends \Test\TestCase {
 	 */
 	private $urlGenerator;
 
+	/**
+	 * @var IUser
+	 */
+	private $user;
+
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
+		// swap for 10.1, method getSubAdmin is not on the interface in 10.0
+		$this->groupManager = $this->createMock(\OC\Group\Manager::class);
+		//$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->notificationManager = $this->createMock(IManager::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		// currently logged in user
-		$user = $this->createMock(IUser::class);
-		$user->method('getUID')->willReturn(self::CURRENT_USER);
-		$user->method('getDisplayName')->willReturn('User One');
+		$this->user = $this->createMock(IUser::class);
+		$this->user->method('getUID')->willReturn(self::CURRENT_USER);
+		$this->user->method('getDisplayName')->willReturn('User One');
 		$this->userSession->expects($this->any())
 			->method('getUser')
-			->willReturn($user);
+			->willReturn($this->user);
 
 		$this->helper = new MembershipHelper(
 			$this->handler,
@@ -99,7 +113,8 @@ class MembershipHelperTest extends \Test\TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->notificationManager,
-			$this->urlGenerator
+			$this->urlGenerator,
+			$this->config
 		);
 	}
 
@@ -478,5 +493,46 @@ class MembershipHelperTest extends \Test\TestCase {
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			['group_id' => 1, 'role' => Roles::BACKEND_ROLE_MEMBER]
 		);
+	}
+
+	public function canCreateRolesProvider() {
+		return [
+			['ocadmin', false, true],
+			['subadmin', false, true],
+			['user', false, true],
+			['ocadmin', true, true],
+			['subadmin', true, true],
+			['user', true, false],
+		];
+	}
+
+	/**
+	 * @dataProvider canCreateRolesProvider
+	 */
+	public function testCanCreateGroups($role, $restrictToSubAdmins, $expectedResult) {
+
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('customgroups', 'only_subadmin_can_create', 'false')
+			->willReturn($restrictToSubAdmins ? 'true' : 'false');
+
+		$this->groupManager->expects($this->any())
+			->method('isAdmin')
+			->with(self::CURRENT_USER)
+			->willReturn($role === 'ocadmin');
+
+		// TODO: swap for 10.1 as 10.0 doesn't provide this interface
+		//$subadminManager = $this->createMock(ISubAdminManager::class);
+		$subadminManager = $this->createMock(\OC\SubAdmin::class);
+		$subadminManager->expects($this->any())
+			->method('isSubAdmin')
+			->with($this->user)
+			->willReturn($role === 'subadmin');
+
+		$this->groupManager->expects($this->any())
+			->method('getSubAdmin')
+			->willReturn($subadminManager);
+
+		$this->assertEquals($expectedResult, $this->helper->canCreateGroups());
 	}
 }

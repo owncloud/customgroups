@@ -15,12 +15,20 @@
 			'click .sidebar .action-close': '_onClickClose'
 		},
 
-		initialize: function() {
+		initialize: function(options) {
+			options = _.extend({
+				canCreate: true
+			}, options);
+
 			this.collection = new OCA.CustomGroups.GroupsCollection([], {
 				// admins can see all groups so don't set a user filter
 				userId: (OC.isUserAdmin() ? null : OC.getCurrentUser().uid)
 			});
-			this.listView = new OCA.CustomGroups.GroupsView(this.collection);
+			this.listView = new OCA.CustomGroups.GroupsView(
+				this.collection, {
+					canCreate: options.canCreate
+				}
+			);
 			this.listView.on('select', this._onSelectGroup, this);
 
 			this.render();
@@ -79,6 +87,9 @@
 })(OCA);
 
 $(document).ready(function() {
-	var app = new OCA.CustomGroups.App();
-	$('#customgroups').append(app.$el);
+	var $container = $('#customgroups');
+	var app = new OCA.CustomGroups.App({
+		canCreate: $container.attr('data-cancreategroups') !== 'false'
+	});
+	$container.append(app.$el);
 });

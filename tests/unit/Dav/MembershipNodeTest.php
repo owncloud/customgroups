@@ -32,6 +32,7 @@ use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
+use OCP\IConfig;
 
 /**
  * Class MembershipNodeTest
@@ -96,7 +97,8 @@ class MembershipNodeTest extends \Test\TestCase {
 				$this->userManager,
 				$this->groupManager,
 				$this->createMock(IManager::class),
-				$this->createMock(IURLGenerator::class)
+				$this->createMock(IURLGenerator::class),
+				$this->createMock(IConfig::class)
 			])
 			->getMock();
 
@@ -198,7 +200,8 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(IManager::class),
-			$this->createMock(IURLGenerator::class)
+			$this->createMock(IURLGenerator::class),
+			$this->createMock(IConfig::class)
 		);
 
 		$memberInfo = ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $role];

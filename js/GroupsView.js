@@ -21,6 +21,8 @@
 
 		_lastActive: null,
 
+		_canCreate: true,
+
 		events: {
 			'submit form': '_onSubmitCreationForm',
 			'submit form.group-rename-form': '_onSubmitRename',
@@ -31,8 +33,13 @@
 			'click .action-delete-group': '_onDeleteGroup'
 		},
 
-		initialize: function(collection) {
+		initialize: function(collection, options) {
 			this.collection = collection;
+			options = _.extend({}, options);
+
+			if (!_.isUndefined(options.canCreate)) {
+				this._canCreate = !!options.canCreate;
+			}
 
 			this.collection.on('request', this._onRequest, this);
 			this.collection.on('sync destroy', this._onEndRequest, this);
@@ -348,7 +355,8 @@
 				newGroupSubmitLabel: t('customgroups', 'Create group'),
 				groupLabel: t('customgroups', 'Group'),
 				yourRoleLabel: t('customgroups', 'Your role'),
-				emptyMessage: t('customgroups', 'There are currently no user defined groups')
+				emptyMessage: t('customgroups', 'There are currently no user defined groups'),
+				canCreate: this._canCreate
 			}));
 			this.$container = this.$('.group-list');
 			this.$renameForm = this.$('.group-rename-form').detach();

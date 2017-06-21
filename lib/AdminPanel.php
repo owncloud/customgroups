@@ -23,22 +23,23 @@ namespace OCA\CustomGroups;
 
 use OCP\Settings\ISettings;
 use OCP\Template;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCP\IConfig;
 
-class SettingsPanel implements ISettings {
+class AdminPanel implements ISettings {
 
-	private $helper;
+	/**
+	 * @var IConfig
+	 */
+	private $config;
 
-	public function __construct(MembershipHelper $helper) {
-		$this->helper = $helper;
+	public function __construct(IConfig $config) {
+		$this->config = $config;
 	}
 
 	public function getPanel() {
-		// TODO: cache or add to info.xml ?
-		$modules = json_decode(file_get_contents(__DIR__ . '/../js/modules.json'), true);
-		$tmpl = new Template('customgroups', 'index');
-		$tmpl->assign('modules', $modules);
-		$tmpl->assign('canCreateGroups', $this->helper->canCreateGroups());
+		$tmpl = new Template('customgroups', 'admin');
+		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', 'false') === 'true';
+		$tmpl->assign('onlySubAdminCanCreate', $restrictToSubadmins);
 		return $tmpl;
 	}
 
