@@ -42,6 +42,7 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Sie wurden von \"%1$s\" aus der Gruppe \"%2$s\" entfernt.",
     "Role change in group \"%1$s\"." : "In der Gruppe \"%1$s\" wurde eine Rolle geändert.",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" hat die \"%3$s\" - Rolle der Gruppe \"%2$s\" Ihnen zugewiesen.",
-    "Unknown role" : "Unbekannte Rolle"
+    "Unknown role" : "Unbekannte Rolle",
+    "Only group admins are allowed to create custom groups" : "Nur Gruppen-Administratoren sind berechtigt benutzerdefinierte Gruppen zu erstellen"
 },
 "nplurals=2; plural=(n != 1);");

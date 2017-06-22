@@ -40,6 +40,7 @@
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "הוסרת מקבוצה \"%2$s\" על ידי \"%1$s\".",
     "Role change in group \"%1$s\"." : "תפקיד שונה בקבוצה \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" הקצה תפקיד \"%3$s\" לקבוצה \"%2$s\" עבורך.",
-    "Unknown role" : "תפקיד לא ידוע"
+    "Unknown role" : "תפקיד לא ידוע",
+    "Only group admins are allowed to create custom groups" : "מנהלי קבוצה בלבד מאושרים ליצור קבוצות מותאמות אישית"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
