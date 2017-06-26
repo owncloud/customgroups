@@ -145,9 +145,21 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 	}
 
 	public function testUsersInGroup() {
-		$this->handler->expects($this->never())->method('getGroup');
-		$this->handler->expects($this->never())->method('getGroupMembers');
-		$this->assertEquals([], $this->backend->usersInGroup(self::GROUP_ID_PREFIX . 'one'));
+		$this->handler->expects($this->once())
+			->method('getGroupByUri')
+			->with('one')
+			->willReturn(['group_id' => 1, 'display_name' => 'Group One']);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, new Search('ser', 5, 10))
+			->willReturn([
+				['user_id' => 'user1'],
+				['user_id' => 'user2'],
+			]);
+		$this->assertEquals(
+			['user1', 'user2'],
+			$this->backend->usersInGroup(self::GROUP_ID_PREFIX . 'one', 'ser', 10, 5)
+		);
 	}
 
 }

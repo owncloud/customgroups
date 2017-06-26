@@ -135,7 +135,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	}
 
 	/**
-	 * Not supported, returns an empty array.
+	 * Returns all users in a custom group.
 	 *
 	 * @param string $gid group id
 	 * @param string $search search string
@@ -144,8 +144,22 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return array empty array
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0) {
+		$uri = $this->extractUri($gid);
+		if (is_null($uri)) {
+			return [];
+		}
+
+		$group = $this->handler->getGroupByUri($uri);
+		if (is_null($group)) {
+			return null;
+		}
+
 		// not exposed to regular user management
-		return [];
+		$search = new Search($search, $offset, $limit);
+		$memberInfo = $this->handler->getGroupMembers($group['group_id'], $search);
+		return array_map(function ($memberInfo) {
+			return $memberInfo['user_id'];
+		}, $memberInfo);
 	}
 
 	/**
