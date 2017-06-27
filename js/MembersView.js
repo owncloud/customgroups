@@ -268,7 +268,7 @@
 				displayName: member.get('userDisplayName'),
 				canAdmin: OC.isUserAdmin() || this.model.get('role') === OCA.CustomGroups.ROLE_ADMIN,
 				roleDisplayName: (member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
-					t('customgroups', 'Group admin') :
+					t('customgroups', 'Group owner') :
 					t('customgroups', 'Member')
 			};
 		},

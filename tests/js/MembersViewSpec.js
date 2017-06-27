@@ -78,7 +78,7 @@ describe('MembersView test', function() {
 
 			expect(view.$('.group-member').length).toEqual(2);
 			expect(view.$('.group-member:eq(0) .user-display-name').text()).toEqual('User One');
-			expect(view.$('.group-member:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Group admin'));
+			expect(view.$('.group-member:eq(0) .role-display-name').text()).toEqual(t('customgroups', 'Group owner'));
 			expect(view.$('.group-member:eq(1) .user-display-name').text()).toEqual('User Two');
 			expect(view.$('.group-member:eq(1) .role-display-name').text()).toEqual(t('customgroups', 'Member'));
 
@@ -92,7 +92,7 @@ describe('MembersView test', function() {
 			expect(avatarStub.getCall(1).args[1]).toEqual(32);
 		});
 
-		it('renders admin actions when user\'s role in group is group admin', function() {
+		it('renders admin actions when user\'s role in group is group owner', function() {
 			model.set({
 				role: OCA.CustomGroups.ROLE_ADMIN
 			});

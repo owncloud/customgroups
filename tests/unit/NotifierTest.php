@@ -110,7 +110,7 @@ class NotifierTest extends \Test\TestCase {
 			->with('Role change in group "group1".');
 		$notification->expects($this->once())
 			->method('setParsedMessage')
-			->with('"user1" assigned the "Group admin" role for the group "group1" to you.');
+			->with('"user1" assigned the "Group owner" role for the group "group1" to you.');
 
 		$notification = $this->notifier->prepare($notification, 'en_US');
 	}

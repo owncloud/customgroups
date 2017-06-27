@@ -144,7 +144,7 @@ Scenario: A non-admin member of a custom group cannot remove members
 					| member1 |
 					| member2 |
 
-Scenario: Group admin cannot remove self if no other admin exists in the group
+Scenario: Group owner cannot remove self if no other admin exists in the group
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
@@ -244,7 +244,7 @@ Scenario: Superadmin can rename any custom group
 		When user "admin" renamed custom group "group0" as "renamed-group0"
 		Then custom group "group0" exists with display name "renamed-group0"
 
-Scenario: A member converted to admin can do the same as group admin
+Scenario: A member converted to group owner can do the same as group owner
 		Given As an "admin"
 		And user "user0" exists
 		And user "user1" exists
@@ -266,7 +266,7 @@ Scenario: A member converted to admin can do the same as group admin
 					| user1 |
 					| user2 |
 
-Scenario: A group admin cannot remove his own admin permissions if there is no other admin in the group
+Scenario: A group owner cannot remove his own admin permissions if there is no other owner in the group
 		Given As an "admin"
 		And user "user0" exists
 		And user "member1" exists
