@@ -12,7 +12,12 @@ describe('MembersInputView test', function() {
 	var view;
 	var avatarStub;
 
+	var oldEnableAvatars;
+
 	beforeEach(function() {
+		/* jshint camelcase:false */
+		oldEnableAvatars = OC.config.enable_avatars;
+		OC.config.enable_avatars = true;
 		avatarStub = sinon.stub($.fn, 'avatar');
 
 		view = new OCA.CustomGroups.MembersInputView({groupUri: 'group1'});
@@ -22,6 +27,8 @@ describe('MembersInputView test', function() {
 		view = null;
 
 		avatarStub.restore();
+		/* jshint camelcase:false */
+		OC.config.enable_avatars = oldEnableAvatars;
 	});
 
 	it('renders input field', function() {

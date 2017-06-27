@@ -17,8 +17,12 @@ describe('MembersView test', function() {
 	var avatarStub;
 
 	var currentUserStub;
+	var oldEnableAvatars;
 
 	beforeEach(function() {
+		/* jshint camelcase:false */
+		oldEnableAvatars = OC.config.enable_avatars;
+		OC.config.enable_avatars = true;
 		imageplaceholderStub = sinon.stub($.fn, 'imageplaceholder');
 		avatarStub = sinon.stub($.fn, 'avatar');
 		currentUserStub = sinon.stub(OC, 'getCurrentUser').returns({uid: 'currentUser'});
@@ -39,6 +43,8 @@ describe('MembersView test', function() {
 		imageplaceholderStub.restore();
 		avatarStub.restore();
 		currentUserStub.restore();
+		/* jshint camelcase:false */
+		OC.config.enable_avatars = oldEnableAvatars;
 	});
 
 	describe('rendering', function() {

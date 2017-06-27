@@ -139,7 +139,10 @@
 				userId: item.userId
 			}));
 
-			$item.find('.avatardiv').avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
+			/* jshint camelcase:false */
+			if (OC.config.enable_avatars) {
+				$item.find('.avatardiv').avatar(item.userId, 32, undefined, undefined, undefined, item.displayName);
+			}
 			$ul.append($item);
 			return $item;
 		},

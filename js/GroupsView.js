@@ -285,13 +285,16 @@
 
 		_postProcessRow: function($el, model) {
 			$el.find('[title]').tooltip();
-			// no group avatars, so using "imageplaceholder" directly instead of "avatar"
-			$el.find('.avatar').imageplaceholder(
-				// combine uri with display name for seed
-				model.id + ':' + model.get('displayName'),
-				model.get('displayName'),
-				32
-			);
+			/* jshint camelcase:false */
+			if (OC.config.enable_avatars) {
+				// no group avatars, so using "imageplaceholder" directly instead of "avatar"
+				$el.find('.avatar').imageplaceholder(
+					// combine uri with display name for seed
+					model.id + ':' + model.get('displayName'),
+					model.get('displayName'),
+					32
+				);
+			}
 		},
 
 		_onRemoveGroup: function(model, collection, options) {
