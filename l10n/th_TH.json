@@ -4,10 +4,9 @@
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "คุณแน่ใจหรือว่าต้องการลบกลุ่ม \"{groupName}\" ?",
     "Confirm deletion of group" : "ยืนยันการลบกลุ่ม",
     "Could not create group" : "ไม่สามารถสร้างกลุ่ม",
+    "Member" : "สมาชิก",
     "Rename" : "เปลี่ยนชื่อ",
     "Delete" : "ลบ",
-    "Group admin" : "กลุ่มผู้ดูแลระบบ",
-    "Member" : "สมาชิก",
     "Display name" : "ชื่อที่แสดง",
     "Group name" : "ชื่อกลุ่ม",
     "Create group" : "สร้างกลุ่ม",
@@ -40,6 +39,7 @@
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "คุณถูกลบออกจากกลุ่ม \"%2$s\" โดย \"%1$s\"",
     "Role change in group \"%1$s\"." : "มีการเปลี่ยนแปลงบทบาทในกลุ่ม \"%1$s\"",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" กำหนดบทบาท \"%3$s\" สำหรับกลุ่ม \"%2$s\" ให้กับคุณ",
-    "Unknown role" : "ยังไม่มีบทบาท"
+    "Unknown role" : "ยังไม่มีบทบาท",
+    "Only group admins are allowed to create custom groups" : "เฉพาะกลุ่มผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้สร้างกลุ่มที่กำหนดเอง"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
