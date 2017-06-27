@@ -29,6 +29,7 @@ use Sabre\DAV\Exception\Forbidden;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Collection of custom groups
@@ -57,6 +58,11 @@ class GroupsCollection implements ICollection {
 	private $userId;
 
 	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	*/
+	private $dispatcher;
+
+	/**
 	 * Constructor
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
@@ -70,6 +76,8 @@ class GroupsCollection implements ICollection {
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
 		$this->userId = $userId;
+
+		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -100,6 +108,9 @@ class GroupsCollection implements ICollection {
 
 		// add current user as admin
 		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
+
+		$event = new GenericEvent(null, ['groupName' => $name, 'user' => $this->helper->getUserId()]);
+		$this->dispatcher->dispatch('addGroupAndUser', $event);
 	}
 
 	/**

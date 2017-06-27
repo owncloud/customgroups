@@ -30,6 +30,7 @@ use Sabre\DAV\Exception\PreconditionFailed;
 use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Group memberships collection for a given group
@@ -63,6 +64,11 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	private $groupInfo;
 
 	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	*/
+	private $dispatcher;
+
+	/**
 	 * Constructor
 	 *
 	 * @param array $groupInfo group info
@@ -77,6 +83,8 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		$this->groupsHandler = $groupsHandler;
 		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
+
+		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -90,6 +98,9 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new Forbidden("No permission to delete group \"$groupId\"");
 		}
 		$this->groupsHandler->deleteGroup($groupId);
+
+		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name']]);
+		$this->dispatcher->dispatch('deleteGroup', $event);
 	}
 
 	/**
@@ -177,6 +188,9 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		}
 
 		$this->helper->notifyUser($userId, $this->groupInfo);
+
+		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name'], 'user' => $userId]);
+		$this->dispatcher->dispatch('addUserToGroup', $event);
 	}
 
 	/**

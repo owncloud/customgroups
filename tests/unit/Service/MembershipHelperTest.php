@@ -32,6 +32,7 @@ use OCP\IURLGenerator;
 use OCP\Notification\INotification;
 use OCA\CustomGroups\Dav\Roles;
 use OCP\IConfig;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class MembershipHelperTest
@@ -462,10 +463,21 @@ class MembershipHelperTest extends \Test\TestCase {
 			->method('notify')
 			->with($notification);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('removeUserFromGroup', function ($event) use (&$called) {
+			$called[] = 'removeUserFromGroup';
+			array_push($called, $event);
+		});
+
 		$this->helper->notifyUserRemoved(
 			'anotheruser',
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
 		);
+
+		$this->assertSame('removeUserFromGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('user_displayName', $called[1]);
+		$this->assertArrayHasKey('group_displayName',$called[1]);
 	}
 
 	public function testNotifyUserRoleChange() {

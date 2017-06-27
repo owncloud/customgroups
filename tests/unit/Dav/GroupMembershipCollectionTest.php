@@ -33,6 +33,7 @@ use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -145,7 +146,17 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->method('deleteGroup')
 			->with(1);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('deleteGroup', function ($event) use (&$called) {
+			$called[] = 'deleteGroup';
+			array_push($called, $event);
+		});
+
 		$this->node->delete();
+
+		$this->assertSame('deleteGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('groupName', $called[1]);
 	}
 
 	/**
@@ -257,7 +268,18 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('addUserToGroup', function ($event) use (&$called) {
+			$called[] = 'addUserToGroup';
+			array_push($called, $event);
+		});
+
 		$this->node->createFile(self::NODE_USER);
+
+		$this->assertSame('addUserToGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertArrayHasKey('user',$called[1]);
 	}
 
 	/**

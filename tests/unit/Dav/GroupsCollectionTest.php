@@ -32,6 +32,8 @@ use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
+use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class GroupsCollectionTest
@@ -186,7 +188,18 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->method('addToGroup')
 			->with('user1', 1, true);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('addGroupAndUser', function ($event) use (&$called) {
+			$called[] = 'addGroupAndUser';
+			array_push($called, $event);
+		});
+
 		$this->collection->createDirectory('group1');
+
+		$this->assertSame('addGroupAndUser', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertArrayHasKey('user', $called[1]);
 	}
 
 	/**
