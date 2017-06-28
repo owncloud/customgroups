@@ -4,6 +4,8 @@
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem certeza de que deseja excluir o grupo {groupName} ?",
     "Confirm deletion of group" : "Confirmar exclusão do grupo",
     "Could not create group" : "Não foi possível criar o grupo",
+    "Administrator" : "Administrador",
+    "Group owner" : "Proprietário do grupo",
     "Member" : "Usuário",
     "Rename" : "Renomear",
     "Delete" : "Excluir",
