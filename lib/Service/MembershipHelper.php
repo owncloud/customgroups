@@ -30,6 +30,7 @@ use OCP\IUser;
 use OCP\Notification\IManager;
 use OCP\IURLGenerator;
 use OCP\IConfig;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Membership helper
@@ -93,6 +94,11 @@ class MembershipHelper {
 	private $config;
 
 	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	*/
+	private $dispatcher;
+
+	/**
 	 * Membership helper
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
@@ -119,6 +125,8 @@ class MembershipHelper {
 		$this->notificationManager = $notificationManager;
 		$this->urlGenerator = $urlGenerator;
 		$this->config = $config;
+
+		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -328,6 +336,9 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
+
+		$event = new GenericEvent(null, ['user_displayName' => $targetUserId, 'group_displayName' => $groupInfo['display_name']]);
+		$this->dispatcher->dispatch('removeUserFromGroup', $event);
 	}
 
 	/**
