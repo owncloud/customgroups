@@ -6,6 +6,8 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Está seguro que desea eliminar el grupo \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmar eliminación del grupo",
     "Could not create group" : "No se pudo crear el grupo",
+    "Administrator" : "Administrador",
+    "Group owner" : "Propietario del grupo",
     "Member" : "Miembro",
     "Rename" : "Cambiar nombre",
     "Delete" : "Eliminar",
@@ -41,6 +43,7 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Ha sido eliminado del grupo \"%2$s\" por \"%1$s\".",
     "Role change in group \"%1$s\"." : "Cambio de roles en el grupo \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" le ha asignado el rol \"%3$s\" a usted para el grupo \"%2$s\".",
-    "Unknown role" : "Rol desconocido"
+    "Unknown role" : "Rol desconocido",
+    "Only group admins are allowed to create custom groups" : "Solo los administradores del grupo pueden crear grupos personalizados"
 },
 "nplurals=2; plural=(n != 1);");
