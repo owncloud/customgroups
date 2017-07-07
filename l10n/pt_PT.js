@@ -6,6 +6,7 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem a certeza que deseja eliminar o grupo \"{groupName}\"",
     "Confirm deletion of group" : "Confirme a eliminação do grupo",
     "Could not create group" : "Não foi possível criar o grupo",
+    "Administrator" : "Administrador",
     "Member" : "Membro",
     "Rename" : "Renomear",
     "Delete" : "Eliminar",
@@ -16,7 +17,7 @@ OC.L10N.register(
     "Your role" : "A sua função",
     "There are currently no user defined groups" : "Não existem atualmentes utilizadores no grupo",
     "Add user to this group" : "Adicionar utilizador a este grupo",
-    "An error occurred while searching users" : "Ocorreu um erro ao procurar utilizadores",
+    "An error occurred while searching users" : "Ocorreu um erro ao pesquisar por utilizadores",
     "No users found for {search}" : "Não foram encontrados utilizadores para {search}",
     "An error occurred. Please try again" : "Ocorreu um erro. Por favor, tente de novo.",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Tem a certeza que quer sair do Grupo \"{name}\" ",
@@ -41,6 +42,7 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Foi removido do grupo \"%2$s\" por \"%1$s\".",
     "Role change in group \"%1$s\"." : "Mudou a sua função no grupo \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" atribuiu-lhe a função de \"%3$s\" no grupo \"%2$s\".",
-    "Unknown role" : "Função desconhecida"
+    "Unknown role" : "Função desconhecida",
+    "Only group admins are allowed to create custom groups" : "Apenas os administradores de grupo têm permissão para criar grupos personalizados"
 },
 "nplurals=2; plural=(n != 1);");

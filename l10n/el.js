@@ -6,6 +6,8 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Είστε σίγουροι πως θέλετε να διαγραφεί η ομάδα \"{groupName}\" ;",
     "Confirm deletion of group" : "Επιβεβαίωση διαγραφής της ομάδας",
     "Could not create group" : "Αδυναμία δημιουργίας ομάδας",
+    "Administrator" : "Διαχειριστής",
+    "Group owner" : "Ιδιοκτήτης ομάδας",
     "Member" : "Μέλος",
     "Rename" : "Μετονομασία",
     "Delete" : "Διαγραφή",
