@@ -6,6 +6,8 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Er du sikker på at du vil slette gruppen \"{groupName}\"?",
     "Confirm deletion of group" : "Bekreft sletting av gruppe",
     "Could not create group" : "Kunne ikke opprette gruppe",
+    "Administrator" : "Administrator",
+    "Group owner" : "Gruppeeier",
     "Member" : "Medlem",
     "Rename" : "Gi nytt navn",
     "Delete" : "Slett",
@@ -41,6 +43,7 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Du er blitt fjernet fra gruppe \"%2$s\" av \"%1$s\".",
     "Role change in group \"%1$s\"." : "Rolleendring i gruppe \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" tilordnet rollen \"%3$s\" for gruppen \"%2$s\" til deg.",
-    "Unknown role" : "Ukjent rolle"
+    "Unknown role" : "Ukjent rolle",
+    "Only group admins are allowed to create custom groups" : "Bare gruppeadministratorer kan opprette egendefinerte grupper"
 },
 "nplurals=2; plural=(n != 1);");
