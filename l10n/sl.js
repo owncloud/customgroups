@@ -6,6 +6,7 @@ OC.L10N.register(
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ali ste prepričani, da želite izbrisati skupino »{groupName}«?",
     "Confirm deletion of group" : "Potrdi brisanje skupine",
     "Could not create group" : "Ni mogoče ustvariti skupine",
+    "Administrator" : "Skrbnik",
     "Member" : "Član",
     "Rename" : "Preimenuj",
     "Delete" : "Izbriši",
