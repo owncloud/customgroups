@@ -71,6 +71,13 @@
 	width: 90%;
 }
 
+#customgroups .group-member-list .user-display-name {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 1px;
+}
+
 .customgroups-autocomplete-item {
 	display: flex;
 }

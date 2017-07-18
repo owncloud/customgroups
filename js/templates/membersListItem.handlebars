@@ -1,10 +1,10 @@
 <tr class="group-member" data-id="{{id}}">
 	<td class="avatar-column"><div class="avatar"></div></td>
-	<td class="user-display-name">{{displayName}}</td>
+	<td class="user-display-name" title="{{displayName}}">{{displayName}}</td>
 	<td><span class="role-display-name">{{roleDisplayName}}</span>
 	{{#if canAdmin}}
 	<a href="#" class="action-change-member-role icon icon-rename" title="{{changeMemberRoleLabel}}"></a>
 	{{/if}}
 	</td>
-	<td>{{#if canAdmin}}<a href="#" class="action action-delete-member"><span class="icon icon-delete"></span><span class="hidden-visually">{{deleteMemberLabel}}</span></a>{{/if}}</td>
+	<td>{{#if canAdmin}}<a href="#" class="action action-delete-member" title="{{deleteLabel}}"><span class="icon icon-delete"></span><span class="hidden-visually">{{deleteMemberLabel}}</span></a>{{/if}}</td>
 </tr>
