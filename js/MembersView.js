@@ -81,8 +81,8 @@
 		_onClickLeaveGroup: function() {
 			var currentUserMembership = this.collection.get(OC.getCurrentUser().uid);
 			OC.dialogs.confirm(
-					t('customgroups', 'Are you sure that you want to leave the group "{name}" ?', {name: this.model.get('displayName')}),
-					t('customgroups', 'Confirm leaving group'),
+				t('customgroups', 'Are you sure that you want to leave the group "{name}" ?', {name: this.model.get('displayName')}),
+				t('customgroups', 'Confirm leaving group'),
 				function confirmCallback(confirmation) {
 					if (confirmation) {
 						currentUserMembership.destroy({
@@ -93,6 +93,7 @@
 								} else {
 									OC.Notification.showTemporary(t('customgroups', 'Could not leave group due to a server error'));
 								}
+								currentUserMembership.save();
 							}
 						});
 					}
