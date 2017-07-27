@@ -30,7 +30,7 @@
 			this.collection = model.getChildrenCollection();
 
 			this.collection.on('request', this._onRequest, this);
-			this.collection.on('sync destroy', this._onEndRequest, this);
+			this.collection.on('sync destroy error', this._onEndRequest, this);
 			this.collection.on('add', this._onAddModel, this);
 			this.collection.on('change', this._onChangeModel, this);
 			this.collection.on('remove', this._onRemoveMember, this);
@@ -93,7 +93,6 @@
 								} else {
 									OC.Notification.showTemporary(t('customgroups', 'Could not leave group due to a server error'));
 								}
-								currentUserMembership.save();
 							}
 						});
 					}
