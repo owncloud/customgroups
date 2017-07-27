@@ -32,6 +32,7 @@ OC.L10N.register(
     "Confirm removal of member" : "Επιβεβαίωση αφαίρεσης του μέλους",
     "Could not delete member" : "Αδυναμία διαγραφής μέλους",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Είστε σίγουρος ότι θέλετε να χάσετε τα δικαιώματα διαχειριστή στην ομάδα  \"{name}\" ;",
+    "Remove member" : "Αφαίρεση μέλους",
     "Add member" : "Προσθήκη μέλους",
     "Leave this group" : "Αποχώρηση από αυτή την ομάδα",
     "Close" : "Κλείσιμο",
