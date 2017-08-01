@@ -7,6 +7,7 @@ OC.L10N.register(
     "Confirm deletion of group" : "Potrdi brisanje skupine",
     "Could not create group" : "Ni mogoče ustvariti skupine",
     "Administrator" : "Skrbnik",
+    "Group owner" : "Lastnik skupine",
     "Member" : "Član",
     "Rename" : "Preimenuj",
     "Delete" : "Izbriši",
