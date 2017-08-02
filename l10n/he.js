@@ -32,6 +32,9 @@ OC.L10N.register(
     "Confirm removal of member" : "אישור להסרת החבר",
     "Could not delete member" : "לא ניתן היה למחוק את החבר",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "האם באמת ברצונך להסיר את הרשאות המנהל שלך עבור הקבוצה \"{name}\" ?",
+    "Change role to \"member\"" : "החלפת תואר ל\"משתמש\"",
+    "Change role to \"group owner\"" : "החלפת תואר ל\"אחראי קבוצה\"",
+    "Remove member" : "הסרת משתמש",
     "Add member" : "הוספת חבר",
     "Leave this group" : "עזיבת קבוצה זו",
     "Close" : "סגירה",
@@ -41,9 +44,9 @@ OC.L10N.register(
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "נוספת לקבוצה \"%2$s\" על ידי \"%1$s\".",
     "Removed from group \"%2$s\"." : "הוסר מקבוצה \"%2$s\".",
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "הוסרת מקבוצה \"%2$s\" על ידי \"%1$s\".",
-    "Role change in group \"%1$s\"." : "תפקיד שונה בקבוצה \"%1$s\".",
-    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" הקצה תפקיד \"%3$s\" לקבוצה \"%2$s\" עבורך.",
-    "Unknown role" : "תפקיד לא ידוע",
+    "Role change in group \"%1$s\"." : "התואר שונה בקבוצה \"%1$s\".",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" הקצה תואר \"%3$s\" לקבוצה \"%2$s\" עבורך.",
+    "Unknown role" : "תואר לא ידוע",
     "Only group admins are allowed to create custom groups" : "מנהלי קבוצה בלבד מאושרים ליצור קבוצות מותאמות אישית"
 },
 "nplurals=2; plural=(n != 1);");
