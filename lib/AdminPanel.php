@@ -40,6 +40,8 @@ class AdminPanel implements ISettings {
 		$tmpl = new Template('customgroups', 'admin');
 		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', 'false') === 'true';
 		$tmpl->assign('onlySubAdminCanCreate', $restrictToSubadmins);
+		$allowDuplicateNames = $this->config->getAppValue('customgroups', 'allow_duplicate_names', 'false') === 'true';
+		$tmpl->assign('allowDuplicateNames', $allowDuplicateNames);
 		return $tmpl;
 	}
 

@@ -547,4 +547,44 @@ class MembershipHelperTest extends \Test\TestCase {
 
 		$this->assertEquals($expectedResult, $this->helper->canCreateGroups());
 	}
+
+	public function testIsGroupDisplayNameAvailableWhenDuplicatesAreAllowed() {
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('customgroups', 'allow_duplicate_names', 'false')
+			->willReturn('true');
+
+		$this->handler->expects($this->never())
+			->method('getGroupsByDisplayName');
+
+		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
+	}
+
+	public function testIsGroupDisplayNameAvailableNoDuplicateExists() {
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('customgroups', 'allow_duplicate_names', 'false')
+			->willReturn('false');
+
+		$this->handler->expects($this->once())
+			->method('getGroupsByDisplayName')
+			->with('test')
+			->willReturn([]);
+
+		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
+	}
+
+	public function testIsGroupDisplayNameAvailableDuplicateExists() {
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('customgroups', 'allow_duplicate_names', 'false')
+			->willReturn('false');
+
+		$this->handler->expects($this->once())
+			->method('getGroupsByDisplayName')
+			->with('test')
+			->willReturn([['duplicate']]);
+
+		$this->assertFalse($this->helper->isGroupDisplayNameAvailable('test'));
+	}
 }

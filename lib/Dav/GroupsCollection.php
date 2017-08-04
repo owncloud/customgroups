@@ -21,7 +21,8 @@
 
 namespace OCA\CustomGroups\Dav;
 
-use Sabre\DAV\ICollection;
+use Sabre\DAV\IExtendedCollection;
+use Sabre\DAV\MkCol;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
@@ -30,11 +31,12 @@ use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Sabre\DAV\Exception\Conflict;
 
 /**
  * Collection of custom groups
  */
-class GroupsCollection implements ICollection {
+class GroupsCollection implements IExtendedCollection {
 
 	/**
 	 * Custom groups handler
@@ -91,17 +93,49 @@ class GroupsCollection implements ICollection {
 		throw new MethodNotAllowed('Cannot create regular nodes');
 	}
 
+	public function createDirectory($name) {
+		if (!$this->helper->canCreateGroups()) {
+			throw new Forbidden('No permission to create groups');
+		}
+
+		$this->createGroup($name, $name);
+	}
+
 	/**
 	 * Creates a new custom group
 	 *
 	 * @param string $name group URI
 	 * @throws MethodNotAllowed if the group already exists
 	 */
-	public function createDirectory($name) {
+	public function createExtendedCollection($name, Mkcol $mkCol) {
 		if (!$this->helper->canCreateGroups()) {
 			throw new Forbidden('No permission to create groups');
 		}
-		$groupId = $this->groupsHandler->createGroup($name, $name);
+
+		$displayName = $name;
+
+		// can't use handle() here as it's called too late
+		$mutations = $mkCol->getMutations();
+		if (isset($mutations[GroupMembershipCollection::PROPERTY_DISPLAY_NAME])) {
+			$displayName = $mutations[GroupMembershipCollection::PROPERTY_DISPLAY_NAME];
+			$mkCol->setResultCode(GroupMembershipCollection::PROPERTY_DISPLAY_NAME, 202); // accepted
+		}
+
+		$this->createGroup($name, $displayName);
+	}
+
+	/**
+	 * Creates a group node with the given name and display name
+	 * 
+	 * @param string $name group uri
+	 * @param string $displayName group display name
+	 */
+	private function createGroup($name, $displayName) {
+		if (!$this->helper->isGroupDisplayNameAvailable($displayName)) {
+			throw new Conflict("Group with display name \"$displayName\" already exists");
+		}
+
+		$groupId = $this->groupsHandler->createGroup($name, $displayName);
 		if (is_null($groupId)) {
 			throw new MethodNotAllowed("Group with uri \"$name\" already exists");
 		}

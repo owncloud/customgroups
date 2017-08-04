@@ -34,6 +34,7 @@ use OCP\Notification\IManager;
 use OCP\IConfig;
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Sabre\DAV\MkCol;
 
 /**
  * Class GroupsCollectionTest
@@ -71,6 +72,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 	 */
 	private $userSession;
 
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
@@ -79,6 +85,14 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 
+		$this->config = $this->createMock(IConfig::class);
+		$this->config->method('getAppValue')
+			->with()
+			->will($this->returnValueMap([
+				['customgroups', 'allow_duplicate_names', 'false', false],
+				['customgroups', 'only_subadmin_can_create', 'false', false],
+			]));
+
 		$this->helper = new MembershipHelper(
 			$this->handler,
 			$this->userSession,
@@ -86,7 +100,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->createMock(IConfig::class)
+			$this->config
 		);
 		$this->collection = new GroupsCollection($this->handler, $this->helper);
 	}
@@ -181,10 +195,14 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->userSession->method('getUser')->willReturn($user);
 
 		$this->handler->expects($this->at(0))
-			->method('createGroup')
-			->with('group1', 'group1')
-			->will($this->returnValue(1));
+			->method('getGroupsByDisplayName')
+			->with('Group One')
+			->will($this->returnValue([]));
 		$this->handler->expects($this->at(1))
+			->method('createGroup')
+			->with('group1', 'Group One')
+			->will($this->returnValue(1));
+		$this->handler->expects($this->at(2))
 			->method('addToGroup')
 			->with('user1', 1, true);
 
@@ -194,12 +212,42 @@ class GroupsCollectionTest extends \Test\TestCase {
 			array_push($called, $event);
 		});
 
-		$this->collection->createDirectory('group1');
+		$mkCol = new MkCol([], [
+			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group One'
+		]);
+		$this->collection->createExtendedCollection('group1', $mkCol);
 
 		$this->assertSame('addGroupAndUser', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertArrayHasKey('user', $called[1]);
+
+		$this->assertEquals(202, $mkCol->getResult()[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+	}
+
+	/**
+	 * @expectedException \Sabre\DAV\Exception\Conflict
+	 */
+	public function testCreateGroupNoDuplicates() {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('user1');
+		$this->userSession->method('getUser')->willReturn($user);
+
+		$this->handler->expects($this->once())
+			->method('getGroupsByDisplayName')
+			->with('Group One')
+			->will($this->returnValue([['duplicate']]));
+
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('addGroupAndUser', function ($event) use (&$called) {
+			$called[] = 'addGroupAndUser';
+			array_push($called, $event);
+		});
+
+		$mkCol = new MkCol([], [
+			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group One'
+		]);
+		$this->collection->createExtendedCollection('group1', $mkCol);
 	}
 
 	/**

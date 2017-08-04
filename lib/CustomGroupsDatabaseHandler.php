@@ -188,15 +188,15 @@ class CustomGroupsDatabaseHandler {
 	 * Returns the info for a given group.
 	 *
 	 * @param string $field field to filter by
-	 * @param string $numericGroupId numeric group id
+	 * @param string $fieldValue field value
 	 * @return array|null group info or null if not found
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	private function getGroupBy($field, $numericGroupId) {
+	private function getGroupBy($field, $fieldValue) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$cursor = $qb->select(['group_id', 'uri', 'display_name'])
 			->from('custom_group')
-			->where($qb->expr()->eq($field, $qb->createNamedParameter($numericGroupId)))
+			->where($qb->expr()->eq($field, $qb->createNamedParameter($fieldValue)))
 			->execute();
 		$result = $cursor->fetch();
 		$cursor->closeCursor();
@@ -206,6 +206,26 @@ class CustomGroupsDatabaseHandler {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get groups by display name in a case-insensitive manner.
+	 *
+	 * @param string $displayName numeric group id
+	 * @return array[] array of group infos
+	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
+	 */
+	public function getGroupsByDisplayName($displayName) {
+		$qb = $this->dbConn->getQueryBuilder();
+		$cursor = $qb->select(['group_id', 'uri', 'display_name'])
+			->from('custom_group')
+			->where($qb->expr()->eq($qb->createFunction('LOWER(`display_name`)'), $qb->createNamedParameter(strtolower($displayName))))
+			->execute();
+
+		$results = $cursor->fetchAll();
+		$cursor->closeCursor();
+
+		return $results;
 	}
 
 	/**

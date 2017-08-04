@@ -356,4 +356,21 @@ class MembershipHelper {
 			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser())
 		);
 	}
+
+	/**
+	 * Checks whether the given display name exists, if applicable from the configuration
+	 *
+	 * @param string $displayName group display name
+	 * @return bool true if a duplicate group was found and the operation is not allowed, false if
+	 * no duplicate group was found or duplicates are allowed
+	 */
+	public function isGroupDisplayNameAvailable($displayName) {
+		if ($this->config->getAppValue('customgroups', 'allow_duplicate_names', 'false') === 'true') {
+			return true;
+		}
+
+		$groups = $this->groupsHandler->getGroupsByDisplayName($displayName);
+
+		return empty($groups);
+	}
 }

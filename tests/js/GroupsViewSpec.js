@@ -279,7 +279,7 @@ describe('GroupsView test', function() {
 			});
 		});
 
-		it('shows notification in case of error', function() {
+		it('shows notification in case of duplicate group error', function() {
 			var notificationStub = sinon.stub(OC.Notification, 'showTemporary');
 			view.$('[name=groupName]').val('newgroup');
 			view.$('[name=customGroupsCreationForm]').submit();
@@ -291,9 +291,10 @@ describe('GroupsView test', function() {
 				role: OCA.CustomGroups.ROLE_ADMIN
 			});
 
-			collection.create.yieldTo('error', collection, {status: 404} );
+			collection.create.yieldTo('error', collection, {status: 409} );
 
 			expect(notificationStub.calledOnce).toEqual(true);
+			expect(notificationStub.calledWith('A group with this name already exists')).toEqual(true);
 
 			notificationStub.restore();
 		});
@@ -349,6 +350,21 @@ describe('GroupsView test', function() {
 				$groupEl.find('input').trigger($.Event('keyup', {keyCode: 27}));
 				expect(model.save.notCalled).toEqual(true);
 				expect($groupEl.find('input').length).toEqual(0);
+			});
+			it('notifies in case of duplicate group error', function() {
+				var notificationStub = sinon.stub(OC.Notification, 'showTemporary');
+				$groupEl.find('.action-rename-group').click();
+				$groupEl.find('input').val('Group Renamed');
+				$groupEl.find('form').submit();
+				expect(model.save.calledOnce).toEqual(true);
+				model.save.yieldTo('error', model, {status: 422});
+
+				expect($groupEl.find('input').length).toEqual(0);
+
+				expect(notificationStub.calledOnce).toEqual(true);
+				expect(notificationStub.calledWith('A group with this name already exists')).toEqual(true);
+
+				notificationStub.restore();
 			});
 		});
 		describe('delete group', function() {

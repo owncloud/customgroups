@@ -34,6 +34,7 @@ use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -96,7 +97,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			]));
 
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
-			->setMethods(['notifyUser'])
+			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
 			->setConstructorArgs([
 				$this->handler,
 				$this->userSession,
@@ -193,13 +194,13 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function adminSetFlagProvider() {
 		return [
 			// admin can change display name
-			[false, true, 200, true],
+			[false, Roles::BACKEND_ROLE_ADMIN, 200, true],
 			// non-admin cannot change anything
-			[false, false, 403, false],
+			[false, Roles::BACKEND_ROLE_MEMBER, 403, false],
 			// non-member cannot change anything
 			[false, null, 403, false],
 			// super-admin non-member can change anything
-			[false, true, 200, true],
+			[false, Roles::BACKEND_ROLE_ADMIN, 200, true],
 		];
 	}
 
@@ -214,6 +215,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		} else {
 			$this->setCurrentUserMemberInfo(null);
 		}
+
+		$this->helper->expects($this->any())
+			->method('isGroupDisplayNameAvailable')
+			->willReturn(true);
 
 		if ($called) {
 			$this->handler->expects($this->at(1))
@@ -232,6 +237,25 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
 		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+	}
+
+	public function testSetDisplayNameNoDuplicates() {
+		$this->setCurrentUserSuperAdmin(true);
+
+		$this->helper->expects($this->once())
+			->method('isGroupDisplayNameAvailable')
+			->willReturn(false);
+
+		$this->handler->expects($this->never())
+			->method('updateGroup');
+
+		$propPatch = new PropPatch([GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group Renamed']);
+		$this->node->propPatch($propPatch);
+
+		$propPatch->commit();
+		$this->assertEmpty($propPatch->getRemainingMutations());
+		$result = $propPatch->getResult();
+		$this->assertEquals(409, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
 	public function rolesProvider() {
