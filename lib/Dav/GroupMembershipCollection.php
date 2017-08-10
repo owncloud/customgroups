@@ -274,6 +274,10 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			return 403;
 		}
 
+		if ($this->groupInfo['display_name'] !== $displayName && !$this->helper->isGroupDisplayNameAvailable($displayName)) {
+			return 409;
+		}
+
 		$result = $this->groupsHandler->updateGroup(
 			$this->groupInfo['group_id'],
 			$this->groupInfo['uri'],

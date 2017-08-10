@@ -182,6 +182,25 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals($group1Id, $results[2]['group_id']);
 	}
 
+	public function testGetGroupsByDisplayName() {
+		$group1Id = $this->handler->createGroup('my_group_1', 'One');
+		$group2Id = $this->handler->createGroup('my_group_2', 'Two');
+		$group3Id = $this->handler->createGroup('my_group_3', 'One');
+
+		$results = $this->handler->getGroupsByDisplayName('one');
+
+		$this->assertCount(2, $results);
+
+		$this->assertEquals('my_group_1', $results[0]['uri']);
+		$this->assertEquals('One', $results[0]['display_name']);
+		$this->assertEquals($group1Id, $results[0]['group_id']);
+
+		$this->assertEquals('my_group_3', $results[1]['uri']);
+		$this->assertEquals('One', $results[1]['display_name']);
+		$this->assertEquals($group3Id, $results[1]['group_id']);
+
+	}
+
 	public function testAddToGroup() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 

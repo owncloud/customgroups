@@ -42,7 +42,7 @@
 			}
 
 			this.collection.on('request', this._onRequest, this);
-			this.collection.on('sync destroy', this._onEndRequest, this);
+			this.collection.on('sync destroy error', this._onEndRequest, this);
 			this.collection.on('add', this._onAddModel, this);
 			this.collection.on('change', this._onChangeModel, this);
 			this.collection.on('remove', this._onRemoveGroup, this);
@@ -107,9 +107,17 @@
 				model.save({
 					displayName: newName
 				}, {
+					wait: true,
 					error: function(model, response) {
-						$displayName.text(oldName);
-						OC.Notification.showTemporary(t('customgroups', 'Could not rename group'));
+						$displayName.find('.group-display-name').text(oldName);
+
+						// status 422 in case of validation error
+						if (response.status === 422) {
+							OC.Notification.showTemporary(t('customgroups', 'A group with this name already exists'));
+							return;
+						} else {
+							OC.Notification.showTemporary(t('customgroups', 'Could not rename group'));
+						}
 					}
 				});
 			}
@@ -241,12 +249,19 @@
 				},
 				error: function(model, response) {
 					// stop at 100 to avoid running for too long...
+
+					// status 405 in case uri/collection already exists
 					if (response.status === 405 && (_.isUndefined(index) || index < 100)) {
 						if (_.isUndefined(index)) {
 							// attempt again with index
 							index = 1;
 						}
 						self._createGroup(groupName, index + 1);
+						return;
+					}
+					// status 409 if display name already exists
+					if (response.status === 409) {
+						OC.Notification.showTemporary(t('customgroups', 'A group with this name already exists'));
 						return;
 					}
 					OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
