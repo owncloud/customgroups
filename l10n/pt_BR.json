@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "Grupos Personalizados",
+    "A group with this name already exists" : "Um grupo com esse nome já existe",
     "Could not rename group" : "Não foi possível renomear o grupo ",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem certeza de que deseja excluir o grupo {groupName} ?",
     "Confirm deletion of group" : "Confirmar exclusão do grupo",
@@ -45,6 +46,7 @@
     "Role change in group \"%1$s\"." : "Mudança de função no grupo \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" atribuiu a função de \"%3$s\" para você no grupo \"%2$s\".",
     "Unknown role" : "Função desconhecida",
-    "Only group admins are allowed to create custom groups" : "Somente os administradores de grupo podem criar grupos personalizados"
+    "Only group admins are allowed to create custom groups" : "Somente os administradores de grupo podem criar grupos personalizados",
+    "Allow creating multiple groups with the same name" : "Permitir criar múltiplos grupos com o mesmo nome"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

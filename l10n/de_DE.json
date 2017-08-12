@@ -1,11 +1,12 @@
 { "translations": {
     "Custom Groups" : "Benutzerdefinierte Gruppe",
+    "A group with this name already exists" : "Eine Gruppe mit diesem Namen ist schon vorhanden.",
     "Could not rename group" : "Gruppe konnte nicht umbenannt werden",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Möchten Sie die Gruppe \"{groupName}\" wirklich löschen?",
     "Confirm deletion of group" : "Bitte bestätigen Sie das Löschen der Gruppe",
     "Could not create group" : "Gruppe konnte nicht erstellt werden",
-    "Administrator" : "Administratior",
-    "Group owner" : "Gruppenbesitzer ",
+    "Administrator" : "Administrator",
+    "Group owner" : "Gruppenbesitzer",
     "Member" : "Mitglied",
     "Rename" : "Umbenennen",
     "Delete" : "Löschen",
@@ -21,7 +22,7 @@
     "An error occurred. Please try again" : "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Möchten Sie die Gruppe \"{name}\" wirklich verlassen?",
     "Confirm leaving group" : "Bitte bestätigen Sie das Verlassen der Gruppe",
-    "Cannot leave group without an administrator" : "Kann Gruppe nicht ohne Administrator verlassen",
+    "Cannot leave group without an administrator" : "Ein Gruppe ohne Administrator kann nicht verlassen werden",
     "Could not leave group due to a server error" : "Konnte Gruppe aufgrund eines Serverfehlers nicht verlassen",
     "User \"{userId}\" does not exist" : "Nutzer \"{userId}\" existiert nicht",
     "User \"{userId}\" is already a member of this group" : "Nutzer \"{userId}\" ist bereits Mitglied dieser Gruppe",
@@ -32,12 +33,12 @@
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Möchten Sie wirklich Ihre eigenen Administratorrechte für die Gruppe \"{name}\" entfernen?",
     "Change role to \"member\"" : "Rolle auf \"Mitglied\" ändern",
     "Change role to \"group owner\"" : "Rolle auf \"Gruppenbesitzer\" ändern",
-    "Remove member" : "Mitglied löschen",
+    "Remove member" : "Mitglied entfernen",
     "Add member" : "Mitglied hinzufügen",
     "Leave this group" : "Gruppe verlassen",
-    "Close" : "Schließen",
+    "Close" : "Schliessen",
     "Custom groups" : "Benutzerdefinierte Gruppen",
-    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden",
+    "Group with uri \"%s\" not found" : "Die Gruppe mit der URI \"%s\" wurde nicht gefunden",
     "Added to group \"%2$s\"." : "Zur Gruppe \"%2$s\" hinzugefügt.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Sie wurden von \"%1$s\" zur Gruppe \"%2$s\" hinzugefügt.",
     "Removed from group \"%2$s\"." : "Aus der Gruppe \"%2$s\" entfernt.",
@@ -45,6 +46,7 @@
     "Role change in group \"%1$s\"." : "In der Gruppe \"%1$s\" wurde eine Rolle geändert.",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" hat die \"%3$s\" - Rolle der Gruppe \"%2$s\" Ihnen zugewiesen.",
     "Unknown role" : "Unbekannte Rolle",
-    "Only group admins are allowed to create custom groups" : "Nur Gruppen-Administratoren sind berechtigt benutzerdefinierte Gruppen zu erstellen"
+    "Only group admins are allowed to create custom groups" : "Nur Gruppen-Administratoren sind berechtigt benutzerdefinierte Gruppen zu erstellen",
+    "Allow creating multiple groups with the same name" : "Das Erstellen von mehreren Gruppen mit dem selben Namen erlauben"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

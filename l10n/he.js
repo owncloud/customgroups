@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "קבוצות מותאמות אישית",
+    "A group with this name already exists" : "קבוצה עם שם זה כבר קיימת",
     "Could not rename group" : "לא ניתן היה לשנות את שם הקבוצה",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "באם באמת למחוק את הקבוצה \"{groupName}\" ?",
     "Confirm deletion of group" : "אישור מחיקת קבוצה",
@@ -47,6 +48,7 @@ OC.L10N.register(
     "Role change in group \"%1$s\"." : "התואר שונה בקבוצה \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" הקצה תואר \"%3$s\" לקבוצה \"%2$s\" עבורך.",
     "Unknown role" : "תואר לא ידוע",
-    "Only group admins are allowed to create custom groups" : "מנהלי קבוצה בלבד מאושרים ליצור קבוצות מותאמות אישית"
+    "Only group admins are allowed to create custom groups" : "מנהלי קבוצה בלבד מאושרים ליצור קבוצות מותאמות אישית",
+    "Allow creating multiple groups with the same name" : "מאפשר יצירת מספר קבוצות עם שם זהה"
 },
 "nplurals=2; plural=(n != 1);");
