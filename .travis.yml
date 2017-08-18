@@ -17,7 +17,7 @@ env:
     - CORE_BRANCH=master
     - APP_NAME=customgroups
   matrix:
-    - DB=sqlite
+    - DB=mysql
 
 branches:
   only:
@@ -44,7 +44,9 @@ matrix:
       env: DB=mysql;TEST=test-upload-coverage
     # PHP unit tests
     - php: 5.6
-      env: DB=pgsql;TEST=test-php
+      env: DB=pgsql;TEST=test-php;CORE_BRANCH=master
+    - php: 5.6
+      env: DB=pgsql;TEST=test-php;CORE_BRANCH=stable10
     # Code checker / syntax
     - php: 5.6
       env: DB=mysql;TEST=test-codecheck
@@ -56,7 +58,9 @@ matrix:
       env: DB=mysql;TEST=test-js
     # Integration tests
     - php: 7.0
-      env: DB=mysql;TEST=test-integration
+      env: DB=mysql;TEST=test-integration;CORE_BRANCH=master
+    - php: 7.0
+      env: DB=mysql;TEST=test-integration;CORE_BRANCH=stable10
   allow_failures:
     - env: DB=mysql;TEST=test-codecheck-deprecations
   fast_finish: true
