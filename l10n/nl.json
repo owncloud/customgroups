@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "Maatwerk groepen",
+    "A group with this name already exists" : "Er bestaat al een groep met die naam",
     "Could not rename group" : "Kon groep niet hernoemen",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Weet je zeker dat je de groep \"{groupName}\" wilt verwijderen?",
     "Confirm deletion of group" : "Bevestig verwijderen van groep",
@@ -30,6 +31,8 @@
     "Confirm removal of member" : "Bevestig verwijderen groepslid",
     "Could not delete member" : "Kan groepslid niet verwijderen",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Weet je zeker dat je je eigen beheerrechten op de groep \"{groupName}\" wilt verwijderen?",
+    "Change role to \"member\"" : "Wijzig rol naar \"member\"",
+    "Remove member" : "Verwijder lid",
     "Add member" : "Lid toevoegen",
     "Leave this group" : "Verlaat deze groep",
     "Close" : "Sluiten",
