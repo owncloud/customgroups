@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Skupine po meri",
+    "A group with this name already exists" : "Skupina s tem imenom že obstaja.",
     "Could not rename group" : "Ni mogoče preimenovati skupine",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ali ste prepričani, da želite izbrisati skupino »{groupName}«?",
     "Confirm deletion of group" : "Potrdi brisanje skupine",
@@ -32,6 +33,9 @@ OC.L10N.register(
     "Confirm removal of member" : "Potrdi odstranitev člana",
     "Could not delete member" : "Ni mogoče izbrisati člana",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ali ste prepričani, da želite odstraniti skrbniška dovoljenja za skupino »{name}« ?",
+    "Change role to \"member\"" : "Spremeni vlogo v »člana«",
+    "Change role to \"group owner\"" : "Spremeni vlogo v »lastnik skupine«",
+    "Remove member" : "Odstrani člana",
     "Add member" : "Dodaj člana",
     "Leave this group" : "Zapusti skupino",
     "Close" : "Zapri",

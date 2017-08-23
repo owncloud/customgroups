@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "กำหนดกลุ่มเอง",
+    "A group with this name already exists" : "มีกลุ่มที่ใช้ชื่อนี้ไปแล้ว",
     "Could not rename group" : "ไม่สามารถเปลี่ยนชื่อกลุ่มได้",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "คุณแน่ใจหรือว่าต้องการลบกลุ่ม \"{groupName}\" ?",
     "Confirm deletion of group" : "ยืนยันการลบกลุ่ม",
@@ -47,6 +48,7 @@ OC.L10N.register(
     "Role change in group \"%1$s\"." : "มีการเปลี่ยนแปลงบทบาทในกลุ่ม \"%1$s\"",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" กำหนดบทบาท \"%3$s\" สำหรับกลุ่ม \"%2$s\" ให้กับคุณ",
     "Unknown role" : "ยังไม่มีบทบาท",
-    "Only group admins are allowed to create custom groups" : "เฉพาะกลุ่มผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้สร้างกลุ่มที่กำหนดเอง"
+    "Only group admins are allowed to create custom groups" : "เฉพาะกลุ่มผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้สร้างกลุ่มที่กำหนดเอง",
+    "Allow creating multiple groups with the same name" : "อนุญาตให้สร้างกลุ่มโดยใช้ชื่อเดียวกัน"
 },
 "nplurals=1; plural=0;");
