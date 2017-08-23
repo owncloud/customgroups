@@ -93,7 +93,11 @@ class UsersCollectionTest extends \Test\TestCase {
 			$this->createMock(IConfig::class)
 		);
 
-		$this->collection = new UsersCollection($this->handler, $this->helper);
+		$this->collection = new UsersCollection(
+			$this->createMock(IGroupManager::class),
+			$this->handler,
+			$this->helper
+		);
 	}
 
 	public function testBase() {

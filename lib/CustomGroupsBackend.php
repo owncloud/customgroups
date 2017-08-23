@@ -53,7 +53,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return boolean
 	 */
 	public function implementsActions($actions) {
-		return ($actions & self::GROUP_DETAILS) !== 0;
+		return ($actions & (self::GROUP_DETAILS | self::DELETE_GROUP)) !== 0;
 	}
 
 	/**
@@ -203,5 +203,20 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function isVisibleForScope($scope) {
 		return ($scope === 'sharing');
+	}
+
+	/**
+	 * Delete group
+	 *
+	 * @param string $gid group id
+	 */
+	public function deleteGroup($gid) {
+		$uri = $this->extractUri($gid);
+		if ($uri !== null) {
+			$groupInfo = $this->handler->getGroupByUri($uri);
+			if ($groupInfo !== null) {
+				$this->handler->deleteGroup($groupInfo['group_id']);
+			}
+		}
 	}
 }

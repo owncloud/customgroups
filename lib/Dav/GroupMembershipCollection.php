@@ -31,6 +31,7 @@ use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use OCP\IGroupManager;
 
 /**
  * Group memberships collection for a given group
@@ -57,6 +58,13 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	private $helper;
 
 	/**
+	 * Group manager from core
+	 *
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
+	/**
 	 * Group information
 	 *
 	 * @var array
@@ -77,10 +85,12 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 */
 	public function __construct(
 		array $groupInfo,
+		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper
 	) {
 		$this->groupsHandler = $groupsHandler;
+		$this->groupManager = $groupManager;
 		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
 
@@ -97,7 +107,12 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		if (!$this->helper->isUserAdmin($groupId)) {
 			throw new Forbidden("No permission to delete group \"$groupId\"");
 		}
-		$this->groupsHandler->deleteGroup($groupId);
+
+		$group = $this->groupManager->get('customgroup_' . $this->groupInfo['uri']);
+		if ($group === null) {
+			throw new NotFound("Group not found \"$groupId\"");
+		}
+		$group->delete();
 
 		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name']]);
 		$this->dispatcher->dispatch('\OCA\CustomGroups::deleteGroup', $event);

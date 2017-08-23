@@ -27,6 +27,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
 use OCA\CustomGroups\Service\MembershipHelper;
+use OCP\IGroupManager;
 
 /**
  * Collection of users
@@ -48,15 +49,22 @@ class UsersCollection implements ICollection {
 	private $helper;
 
 	/**
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
+	/**
 	 * Constructor
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
 	 * @param MembershipHelper $helper
 	 */
 	public function __construct(
+		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper
 	) {
+		$this->groupManager = $groupManager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
 	}
@@ -94,6 +102,7 @@ class UsersCollection implements ICollection {
 		// but ownCloud admin can query membership of any user
 		if ($name === $this->helper->getUserId() || $this->helper->isUserSuperAdmin()) {
 			return new GroupsCollection(
+				$this->groupManager,
 				$this->groupsHandler,
 				$this->helper,
 				$name

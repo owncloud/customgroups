@@ -35,6 +35,7 @@ use OCP\Notification\IManager;
 use OCP\IConfig;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use OCA\CustomGroups\Dav\Roles;
+use OCP\IGroup;
 
 /**
  * Class GroupMembershipCollectionTest
@@ -111,6 +112,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->node = new GroupMembershipCollection(
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
+			$this->groupManager,
 			$this->handler,
 			$this->helper
 		);
@@ -143,9 +145,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function testDeleteAsAdmin() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 
-		$this->handler->expects($this->at(1))
-			->method('deleteGroup')
-			->with(1);
+		$group = $this->createMock(IGroup::class);
+		$group->expects($this->once())
+			->method('delete');
+
+		$this->groupManager->expects($this->once())
+			->method('get')
+			->with('customgroup_group1')
+			->willReturn($group);
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {

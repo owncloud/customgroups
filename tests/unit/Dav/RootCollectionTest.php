@@ -25,6 +25,7 @@ use OCA\CustomGroups\Dav\UsersCollection;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Service\MembershipHelper;
+use OCP\IGroupManager;
 
 /**
  * Class RootCollectionTest
@@ -39,6 +40,7 @@ class RootCollectionTest extends \Test\TestCase {
 		$helper = $this->createMock(MembershipHelper::class);
 
 		$this->collection = new RootCollection(
+			$this->createMock(IGroupManager::class),
 			$handler,
 			$helper
 		);
