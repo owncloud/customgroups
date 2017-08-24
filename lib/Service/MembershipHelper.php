@@ -22,6 +22,7 @@
 namespace OCA\CustomGroups\Service;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Dav\Roles;
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -315,6 +316,13 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
+		if($memberInfo['role'] === Roles::BACKEND_ROLE_MEMBER) {
+			$roleName = "Member";
+		} elseif ($memberInfo['role'] === Roles::BACKEND_ROLE_ADMIN) {
+			$roleName = "Group owner";
+		}
+		$event = new GenericEvent(null, ['user' => $targetUserId, 'groupName' => $groupInfo['display_name'], 'roleNumber' => $memberInfo['role'], 'roleDisaplayName' => $roleName]);
+		$this->dispatcher->dispatch('changeRoleInGroup', $event);
 	}
 
 	/**
