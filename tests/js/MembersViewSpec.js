@@ -218,6 +218,17 @@ describe('MembersView test', function() {
 
 			notificationStub.restore();
 		});
+
+		it('rerendering header after rename does not double register select event', function() {
+			// this will rerender the header
+			model.set('displayName', 'renamed');
+			view.membersInput.trigger('select', {
+				userId: 'newuser',
+				displayName: 'new user display name'
+			});
+			// only called once
+			expect(collection.create.calledOnce).toEqual(true);
+		});
 	});
 
 	describe('actions', function() {
