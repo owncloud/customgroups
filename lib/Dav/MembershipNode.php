@@ -28,6 +28,7 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
 use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Service\MembershipHelper;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Membership node
@@ -75,6 +76,11 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	private $name;
 
 	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 */
+	private $dispatcher;
+
+	/**
 	 * Constructor
 	 *
 	 * @param array $memberInfo membership information
@@ -94,6 +100,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		$this->memberInfo = $memberInfo;
 		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
+		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -131,6 +138,9 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			// only notify when the removal was done by another user
 			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
 		}
+
+		$event = new GenericEvent(null, ['user' => $currentUserId, 'groupName' => $this->groupInfo['display_name']]);
+		$this->dispatcher->dispatch('leaveGroup', $event);
 	}
 
 	/**

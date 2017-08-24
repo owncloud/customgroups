@@ -278,6 +278,10 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			return 409;
 		}
 
+		$event = new GenericEvent(null, ['oldGroupName' => $this->groupInfo['display_name'],
+			'newGroupName' => $displayName]);
+		$this->dispatcher->dispatch('updateGroupName', $event);
+
 		$result = $this->groupsHandler->updateGroup(
 			$this->groupInfo['group_id'],
 			$this->groupInfo['uri'],
