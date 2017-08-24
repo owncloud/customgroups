@@ -123,11 +123,29 @@ describe('App test', function() {
 		it('hides sidebar if group deselected', function() {
 			var showSidebarStub = sinon.stub(OC.Apps, 'showAppSidebar');
 			var hideSidebarStub = sinon.stub(OC.Apps, 'hideAppSidebar');
-			app.listView.trigger('select', null);
+			app.listView.select(null);
 			expect(showSidebarStub.notCalled).toEqual(true);
 			expect(hideSidebarStub.calledOnce).toEqual(true);
 			expect(hideSidebarStub.calledWith(app.$membersContainer)).toEqual(true);
 			showSidebarStub.restore();
+			hideSidebarStub.restore();
+		});
+
+		it('selects null if sidebar was manually closed', function() {
+			var hideSidebarStub = sinon.stub(OC.Apps, 'hideAppSidebar');
+			app.listView.trigger('select', collection.at(0));
+
+			var handler = sinon.stub();
+			app.listView.on('select', handler);
+
+			// trigger close event handler that was registered
+			// on the membersView
+			expect(app.membersView.on.calledWith('close')).toEqual(true);
+			app.membersView.on.getCall(0).args[1].call(app.membersView.on.getCall(0).args[2]);
+
+			expect(handler.calledOnce).toEqual(true);
+			expect(handler.calledWith(null)).toEqual(true);
+			
 			hideSidebarStub.restore();
 		});
 

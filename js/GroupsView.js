@@ -200,17 +200,21 @@
 				return;
 			}
 
+			if (this._lastActive) {
+				this._lastActive.removeClass('active');
+			}
+
 			if (model) {
 				this._selected = model;
-				if (this._lastActive) {
-					this._lastActive.removeClass('active');
-				}
 
 				if (_.isUndefined($el)) {
 					$el = this.$('.group').filterAttr('data-id', model.id);
 				}
 				this._lastActive = $el.addClass('active');
 				this.trigger('select', model);
+			} else {
+				this._selected = null;
+				this.trigger('select', null);
 			}
 		},
 

@@ -345,4 +345,15 @@ describe('MembersView test', function() {
 			expect(view.$('.loading').hasClass('hidden')).toEqual(true);
 		});
 	});
+
+	it('sends close event when clicking close button', function() {
+		view.render();
+
+		var handler = sinon.stub();
+		view.on('close', handler);
+
+		view.$('.close').click();
+
+		expect(handler.calledOnce).toEqual(true);
+	});
 });
