@@ -322,6 +322,7 @@
 				);
 			}
 
+			this.membersInput.off('select', this._onAddMember, this);
 			this.membersInput.render();
 			this.membersInput.on('select', this._onAddMember, this);
 			this.$('.add-member-container').append(this.membersInput.$el);
