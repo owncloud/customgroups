@@ -214,6 +214,18 @@ describe('GroupsView test', function() {
 			expect(handler.calledOnce).toEqual(true);
 			expect(handler.calledWith(null)).toEqual(true);
 		});
+
+		it('triggers "select" event with null when calling select with null', function() {
+			view.$('.group:eq(1)').click();
+
+			var handler = sinon.stub();
+			view.on('select', handler);
+
+			view.select(null);
+
+			expect(handler.calledOnce).toEqual(true);
+			expect(handler.calledWith(null)).toEqual(true);
+		});
 	});
 
 	describe('creating groups', function() {

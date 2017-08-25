@@ -11,10 +11,6 @@
 (function(OCA) {
 
 	var App = OC.Backbone.View.extend({
-		events: {
-			'click .sidebar .action-close': '_onClickClose'
-		},
-
 		initialize: function(options) {
 			options = _.extend({
 				canCreate: true
@@ -64,14 +60,14 @@
 				this.$membersContainer.append(this.membersView.$el);
 
 				this.membersView.render();
+				this.membersView.on('close', this._onClickClose, this);
 			} else {
 				OC.Apps.hideAppSidebar(this.$membersContainer);
 			}
 		},
 
-		_onClickClose: function(ev) {
-			ev.preventDefault();
-			OC.Apps.hideAppSidebar(this.$membersContainer);
+		_onClickClose: function() {
+			this.listView.select(null);
 			return false;
 		},
 

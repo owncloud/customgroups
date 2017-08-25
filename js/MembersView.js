@@ -20,6 +20,7 @@
 		sync: OC.Backbone.davSync,
 
 		events: {
+			'click .close': '_onClose',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
 			'click .action-leave-group': '_onClickLeaveGroup'
@@ -66,6 +67,11 @@
 		_toggleLoading: function(state) {
 			this._loading = state;
 			this.$('.loading').toggleClass('hidden', !state);
+		},
+
+		_onClose: function(ev) {
+			ev.preventDefault();
+			this.trigger('close');
 		},
 
 		_onRequest: function() {
