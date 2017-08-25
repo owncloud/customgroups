@@ -227,14 +227,14 @@
 			var $row = $target.closest('.group-member');
 			var id = $row.attr('data-id');
 			var model = this.collection.findWhere({'id': id});
-			$target.next('.loading').removeClass('hidden');
-			$target.tooltip('hide').remove();
 
 			if (!model) {
 				return;
 			}
 
 			function action(rerender) {
+				$target.next('.loading').removeClass('hidden');
+				$target.tooltip('hide').remove();
 				// swap permissions
 				var newRole = (model.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
 					OCA.CustomGroups.ROLE_MEMBER :

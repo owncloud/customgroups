@@ -307,7 +307,9 @@ describe('MembersView test', function() {
 			});
 
 			it('switches role when clicking change role', function() {
+				expect(view.$('.group-member:eq(1) .icon-rename+.loading').hasClass('hidden')).toEqual(true);
 				view.$('.group-member:eq(1) .action-change-member-role').click();
+				expect(view.$('.group-member:eq(1) .icon-rename+.loading').hasClass('hidden')).toEqual(false);
 
 				expect(saveStub.calledOnce).toEqual(true);
 				expect(saveStub.calledOn(anotherAdmin)).toEqual(true);
@@ -324,13 +326,18 @@ describe('MembersView test', function() {
 				saveStub.yieldTo('success');
 
 				expect(confirmStub.notCalled).toEqual(true);
+
 			});
 			it('asks for confirmation before removing own admin powers', function() {
 				view.$('.group-member:eq(0) .action-change-member-role').click();
+
+				expect(view.$('.group-member:eq(0) .icon-rename+.loading').hasClass('hidden')).toEqual(true);
 				
 				expect(saveStub.notCalled).toEqual(true);
 				confirmStub.yield(true);
 				expect(confirmStub.calledOnce).toEqual(true);
+
+				expect(view.$('.group-member:eq(0) .icon-rename+.loading').hasClass('hidden')).toEqual(false);
 
 				expect(saveStub.calledOnce).toEqual(true);
 				expect(saveStub.calledOn(collection.at(0))).toEqual(true);
