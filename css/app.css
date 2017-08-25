@@ -78,6 +78,14 @@
 	max-width: 1px;
 }
 
+#customgroups .loading-list {
+	margin-top: 10px;
+}
+
+#customgroups .icon-loading-small {
+	margin-left: 10px;
+}
+
 .customgroups-autocomplete-item {
 	display: flex;
 }

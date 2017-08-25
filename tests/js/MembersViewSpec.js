@@ -232,10 +232,12 @@ describe('MembersView test', function() {
 	});
 
 	describe('actions', function() {
+		var saveStub;
 		var confirmStub;
 		var currentUserModel;
 
 		beforeEach(function() {
+			saveStub = sinon.stub(OCA.CustomGroups.MemberModel.prototype, 'save');
 			view.render();
 			confirmStub = sinon.stub(OC.dialogs, 'confirm');
 			currentUserModel = collection.add({
@@ -254,6 +256,7 @@ describe('MembersView test', function() {
 		});
 		afterEach(function() {
 			confirmStub.restore();
+			saveStub.restore();
 		});
 
 		describe('leaving group', function() {
@@ -315,20 +318,41 @@ describe('MembersView test', function() {
 			});
 
 			it('switches role when clicking change role', function() {
+				expect(view.$('.group-member:eq(1) .icon-rename+.loading').hasClass('hidden')).toEqual(true);
 				view.$('.group-member:eq(1) .action-change-member-role').click();
-				expect(anotherAdmin.get('role')).toEqual(OCA.CustomGroups.ROLE_MEMBER);
+				expect(view.$('.group-member:eq(1) .icon-rename+.loading').hasClass('hidden')).toEqual(false);
+
+				expect(saveStub.calledOnce).toEqual(true);
+				expect(saveStub.calledOn(anotherAdmin)).toEqual(true);
+
+				expect(saveStub.calledWith({role: OCA.CustomGroups.ROLE_MEMBER}));
+				saveStub.yieldTo('success');
+				saveStub.reset();
 
 				view.$('.group-member:eq(2) .action-change-member-role').click();
-				expect(anotherMember.get('role')).toEqual(OCA.CustomGroups.ROLE_ADMIN);
+
+				expect(saveStub.calledOnce).toEqual(true);
+				expect(saveStub.calledOn(anotherMember)).toEqual(true);
+				expect(saveStub.calledWith({role: OCA.CustomGroups.ROLE_ADMIN}));
+				saveStub.yieldTo('success');
 
 				expect(confirmStub.notCalled).toEqual(true);
+
 			});
 			it('asks for confirmation before removing own admin powers', function() {
 				view.$('.group-member:eq(0) .action-change-member-role').click();
+
+				expect(view.$('.group-member:eq(0) .icon-rename+.loading').hasClass('hidden')).toEqual(true);
+				
+				expect(saveStub.notCalled).toEqual(true);
 				confirmStub.yield(true);
 				expect(confirmStub.calledOnce).toEqual(true);
 
-				expect(currentUserModel.get('role')).toEqual(OCA.CustomGroups.ROLE_MEMBER);
+				expect(view.$('.group-member:eq(0) .icon-rename+.loading').hasClass('hidden')).toEqual(false);
+
+				expect(saveStub.calledOnce).toEqual(true);
+				expect(saveStub.calledOn(collection.at(0))).toEqual(true);
+				expect(saveStub.calledWith({role: OCA.CustomGroups.ROLE_MEMBER}));
 			});
 			it('does not remove admin role if aborted', function() {
 				view.$('.group-member:eq(0) .action-change-member-role').click();
@@ -348,12 +372,12 @@ describe('MembersView test', function() {
 
 			collection.fetch();
 
-			expect(view.$('.loading').hasClass('hidden')).toEqual(false);
+			expect(view.$('.loading-list').hasClass('hidden')).toEqual(false);
 
 			expect(collection.sync.calledOnce).toEqual(true);
 			collection.sync.yieldTo('success');
 
-			expect(view.$('.loading').hasClass('hidden')).toEqual(true);
+			expect(view.$('.loading-list').hasClass('hidden')).toEqual(true);
 		});
 	});
 

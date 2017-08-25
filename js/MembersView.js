@@ -42,8 +42,12 @@
 				groupUri: this.model.id
 			});
 
+			var self = this;
 			this.collection.reset([], {silent: true});
 			this.collection.fetch();
+			_.defer(function() {
+				self._toggleLoading(true);
+			});
 
 			_.bindAll(
 				this,
@@ -66,7 +70,8 @@
 
 		_toggleLoading: function(state) {
 			this._loading = state;
-			this.$('.loading').toggleClass('hidden', !state);
+			this.$('.loading-list').toggleClass('hidden', !state);
+			this.$('.grid').toggleClass('hidden', state);
 		},
 
 		_onClose: function(ev) {
@@ -75,7 +80,6 @@
 		},
 
 		_onRequest: function() {
-			this._toggleLoading(true);
 			this.$('.empty').addClass('hidden');
 		},
 
@@ -153,6 +157,8 @@
 			}
 
 			$field.prop('disabled', true);
+			var $loading = this.$('.member-input-view .loading');
+			$loading.removeClass('hidden');
 
 			this.collection.create({
 				id: userId,
@@ -160,10 +166,12 @@
 			},  {
 				wait: true,
 				success: function() {
+					$loading.addClass('hidden');
 					$field.prop('disabled', false);
 					$field.val('').focus();
 				},
 				error: function(model, response) {
+					$loading.addClass('hidden');
 					$field.prop('disabled', false);
 					$field.val('').focus();
 					if (response.status === 412) {
@@ -221,7 +229,8 @@
 		_onChangeMemberRole: function(ev) {
 			ev.preventDefault();
 			var self = this;
-			var $row = $(ev.target).closest('.group-member');
+			var $target = $(ev.target);
+			var $row = $target.closest('.group-member');
 			var id = $row.attr('data-id');
 			var model = this.collection.findWhere({'id': id});
 
@@ -230,6 +239,8 @@
 			}
 
 			function action(rerender) {
+				$target.next('.loading').removeClass('hidden');
+				$target.tooltip('hide').remove();
 				// swap permissions
 				var newRole = (model.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
 					OCA.CustomGroups.ROLE_MEMBER :
@@ -238,6 +249,8 @@
 				model.save({
 					role: newRole
 				}, {
+					wait: true,
+					patch: true,
 					success: function() {
 						if (rerender) {
 							// refresh permission actions
