@@ -18,7 +18,7 @@
 	</types>
 	<use-migrations>true</use-migrations>
 	<dependencies>
-		<owncloud min-version="10.0.1" max-version="10.0.99" />
+		<owncloud min-version="10.0.3" max-version="10.0.99" />
 	</dependencies>
 	<sabre>
 		<plugins>
