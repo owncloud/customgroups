@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Tilpassede grupper",
+    "A group with this name already exists" : "Det finnes allerede en gruppe med det navnet",
     "Could not rename group" : "Klarte ikke å gi gruppa nytt navn",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Er du sikker på at du vil slette gruppen \"{groupName}\"?",
     "Confirm deletion of group" : "Bekreft sletting av gruppe",
@@ -32,6 +33,9 @@ OC.L10N.register(
     "Confirm removal of member" : "Bekreft fjerning av medlem",
     "Could not delete member" : "Kunne ikke slette medlem",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Er du sikker på at du vil fjerne dine egne administratorrettigheter for gruppen \"{name}\"?",
+    "Change role to \"member\"" : "Endre rolle til \"medlem\"",
+    "Change role to \"group owner\"" : "Endre rolle til \"gruppeeier\"",
+    "Remove member" : "Fjern medlem",
     "Add member" : "Legg til medlem",
     "Leave this group" : "Forlat gruppen",
     "Close" : "Lukk",
@@ -44,6 +48,7 @@ OC.L10N.register(
     "Role change in group \"%1$s\"." : "Rolleendring i gruppe \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" tilordnet rollen \"%3$s\" for gruppen \"%2$s\" til deg.",
     "Unknown role" : "Ukjent rolle",
-    "Only group admins are allowed to create custom groups" : "Bare gruppeadministratorer kan opprette egendefinerte grupper"
+    "Only group admins are allowed to create custom groups" : "Bare gruppeadministratorer kan opprette egendefinerte grupper",
+    "Allow creating multiple groups with the same name" : "Tillat opprettelse av flere grupper med samme navn"
 },
 "nplurals=2; plural=(n != 1);");
