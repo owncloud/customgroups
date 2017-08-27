@@ -33,6 +33,7 @@ use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class MembershipNodeTest
@@ -154,7 +155,18 @@ class MembershipNodeTest extends \Test\TestCase {
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::removeUserFromGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::removeUserFromGroup';
+			array_push($called, $event);
+		});
+
 		$this->node->delete();
+
+		$this->assertSame('\OCA\CustomGroups::removeUserFromGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('user_displayName', $called[1]);
+		$this->assertArrayHasKey('group_displayName',$called[1]);
 	}
 
 	/**

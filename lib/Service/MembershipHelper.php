@@ -322,7 +322,7 @@ class MembershipHelper {
 			$roleName = "Group owner";
 		}
 		$event = new GenericEvent(null, ['user' => $targetUserId, 'groupName' => $groupInfo['display_name'], 'roleNumber' => $memberInfo['role'], 'roleDisaplayName' => $roleName]);
-		$this->dispatcher->dispatch('changeRoleInGroup', $event);
+		$this->dispatcher->dispatch('\OCA\CustomGroups::changeRoleInGroup', $event);
 	}
 
 	/**
@@ -344,9 +344,6 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
-
-		$event = new GenericEvent(null, ['user_displayName' => $targetUserId, 'group_displayName' => $groupInfo['display_name']]);
-		$this->dispatcher->dispatch('removeUserFromGroup', $event);
 	}
 
 	/**
