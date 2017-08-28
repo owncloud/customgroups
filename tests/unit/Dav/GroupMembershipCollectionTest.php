@@ -148,14 +148,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->with(1);
 
 		$called = array();
-		\OC::$server->getEventDispatcher()->addListener('deleteGroup', function ($event) use (&$called) {
-			$called[] = 'deleteGroup';
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::deleteGroup';
 			array_push($called, $event);
 		});
 
 		$this->node->delete();
 
-		$this->assertSame('deleteGroup', $called[0]);
+		$this->assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 	}
@@ -221,6 +221,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->willReturn(true);
 
 		if ($called) {
+			$calledEvent = array();
+			\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::updateGroupName', function ($event) use (&$calledEvent){
+				$calledEvent[] = '\OCA\CustomGroups::updateGroupName';
+				array_push($calledEvent, $event);
+			});
 			$this->handler->expects($this->at(1))
 				->method('updateGroup')
 				->with(1, 'group1', 'Group Renamed')
@@ -236,6 +241,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$propPatch->commit();
 		$this->assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
+		if (isset($calledEvent)) {
+			$this->assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
+			$this->assertTrue($calledEvent[1] instanceof GenericEvent);
+		}
 		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
@@ -293,14 +302,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			);
 
 		$called = array();
-		\OC::$server->getEventDispatcher()->addListener('addUserToGroup', function ($event) use (&$called) {
-			$called[] = 'addUserToGroup';
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addUserToGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::addUserToGroup';
 			array_push($called, $event);
 		});
 
 		$this->node->createFile(self::NODE_USER);
 
-		$this->assertSame('addUserToGroup', $called[0]);
+		$this->assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertArrayHasKey('user',$called[1]);

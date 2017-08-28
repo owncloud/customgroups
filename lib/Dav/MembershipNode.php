@@ -139,8 +139,8 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
 		}
 
-		$event = new GenericEvent(null, ['user' => $currentUserId, 'groupName' => $this->groupInfo['display_name']]);
-		$this->dispatcher->dispatch('leaveGroup', $event);
+		$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
+		$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
 	}
 
 	/**

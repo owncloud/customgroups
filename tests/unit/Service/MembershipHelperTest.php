@@ -463,21 +463,10 @@ class MembershipHelperTest extends \Test\TestCase {
 			->method('notify')
 			->with($notification);
 
-		$called = array();
-		\OC::$server->getEventDispatcher()->addListener('removeUserFromGroup', function ($event) use (&$called) {
-			$called[] = 'removeUserFromGroup';
-			array_push($called, $event);
-		});
-
 		$this->helper->notifyUserRemoved(
 			'anotheruser',
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
 		);
-
-		$this->assertSame('removeUserFromGroup', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
-		$this->assertArrayHasKey('user_displayName', $called[1]);
-		$this->assertArrayHasKey('group_displayName',$called[1]);
 	}
 
 	public function testNotifyUserRoleChange() {
@@ -500,11 +489,19 @@ class MembershipHelperTest extends \Test\TestCase {
 			->method('notify')
 			->with($notification);
 
+		$called = array();
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::changeRoleInGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::changeRoleInGroup';
+			array_push($called, $event);
+		});
 		$this->helper->notifyUserRoleChange(
 			'anotheruser',
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 			['group_id' => 1, 'role' => Roles::BACKEND_ROLE_MEMBER]
 		);
+
+		$this->assertSame('\OCA\CustomGroups::changeRoleInGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
 	}
 
 	public function canCreateRolesProvider() {

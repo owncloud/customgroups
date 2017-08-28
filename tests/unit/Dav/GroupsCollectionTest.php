@@ -207,8 +207,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->with('user1', 1, true);
 
 		$called = array();
-		\OC::$server->getEventDispatcher()->addListener('addGroupAndUser', function ($event) use (&$called) {
-			$called[] = 'addGroupAndUser';
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addGroupAndUser', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::addGroupAndUser';
 			array_push($called, $event);
 		});
 
@@ -217,7 +217,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		]);
 		$this->collection->createExtendedCollection('group1', $mkCol);
 
-		$this->assertSame('addGroupAndUser', $called[0]);
+		$this->assertSame('\OCA\CustomGroups::addGroupAndUser', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertArrayHasKey('user', $called[1]);

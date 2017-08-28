@@ -100,7 +100,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		$this->groupsHandler->deleteGroup($groupId);
 
 		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name']]);
-		$this->dispatcher->dispatch('deleteGroup', $event);
+		$this->dispatcher->dispatch('\OCA\CustomGroups::deleteGroup', $event);
 	}
 
 	/**
@@ -190,7 +190,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		$this->helper->notifyUser($userId, $this->groupInfo);
 
 		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name'], 'user' => $userId]);
-		$this->dispatcher->dispatch('addUserToGroup', $event);
+		$this->dispatcher->dispatch('\OCA\CustomGroups::addUserToGroup', $event);
 	}
 
 	/**
@@ -280,7 +280,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 
 		$event = new GenericEvent(null, ['oldGroupName' => $this->groupInfo['display_name'],
 			'newGroupName' => $displayName]);
-		$this->dispatcher->dispatch('updateGroupName', $event);
+		$this->dispatcher->dispatch('\OCA\CustomGroups::updateGroupName', $event);
 
 		$result = $this->groupsHandler->updateGroup(
 			$this->groupInfo['group_id'],
