@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Grupos Personalizados",
+    "A group with this name already exists" : "Ya existe un grupo con este nombre",
     "Could not rename group" : "No se pudo renombrar al grupo",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Está seguro que desea eliminar el grupo \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmar eliminación del grupo",
@@ -47,6 +48,7 @@ OC.L10N.register(
     "Role change in group \"%1$s\"." : "Cambio de rol en el grupo \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" le ha asignado el rol \"%3$s\" a usted para el grupo \"%2$s\".",
     "Unknown role" : "Rol desconocido",
-    "Only group admins are allowed to create custom groups" : "Solo los administradores del grupo pueden crear grupos personalizados"
+    "Only group admins are allowed to create custom groups" : "Solo los administradores del grupo pueden crear grupos personalizados",
+    "Allow creating multiple groups with the same name" : "Permitir crear varios grupos con el mismo nombre"
 },
 "nplurals=2; plural=(n != 1);");
