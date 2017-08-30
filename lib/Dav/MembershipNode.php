@@ -137,10 +137,15 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		if ($currentUserId !== $userId) {
 			// only notify when the removal was done by another user
 			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
+			$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
+			$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
 		}
 
-		$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
+		//Send dispatcher event if the removal is self
+		if ($currentUserId === $userId) {
+			$event = new GenericEvent(null, ['userId' => $userId, 'groupName' => $this->groupInfo['display_name']]);
+			$this->dispatcher->dispatch('\OCA\CustomGroups::leaveFromGroup', $event);
+		}
 	}
 
 	/**
