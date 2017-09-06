@@ -22,3 +22,9 @@
 $app = new \OCA\CustomGroups\Application();
 $app->registerGroupBackend();
 $app->registerNotifier();
+
+$pathInfo = \OC::$server->getRequest()->getPathInfo();
+if (strstr($pathInfo, 'settings/') != false) {
+	// Temporarily fix icon until custom icons are supported
+	\OCP\Util::addStyle('customgroups', 'icon');
+}

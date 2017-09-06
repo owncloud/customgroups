@@ -31,7 +31,7 @@ class SettingsSection implements ISection {
 	}
 
 	public function getIconName() {
-		return 'settings';
+		return 'customgroups';
 	}
 
 	public function getID() {
