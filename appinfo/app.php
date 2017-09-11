@@ -23,7 +23,7 @@ $app = new \OCA\CustomGroups\Application();
 $app->registerGroupBackend();
 $app->registerNotifier();
 
-if(!defined('PHPUNIT') || !\OC::$CLI) {
+if(!defined('PHPUNIT') && !\OC::$CLI) {
    $pathInfo = \OC::$server->getRequest()->getPathInfo();
    if (strstr($pathInfo, 'settings/') != false) {
       // Temporarily fix icon until custom icons are supported
