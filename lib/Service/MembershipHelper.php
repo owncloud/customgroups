@@ -223,13 +223,10 @@ class MembershipHelper {
 	 * Return the user ids of the members in the given group matching the given pattern
 	 *
 	 * @param int $groupId numeric group id
-	 * @param string $pattern pattern
 	 * @return array array of user ids as keys and true as value
 	 */
-	private function getGroupMemberUserIds($groupId, $pattern) {
-		$search = new Search($pattern);
-
-		$foundMembers = $this->groupsHandler->getGroupMembers($groupId, $search);
+	private function getGroupMemberUserIds($groupId) {
+		$foundMembers = $this->groupsHandler->getGroupMembers($groupId);
 		$existingMembers = [];
 		foreach ($foundMembers as $foundMember) {
 			$existingMembers[$foundMember['user_id']] = true;
@@ -248,7 +245,7 @@ class MembershipHelper {
 	 * @return IUser[] results
 	 */
 	public function searchForNewMembers($groupId, $pattern, $limit = 200) {
-		$existingMembers = $this->getGroupMemberUserIds($groupId, $pattern);
+		$existingMembers = $this->getGroupMemberUserIds($groupId);
 
 		$totalResults = [];
 		$totalResultCount = 0;
@@ -257,7 +254,7 @@ class MembershipHelper {
 		$internalOffset = 0;
 		// loop until the $totalResults reaches $limit size or no more results exist
 		do {
-			$results = $this->userManager->searchDisplayName($pattern, $internalLimit, $internalOffset);
+			$results = $this->userManager->find($pattern, $internalLimit, $internalOffset);
 			foreach ($results as $result) {
 				if ($totalResultCount >= $limit) {
 					break;

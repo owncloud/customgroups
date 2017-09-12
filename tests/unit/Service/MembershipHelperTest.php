@@ -266,7 +266,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		
 		$this->handler->expects($this->once())
 			->method('getGroupMembers')
-			->with(1, $search)
+			->with(1)
 			->willReturn([
 				['user_id' => 'user1'],
 				['user_id' => 'user2'],
@@ -286,7 +286,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$user4->method('getDisplayName')->willReturn('User Four');
 
 		$this->userManager->expects($this->once())
-			->method('searchDisplayName')
+			->method('find')
 			->with('us', 150, 0)
 			->willReturn([$user1, $user2, $user3, $user4]);
 		$results = $this->helper->searchForNewMembers(1, 'us', 150);
@@ -310,7 +310,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		
 		$this->handler->expects($this->once())
 			->method('getGroupMembers')
-			->with(1, $search)
+			->with(1)
 			->willReturn([
 				['user_id' => 'user15'],
 				['user_id' => 'user16'],
@@ -320,11 +320,11 @@ class MembershipHelperTest extends \Test\TestCase {
 		$usersChunk = array_chunk($users, 20);
 
 		$this->userManager->expects($this->at(0))
-			->method('searchDisplayName')
+			->method('find')
 			->with('us', 20, 0)
 			->willReturn($usersChunk[0]);
 		$this->userManager->expects($this->at(1))
-			->method('searchDisplayName')
+			->method('find')
 			->with('us', 20, 20)
 			->willReturn($usersChunk[1]);
 
@@ -355,7 +355,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		
 		$this->handler->expects($this->once())
 			->method('getGroupMembers')
-			->with(1, $search)
+			->with(1)
 			->willReturn([
 				['user_id' => 'user15'],
 				['user_id' => 'user16'],
@@ -365,11 +365,11 @@ class MembershipHelperTest extends \Test\TestCase {
 		$usersChunk = array_chunk($users, 20);
 
 		$this->userManager->expects($this->at(0))
-			->method('searchDisplayName')
+			->method('find')
 			->with('us', 20, 0)
 			->willReturn($usersChunk[0]);
 		$this->userManager->expects($this->at(1))
-			->method('searchDisplayName')
+			->method('find')
 			->with('us', 20, 20)
 			->willReturn($usersChunk[1]);
 
