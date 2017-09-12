@@ -5,11 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
-### Changed
+### Added
+- Adding more dispatcher events for the app - [#94](https://github.com/owncloud/customgroups/issues/94) [#103](https://github.com/owncloud/customgroups/issues/103)
 
+### Changed
 - Add option to prevent duplicate display names - [#82](https://github.com/owncloud/customgroups/issues/82)
+- Use event names with namespace - [#102](https://github.com/owncloud/customgroups/issues/102)
+- Set min version to 10.0.3 - [#98](https://github.com/owncloud/customgroups/issues/98)
+- Align package.json versions with core - [#101](https://github.com/owncloud/customgroups/issues/101)
 
 ### Fixed
+- Fix member search in member sidebar to use all search fields - [#106](https://github.com/owncloud/customgroups/issues/106)
+- Fix closing sidebar, reset selection - [#96](https://github.com/owncloud/customgroups/issues/96)
+- Improve spinners in members view - [#97](https://github.com/owncloud/customgroups/issues/97)
+- Prevent registering select event twice on autocomplete - [#95](https://github.com/owncloud/customgroups/issues/95)
 
 ## [0.3.4] - 2017-07-19
 
