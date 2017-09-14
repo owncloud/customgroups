@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Align package.json versions with core - [#101](https://github.com/owncloud/customgroups/issues/101)
 
 ### Fixed
+- Deleting a custom group now properly deletes associated shares [#92](https://github.com/owncloud/customgroups/pull/92)
 - Fix member search in member sidebar to use all search fields - [#106](https://github.com/owncloud/customgroups/issues/106)
 - Fix closing sidebar, reset selection - [#96](https://github.com/owncloud/customgroups/issues/96)
 - Improve spinners in members view - [#97](https://github.com/owncloud/customgroups/issues/97)
