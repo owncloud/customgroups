@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.3.5] - 2017-09-15
+
 ### Added
 - Adding more dispatcher events for the app - [#94](https://github.com/owncloud/customgroups/issues/94) [#103](https://github.com/owncloud/customgroups/issues/103)
 
