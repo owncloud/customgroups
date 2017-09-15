@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.3.5] - 2017-09-15
+
 ### Added
 - Adding more dispatcher events for the app - [#94](https://github.com/owncloud/customgroups/issues/94) [#103](https://github.com/owncloud/customgroups/issues/103)
 
@@ -72,7 +73,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.3.4...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.3.5...master
+[0.3.5]: https://github.com/owncloud/customgroups/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/owncloud/customgroups/compare/v0.3.1...v0.3.4
 [0.3.1]: https://github.com/owncloud/customgroups/compare/v0.2.0...v0.3.1
 [0.2.0]: https://github.com/owncloud/customgroups/compare/v0.1.1...v0.2.0
