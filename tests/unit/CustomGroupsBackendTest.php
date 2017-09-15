@@ -48,7 +48,7 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 	public function testImplementsAction() {
 		$this->assertTrue($this->backend->implementsActions(GroupInterface::GROUP_DETAILS));
 		$this->assertFalse($this->backend->implementsActions(GroupInterface::CREATE_GROUP));
-		$this->assertFalse($this->backend->implementsActions(GroupInterface::DELETE_GROUP));
+		$this->assertTrue($this->backend->implementsActions(GroupInterface::DELETE_GROUP));
 		$this->assertFalse($this->backend->implementsActions(GroupInterface::ADD_TO_GROUP));
 		$this->assertFalse($this->backend->implementsActions(GroupInterface::REMOVE_FROM_GROUP));
 		$this->assertFalse($this->backend->implementsActions(GroupInterface::COUNT_USERS));

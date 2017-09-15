@@ -102,7 +102,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->createMock(IURLGenerator::class),
 			$this->config
 		);
-		$this->collection = new GroupsCollection($this->handler, $this->helper);
+		$this->collection = new GroupsCollection(
+			$this->createMock(IGroupManager::class),
+			$this->handler,
+			$this->helper
+		);
 	}
 
 	public function testBase() {
@@ -148,7 +152,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	public function testListGroupsForUser() {
-		$collection = new GroupsCollection($this->handler, $this->helper, 'user1');
+		$collection = new GroupsCollection(
+			$this->createMock(IGroupManager::class),
+			$this->handler,
+			$this->helper,
+			'user1'
+		);
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
@@ -170,7 +179,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 	public function testListGroupsForUserSearchPattern() {
 		$search = new Search('gr', 16, 256);
 
-		$collection = new GroupsCollection($this->handler, $this->helper, 'user1');
+		$collection = new GroupsCollection(
+			$this->createMock(IGroupManager::class),
+			$this->handler,
+			$this->helper,
+			'user1'
+		);
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
@@ -259,7 +273,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->method('canCreateGroups')
 			->willReturn(false);
 
-		$this->collection = new GroupsCollection($this->handler, $helper);
+		$this->collection = new GroupsCollection(
+			$this->createMock(IGroupManager::class),
+			$this->handler,
+			$helper
+		);
 
 		$this->handler->expects($this->never())
 			->method('createGroup');

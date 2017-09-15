@@ -26,6 +26,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\SimpleCollection;
 use OCA\CustomGroups\Service\MembershipHelper;
+use OCP\IGroupManager;
 
 /**
  * Root collection for the custom groups and members
@@ -34,18 +35,23 @@ class RootCollection extends SimpleCollection {
 	/**
 	 * Constructor
 	 *
+	 * @param IGroupManager $groupManager group manager
+	 * @param CustomGroupsDatabaseHandler $groupsHandler groups database handler
 	 * @param MembershipHelper $helper membership helper
 	 */
 	public function __construct(
+		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper
 	) {
 		$children = [
 			new GroupsCollection(
+				$groupManager,
 				$groupsHandler,
 				$helper
 			),
 			new UsersCollection(
+				$groupManager,
 				$groupsHandler,
 				$helper
 			),

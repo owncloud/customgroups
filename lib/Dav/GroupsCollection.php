@@ -32,6 +32,7 @@ use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sabre\DAV\Exception\Conflict;
+use OCP\IGroupManager;
 
 /**
  * Collection of custom groups
@@ -44,6 +45,12 @@ class GroupsCollection implements IExtendedCollection {
 	 * @var CustomGroupsDatabaseHandler
 	 */
 	private $groupsHandler;
+
+	/**
+	 * Group manager from core
+	 * @var IGroupManager
+	 */
+	private $groupManager;
 
 	/**
 	 * Membership helper
@@ -71,10 +78,12 @@ class GroupsCollection implements IExtendedCollection {
 	 * @param MembershipHelper $helper helper
 	 */
 	public function __construct(
+		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper,
 		$userId = null
 	) {
+		$this->groupManager = $groupManager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
 		$this->userId = $userId;
@@ -248,6 +257,7 @@ class GroupsCollection implements IExtendedCollection {
 	private function createMembershipsCollection(array $groupInfo) {
 		return new GroupMembershipCollection(
 			$groupInfo,
+			$this->groupManager,
 			$this->groupsHandler,
 			$this->helper
 		);
