@@ -29,7 +29,7 @@ require __DIR__ . '/../../vendor/autoload.php';
  * Custom Groups context.
  */
 class CustomGroupsContext implements Context, SnippetAcceptingContext {
-	use Webdav;
+	use BasicStructure;
 
 	/** @var array */
 	private $createdCustomGroups = [];
@@ -349,6 +349,11 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * Abstract method implemented from Core's FeatureContext
+	 */
+	protected function resetAppConfigs() {}
+
+	/**
 	 * @BeforeScenario
 	 * @AfterScenario
 	 */
@@ -358,7 +363,6 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			$this->userDeletedACustomGroup('admin', $customGroup);
 		}
 	}
-
 
 }
 
