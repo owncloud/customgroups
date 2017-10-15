@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Προσαρμοσμένες ομάδες",
+    "A group with this name already exists" : "Μια ομάδα με αυτό το όνομα υπάρχει ήδη",
     "Could not rename group" : "Αδυναμία μετονομασίας ομάδας",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Είστε σίγουροι πως θέλετε να διαγραφεί η ομάδα \"{groupName}\" ;",
     "Confirm deletion of group" : "Επιβεβαίωση διαγραφής της ομάδας",
