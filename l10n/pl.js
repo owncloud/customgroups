@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Własna grupa",
+    "A group with this name already exists" : "Grupa o tej nazwie już istnieje",
     "Could not rename group" : "Nie można zmienić nazwy grupy",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Czy na pewno chcesz usunąć grupę \"{groupName}\" ?",
     "Confirm deletion of group" : "Potwierdź usunięcie grupy",
