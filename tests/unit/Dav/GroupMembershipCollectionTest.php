@@ -76,6 +76,21 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	private $userSession;
 
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
+	/**
+	 * @var IUser
+	 */
+	private $currentUser;
+
+	/**
+	 * @var IUser
+	 */
+	private $nodeUser;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
@@ -85,18 +100,20 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 
 		// currently logged in user
-		$user = $this->createMock(IUser::class);
-		$user->method('getUID')->willReturn(self::CURRENT_USER);
-		$this->userSession->method('getUser')->willReturn($user);
+		$this->currentUser = $this->createMock(IUser::class);
+		$this->currentUser->method('getUID')->willReturn(self::CURRENT_USER);
+		$this->userSession->method('getUser')->willReturn($this->currentUser);
 
-		$nodeUser = $this->createMock(IUser::class);
-		$nodeUser->method('getUID')->willReturn(self::NODE_USER);
+		$this->nodeUser = $this->createMock(IUser::class);
+		$this->nodeUser->method('getUID')->willReturn(self::NODE_USER);
 		$this->userManager->method('get')->will(
 			$this->returnValueMap([
-				[self::NODE_USER, $nodeUser],
-				[strtoupper(self::NODE_USER), $nodeUser],
+				[self::NODE_USER, $this->nodeUser],
+				[strtoupper(self::NODE_USER), $this->nodeUser],
+				[self::CURRENT_USER, $this->currentUser],
 			]));
 
+		$this->config = $this->createMock(IConfig::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
 			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
 			->setConstructorArgs([
@@ -106,7 +123,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				$this->groupManager,
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
-				$this->createMock(IConfig::class)
+				$this->config
 			])
 			->getMock();
 
@@ -386,6 +403,49 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->handler->expects($this->never())
 			->method('addToGroup');
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	/**
+	 * @expectedException \Sabre\DAV\Exception\Forbidden
+	 */
+	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup() {
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+
+		$this->config->method('getAppValue')
+			->with('core', 'shareapi_only_share_with_group_members', 'no')
+			->willReturn('yes');
+
+		$this->groupManager->method('getUserGroupIds')
+			->will($this->returnValueMap([
+				[$this->currentUser, null, ['group1', 'group2']],
+				[$this->nodeUser, null, ['group3', 'group4']],
+			]));
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	public function testAddMemberWithShareToMemberRestrictionAndCommonGroup() {
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+
+		$this->config->method('getAppValue')
+			->with('core', 'shareapi_only_share_with_group_members', 'no')
+			->willReturn('yes');
+
+		$this->groupManager->method('getUserGroupIds')
+			->will($this->returnValueMap([
+				[$this->currentUser, null, ['group1', 'group2']],
+				[$this->nodeUser, null, ['group1', 'group4']],
+			]));
+
+		$this->handler->expects($this->once())
+			->method('addToGroup')
+			->with(self::NODE_USER, 1, false)
+			->willReturn(true);
 
 		$this->node->createFile(self::NODE_USER);
 	}
