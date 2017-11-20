@@ -191,11 +191,16 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		if (!$this->helper->isUserAdmin($groupId)) {
 			throw new Forbidden("No permission to add members to group \"$groupId\"");
 		}
+
 		// check if the user name actually exists
 		$user = $this->helper->getUser($userId);
 		// not existing user or mismatch user casing
 		if (is_null($user) || $userId !== $user->getUID()) {
 			throw new PreconditionFailed("The user \"$userId\" does not exist");
+		}
+
+		if (!$this->helper->canAddMember($userId)) {
+			throw new Forbidden("Cannot add member \"$userId\" to group \"$groupId\"");
 		}
 
 		if (!$this->groupsHandler->addToGroup($userId, $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER)) {

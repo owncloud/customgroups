@@ -220,58 +220,6 @@ class MembershipHelper {
 	}
 
 	/**
-	 * Return the user ids of the members in the given group matching the given pattern
-	 *
-	 * @param int $groupId numeric group id
-	 * @return array array of user ids as keys and true as value
-	 */
-	private function getGroupMemberUserIds($groupId) {
-		$foundMembers = $this->groupsHandler->getGroupMembers($groupId);
-		$existingMembers = [];
-		foreach ($foundMembers as $foundMember) {
-			$existingMembers[$foundMember['user_id']] = true;
-		}
-		return $existingMembers;
-	}
-
-	/**
-	 * Search for users that could be added as member of the given group.
-	 * This searches the whole user list by display name and excludes the
-	 * users that are already members of the given group.
-	 *
-	 * @param int $groupId numeric group id for which to find new members
-	 * @param string $pattern pattern to search for in display names
-	 * @param int $limit limit up to which to return results
-	 * @return IUser[] results
-	 */
-	public function searchForNewMembers($groupId, $pattern, $limit = 200) {
-		$existingMembers = $this->getGroupMemberUserIds($groupId);
-
-		$totalResults = [];
-		$totalResultCount = 0;
-
-		$internalLimit = $limit;
-		$internalOffset = 0;
-		// loop until the $totalResults reaches $limit size or no more results exist
-		do {
-			$results = $this->userManager->find($pattern, $internalLimit, $internalOffset);
-			foreach ($results as $result) {
-				if ($totalResultCount >= $limit) {
-					break;
-				}
-				if (!isset($existingMembers[$result->getUID()])) {
-					$totalResults[] = $result;
-					$totalResultCount++;
-				}
-			}
-			$resultsCount = count($results);
-			$internalOffset += $resultsCount;
-		} while ($totalResultCount < $limit && $resultsCount >= $internalLimit);
-
-		return $totalResults;
-	}
-
-	/**
 	 * Notify the given user about the given group
 	 *
 	 * @param string $targetUserId user to notify
@@ -357,6 +305,30 @@ class MembershipHelper {
 			|| $this->isUserSuperAdmin()
 			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser())
 		);
+	}
+
+	/**
+	 * Checks whether the current user is allowed to add a member into the target group
+	 *
+	 * @param string $targetUserId new member to add
+	 */
+	public function canAddMember($targetUserId) {
+		$shareWithGroupOnly = $this->config->getAppValue('core', 'shareapi_only_share_with_group_members', 'no') === 'yes';
+		if (!$shareWithGroupOnly) {
+			return true;
+		}
+
+		// check if user to add is member of any groups
+		$userGroups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
+		$targetUserGroups = $this->groupManager->getUserGroupIds($this->userManager->get($targetUserId));
+
+		foreach ($userGroups as $userGroup) {
+			if (in_array($userGroup, $targetUserGroups)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
