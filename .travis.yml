@@ -37,6 +37,9 @@ script:
   - cd apps/$APP_NAME/
   - make $TEST
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 matrix:
   include:
     # PHP unit tests + code coverage
