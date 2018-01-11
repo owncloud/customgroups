@@ -23,7 +23,7 @@ Sharing with a Custom Group is as easy and quick as always. Just click on the sh
 	<repository type="git">http://github.com/owncloud/customgroups.git</repository>
 	<licence>AGPL</licence>
 	<author>Vincent Petry</author>
-	<version>0.3.5</version>
+	<version>0.3.6</version>
 	<documentation>
     		<user>https://doc.owncloud.com/server/latest/user_manual/files/webgui/custom_groups.html</user>
 		<admin>https://doc.owncloud.com/server/latest/admin_manual/configuration/user/user_configuration.html?highlight=custom%20groups#enabling-custom-groups</admin>
