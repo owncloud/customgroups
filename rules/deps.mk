@@ -65,7 +65,7 @@ $(BOWER): $(nodejs_deps)
 $(JSDOC): $(nodejs_deps)
 
 $(bower_deps): $(BOWER)
-	$(BOWER) install && touch $@
+	$(BOWER) --allow-root install && touch $@
 
 .PHONY: deps
 deps: $(composer_deps) $(bower_deps)
