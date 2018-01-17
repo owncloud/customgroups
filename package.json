@@ -23,7 +23,7 @@
     "karma-junit-reporter": "*",
     "karma-phantomjs-launcher": "*",
     "npm-watch": "*",
-    "phantomjs": "*",
+    "phantomjs-prebuilt": "*",
     "sinon": "^2.0.0",
     "underscore": "1.8.3"
   },

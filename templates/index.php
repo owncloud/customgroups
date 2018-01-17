@@ -23,7 +23,6 @@ style('customgroups', 'app');
 style('settings', 'settings');
 script('core', 'oc-backbone');
 script('core', 'oc-backbone-webdav');
-script('customgroups', 'vendor/handlebars/handlebars');
 
 foreach ($_['modules'] as $module) {
 	script('customgroups', $module);

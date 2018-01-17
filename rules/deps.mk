@@ -2,19 +2,15 @@
 
 NODE_PREFIX=$(shell pwd)
 
-NPM := $(shell command -v npm 2> /dev/null)
-ifndef NPM
-    $(error npm is not available on your system, please install npm)
-endif
+YARN := $(shell command -v yarn 2> /dev/null)
 
-BOWER=$(NODE_PREFIX)/node_modules/bower/bin/bower
 JSDOC=$(NODE_PREFIX)/node_modules/.bin/jsdoc
 COMPOSER=$(tools_path)/composer.phar
 
 composer_deps=lib/composer
 composer_dev_deps=lib/composer/phpunit
 nodejs_deps=node_modules
-bower_deps=js/vendor
+js_deps=js/vendor
 clean_rules+=clean-deps
 help_rules+=help-deps
 
@@ -26,16 +22,16 @@ help-deps:
 	@echo
 
 .PHONY: clean-deps
-clean-deps: clean-composer clean-bower clean-nodejs
+clean-deps: clean-composer clean-js clean-nodejs
 	rm -Rf $(tools_path)/*.phar
 
 .PHONY: clean-composer
 clean-composer:
 	rm -Rf $(composer_deps)/
 
-.PHONY: clean-bower
-clean-bower:
-	rm -Rf $(bower_deps)/
+.PHONY: clean-js
+clean-js:
+	rm -Rf $(js_deps)/
 
 .PHONY: clean-nodejs
 clean-nodejs:
@@ -58,18 +54,14 @@ update-composer:
 #
 # Node JS dependencies for tools
 #
-$(nodejs_deps): package.json
-	$(NPM) install --prefix $(NODE_PREFIX) && touch $@
+$(nodejs_deps): package.json yarn.lock
+	cd $(NODE_PREFIX) && $(YARN) install && touch $@
 
-$(BOWER): $(nodejs_deps)
 $(JSDOC): $(nodejs_deps)
-
-$(bower_deps): $(BOWER)
-	$(BOWER) --allow-root install && touch $@
-
+$(js_deps): $(nodejs_deps)
 .PHONY: deps
-deps: $(composer_deps) $(bower_deps)
+deps: $(composer_deps) $(js_deps)
 
 .PHONY: dev-deps
-dev-deps: $(composer_dev_deps) $(bower_deps) $(nodejs_deps)
+dev-deps: $(composer_dev_deps) $(js_deps) $(nodejs_deps)
 
