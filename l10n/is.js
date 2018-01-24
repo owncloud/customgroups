@@ -32,6 +32,7 @@ OC.L10N.register(
     "Confirm removal of member" : "Staðfesta fjarlægingu á meðlimi",
     "Could not delete member" : "Gat ekki eytt meðlimi",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ertu viss um að þú viljir eyða kerfisstjóraheimildum þínum af hópnum \"{name}\" ?",
+    "Remove member" : "Fjarlægja meðlim",
     "Add member" : "Bæta við meðlimi",
     "Leave this group" : "Hætta í þessum hóp",
     "Close" : "Loka",

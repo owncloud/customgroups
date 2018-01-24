@@ -2,10 +2,13 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Groupes personnalisés",
+    "A group with this name already exists" : "Un groupe portant ce nom existe déjà",
     "Could not rename group" : "Impossible de renommer le groupe",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Êtes-vous certain de vouloir supprimer le groupe \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmer la suppression du groupe",
     "Could not create group" : "Impossible de créer le groupe",
+    "Administrator" : "Administrateur",
+    "Group owner" : "Détenteur du groupe",
     "Member" : "Membre",
     "Rename" : "Renomer",
     "Delete" : "Supprimer",
@@ -30,6 +33,9 @@ OC.L10N.register(
     "Confirm removal of member" : "Confirmation du retrait du membre",
     "Could not delete member" : "Impossible de supprimer le membre",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Êtes-vous sûr de vouloir retirer vos propres droits d'administrateur sur le groupe \"{name}\" ?",
+    "Change role to \"member\"" : "Modifier la fonction en \"membre\"",
+    "Change role to \"group owner\"" : "Modifier la fonction en \"détenteur de groupe\"",
+    "Remove member" : "Supprimer un membre",
     "Add member" : "Ajouter le membre",
     "Leave this group" : "Quitter ce groupe",
     "Close" : "Fermer",
@@ -41,6 +47,8 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Vous avez été supprimé du groupe \"%2$s\" par \"%1$s\".",
     "Role change in group \"%1$s\"." : "Changement de rôle dans le groupe \"%1$s\"",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" vous a assigné le rôle \"%3$s\" pour le groupe \"%2$s\".",
-    "Unknown role" : "Rôle inconnu"
+    "Unknown role" : "Rôle inconnu",
+    "Only group admins are allowed to create custom groups" : "Seuls les administrateurs de groupe sont autorisés à créer des groupes personnalisés",
+    "Allow creating multiple groups with the same name" : "Autoriser la création de plusieurs groupes portant le même nom"
 },
 "nplurals=2; plural=(n > 1);");
