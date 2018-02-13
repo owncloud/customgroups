@@ -5,9 +5,9 @@ Background:
 	And using new dav path
 
 Scenario: Check that skeleton is properly set
-	Given as an "admin"
-	And user "user0" exists
-	Then user "user0" should see following elements
+	Given as user "admin"
+	And user "user0" has been created
+	Then user "user0" should see the following elements
 		| /FOLDER/ |
 		| /PARENT/ |
 		| /PARENT/parent.txt |
@@ -19,14 +19,13 @@ Scenario: Check that skeleton is properly set
 		| /welcome.txt |
 
 Scenario: Creating a share with a custom group
-	Given as an "admin"
-	And user "user0" exists
-	And user "user1" exists
-	And user "member1" exists
+	Given as user "admin"
+	And user "user0" has been created
+	And user "user1" has been created
+	And user "member1" has been created
 	And user "user1" created a custom group called "sharing-group"
 	And user "user1" made user "member1" member of custom group "sharing-group"
-    And as an "user0"
-    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | welcome.txt |
       | shareWith | customgroup_sharing-group |
       | shareType | 1 |
@@ -34,13 +33,12 @@ Scenario: Creating a share with a custom group
     And the HTTP status code should be "200"
 
 Scenario: Creating a new share with user who already received a share through their custom group
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "sharing-group"
-    And file "welcome.txt" of user "user0" is shared with group "customgroup_sharing-group"
-    And as an "user0"
-    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+    And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
+    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | welcome.txt |
       | shareWith | user1 |
       | shareType | 0 |
@@ -48,19 +46,18 @@ Scenario: Creating a new share with user who already received a share through th
     And the HTTP status code should be "200"
 
 Scenario: Keep custom group permissions in sync
-    Given as an "admin"
-    Given user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "group1"
-    And file "textfile0.txt" of user "user0" is shared with group "customgroup_group1"
-    And user "user1" moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
-    And as an "user0"
-    When updating last share with
+    And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
+    And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
+    When user "user0" updates the last share using the API with
       | permissions | 1 |
-    And getting info of last share
+    And user "user0" gets the info of the last share using the API
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And share fields of last share match with
+    And the share fields of the last share should include
       | id | A_NUMBER |
       | item_type | file |
       | item_source | A_NUMBER |
@@ -78,25 +75,24 @@ Scenario: Keep custom group permissions in sync
       | mimetype          | text/plain |
 
 Scenario: Sharee can see the custom group share
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "group1"
-    And file "textfile0.txt" of user "user0" is shared with group "customgroup_group1"
-    And as an "user1"
-    When sending "GET" to "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
+    When user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And last share_id is included in the answer
+    And the last share_id should be included in the response
 
 Scenario: Share of folder and sub-folder to same user
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "group1"
-    And file "/PARENT" of user "user0" is shared with user "user1"
-    When file "/PARENT/CHILD" of user "user0" is shared with group "customgroup_group1"
-    Then user "user1" should see following elements
+    And user "user0" has shared file "/PARENT" with user "user1"
+    When user "user0" shares file "/PARENT/CHILD" with group "customgroup_group1" using the API
+    Then user "user1" should see the following elements
       | /FOLDER/ |
       | /PARENT/ |
       | /CHILD/ |
@@ -105,62 +101,60 @@ Scenario: Share of folder and sub-folder to same user
     And the HTTP status code should be "200"
 
 Scenario: Share a file by multiple channels
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
-    And user "user2" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
+    And user "user2" has been created
     And user "user1" created a custom group called "group1"
 	And user "user1" made user "user2" member of custom group "group1"
-    And user "user0" created a folder "/common"
-    And user "user0" created a folder "/common/sub"
-    And folder "common" of user "user0" is shared with group "customgroup_group1"
-    And file "textfile0.txt" of user "user1" is shared with user "user2"
-    And user "user1" moved file "/textfile0.txt" to "/common/textfile0.txt"
-    And user "user1" moved file "/common/textfile0.txt" to "/common/sub/textfile0.txt"
-    And as an "user2"
-    When downloading file "/textfile0.txt" with range "bytes=9-17"
-    Then downloaded content should be "test text"
-    And user "user2" should see following elements
+    And user "user0" has created a folder "/common"
+    And user "user0" has created a folder "/common/sub"
+    And user "user0" has shared folder "common" with group "customgroup_group1"
+    And user "user1" has shared file "textfile0.txt" with user "user2"
+    And user "user1" has moved file "/textfile0.txt" to "/common/textfile0.txt"
+    And user "user1" has moved file "/common/textfile0.txt" to "/common/sub/textfile0.txt"
+    When user "user2" downloads file "/textfile0.txt" with range "bytes=9-17" using the API
+    Then the downloaded content should be "test text"
+    And user "user2" should see the following elements
       | /common/sub/textfile0.txt |
 
 Scenario: Delete all custom group shares
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "group1"
-    And file "textfile0.txt" of user "user0" is shared with group "customgroup_group1"
-    And user "user1" moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
-    And as an "user0"
-    And deleting last share
-    And as an "user1"
-    When sending "GET" to "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
+    And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
+    When user "user0" deletes the last share using the API
+    And as user "user1"
+    And user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And last share_id is not included in the answer
+    And the last share_id should not be included in the response
 
 Scenario: Keep user custom group shares 
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
-    And user "user2" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
+    And user "user2" has been created
     And user "user1" created a custom group called "group1"
     And user "user1" made user "user2" member of custom group "group1"
-    And user "user0" created a folder "/TMP"
-    And folder "TMP" of user "user0" is shared with group "customgroup_group1"
-    And user "user1" created a folder "/myFOLDER"
-    And user "user1" moves file "/TMP" to "/myFOLDER/myTMP"
-    And user "user2" does not exist
-    And user "user1" should see following elements
+    And user "user0" has created a folder "/TMP"
+    And user "user0" has shared folder "TMP" with group "customgroup_group1"
+    And user "user1" has created a folder "/myFOLDER"
+    And user "user1" has moved file "/TMP" to "/myFOLDER/myTMP"
+    When the administrator deletes user "user2" using the API
+    Then user "user1" should see the following elements
       | /myFOLDER/myTMP/ |
 
 Scenario: Sharing again an own file while belonging to a custom group
-    Given as an "admin"
-    And user "user0" exists
+    Given as user "admin"
+    And user "user0" has been created
     And user "user0" created a custom group called "sharing-group"
-    And group "sharing-group" exists
-    And file "welcome.txt" of user "user0" is shared with group "customgroup_sharing-group"
-    And deleting last share
-    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+    And group "sharing-group" has been created
+    And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
+    And user "user0" deletes the last share using the API
+    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | welcome.txt |
       | shareWith | customgroup_sharing-group |
       | shareType | 1 |
@@ -168,64 +162,61 @@ Scenario: Sharing again an own file while belonging to a custom group
     And the HTTP status code should be "200"
 
 Scenario: Sharing subfolder when parent already shared
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user1" created a custom group called "sharing-group"
-    And user "user0" created a folder "/test"
-    And user "user0" created a folder "/test/sub"
-    And folder "/test" of user "user0" is shared with group "customgroup_sharing-group"
-    And as an "user0"
-    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+    And user "user0" has created a folder "/test"
+    And user "user0" has created a folder "/test/sub"
+    And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
+    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | /test/sub |
       | shareWith | user1 |
       | shareType | 0 |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-	And as "user1" the folder "/sub" exists
+	And as "user1" the folder "/sub" should exist
 
 Scenario: Sharing subfolder when parent already shared with custom group of sharer
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user0" created a custom group called "sharing-group"
-    And user "user0" created a folder "/test"
-    And user "user0" created a folder "/test/sub"
-    And file "/test" of user "user0" is shared with group "customgroup_sharing-group"
-    And as an "user0"
-    When sending "POST" to "/apps/files_sharing/api/v1/shares" with
+    And user "user0" has created a folder "/test"
+    And user "user0" has created a folder "/test/sub"
+    And user "user0" has shared file "/test" with group "customgroup_sharing-group"
+    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | /test/sub |
       | shareWith | user1 |
       | shareType | 0 |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-	And as "user1" the folder "/sub" exists
+	And as "user1" the folder "/sub" should exist
 
 Scenario: Unshare from self using custom groups
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user0" created a custom group called "sharing-group"
     And user "user0" made user "user1" member of custom group "sharing-group"
-    And file "/PARENT/parent.txt" of user "user0" is shared with group "customgroup_sharing-group"
-    And user "user0" stores etag of element "/PARENT"
-    And user "user1" stores etag of element "/"
-    And as an "user1"
-    When deleting last share
-    Then etag of element "/" of user "user1" has changed
-    And etag of element "/PARENT" of user "user0" has not changed
+    And user "user0" has shared file "/PARENT/parent.txt" with group "customgroup_sharing-group"
+    And user "user0" has stored etag of element "/PARENT"
+    And user "user1" has stored etag of element "/"
+    When user "user1" deletes the last share using the API
+    Then the etag of element "/" of user "user1" should have changed
+    And the etag of element "/PARENT" of user "user0" should not have changed
 
 Scenario: Increasing permissions is allowed for owner
-    Given as an "admin"
-    And user "user0" exists
-    And user "user1" exists
+    Given as user "admin"
+    And user "user0" has been created
+    And user "user1" has been created
     And user "user0" created a custom group called "sharing-group"
     And user "user0" made user "user1" member of custom group "sharing-group"
-    And as an "user0"
-    And folder "/FOLDER" of user "user0" is shared with group "customgroup_sharing-group"
-    And updating last share with
+    And as user "user0"
+    And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
+    When user "user0" updates the last share using the API with
       | permissions | 0 |
-    When updating last share with
+    And user "user0" updates the last share using the API with
       | permissions | 31 |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
