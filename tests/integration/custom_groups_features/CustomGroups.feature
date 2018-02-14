@@ -218,7 +218,7 @@ Scenario: Superadmin can do everything
 		And user "admin" renamed custom group "group0" as "renamed-group0"
 		And custom group "group0" exists with display name "renamed-group0"
 		And user "admin" changed role of "user0" to admin in custom group "group0"
-		And user "user1" is admin of custom group "group0"
+		And user "user0" is admin of custom group "group0"
 		When user "admin" removed membership of user "user1" from custom group "group0"
 		Then members of "group0" requested by user "admin" are
 					| user0 |
