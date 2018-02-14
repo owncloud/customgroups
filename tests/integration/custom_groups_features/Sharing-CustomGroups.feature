@@ -23,8 +23,8 @@ Scenario: Creating a share with a custom group
 	And user "user0" has been created
 	And user "user1" has been created
 	And user "member1" has been created
-	And user "user1" created a custom group called "sharing-group"
-	And user "user1" made user "member1" member of custom group "sharing-group"
+	And user "user1" has created a custom group called "sharing-group"
+	And user "user1" has made user "member1" a member of custom group "sharing-group"
     When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | welcome.txt |
       | shareWith | customgroup_sharing-group |
@@ -36,7 +36,7 @@ Scenario: Creating a new share with user who already received a share through th
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "sharing-group"
+    And user "user1" has created a custom group called "sharing-group"
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
     When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path | welcome.txt |
@@ -49,7 +49,7 @@ Scenario: Keep custom group permissions in sync
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "group1"
+    And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "user0" updates the last share using the API with
@@ -78,7 +78,7 @@ Scenario: Sharee can see the custom group share
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "group1"
+    And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     When user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
@@ -89,7 +89,7 @@ Scenario: Share of folder and sub-folder to same user
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "group1"
+    And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "/PARENT" with user "user1"
     When user "user0" shares file "/PARENT/CHILD" with group "customgroup_group1" using the API
     Then user "user1" should see the following elements
@@ -105,8 +105,8 @@ Scenario: Share a file by multiple channels
     And user "user0" has been created
     And user "user1" has been created
     And user "user2" has been created
-    And user "user1" created a custom group called "group1"
-	And user "user1" made user "user2" member of custom group "group1"
+    And user "user1" has created a custom group called "group1"
+	And user "user1" has made user "user2" a member of custom group "group1"
     And user "user0" has created a folder "/common"
     And user "user0" has created a folder "/common/sub"
     And user "user0" has shared folder "common" with group "customgroup_group1"
@@ -122,11 +122,10 @@ Scenario: Delete all custom group shares
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "group1"
+    And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "user0" deletes the last share using the API
-    And as user "user1"
     And user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
@@ -137,8 +136,8 @@ Scenario: Keep user custom group shares
     And user "user0" has been created
     And user "user1" has been created
     And user "user2" has been created
-    And user "user1" created a custom group called "group1"
-    And user "user1" made user "user2" member of custom group "group1"
+    And user "user1" has created a custom group called "group1"
+    And user "user1" has made user "user2" a member of custom group "group1"
     And user "user0" has created a folder "/TMP"
     And user "user0" has shared folder "TMP" with group "customgroup_group1"
     And user "user1" has created a folder "/myFOLDER"
@@ -150,7 +149,7 @@ Scenario: Keep user custom group shares
 Scenario: Sharing again an own file while belonging to a custom group
     Given as user "admin"
     And user "user0" has been created
-    And user "user0" created a custom group called "sharing-group"
+    And user "user0" has created a custom group called "sharing-group"
     And group "sharing-group" has been created
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
     And user "user0" deletes the last share using the API
@@ -165,7 +164,7 @@ Scenario: Sharing subfolder when parent already shared
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user1" created a custom group called "sharing-group"
+    And user "user1" has created a custom group called "sharing-group"
     And user "user0" has created a folder "/test"
     And user "user0" has created a folder "/test/sub"
     And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
@@ -181,7 +180,7 @@ Scenario: Sharing subfolder when parent already shared with custom group of shar
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user0" created a custom group called "sharing-group"
+    And user "user0" has created a custom group called "sharing-group"
     And user "user0" has created a folder "/test"
     And user "user0" has created a folder "/test/sub"
     And user "user0" has shared file "/test" with group "customgroup_sharing-group"
@@ -197,8 +196,8 @@ Scenario: Unshare from self using custom groups
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user0" created a custom group called "sharing-group"
-    And user "user0" made user "user1" member of custom group "sharing-group"
+    And user "user0" has created a custom group called "sharing-group"
+    And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared file "/PARENT/parent.txt" with group "customgroup_sharing-group"
     And user "user0" has stored etag of element "/PARENT"
     And user "user1" has stored etag of element "/"
@@ -210,9 +209,8 @@ Scenario: Increasing permissions is allowed for owner
     Given as user "admin"
     And user "user0" has been created
     And user "user1" has been created
-    And user "user0" created a custom group called "sharing-group"
-    And user "user0" made user "user1" member of custom group "sharing-group"
-    And as user "user0"
+    And user "user0" has created a custom group called "sharing-group"
+    And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
     When user "user0" updates the last share using the API with
       | permissions | 0 |
