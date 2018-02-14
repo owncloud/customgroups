@@ -231,8 +231,8 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @param string $customGroup
 	 */
 	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup){
-		$role = $this->getUserRoleInACustomGroup('admin', $user, $customGroup);
-		PHPUnit_Framework_Assert::assertEquals($role, $role);
+		$currentRole = $this->getUserRoleInACustomGroup('admin', $user, $customGroup);
+		PHPUnit_Framework_Assert::assertEquals($role, $currentRole);
 	}
 
 	/**
