@@ -35,11 +35,12 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	private $createdCustomGroups = [];
 
 	/**
-	 * @Given user :user created a custom group called :groupName
+	 * @When user :user creates a custom group called :groupName using the API
+	 * @Given user :user has created a custom group called :groupName
 	 * @param string $user
 	 * @param string $groupName
 	 */
-	public function userCreatedACustomGroup($user, $groupName){
+	public function userCreatesACustomGroup($user, $groupName){
 		try {
 			$appPath = '/customgroups/groups/';
 			$this->response = $this->makeDavRequest($user, "MKCOL", $appPath . $groupName, null, null, "uploads");
@@ -54,11 +55,12 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given user :user deleted a custom group called :groupName
+	 * @When user :user deletes a custom group called :groupName using the API
+	 * @Given user :user has deleted a custom group called :groupName
 	 * @param string $user
 	 * @param string $groupName
 	 */
-	public function userDeletedACustomGroup($user, $groupName){
+	public function userDeletesACustomGroup($user, $groupName){
 		try {
 			$appPath = '/customgroups/groups/';
 			$this->response = $this->makeDavRequest($user, "DELETE", $appPath . $groupName, null, null, "uploads");
@@ -82,10 +84,10 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then custom group :customGroup exists
+	 * @Then custom group :customGroup should exist
 	 * @param string $customGroup
 	 */
-	public function customGroupExists($customGroup){
+	public function customGroupShouldExist($customGroup){
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
 		foreach($customGroupsList as $customGroupPath => $customGroupName) {
@@ -99,7 +101,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then custom group :customGroup exists with display name :displayName
+	 * @Then custom group :customGroup should exist with display name :displayName
 	 * @param string $customGroup
 	 * @param string $displayName
 	 */
@@ -118,10 +120,10 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then custom group :customGroup doesn't exist
+	 * @Then custom group :customGroup should not exist
 	 * @param string $customGroup
 	 */
-	public function customGroupDoesntExists($customGroup){
+	public function customGroupShouldNotExist($customGroup){
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
 		foreach($customGroupsList as $customGroupPath => $customGroupName) {
@@ -167,7 +169,8 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @When /^user "([^"]*)" changed role of "([^"]*)" to (admin|member) in custom group "([^"]*)"$/
+	 * @When /^user "([^"]*)" changes role of "([^"]*)" to (admin|member) in custom group "([^"]*)" using the API$/
+	 * @Given /^user "([^"]*)" has changed role of "([^"]*)" to (admin|member) in custom group "([^"]*)"$/
 	 * @param string $userRequesting
 	 * @param string $userRequested
 	 * @param string $role
@@ -181,8 +184,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @When user :user renamed custom group :customGroup as :newName
-	 * @param user $user
+	 * @When user :user renames custom group :customGroup as :newName using the API
+	 * @Given user :user has renamed custom group :customGroup as :newName
+	 * @param string $user
 	 * @param string $customGroup
 	 * @param string $newName
 	 */
@@ -225,7 +229,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^user "([^"]*)" is (admin|member) of custom group "([^"]*)"$/
+	 * @Then /^user "([^"]*)" should be (?:an|a) (admin|member) of custom group "([^"]*)"$/
 	 * @param string $user
 	 * @param string $role
 	 * @param string $customGroup
@@ -236,7 +240,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then members of :customGroup requested by user :user are
+	 * @Then the members of :customGroup requested by user :user should be
 	 * @param \Behat\Gherkin\Node\TableNode|null $memberList
 	 * @param string $customGroup
 	 * @param string $user
@@ -257,7 +261,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then user :user is not able to get members of custom group :customGroup
+	 * @Then user :user should not be able to get members of custom group :customGroup
 	 * @param string $user
 	 * @param string $customGroup
 	 */
@@ -268,7 +272,8 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given user :userRequesting made user :userRequested member of custom group :customGroup
+	 * @When user :userRequesting makes user :userRequested a member of custom group :customGroup using the API
+	 * @Given user :userRequesting has made user :userRequested a member of custom group :customGroup
 	 * @param string $userRequesting
 	 * @param string $userRequested
 	 * @param string $customGroup
@@ -284,7 +289,8 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given user :userRequesting removed membership of user :userRequested from custom group :customGroup
+	 * @When user :userRequesting removes membership of user :userRequested from custom group :customGroup using the API
+	 * @Given user :userRequesting has removed membership of user :userRequested from custom group :customGroup
 	 * @param string $userRequesting
 	 * @param string $userRequested
 	 * @param string $customGroup
@@ -319,7 +325,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then custom groups of :userRequested requested by user :userRequesting are
+	 * @Then the custom groups of :userRequested requested by user :userRequesting should be
 	 * @param \Behat\Gherkin\Node\TableNode|null $customGroupList
 	 * @param string $userRequested
 	 * @param string $userRequesting
@@ -360,7 +366,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	public function cleanupCustomGroups()
 	{
 		foreach($this->createdCustomGroups as $customGroup) {
-			$this->userDeletedACustomGroup('admin', $customGroup);
+			$this->userDeletesACustomGroup('admin', $customGroup);
 		}
 	}
 
