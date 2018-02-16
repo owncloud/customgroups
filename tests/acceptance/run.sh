@@ -5,7 +5,7 @@ mkdir -p output
 composer install
 
 OC_PATH=../../../../
-CORE_INT_TESTS_PATH=tests/integration/
+CORE_INT_TESTS_PATH=tests/acceptance/
 
 OCC=${OC_PATH}occ
 

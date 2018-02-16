@@ -23,7 +23,7 @@ help-test:
 	@echo -e "test-syntax\t\tto run syntax checks"
 	@echo -e "test-codecheck\t\tto run the code checker"
 	@echo -e "test-php\t\tto run PHP test suites"
-	@echo -e "test-integration\tto run integration tests"
+	@echo -e "test-acceptance\tto run acceptance tests"
 	@echo -e "test-js\t\t\tto run JS test suites (single run)"
 	@echo -e "test-js-debug\t\tto run JS test and watch for changes"
 	@echo
@@ -64,9 +64,9 @@ $(clover_xml): test-php
 test-upload-coverage: $(OCULAR) $(clover_xml)
 	$(OCULAR) code-coverage:upload --format=php-clover $(clover_xml)
 
-.PHONY: test-integration
-test-integration: test-syntax-php
-	cd tests/integration && OCC="$(OCC)" ./run.sh
+.PHONY: test-acceptance
+test-acceptance: test-syntax-php
+	cd tests/acceptance && OCC="$(OCC)" ./run.sh
 
 .PHONY: test-js
 test-js: $(bower_deps) $(KARMA) js-templates test-syntax-js
