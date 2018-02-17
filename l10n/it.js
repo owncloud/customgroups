@@ -23,6 +23,7 @@ OC.L10N.register(
     "An error occurred. Please try again" : "Si è verificato un errore. Prova ancora",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Sei sicuro di voler uscire dal gruppo \"{name}\" ?",
     "Confirm leaving group" : "Conferma l'abbandono del gruppo",
+    "Cannot leave group without an administrator" : "Non puoi uscire dal gruppo senza l'amministratore",
     "User \"{userId}\" does not exist" : "L'utente \"{userId}\" non esiste",
     "User \"{userId}\" is already a member of this group" : "L'utente \"{userId}\" è già membro di questo gruppo",
     "Could not add user to group" : "Impossibile aggiungere l'utente al gruppo",
@@ -38,6 +39,8 @@ OC.L10N.register(
     "Custom groups" : "Gruppi personalizzati",
     "Group with uri \"%s\" not found" : "Gruppo \"%s\"  non trovato",
     "Added to group \"%2$s\"." : "Aggiunto al gruppo \"%2$s\".",
-    "Unknown role" : "Ruolo sconosciuto"
+    "Removed from group \"%2$s\"." : "Rimosso dal gruppo \"%2$s\"",
+    "Unknown role" : "Ruolo sconosciuto",
+    "Only group admins are allowed to create custom groups" : "Solo gli amministratori possono creare gruppi custom"
 },
 "nplurals=2; plural=(n != 1);");
