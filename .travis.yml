@@ -15,7 +15,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable10
     - APP_NAME=customgroups
   matrix:
     - DB=mysql
@@ -43,27 +43,35 @@ after_success:
 
 matrix:
   include:
+    - php: 7.1
+      env: DB=mysql;CORE_BRANCH=master
+    - php: 7.2
+      env: DB=mysql;CORE_BRANCH=master
     # PHP unit tests + code coverage
     - php: 5.6
       env: DB=mysql;TEST=test-upload-coverage
     # PHP unit tests
-    - php: 5.6
+    - php: 7.1
       env: DB=pgsql;TEST=test-php;CORE_BRANCH=master
     - php: 5.6
       env: DB=pgsql;TEST=test-php;CORE_BRANCH=stable10
     # Code checker / syntax
+    - php: 7.1
+      env: DB=mysql;TEST=test-codecheck;CORE_BRANCH=master
     - php: 5.6
       env: DB=mysql;TEST=test-codecheck
     # Code checker (deprecations only, allowed to fail)
     - php: 5.6
       env: DB=mysql;TEST=test-codecheck-deprecations
     # Javascript tests
+    - php: 7.1
+      env: DB=mysql;TEST=test-js;CORE_BRANCH=master
     - php: 5.6
       env: DB=mysql;TEST=test-js
     # Integration tests
-    - php: 7.0
+    - php: 7.1
       env: DB=mysql;TEST=test-integration;CORE_BRANCH=master
-    - php: 7.0
+    - php: 5.6
       env: DB=mysql;TEST=test-integration;CORE_BRANCH=stable10
   allow_failures:
     - env: DB=mysql;TEST=test-codecheck-deprecations
