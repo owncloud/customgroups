@@ -68,11 +68,11 @@ matrix:
       env: DB=mysql;TEST=test-js;CORE_BRANCH=master
     - php: 5.6
       env: DB=mysql;TEST=test-js
-    # Integration tests
+    # Acceptance tests
     - php: 7.1
-      env: DB=mysql;TEST=test-integration;CORE_BRANCH=master
+      env: DB=mysql;TEST=test-acceptance;CORE_BRANCH=master
     - php: 5.6
-      env: DB=mysql;TEST=test-integration;CORE_BRANCH=stable10
+      env: DB=mysql;TEST=test-acceptance;CORE_BRANCH=stable10
   allow_failures:
     - env: DB=mysql;TEST=test-codecheck-deprecations
   fast_finish: true
