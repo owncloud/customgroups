@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Sérsniðnir hópar",
+    "A group with this name already exists" : "Hópur með þessu nafni er þegar til",
     "Could not rename group" : "Gat ekki endurnefnt hóp",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ertu viss um að þú viljir eyða hópnum \"{groupName}\" ?",
     "Confirm deletion of group" : "Staðfesta eyðingu á hóp",
@@ -32,6 +33,8 @@ OC.L10N.register(
     "Confirm removal of member" : "Staðfesta fjarlægingu á meðlimi",
     "Could not delete member" : "Gat ekki eytt meðlimi",
     "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ertu viss um að þú viljir eyða kerfisstjóraheimildum þínum af hópnum \"{name}\" ?",
+    "Change role to \"member\"" : "Breyta hlutverki í \"meðlimur\"",
+    "Change role to \"group owner\"" : "Breyta hlutverki í \"eigandi hóps\"",
     "Remove member" : "Fjarlægja meðlim",
     "Add member" : "Bæta við meðlimi",
     "Leave this group" : "Hætta í þessum hóp",
@@ -44,6 +47,8 @@ OC.L10N.register(
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Þú hefur verið fjarlægð/ur úr hópnum \"%2$s\" af \"%1$s\".",
     "Role change in group \"%1$s\"." : "Breyting á hlutverkum í hópnum \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" úthlutaði hlutverkinu \"%3$s\" í hópnum \"%2$s\" til þín.",
-    "Unknown role" : "Óþekkt hlutverk"
+    "Unknown role" : "Óþekkt hlutverk",
+    "Only group admins are allowed to create custom groups" : "Aðeins hópstjórum er heimilt að útbúa sérsniðna hópa",
+    "Allow creating multiple groups with the same name" : "Leyfa að búa til marga hópa með sama nafni"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
