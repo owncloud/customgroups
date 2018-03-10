@@ -7,6 +7,7 @@ OC.L10N.register(
     "Confirm deletion of group" : "Confirme a eliminação do grupo",
     "Could not create group" : "Não foi possível criar o grupo",
     "Administrator" : "Administrador",
+    "Group owner" : "Proprietário do grupo",
     "Member" : "Membro",
     "Rename" : "Renomear",
     "Delete" : "Eliminar",
