@@ -116,7 +116,7 @@ class CustomGroupsDatabaseHandler {
 	 */
 	public function getUserMemberships($uid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
-		$qb->select('m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name')
+		$qb->select(['m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name'])
 			->from('custom_group_member', 'm')
 			->from('custom_group', 'g')
 			->where($qb->expr()->eq('g.group_id', 'm.group_id'))
@@ -165,34 +165,12 @@ class CustomGroupsDatabaseHandler {
 	/**
 	 * Returns the info for a given group.
 	 *
-	 * @param string $numericGroupId group id
-	 * @return array|null group info or null if not found
-	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
-	 */
-	public function getGroup($numericGroupId) {
-		return $this->getGroupBy('group_id', $numericGroupId);
-	}
-
-	/**
-	 * Returns the info for a given group.
-	 *
-	 * @param string $uri group uri
-	 * @return array|null group info or null if not found
-	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
-	 */
-	public function getGroupByUri($uri) {
-		return $this->getGroupBy('uri', $uri);
-	}
-
-	/**
-	 * Returns the info for a given group.
-	 *
 	 * @param string $field field to filter by
 	 * @param string $fieldValue field value
 	 * @return array|null group info or null if not found
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
-	private function getGroupBy($field, $fieldValue) {
+	public function getGroupBy($field, $fieldValue) {
 		$qb = $this->dbConn->getQueryBuilder();
 		$cursor = $qb->select(['group_id', 'uri', 'display_name'])
 			->from('custom_group')

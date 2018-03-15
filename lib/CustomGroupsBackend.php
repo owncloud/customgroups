@@ -53,7 +53,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return boolean
 	 */
 	public function implementsActions($actions) {
-		return ($actions & (self::GROUP_DETAILS | self::DELETE_GROUP)) !== 0;
+		return ($actions & (self::GROUP_DETAILS)) !== 0;
 	}
 
 	/**
@@ -65,11 +65,12 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function inGroup($uid, $gid) {
 		$uri = $this->extractUri($gid);
-		if (is_null($uri)) {
+		$group = $this->handler->getGroupBy('uri', $uri);
+		if (is_null($group)) {
 			return false;
 		}
 
-		return $this->handler->inGroupByUri($uid, $uri);
+		return $this->handler->inGroup($uid, $group['group_id']);
 	}
 
 	/**
@@ -124,7 +125,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 			return null;
 		}
 
-		$group = $this->handler->getGroupByUri($uri);
+		$group = $this->handler->getGroupBy('uri', $uri);
 		if (is_null($group)) {
 			return null;
 		}
@@ -149,7 +150,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 			return [];
 		}
 
-		$group = $this->handler->getGroupByUri($uri);
+		$group = $this->handler->getGroupBy('uri', $uri);
 		if (is_null($group)) {
 			return null;
 		}
@@ -169,7 +170,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @param string $gid group id in format "customgroup_$uri"
 	 * @return string|null extracted uri or null if the format did not match
 	 */
-	private function extractUri($gid) {
+	public function extractUri($gid) {
 		$len = strlen(self::GROUP_ID_PREFIX);
 		$prefixPart = substr($gid, 0, $len);
 		if ($prefixPart !== self::GROUP_ID_PREFIX) {
@@ -191,7 +192,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @param int $uri numeric group id
 	 * @return string formatted id in format "customgroup_$uri"
 	 */
-	private function formatGroupId($uri) {
+	public function formatGroupId($uri) {
 		return self::GROUP_ID_PREFIX . $uri;
 	}
 
@@ -203,20 +204,5 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function isVisibleForScope($scope) {
 		return ($scope === 'sharing');
-	}
-
-	/**
-	 * Delete group
-	 *
-	 * @param string $gid group id
-	 */
-	public function deleteGroup($gid) {
-		$uri = $this->extractUri($gid);
-		if ($uri !== null) {
-			$groupInfo = $this->handler->getGroupByUri($uri);
-			if ($groupInfo !== null) {
-				$this->handler->deleteGroup($groupInfo['group_id']);
-			}
-		}
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
@@ -21,11 +22,11 @@
 
 namespace OCA\CustomGroups\Dav;
 
+use OCA\CustomGroups\CustomGroupsBackend;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use Sabre\DAV\Exception\NotFound;
-use Sabre\DAV\Exception\MethodNotAllowed;
+use OCA\CustomGroups\CustomGroupsManager;
 use Sabre\DAV\SimpleCollection;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 
 /**
@@ -36,22 +37,27 @@ class RootCollection extends SimpleCollection {
 	 * Constructor
 	 *
 	 * @param IGroupManager $groupManager group manager
+	 * @param CustomGroupsManager $customGroupsManager custom groups manager
+	 * @param CustomGroupsBackend $groupsBackend
 	 * @param CustomGroupsDatabaseHandler $groupsHandler groups database handler
-	 * @param MembershipHelper $helper membership helper
+	 * @param Helper $helper membership helper
+	 * @throws \Sabre\DAV\Exception
 	 */
 	public function __construct(
 		IGroupManager $groupManager,
+		CustomGroupsManager $customGroupsManager,
+		CustomGroupsBackend $groupsBackend,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		Helper $helper
 	) {
 		$children = [
 			new GroupsCollection(
-				$groupManager,
+				$customGroupsManager,
 				$groupsHandler,
 				$helper
 			),
 			new UsersCollection(
-				$groupManager,
+				$customGroupsManager,
 				$groupsHandler,
 				$helper
 			),

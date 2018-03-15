@@ -20,13 +20,15 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Dav;
 
+use OCA\CustomGroups\CustomGroupsBackend;
+use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
 use Sabre\DAV\PropPatch;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
@@ -56,7 +58,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	private $node;
 
 	/**
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
@@ -71,6 +73,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	private $groupManager;
 
 	/**
+	 * @var CustomGroupsManager
+	 */
+	private $manager;
+	/**
 	 * @var IUserSession
 	 */
 	private $userSession;
@@ -78,7 +84,6 @@ class MembershipNodeTest extends \Test\TestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
@@ -90,7 +95,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturn($user);
 
-		$this->helper = $this->getMockBuilder(MembershipHelper::class)
+		$this->helper = $this->getMockBuilder(Helper::class)
 			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved'])
 			->setConstructorArgs([
 				$this->handler,
@@ -103,10 +108,18 @@ class MembershipNodeTest extends \Test\TestCase {
 			])
 			->getMock();
 
+		$backend = $this->createMock(CustomGroupsBackend::class);
+		$this->manager = new CustomGroupsManager(
+			$this->helper,
+			$this->handler,
+			$backend,
+			$this->groupManager
+		);
+
 		$this->node = new MembershipNode(
 			['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
-			self::NODE_USER,
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			$this->manager,
 			$this->handler,
 			$this->helper
 		);
@@ -129,19 +142,30 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->assertNull($this->node->getLastModified());
 	}
 
+	/**
+	 * Test that node name is always user_id, since there is no use case that name should be group name
+	 */
 	public function testNodeName() {
 		$node = new MembershipNode(
 			['group_id' => 1, 'uri' => 'group1', 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
-			'group1',
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			$this->manager,
 			$this->handler,
 			$this->helper
 		);
-		$this->assertEquals('group1', $node->getName());
+		$this->assertEquals(self::NODE_USER, $node->getName());
+		$this->assertNotEquals('group1', $node->getName());
 	}
 
 	public function testDeleteAsAdmin() {
-		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$userMemberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+		$this->setCurrentUserMemberInfo($userMemberInfo);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->willReturn([$userMemberInfo]);
+		$this->handler->expects($this->any())
+			->method('getGroupBy')
+			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
@@ -151,8 +175,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('notifyUserRemoved')
 			->with(
 				self::NODE_USER,
-				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
-				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
 			);
 
 		$called = array();
@@ -173,11 +196,18 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 */
 	public function testDeleteAsAdminFailed() {
-		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$userMemberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+		$this->setCurrentUserMemberInfo($userMemberInfo);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(false);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->willReturn([$userMemberInfo]);
+		$this->handler->expects($this->any())
+			->method('getGroupBy')
+			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 
 		$this->node->delete();
 	}
@@ -206,7 +236,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$userSession = $this->createMock(IUserSession::class);
 		$userSession->method('getUser')->willReturn($user);
 
-		$helper = new MembershipHelper(
+		$helper = new Helper(
 			$this->handler,
 			$userSession,
 			$this->userManager,
@@ -215,12 +245,22 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->createMock(IURLGenerator::class),
 			$this->createMock(IConfig::class)
 		);
-
+		$backend = $this->createMock(CustomGroupsBackend::class);
+		$manager = new CustomGroupsManager(
+			$helper,
+			$this->handler,
+			$backend,
+			$this->groupManager
+		);
 		$memberInfo = ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $role];
+		$groupInfo = ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'];
+		$this->handler->expects($this->any())
+			->method('getGroupBy')
+			->willReturn($groupInfo);
 		$node = new MembershipNode(
 			$memberInfo,
-			self::NODE_USER,
-			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			$groupInfo,
+			$manager,
 			$this->handler,
 			$helper
 		);
@@ -242,6 +282,12 @@ class MembershipNodeTest extends \Test\TestCase {
 		// no notification in this case
 		$this->helper->expects($this->never())
 			->method('notifyUserRemoved');
+
+		$userMemberInfo1 = ['user_id' => self::NODE_USER];
+		$userMemberInfo2 = ['user_id' => 'some_admin'];
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->willReturn([$userMemberInfo1, $userMemberInfo2]);
 
 		$node->delete();
 	}
@@ -266,6 +312,14 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::CURRENT_USER)
 			->willReturn(true);
 
+		$memberInfo1 = ['user_id' => self::NODE_USER];
+		$memberInfo2 = ['user_id' => 'some_admin'];
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->willReturn([$memberInfo1, $memberInfo2]);
+		$this->handler->expects($this->any())
+			->method('getGroupBy')
+			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
@@ -347,8 +401,8 @@ class MembershipNodeTest extends \Test\TestCase {
 	public function testGetProperties($propName, $propValue, $roleValue = 0) {
 		$node = new MembershipNode(
 			['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $roleValue, 'uri' => 'group1'],
-			self::NODE_USER,
 			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
+			$this->manager,
 			$this->handler,
 			$this->helper
 		);
@@ -392,6 +446,11 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::CURRENT_USER)
 			->willReturn($isSuperAdmin);
 
+		$groupInfo = ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'];
+		$this->handler->expects($this->any())
+			->method('getGroupBy')
+			->willReturn($groupInfo);
+
 		if ($called) {
 			$this->handler->expects($this->once())
 				->method('setGroupMemberInfo')
@@ -401,8 +460,8 @@ class MembershipNodeTest extends \Test\TestCase {
 				->method('notifyUserRoleChange')
 				->with(
 					self::NODE_USER,
-					['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
-					['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => Roles::davToBackend($roleToSet)]
+					$groupInfo,
+					Roles::davToBackend($roleToSet)
 				);
 		} else {
 			$this->handler->expects($this->never())

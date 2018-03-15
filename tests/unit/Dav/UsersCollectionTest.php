@@ -20,12 +20,13 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Dav;
 
+use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\UsersCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCP\IURLGenerator;
@@ -52,7 +53,7 @@ class UsersCollectionTest extends \Test\TestCase {
 	private $collection;
 
 	/**
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
@@ -74,7 +75,6 @@ class UsersCollectionTest extends \Test\TestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
@@ -83,7 +83,7 @@ class UsersCollectionTest extends \Test\TestCase {
 		$user->method('getUID')->willReturn(self::USER);
 		$this->userSession->method('getUser')->willReturn($user);
 
-		$this->helper = new MembershipHelper(
+		$this->helper = new Helper(
 			$this->handler,
 			$this->userSession,
 			$this->userManager,
@@ -94,7 +94,7 @@ class UsersCollectionTest extends \Test\TestCase {
 		);
 
 		$this->collection = new UsersCollection(
-			$this->createMock(IGroupManager::class),
+			$this->createMock(CustomGroupsManager::class),
 			$this->handler,
 			$this->helper
 		);
@@ -106,14 +106,14 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testListUsers() {
 		$this->collection->getChildren();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateUser() {
 		$this->collection->createDirectory('user1');
@@ -126,7 +126,7 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\Forbidden
+	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testGetAnotherUser() {
 		$this->collection->getChild('another');
@@ -148,21 +148,21 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
 		$this->collection->setName('x');
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testDelete() {
 		$this->collection->delete();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateFile() {
 		$this->collection->createFile('somefile.txt');

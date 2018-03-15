@@ -10,7 +10,7 @@
 
 namespace OCA\CustomGroups\Tests\unit;
 
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCA\CustomGroups\SettingsPanel;
 
 /**
@@ -24,13 +24,13 @@ class SettingsPanelTest extends \Test\TestCase {
 	private $panel;
 
 	/**
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $config;
 
 	public function setUp() {
 		parent::setUp();
-		$this->helper = $this->createMock(MembershipHelper::class);
+		$this->helper = $this->createMock(Helper::class);
 		$this->panel = new SettingsPanel($this->helper);
 	}
 

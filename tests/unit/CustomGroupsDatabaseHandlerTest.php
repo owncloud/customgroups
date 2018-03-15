@@ -78,7 +78,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertTrue($this->handler->deleteGroup($groupId));
 
-		$this->assertNull($this->handler->getGroup($groupId));
+		$this->assertNull($this->handler->getGroupBy('group_id', $groupId));
 
 		$this->assertFalse($this->handler->deleteGroup($groupId));
 	}
@@ -87,7 +87,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertTrue($this->handler->updateGroup($groupId, 'meine_gruppe', 'Meine Gruppe'));
 
-		$groupInfo = $this->handler->getGroup($groupId);
+		$groupInfo = $this->handler->getGroupBy('group_id', $groupId);
 
 		$this->assertEquals('meine_gruppe', $groupInfo['uri']);
 		$this->assertEquals('Meine Gruppe', $groupInfo['display_name']);
@@ -139,24 +139,24 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertNotNull($groupId);
 
-		$groupInfo = $this->handler->getGroup($groupId);
+		$groupInfo = $this->handler->getGroupBy('group_id', $groupId);
 		$this->assertEquals($groupId, $groupInfo['group_id']);
 		$this->assertEquals('My Group', $groupInfo['display_name']);
 		$this->assertEquals('my_group', $groupInfo['uri']);
 
-		$this->assertNull($this->handler->getGroup(-100));
+		$this->assertNull($this->handler->getGroupBy('group_id', -100));
 	}
 
 	public function testGetGroupByUri() {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertNotNull($groupId);
 
-		$groupInfo = $this->handler->getGroupByUri('my_group');
+		$groupInfo = $this->handler->getGroupBy('uri', 'my_group');
 		$this->assertEquals($groupId, $groupInfo['group_id']);
 		$this->assertEquals('My Group', $groupInfo['display_name']);
 		$this->assertEquals('my_group', $groupInfo['uri']);
 
-		$this->assertNull($this->handler->getGroupByUri('unexist'));
+		$this->assertNull($this->handler->getGroupBy('uri', 'unexist'));
 	}
 
 	public function testGetGroups() {

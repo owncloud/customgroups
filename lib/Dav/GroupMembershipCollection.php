@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
@@ -22,16 +23,14 @@
 namespace OCA\CustomGroups\Dav;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\CustomGroupsManager;
+use Sabre\DAV\Exception\PreconditionFailed;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\Forbidden;
-use Sabre\DAV\Exception\PreconditionFailed;
-use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
-use OCA\CustomGroups\Service\MembershipHelper;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use OCP\IGroupManager;
+use OCA\CustomGroups\Service\Helper;
 
 /**
  * Group memberships collection for a given group
@@ -53,16 +52,16 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	/**
 	 * Membership helper
 	 *
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
 	/**
-	 * Group manager from core
+	 * Custom groups manager
 	 *
-	 * @var IGroupManager
+	 * @var CustomGroupsManager
 	 */
-	private $groupManager;
+	private $manager;
 
 	/**
 	 * Group information
@@ -72,29 +71,23 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	private $groupInfo;
 
 	/**
-	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-	*/
-	private $dispatcher;
-
-	/**
 	 * Constructor
 	 *
 	 * @param array $groupInfo group info
+	 * @param CustomGroupsManager $manager custom group manager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
-	 * @param MembershipHelper $helper membership helper
+	 * @param Helper $helper membership helper
 	 */
 	public function __construct(
 		array $groupInfo,
-		IGroupManager $groupManager,
+		CustomGroupsManager $manager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		Helper $helper
 	) {
+		$this->manager = $manager;
 		$this->groupsHandler = $groupsHandler;
-		$this->groupManager = $groupManager;
 		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
-
-		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -108,14 +101,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new Forbidden("No permission to delete group \"$groupId\"");
 		}
 
-		$group = $this->groupManager->get('customgroup_' . $this->groupInfo['uri']);
-		if ($group === null) {
-			throw new NotFound("Group not found \"$groupId\"");
-		}
-		$group->delete();
-
-		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name']]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::deleteGroup', $event);
+		$this->manager->deleteGroup($this->groupInfo['uri']);
 	}
 
 	/**
@@ -183,8 +169,8 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 *
 	 * @param string $userId user id to add
 	 * @param resource|string $data unused
-	 * @throws Forbidden if the current user has insufficient permissions
-	 * @throws PreconditionFailed if the user did not exist
+	 * @throws Forbidden
+	 * @throws PreconditionFailed
 	 */
 	public function createFile($userId, $data = null) {
 		$groupId = $this->groupInfo['group_id'];
@@ -203,14 +189,9 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new Forbidden("Cannot add member \"$userId\" to group \"$groupId\"");
 		}
 
-		if (!$this->groupsHandler->addToGroup($userId, $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER)) {
+		if (!$this->manager->addUser($this->groupInfo['uri'], $userId)) {
 			throw new PreconditionFailed("The user \"$userId\" is already member of this group");
 		}
-
-		$this->helper->notifyUser($userId, $this->groupInfo);
-
-		$event = new GenericEvent(null, ['groupName' => $this->groupInfo['display_name'], 'user' => $userId]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::addUserToGroup', $event);
 	}
 
 	/**
@@ -227,7 +208,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Returns a membership node
 	 *
 	 * @param string $userId user id
-	 * @return CustomGroupMemberNode membership node
+	 * @return MembershipNode membership node
 	 * @throws NotFound if the given user has no membership in this group
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
@@ -248,7 +229,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	/**
 	 * Returns a list of all memberships
 	 *
-	 * @return CustomGroupMemberNode[] list of memberships
+	 * @return MembershipNode[] list of memberships
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChildren() {
@@ -298,15 +279,8 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			return 409;
 		}
 
-		$event = new GenericEvent(null, ['oldGroupName' => $this->groupInfo['display_name'],
-			'newGroupName' => $displayName]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::updateGroupName', $event);
+		$result = $this->manager->updateGroup($this->groupInfo['uri'], $displayName);
 
-		$result = $this->groupsHandler->updateGroup(
-			$this->groupInfo['group_id'],
-			$this->groupInfo['uri'],
-			$displayName
-		);
 		$this->groupInfo['display_name'] = $displayName;
 
 		return $result;
@@ -316,13 +290,13 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Creates a membership node based on the given membership info.
 	 *
 	 * @param array $memberInfo membership info
-	 * @return CustomGroupMemberNode membership node
+	 * @return MembershipNode membership node
 	 */
 	private function createCustomGroupMemberNode(array $memberInfo) {
 		return new MembershipNode(
 			$memberInfo,
-			$memberInfo['user_id'],
 			$this->groupInfo,
+			$this->manager,
 			$this->groupsHandler,
 			$this->helper
 		);

@@ -21,8 +21,8 @@
 namespace OCA\CustomGroups\Tests\unit;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use OCA\CustomGroups\Service\MembershipHelper;
 use OCA\CustomGroups\Controller\PageController;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IConfig;
@@ -69,6 +69,9 @@ class PageControllerTest extends \Test\TestCase {
 	 */
 	private $groupManager;
 
+	/** @var IL10N */
+	private $l10n;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
@@ -76,6 +79,7 @@ class PageControllerTest extends \Test\TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->l10n = $this->createMock(IL10N::class);
 
 		$this->pageController = new PageController(
 			'customgroups',
@@ -84,7 +88,8 @@ class PageControllerTest extends \Test\TestCase {
 			$this->userSession,
 			$this->userManager,
 			$this->groupManager,
-			$this->handler
+			$this->handler,
+			$this->l10n
 		);
 	}
 
@@ -122,8 +127,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->once())
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 		$this->handler->expects($this->once())
 			->method('getGroupMembers')
@@ -162,8 +167,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->at(0))
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 		$this->handler->expects($this->at(1))
 			->method('getGroupMembers')
@@ -244,8 +249,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->at(0))
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 		$this->handler->expects($this->at(1))
 			->method('getGroupMembers')
@@ -280,8 +285,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->at(0))
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 		$this->handler->expects($this->at(1))
 			->method('getGroupMembers')
@@ -348,8 +353,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->once())
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 
 		// user3 is already member so it will be filtered out of the result
@@ -433,8 +438,8 @@ class PageControllerTest extends \Test\TestCase {
 			->will($this->returnValueMap($groupData));
 
 		$this->handler->expects($this->once())
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 
 		// user3 is already member so it will be filtered out of the result
@@ -496,8 +501,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->once())
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 
 		// user3 is already member so it will be filtered out of the result
@@ -550,8 +555,8 @@ class PageControllerTest extends \Test\TestCase {
 			]));
 
 		$this->handler->expects($this->once())
-			->method('getGroupByUri')
-			->with('group1')
+			->method('getGroupBy')
+			->with('uri', 'group1')
 			->willReturn(['group_id' => 128]);
 
 		// user3 is already member so it will be filtered out of the result

@@ -1,8 +1,9 @@
 <?php
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud GmbH
+ * @copyright Copyright (c) 2018, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -21,8 +22,10 @@
 
 namespace OCA\CustomGroups\Service;
 
+use OCA\CustomGroups\CustomGroupsBackend;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Dav\Roles;
+use OCA\DAV\Connector\Sabre\Exception\Forbidden;
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -31,6 +34,10 @@ use OCP\IUser;
 use OCP\Notification\IManager;
 use OCP\IURLGenerator;
 use OCP\IConfig;
+use Sabre\DAV\Exception\Conflict;
+use Sabre\DAV\Exception\MethodNotAllowed;
+use Sabre\DAV\Exception\NotFound;
+use Sabre\DAV\Exception\PreconditionFailed;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
@@ -38,7 +45,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  *
  * Provides method related to the current user's membership and admin roles.
  */
-class MembershipHelper {
+class Helper {
 
 	/**
 	 * Custom groups handler
@@ -103,6 +110,7 @@ class MembershipHelper {
 	 * Membership helper
 	 *
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
+	 * @param CustomGroupsBackend $groupsBackend custom groups backend
 	 * @param IUserSession $userSession user session
 	 * @param IUserManager $userManager user manager
 	 * @param IGroupManager $groupManager group manager
@@ -246,28 +254,21 @@ class MembershipHelper {
 	 *
 	 * @param array $groupInfo group info
 	 * @param string $targetUserId user to notify
-	 * @param array $memberInfo membership info
+	 * @param int $role role info
 	 */
-	public function notifyUserRoleChange($targetUserId, array $groupInfo, array $memberInfo) {
+	public function notifyUserRoleChange($targetUserId, array $groupInfo, $role) {
 		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
 		$user = $this->getUser($this->getUserId());
 
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('customgroups')
 			->setDateTime(new \DateTime())
-			->setObject('customgroup', $memberInfo['group_id'])
-			->setSubject('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $memberInfo['role']])
-			->setMessage('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $memberInfo['role']])
+			->setObject('customgroup', $groupInfo['group_id'])
+			->setSubject('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $role])
+			->setMessage('changed_member_role', [$user->getDisplayName(), $groupInfo['display_name'], $role])
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
-		if($memberInfo['role'] === Roles::BACKEND_ROLE_MEMBER) {
-			$roleName = "Member";
-		} elseif ($memberInfo['role'] === Roles::BACKEND_ROLE_ADMIN) {
-			$roleName = "Group owner";
-		}
-		$event = new GenericEvent(null, ['user' => $targetUserId, 'groupName' => $groupInfo['display_name'], 'roleNumber' => $memberInfo['role'], 'roleDisaplayName' => $roleName]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::changeRoleInGroup', $event);
 	}
 
 	/**
@@ -300,6 +301,7 @@ class MembershipHelper {
 		$restrictToSubadmins = $this->config->getAppValue('customgroups', 'only_subadmin_can_create', 'false') === 'true';
 
 		// if the restriction is set, only admins or subadmins are allowed to create, not regular users
+		// if user was selected as subadmin of any of the core groups, he is allowed to create groups in this app
 		return (
 			!$restrictToSubadmins
 			|| $this->isUserSuperAdmin()
@@ -319,11 +321,15 @@ class MembershipHelper {
 		}
 
 		// check if user to add is member of any groups
-		$userGroups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
-		$targetUserGroups = $this->groupManager->getUserGroupIds($this->userManager->get($targetUserId));
+		$userMemberships = $this->groupsHandler->getUserMemberships($this->getUserId(), new Search('', -1, 0));
+		$targetUserMemberships = $this->groupsHandler->getUserMemberships($targetUserId, new Search('', -1, 0));
+		$targetUserGroupsUris = array_map(function ($membershipInfo) {
+			return $membershipInfo['uri'];
+		}, $targetUserMemberships);
 
-		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup, $targetUserGroups)) {
+		foreach ($userMemberships as $userMembership) {
+			$userGroupUri = $userMembership['uri'];
+			if (in_array($userGroupUri, $targetUserGroupsUris)) {
 				return true;
 			}
 		}
@@ -344,7 +350,6 @@ class MembershipHelper {
 		}
 
 		$groups = $this->groupsHandler->getGroupsByDisplayName($displayName);
-
 		return empty($groups);
 	}
 }

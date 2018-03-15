@@ -23,13 +23,13 @@ namespace OCA\CustomGroups;
 
 use OCP\Settings\ISettings;
 use OCP\Template;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 
 class SettingsPanel implements ISettings {
 
 	private $helper;
 
-	public function __construct(MembershipHelper $helper) {
+	public function __construct(Helper $helper) {
 		$this->helper = $helper;
 	}
 

@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
@@ -21,18 +22,17 @@
 
 namespace OCA\CustomGroups\Dav;
 
+use OCA\CustomGroups\CustomGroupsManager;
+use Sabre\DAV\Exception\Conflict;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\IExtendedCollection;
 use Sabre\DAV\MkCol;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
-use Sabre\DAV\Exception\Forbidden;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Search;
-use OCA\CustomGroups\Service\MembershipHelper;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Sabre\DAV\Exception\Conflict;
-use OCP\IGroupManager;
+use OCA\CustomGroups\Service\Helper;
 
 /**
  * Collection of custom groups
@@ -47,15 +47,16 @@ class GroupsCollection implements IExtendedCollection {
 	private $groupsHandler;
 
 	/**
-	 * Group manager from core
-	 * @var IGroupManager
+	 * Custom groups manager
+	 *
+	 * @var CustomGroupsManager
 	 */
-	private $groupManager;
+	private $manager;
 
 	/**
 	 * Membership helper
 	 *
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
@@ -67,28 +68,23 @@ class GroupsCollection implements IExtendedCollection {
 	private $userId;
 
 	/**
-	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-	*/
-	private $dispatcher;
-
-	/**
 	 * Constructor
 	 *
+	 * @param CustomGroupsManager $manager custom group manager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
-	 * @param MembershipHelper $helper helper
+	 * @param Helper $helper helper
+	 * @param null $userId
 	 */
 	public function __construct(
-		IGroupManager $groupManager,
+		CustomGroupsManager $manager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper,
+		Helper $helper,
 		$userId = null
 	) {
-		$this->groupManager = $groupManager;
+		$this->manager = $manager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
 		$this->userId = $userId;
-
-		$this->dispatcher = \OC::$server->getEventDispatcher();
 	}
 
 	/**
@@ -103,10 +99,6 @@ class GroupsCollection implements IExtendedCollection {
 	}
 
 	public function createDirectory($name) {
-		if (!$this->helper->canCreateGroups()) {
-			throw new Forbidden('No permission to create groups');
-		}
-
 		$this->createGroup($name, $name);
 	}
 
@@ -117,43 +109,42 @@ class GroupsCollection implements IExtendedCollection {
 	 * @throws MethodNotAllowed if the group already exists
 	 */
 	public function createExtendedCollection($name, Mkcol $mkCol) {
-		if (!$this->helper->canCreateGroups()) {
-			throw new Forbidden('No permission to create groups');
-		}
-
 		$displayName = $name;
 
 		// can't use handle() here as it's called too late
 		$mutations = $mkCol->getMutations();
 		if (isset($mutations[GroupMembershipCollection::PROPERTY_DISPLAY_NAME])) {
 			$displayName = $mutations[GroupMembershipCollection::PROPERTY_DISPLAY_NAME];
-			$mkCol->setResultCode(GroupMembershipCollection::PROPERTY_DISPLAY_NAME, 202); // accepted
 		}
 
 		$this->createGroup($name, $displayName);
+
+		if (isset($mutations[GroupMembershipCollection::PROPERTY_DISPLAY_NAME])) {
+			$mkCol->setResultCode(GroupMembershipCollection::PROPERTY_DISPLAY_NAME, 202); // accepted
+		}
 	}
 
 	/**
 	 * Creates a group node with the given name and display name
-	 * 
+	 *
 	 * @param string $name group uri
 	 * @param string $displayName group display name
+	 * @throws Conflict
+	 * @throws Forbidden
+	 * @throws MethodNotAllowed
 	 */
 	private function createGroup($name, $displayName) {
+		if (!$this->helper->canCreateGroups()) {
+			throw new Forbidden('No permission to create groups');
+		}
+
 		if (!$this->helper->isGroupDisplayNameAvailable($displayName)) {
 			throw new Conflict("Group with display name \"$displayName\" already exists");
 		}
 
-		$groupId = $this->groupsHandler->createGroup($name, $displayName);
-		if (is_null($groupId)) {
+		if (!$this->manager->createGroup($name, $displayName)) {
 			throw new MethodNotAllowed("Group with uri \"$name\" already exists");
 		}
-
-		// add current user as admin
-		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
-
-		$event = new GenericEvent(null, ['groupName' => $name, 'user' => $this->helper->getUserId()]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::addGroupAndUser', $event);
 	}
 
 	/**
@@ -164,7 +155,7 @@ class GroupsCollection implements IExtendedCollection {
 	 * @throws NotFound if the requested group does not exist
 	 */
 	public function getChild($name) {
-		$group = $this->groupsHandler->getGroupByUri($name);
+		$group = $this->groupsHandler->getGroupBy('uri', $name);
 		if (is_null($group)) {
 			throw new NotFound("Group with uri \"$name\" not found");
 		}
@@ -203,7 +194,7 @@ class GroupsCollection implements IExtendedCollection {
 	 * @return boolean true if the group exists, false otherwise
 	 */
 	public function childExists($name) {
-		return !is_null($this->groupsHandler->getGroupByUri($name));
+		return !is_null($this->groupsHandler->getGroupBy('uri', $name));
 	}
 
 	/**
@@ -257,7 +248,7 @@ class GroupsCollection implements IExtendedCollection {
 	private function createMembershipsCollection(array $groupInfo) {
 		return new GroupMembershipCollection(
 			$groupInfo,
-			$this->groupManager,
+			$this->manager,
 			$this->groupsHandler,
 			$this->helper
 		);

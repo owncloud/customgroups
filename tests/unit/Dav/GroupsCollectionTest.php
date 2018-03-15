@@ -20,19 +20,20 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Dav;
 
+use OCA\CustomGroups\CustomGroupsBackend;
+use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
 use OCA\CustomGroups\Dav\GroupMembershipCollection;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
-use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sabre\DAV\MkCol;
 
@@ -53,7 +54,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	private $collection;
 
 	/**
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
@@ -68,6 +69,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 	private $groupManager;
 
 	/**
+	 * @var CustomGroupsManager
+	 */
+	private $manager;
+
+	/**
 	 * @var IUserSession
 	 */
 	private $userSession;
@@ -80,7 +86,6 @@ class GroupsCollectionTest extends \Test\TestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
@@ -93,7 +98,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 				['customgroups', 'only_subadmin_can_create', 'false', false],
 			]));
 
-		$this->helper = new MembershipHelper(
+		$this->helper = new Helper(
 			$this->handler,
 			$this->userSession,
 			$this->userManager,
@@ -102,8 +107,17 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->createMock(IURLGenerator::class),
 			$this->config
 		);
+
+		$backend = $this->createMock(CustomGroupsBackend::class);
+		$this->manager = new CustomGroupsManager(
+			$this->helper,
+			$this->handler,
+			$backend,
+			$this->groupManager
+		);
+
 		$this->collection = new GroupsCollection(
-			$this->createMock(IGroupManager::class),
+			$this->manager,
 			$this->handler,
 			$this->helper
 		);
@@ -153,7 +167,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	public function testListGroupsForUser() {
 		$collection = new GroupsCollection(
-			$this->createMock(IGroupManager::class),
+			$this->manager,
 			$this->handler,
 			$this->helper,
 			'user1'
@@ -180,7 +194,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$search = new Search('gr', 16, 256);
 
 		$collection = new GroupsCollection(
-			$this->createMock(IGroupManager::class),
+			$this->manager,
 			$this->handler,
 			$this->helper,
 			'user1'
@@ -211,14 +225,15 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->at(0))
 			->method('getGroupsByDisplayName')
 			->with('Group One')
-			->will($this->returnValue([]));
+			->willReturn([]);
 		$this->handler->expects($this->at(1))
 			->method('createGroup')
 			->with('group1', 'Group One')
-			->will($this->returnValue(1));
+			->willReturn(1);
 		$this->handler->expects($this->at(2))
 			->method('addToGroup')
-			->with('user1', 1, true);
+			->with('user1', 1, CustomGroupsDatabaseHandler::ROLE_ADMIN)
+			->willReturn(true);
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addGroupAndUser', function ($event) use (&$called) {
@@ -268,13 +283,13 @@ class GroupsCollectionTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testCreateGroupNoPermission() {
-		$helper = $this->createMock(MembershipHelper::class);
+		$helper = $this->createMock(Helper::class);
 		$helper->expects($this->once())
 			->method('canCreateGroups')
 			->willReturn(false);
 
 		$this->collection = new GroupsCollection(
-			$this->createMock(IGroupManager::class),
+			$this->manager,
 			$this->handler,
 			$helper
 		);
@@ -304,9 +319,9 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	public function testGetGroup() {
 		$this->handler->expects($this->any())
-			->method('getGroupByUri')
-			->with('group1')
-			->will($this->returnValue(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']));
+			->method('getGroupBy')
+			->with('uri', 'group1')
+			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 
 		$groupNode = $this->collection->getChild('group1');
 		$this->assertInstanceOf(GroupMembershipCollection::class, $groupNode);
@@ -318,8 +333,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 	 */
 	public function testGetGroupNonExisting() {
 		$this->handler->expects($this->any())
-			->method('getGroupByUri')
-			->with('groupx')
+			->method('getGroupBy')
+			->with('uri', 'groupx')
 			->will($this->returnValue(null));
 
 		$this->collection->getChild('groupx');
@@ -327,10 +342,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	public function testGroupExists() {
 		$this->handler->expects($this->any())
-			->method('getGroupByUri')
+			->method('getGroupBy')
 			->will($this->returnValueMap([
-				['group1', ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']],
-				['group2', null],
+				['uri', 'group1', ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']],
+				['uri', 'group2', null],
 			]));
 
 		$this->assertTrue($this->collection->childExists('group1'));
@@ -338,21 +353,21 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
 		$this->collection->setName('x');
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testDelete() {
 		$this->collection->delete();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
+	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateFile() {
 		$this->collection->createFile('somefile.txt');

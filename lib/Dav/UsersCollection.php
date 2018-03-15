@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Vincent Petry <pvince81@owncloud.com>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud GmbH
  * @license AGPL-3.0
@@ -21,12 +22,13 @@
 
 namespace OCA\CustomGroups\Dav;
 
+use OCA\CustomGroups\CustomGroupsManager;
 use Sabre\DAV\ICollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 
 /**
@@ -44,27 +46,30 @@ class UsersCollection implements ICollection {
 	/**
 	 * Membership helper
 	 *
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
 	/**
-	 * @var IGroupManager
+	 * Custom groups manager
+	 *
+	 * @var CustomGroupsManager
 	 */
-	private $groupManager;
+	private $manager;
 
 	/**
 	 * Constructor
 	 *
+	 * @param CustomGroupsManager $manager custom group manager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
-	 * @param MembershipHelper $helper
+	 * @param Helper $helper
 	 */
 	public function __construct(
-		IGroupManager $groupManager,
+		CustomGroupsManager $manager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		Helper $helper
 	) {
-		$this->groupManager = $groupManager;
+		$this->manager = $manager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
 	}
@@ -94,7 +99,7 @@ class UsersCollection implements ICollection {
 	 * Returns the given user's memberships
 	 *
 	 * @param string $name user id
-	 * @return CustomGroupMembershipCollection user membership collection
+	 * @return GroupsCollection user membership collection
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChild($name) {
@@ -102,7 +107,7 @@ class UsersCollection implements ICollection {
 		// but ownCloud admin can query membership of any user
 		if ($name === $this->helper->getUserId() || $this->helper->isUserSuperAdmin()) {
 			return new GroupsCollection(
-				$this->groupManager,
+				$this->manager,
 				$this->groupsHandler,
 				$this->helper,
 				$name

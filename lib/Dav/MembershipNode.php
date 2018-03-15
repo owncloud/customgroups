@@ -22,12 +22,13 @@
 namespace OCA\CustomGroups\Dav;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\CustomGroupsManager;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
 use OCA\CustomGroups\Dav\Roles;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
@@ -48,6 +49,13 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	private $groupsHandler;
 
 	/**
+	 * Custom groups manager
+	 *
+	 * @var CustomGroupsManager
+	 */
+	private $manager;
+
+	/**
 	 * Membership information
 	 *
 	 * @var array
@@ -64,7 +72,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	/**
 	 * Membership helper
 	 *
-	 * @var MembershipHelper
+	 * @var Helper
 	 */
 	private $helper;
 
@@ -84,19 +92,20 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 * Constructor
 	 *
 	 * @param array $memberInfo membership information
-	 * @param string $name node name (based on user id or group id)
+	 * @param array $groupInfo group information
+	 * @param CustomGroupsManager $manager custom group manager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
-	 * @param MembershipHelper $helper membership helper
+	 * @param Helper $helper membership helper
 	 */
 	public function __construct(
 		array $memberInfo,
-		$name,
 		array $groupInfo,
+		CustomGroupsManager $manager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		Helper $helper
 	) {
+		$this->manager = $manager;
 		$this->groupsHandler = $groupsHandler;
-		$this->name = $name;
 		$this->memberInfo = $memberInfo;
 		$this->groupInfo = $groupInfo;
 		$this->helper = $helper;
@@ -106,8 +115,8 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	/**
 	 * Removes this member from the group
 	 *
-	 * @throws Forbidden when no permission to delete
-	 * @throws PreconditionFailed when membership did not exist
+	 * @throws Forbidden
+	 * @throws PreconditionFailed
 	 */
 	public function delete() {
 		$currentUserId = $this->helper->getUserId();
@@ -121,31 +130,16 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 
 		// can't remove the last admin
-		if ($this->helper->isTheOnlyAdmin($groupId, $this->name)) {
+		if ($this->helper->isTheOnlyAdmin($groupId, $this->getName())) {
 			throw new Forbidden("Cannot remove the last admin from the group \"$groupId\"");
 		}
 
 		$userId = $this->memberInfo['user_id'];
-		if (!$this->groupsHandler->removeFromGroup(
-			$userId,
-			$groupId
-		)) {
+		$groupInfo = $this->groupsHandler->getGroupBy('group_id', $groupId);
+		if (!$this->manager->removeUser($groupInfo['uri'], $userId)) {
 			// possibly the membership was deleted concurrently
 			throw new PreconditionFailed("Could not remove member \"$userId\" from group \"$groupId\"");
 		};
-
-		if ($currentUserId !== $userId) {
-			// only notify when the removal was done by another user
-			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
-			$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
-			$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
-		}
-
-		//Send dispatcher event if the removal is self
-		if ($currentUserId === $userId) {
-			$event = new GenericEvent(null, ['userId' => $userId, 'groupName' => $this->groupInfo['display_name']]);
-			$this->dispatcher->dispatch('\OCA\CustomGroups::leaveFromGroup', $event);
-		}
 	}
 
 	/**
@@ -154,7 +148,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 * @return string node name
 	 */
 	public function getName() {
-		return $this->name;
+		return $this->memberInfo['user_id'];
 	}
 
 	/**
@@ -234,6 +228,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			// invalid role given
 			return 400;
 		}
+
 		$groupId = $this->memberInfo['group_id'];
 		$userId = $this->memberInfo['user_id'];
 		// only the group admin can change permissions
@@ -246,14 +241,9 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			return 403;
 		}
 
-		$result = $this->groupsHandler->setGroupMemberInfo(
-			$groupId,
-			$userId,
-			$rolePropValue
-		);
+		$groupInfo = $this->groupsHandler->getGroupBy('group_id', $groupId);
+		$result = $this->manager->updateUser($groupInfo['uri'], $userId, $rolePropValue);
 		$this->memberInfo['role'] = $rolePropValue;
-
-		$this->helper->notifyUserRoleChange($userId, $this->groupInfo, $this->memberInfo);
 
 		return $result;
 	}

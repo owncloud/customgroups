@@ -23,6 +23,7 @@ namespace OCA\CustomGroups\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IL10N;
 use OCP\IUser;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -60,6 +61,9 @@ class PageController extends Controller {
 	 */
 	private $userManager;
 
+	/** @var IL10N */
+	private $l10n;
+
 	public function __construct(
 		$appName,
 		IRequest $request,
@@ -67,7 +71,8 @@ class PageController extends Controller {
 		IUserSession $userSession,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		CustomGroupsDatabaseHandler $handler
+		CustomGroupsDatabaseHandler $handler,
+		IL10N $l10n
 	) {
 		parent::__construct($appName, $request);
 		$this->handler = $handler;
@@ -75,6 +80,7 @@ class PageController extends Controller {
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -91,6 +97,8 @@ class PageController extends Controller {
 
 	/**
 	 * Search in all groups the current user is member of
+	 *
+	 * TODO: Refactor to use custom groups database instead and reduce complexity
 	 *
 	 * @param string $customGroupId custom group id
 	 * @param string $pattern lowercase pattern
@@ -241,7 +249,7 @@ class PageController extends Controller {
 
 		$pattern = strtolower($pattern);
 
-		$groupInfo = $this->handler->getGroupByUri($group);
+		$groupInfo = $this->handler->getGroupBy('uri', $group);
 		if (is_null($groupInfo)) {
 			return new DataResponse(
 				[

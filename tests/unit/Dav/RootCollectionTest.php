@@ -20,11 +20,13 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Dav;
 
+use OCA\CustomGroups\CustomGroupsBackend;
+use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\RootCollection;
 use OCA\CustomGroups\Dav\UsersCollection;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 
 /**
@@ -36,13 +38,13 @@ class RootCollectionTest extends \Test\TestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$helper = $this->createMock(MembershipHelper::class);
 
 		$this->collection = new RootCollection(
 			$this->createMock(IGroupManager::class),
-			$handler,
-			$helper
+			$this->createMock(CustomGroupsManager::class),
+			$this->createMock(CustomGroupsBackend::class),
+			$this->createMock(CustomGroupsDatabaseHandler::class),
+			$this->createMock(Helper::class)
 		);
 	}
 

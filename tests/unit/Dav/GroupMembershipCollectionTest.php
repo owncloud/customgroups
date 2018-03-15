@@ -20,6 +20,8 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Dav;
 
+use OCA\CustomGroups\CustomGroupsBackend;
+use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\GroupMembershipCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserManager;
@@ -27,7 +29,7 @@ use OCP\IUserSession;
 use OCP\IUser;
 use Sabre\DAV\PropPatch;
 use OCA\CustomGroups\Dav\MembershipNode;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\Helper;
 use OCP\IGroupManager;
 use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
@@ -47,54 +49,63 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	const NODE_USER = 'nodeuser';
 
 	/**
-	 * @var CustomGroupsDatabaseHandler
+	 * @var \PHPUnit_Framework_MockObject_MockObject | CustomGroupsDatabaseHandler
 	 */
 	private $handler;
 
 	/**
-	 * @var GroupMembershipCollection
+	 * @var \PHPUnit_Framework_MockObject_MockObject | GroupMembershipCollection
 	 */
 	private $node;
 
 	/**
-	 * @var MembershipHelper
+	 * @var \PHPUnit_Framework_MockObject_MockObject | Helper
 	 */
 	private $helper;
 
 	/**
-	 * @var IUserManager
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUserManager
 	 */
 	private $userManager;
 
 	/**
-	 * @var IGroupManager
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IGroupManager
 	 */
 	private $groupManager;
 
 	/**
-	 * @var IUserSession
+	 * @var CustomGroupsManager
+	 */
+	private $manager;
+
+	/**
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUserSession
 	 */
 	private $userSession;
 
 	/**
-	 * @var IConfig
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IConfig
 	 */
 	private $config;
 
 	/**
-	 * @var IUser
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUser
 	 */
 	private $currentUser;
 
 	/**
-	 * @var IUser
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUser
 	 */
 	private $nodeUser;
+
+	/**
+	 * @var array
+	 */
+	private $groupInfo;
 
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
@@ -114,7 +125,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			]));
 
 		$this->config = $this->createMock(IConfig::class);
-		$this->helper = $this->getMockBuilder(MembershipHelper::class)
+		$this->helper = $this->getMockBuilder(Helper::class)
 			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
 			->setConstructorArgs([
 				$this->handler,
@@ -127,12 +138,23 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			])
 			->getMock();
 
+		$backend = $this->createMock(CustomGroupsBackend::class);
+		$this->manager = new CustomGroupsManager(
+			$this->helper,
+			$this->handler,
+			$backend,
+			$this->groupManager
+		);
+
+		$this->groupInfo = ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
 		$this->node = new GroupMembershipCollection(
-			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
-			$this->groupManager,
+			$this->groupInfo,
+			$this->manager,
 			$this->handler,
 			$this->helper
 		);
+
+		$this->handler->expects($this->any())->method('getGroupBy')->willReturn($this->groupInfo);
 	}
 
 	/**
@@ -163,13 +185,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 
 		$group = $this->createMock(IGroup::class);
-		$group->expects($this->once())
+		$group->expects($this->never())
 			->method('delete');
-
-		$this->groupManager->expects($this->once())
-			->method('get')
-			->with('customgroup_group1')
-			->willReturn($group);
+		$this->groupManager->expects($this->never())->method('get');
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {
@@ -250,7 +268,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				$calledEvent[] = '\OCA\CustomGroups::updateGroupName';
 				array_push($calledEvent, $event);
 			});
-			$this->handler->expects($this->at(1))
+			$this->handler->expects($this->at(2))
 				->method('updateGroup')
 				->with(1, 'group1', 'Group Renamed')
 				->willReturn(true);
@@ -417,11 +435,13 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->with('core', 'shareapi_only_share_with_group_members', 'no')
 			->willReturn('yes');
 
-		$this->groupManager->method('getUserGroupIds')
-			->will($this->returnValueMap([
-				[$this->currentUser, null, ['group1', 'group2']],
-				[$this->nodeUser, null, ['group3', 'group4']],
-			]));
+		$this->groupManager->expects($this->never())->method('getUserGroupIds');
+		$this->handler->expects($this->at(1))->method('getUserMemberships')
+			->withAnyParameters($this->currentUser)
+			->willReturn([['uri' => 'group1'], ['uri' => 'group2']]);
+		$this->handler->expects($this->at(2))->method('getUserMemberships')
+			->withAnyParameters($this->nodeUser)
+			->willReturn([['uri' => 'group3'], ['uri' => 'group4']]);
 
 		$this->handler->expects($this->never())
 			->method('addToGroup');
@@ -436,11 +456,13 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->with('core', 'shareapi_only_share_with_group_members', 'no')
 			->willReturn('yes');
 
-		$this->groupManager->method('getUserGroupIds')
-			->will($this->returnValueMap([
-				[$this->currentUser, null, ['group1', 'group2']],
-				[$this->nodeUser, null, ['group1', 'group4']],
-			]));
+		$this->groupManager->expects($this->never())->method('getUserGroupIds');
+		$this->handler->expects($this->at(1))->method('getUserMemberships')
+			->withAnyParameters($this->currentUser)
+			->willReturn([['uri' => 'group1'], ['uri' => 'group2']]);
+		$this->handler->expects($this->at(2))->method('getUserMemberships')
+			->withAnyParameters($this->nodeUser)
+			->willReturn([['uri' => 'group1'], ['uri' => 'group4']]);
 
 		$this->handler->expects($this->once())
 			->method('addToGroup')
