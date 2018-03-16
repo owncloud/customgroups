@@ -366,7 +366,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	public function cleanupCustomGroups()
 	{
 		foreach($this->createdCustomGroups as $customGroup) {
-			$this->userDeletesACustomGroup('admin', $customGroup);
+			$this->userDeletesACustomGroup($this->getAdminUsername(), $customGroup);
 		}
 	}
 
