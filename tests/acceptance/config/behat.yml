@@ -11,24 +11,22 @@ default:
       contexts:
         - FeatureContext:
             baseUrl:  http://localhost:8080/ocs/
-            admin:
-              - admin
-              - admin
-            regular_user_password: 123456
-            mailhog_url: http://127.0.0.1:8025/api/v2/messages
-            oc_path: ../../../../
+            adminUsername: admin
+            adminPassword: admin
+            regularUserPassword: 123456
+            mailhogUrl: http://127.0.0.1:8025/api/v2/messages
+            ocPath: ../../../../
     Custom_Groups:
       paths:
         - %paths.base%/../custom_groups_features
       contexts:
         - CustomGroupsContext:
             baseUrl:  http://localhost:8080/ocs/
-            admin:
-              - admin
-              - admin
-            regular_user_password: 123456
-            mailhog_url: http://127.0.0.1:8025/api/v2/messages
-            oc_path: ../../../../
+            adminUsername: admin
+            adminPassword: admin
+            regularUserPassword: 123456
+            mailhogUrl: http://127.0.0.1:8025/api/v2/messages
+            ocPath: ../../../../
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml

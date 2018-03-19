@@ -1,3 +1,4 @@
+@api
 Feature: Custom Groups
 
   Background:
