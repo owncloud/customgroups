@@ -37,3 +37,4 @@ It is then possible to share files or folders with these groups.
 
 [Vincent Petry](https://github.com/PVince81/) :: PVince81 at owncloud dot com
 
+Touch to check CI
