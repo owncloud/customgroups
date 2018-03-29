@@ -78,7 +78,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 						'{http://owncloud.org/ns}display-name'
 					  ];
 		$appPath = '/customgroups/groups/';
-		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath;
+		$fullUrl = $this->getBaseUrl() . '/' . $this->davPath . $appPath;
 		$response = $client->propfind($fullUrl, $properties, 1);
 		return $response;
 	}
@@ -141,7 +141,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$client = $this->getSabreClient($user);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
-		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup;
+		$fullUrl = $this->getBaseUrl() . '/' . $this->davPath . $appPath . $customGroup;
 		try {
 			$response = $client->proppatch($fullUrl, $properties, 1);
 			$this->response = $response;
@@ -157,7 +157,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$client = $this->getSabreClient($userRequesting);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
-		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath . $customGroup . '/' . $userRequested;
+		$fullUrl = $this->getBaseUrl() . '/' . $this->davPath . $appPath . $customGroup . '/' . $userRequested;
 		try {
 			$response = $client->proppatch($fullUrl, $properties, 1);
 			$this->response = $response;
@@ -205,7 +205,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 						'{http://owncloud.org/ns}role'
 					  ];
 		$appPath = '/customgroups/groups/' . $group;
-		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath . $appPath;
+		$fullUrl = $this->getBaseUrl() . '/' . $this->davPath . $appPath;
 		try {
 			$response = $client->propfind($fullUrl, $properties, 1);
 			$this->response = $response;
@@ -223,7 +223,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 						'{http://owncloud.org/ns}role'
 					  ];
 		$userPath = $this->davPath .'/customgroups/groups/' . $group . '/' . $userRequested;
-		$fullUrl = substr($this->baseUrl, 0, -4) . $userPath;
+		$fullUrl = $this->getBaseUrl() . '/' . $userPath;
 		$response = $client->propfind($fullUrl, $properties, 1);
 		return $response['/' . $userPath]['{http://owncloud.org/ns}role'];
 	}
@@ -313,7 +313,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 						'{http://owncloud.org/ns}role'
 					  ];
 		$userPath = $this->davPath .'/customgroups/users/' . $userRequested;
-		$fullUrl = substr($this->baseUrl, 0, -4) . $userPath;
+		$fullUrl = $this->getBaseUrl() . '/' . $userPath;
 		try {
 			$response = $client->propfind($fullUrl, $properties, 1);
 			$this->response = $response;
