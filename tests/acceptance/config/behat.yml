@@ -10,7 +10,7 @@ default:
         - %paths.base%/../features
       contexts:
         - FeatureContext:
-            baseUrl:  http://localhost:8080/ocs/
+            baseUrl:  http://localhost:8080
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
@@ -21,7 +21,7 @@ default:
         - %paths.base%/../custom_groups_features
       contexts:
         - CustomGroupsContext:
-            baseUrl:  http://localhost:8080/ocs/
+            baseUrl:  http://localhost:8080
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
