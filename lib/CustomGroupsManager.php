@@ -102,11 +102,11 @@ class CustomGroupsManager {
 		}
 
 		// Add this group and user in core so it is available to other apps to use
-		//$gid = $this->groupsBackend->formatGroupId($uri);
-		//$group = $this->groupManager->createGroupFromBackend($gid, $this->groupsBackend);
+		$gid = $this->groupsBackend->formatGroupId($uri);
+		$group = $this->groupManager->createGroupFromBackend($gid, $this->groupsBackend);
 		$userId = $this->helper->getUserId();
-		//$user = $this->helper->getUser($userId);
-		//$group->addUser($user);
+		$user = $this->helper->getUser($userId);
+		$group->addUser($user);
 
 		// add current user as admin
 		$result = $this->groupsHandler->addToGroup($userId, $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
@@ -139,9 +139,9 @@ class CustomGroupsManager {
 			$displayName
 		);
 
-		// Update this group and user in core so it is available to other apps to use
-		//$gid = $this->groupsBackend->formatGroupId($uri);
-		//$this->groupManager->createGroupFromBackend($gid, $this->groupsBackend);
+		// Sync with core if needed (use group backend to format gid from internal uri)
+		$gid = $this->groupsBackend->formatGroupId($uri);
+		$this->groupManager->createGroupFromBackend($gid, $this->groupsBackend);
 
 		return $result;
 	}
@@ -156,10 +156,11 @@ class CustomGroupsManager {
 	public function deleteGroup($uri) {
 		$groupInfo = $this->groupsHandler->getGroupBy('uri', $uri);
 
-		// Remove this group and user in core so it is not available to other apps to use
-		//$gid = $this->groupsBackend->formatGroupId($uri);
-		//$group = $this->groupManager->get($gid);
-		//$group->delete();
+		// Sync with core if needed (use group backend to format gid from internal uri)
+		$gid = $this->groupsBackend->formatGroupId($uri);
+		if ($group = $this->groupManager->get($gid)) {
+			$group->delete();
+		}
 
 		$result = $this->groupsHandler->deleteGroup($groupInfo['group_id']);
 
@@ -185,11 +186,12 @@ class CustomGroupsManager {
 			return false;
 		}
 
-		// Add this user in core so it is available to other apps
-		//$gid = $this->groupsBackend->formatGroupId($uri);
-		//$group = $this->groupManager->get($gid);
-		//$user = $this->helper->getUser($userId);
-		//$group->addUser($user);
+		// Sync with core if needed (use group backend to format gid from internal uri)
+		$gid = $this->groupsBackend->formatGroupId($uri);
+		if($group = $this->groupManager->get($gid)){
+			$user = $this->helper->getUser($userId);
+			$group->addUser($user);
+		}
 
 		$this->helper->notifyUser($userId, $groupInfo);
 		$event = new GenericEvent(null, ['groupName' => $groupInfo['display_name'], 'user' => $userId]);
@@ -213,7 +215,7 @@ class CustomGroupsManager {
 			return false;
 		}
 
-		// Notify directly after internal custom group change, core does not need to be
+		// Notify directly after internal custom group change. Core does not need to be
 		// aware of this app logic (admin/not-admin of custom group)
 		$this->helper->notifyUserRoleChange($userId, $groupInfo, $rolePropValue);
 
@@ -246,9 +248,12 @@ class CustomGroupsManager {
 			return false;
 		}
 
-		//$user = $this->helper->getUser($userId);
-		//$gid = $this->groupsBackend->formatGroupId($uri);
-		//$this->groupManager->get($gid)->removeUser($user);
+		// Sync with core if needed (use group backend to format gid from internal uri)
+		$user = $this->helper->getUser($userId);
+		$gid = $this->groupsBackend->formatGroupId($uri);
+		if ($group = $this->groupManager->get($gid)) {
+			$group->removeUser($user);
+		}
 
 		if ($currentUserId !== $userId) {
 			$this->helper->notifyUserRemoved($userId, $groupInfo);

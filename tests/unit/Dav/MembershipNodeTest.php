@@ -24,6 +24,7 @@ use OCA\CustomGroups\CustomGroupsBackend;
 use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCP\IGroup;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -171,6 +172,10 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
 
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('removeUser');
+
 		$this->helper->expects($this->once())
 			->method('notifyUserRemoved')
 			->with(
@@ -278,6 +283,9 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('removeUser');
 
 		// no notification in this case
 		$this->helper->expects($this->never())
@@ -299,6 +307,10 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo(null);
 		$this->handler->expects($this->never())
 			->method('removeFromGroup');
+
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->never())->method('get');
+		$group->expects($this->never())->method('removeUser');
 
 		$this->node->delete();
 	}
@@ -324,6 +336,9 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('removeUser');
 
 		$this->node->delete();
 	}

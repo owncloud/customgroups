@@ -185,9 +185,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 
 		$group = $this->createMock(IGroup::class);
-		$group->expects($this->never())
-			->method('delete');
-		$this->groupManager->expects($this->never())->method('get');
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('delete');
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {
@@ -331,6 +330,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('addUser');
+
 		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with(self::NODE_USER, 1, false)
@@ -443,6 +446,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->withAnyParameters($this->nodeUser)
 			->willReturn([['uri' => 'group3'], ['uri' => 'group4']]);
 
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->never())->method('get');
+		$group->expects($this->never())->method('addUser');
 		$this->handler->expects($this->never())
 			->method('addToGroup');
 
@@ -464,6 +470,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->withAnyParameters($this->nodeUser)
 			->willReturn([['uri' => 'group1'], ['uri' => 'group4']]);
 
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('get')->willReturn($group);
+		$group->expects($this->once())->method('addUser');
 		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with(self::NODE_USER, 1, false)

@@ -24,6 +24,7 @@ use OCA\CustomGroups\CustomGroupsBackend;
 use OCA\CustomGroups\CustomGroupsManager;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCP\IGroup;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -234,6 +235,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->method('addToGroup')
 			->with('user1', 1, CustomGroupsDatabaseHandler::ROLE_ADMIN)
 			->willReturn(true);
+
+		$group = $this->createMock(IGroup::class);
+		$this->groupManager->expects($this->once())->method('createGroupFromBackend')->willReturn($group);
+		$group->expects($this->once())->method('addUser');
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addGroupAndUser', function ($event) use (&$called) {
