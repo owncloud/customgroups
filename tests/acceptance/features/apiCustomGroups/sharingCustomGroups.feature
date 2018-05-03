@@ -1,5 +1,5 @@
 @api
-Feature: Custom Groups
+Feature: Sharing Custom Groups
 
   Background:
     Given using api version "1"

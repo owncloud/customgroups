@@ -5,19 +5,9 @@ default:
      - %paths.base%/../vendor/autoload.php
 
   suites:
-    default:
+    apiCustomGroups:
       paths:
-        - %paths.base%/../features
-      contexts:
-        - FeatureContext:
-            baseUrl:  http://localhost:8080
-            adminUsername: admin
-            adminPassword: admin
-            regularUserPassword: 123456
-            ocPath: ../../../../
-    Custom_Groups:
-      paths:
-        - %paths.base%/../custom_groups_features
+        - %paths.base%/../features/apiCustomGroups
       contexts:
         - CustomGroupsContext:
             baseUrl:  http://localhost:8080
