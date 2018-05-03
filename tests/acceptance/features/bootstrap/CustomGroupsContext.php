@@ -22,8 +22,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 
-require __DIR__ . '/../../vendor/autoload.php';
-
+require_once 'bootstrap.php';
 
 /**
  * Custom Groups context.
