@@ -40,5 +40,5 @@
     "Role change in group \"%1$s\"." : "Změna role ve skupině \"%1$s\".",
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "Je Vám přiřazen \"%1$s\" k roli \"%3$s\" ve skupině \"%2$s\".",
     "Unknown role" : "Neznámá role"
-},"pluralForm" :"nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;"
+},"pluralForm" :"nplurals=4; plural=(n < 10 && n % 1 == 0) ? 1 : (n < 9999 && n >= 10 && n % 1 == 0) ? 3 : (n % 1 != 0) : 4;"
 }
