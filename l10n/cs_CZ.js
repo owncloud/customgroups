@@ -43,4 +43,4 @@ OC.L10N.register(
     "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "Je Vám přiřazen \"%1$s\" k roli \"%3$s\" ve skupině \"%2$s\".",
     "Unknown role" : "Neznámá role"
 },
-"nplurals=4; plural=(n < 10 && n % 1 == 0) ? 1 : (n < 9999 && n >= 10 && n % 1 == 0) ? 3 : (n % 1 != 0) : 4;");
+"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
