@@ -1,5 +1,6 @@
 { "translations": {
     "Custom Groups" : "Grupos Personalizados",
+    "A group with this name already exists" : "Já existe um grupo com este nome",
     "Could not rename group" : "Não foi possível renomear o grupo",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem a certeza que deseja eliminar o grupo \"{groupName}\"",
     "Confirm deletion of group" : "Confirme a eliminação do grupo",
