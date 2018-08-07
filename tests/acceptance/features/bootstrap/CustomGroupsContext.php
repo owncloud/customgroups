@@ -356,7 +356,13 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * Abstract method implemented from Core's FeatureContext
 	 */
-	protected function resetAppConfigs() {}
+	protected function resetAppConfigs() {
+		// Remember the current capabilities
+		$this->getCapabilitiesCheckResponse();
+		$this->savedCapabilitiesXml[$this->getBaseUrl()] = $this->getCapabilitiesXml();
+		// Set the required starting values for testing
+		$this->setCapabilities($this->getCommonSharingConfigs());
+	}
 
 	/**
 	 * @BeforeScenario
