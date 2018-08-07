@@ -2,7 +2,7 @@
 Feature: Sharing Custom Groups
 
   Background:
-    Given using api version "1"
+    Given using OCS API version "1"
     And using new dav path
 
   Scenario: Check that skeleton is properly set
@@ -26,7 +26,7 @@ Feature: Sharing Custom Groups
     And user "member1" has been created
     And user "user1" has created a custom group called "sharing-group"
     And user "user1" has made user "member1" a member of custom group "sharing-group"
-    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
       | shareType | 1                         |
@@ -39,7 +39,7 @@ Feature: Sharing Custom Groups
     And user "user1" has been created
     And user "user1" has created a custom group called "sharing-group"
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt |
       | shareWith | user1       |
       | shareType | 0           |
@@ -53,9 +53,9 @@ Feature: Sharing Custom Groups
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
-    When user "user0" updates the last share using the API with
+    When user "user0" updates the last share using the sharing API with
       | permissions | 1 |
-    And user "user0" gets the info of the last share using the API
+    And user "user0" gets the info of the last share using the sharing API
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the share fields of the last share should include
@@ -81,7 +81,7 @@ Feature: Sharing Custom Groups
     And user "user1" has been created
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
-    When user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    When user "user1" sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the last share_id should be included in the response
@@ -92,7 +92,7 @@ Feature: Sharing Custom Groups
     And user "user1" has been created
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "/PARENT" with user "user1"
-    When user "user0" shares file "/PARENT/CHILD" with group "customgroup_group1" using the API
+    When user "user0" shares file "/PARENT/CHILD" with group "customgroup_group1" using the sharing API
     Then user "user1" should see the following elements
       | /FOLDER/           |
       | /PARENT/           |
@@ -114,7 +114,7 @@ Feature: Sharing Custom Groups
     And user "user1" has shared file "textfile0.txt" with user "user2"
     And user "user1" has moved file "/textfile0.txt" to "/common/textfile0.txt"
     And user "user1" has moved file "/common/textfile0.txt" to "/common/sub/textfile0.txt"
-    When user "user2" downloads file "/textfile0.txt" with range "bytes=9-17" using the API
+    When user "user2" downloads file "/textfile0.txt" with range "bytes=9-17" using the WebDAV API
     Then the downloaded content should be "test text"
     And user "user2" should see the following elements
       | /common/sub/textfile0.txt |
@@ -126,8 +126,8 @@ Feature: Sharing Custom Groups
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
-    When user "user0" deletes the last share using the API
-    And user "user1" sends HTTP method "GET" to API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
+    When user "user0" deletes the last share using the sharing API
+    And user "user1" sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the last share_id should not be included in the response
@@ -143,7 +143,7 @@ Feature: Sharing Custom Groups
     And user "user0" has shared folder "TMP" with group "customgroup_group1"
     And user "user1" has created a folder "/myFOLDER"
     And user "user1" has moved file "/TMP" to "/myFOLDER/myTMP"
-    When the administrator deletes user "user2" using the API
+    When the administrator deletes user "user2" using the provisioning API
     Then user "user1" should see the following elements
       | /myFOLDER/myTMP/ |
 
@@ -153,8 +153,8 @@ Feature: Sharing Custom Groups
     And user "user0" has created a custom group called "sharing-group"
     And group "sharing-group" has been created
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
-    And user "user0" deletes the last share using the API
-    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
+    And user "user0" deletes the last share using the sharing API
+    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
       | shareType | 1                         |
@@ -169,7 +169,7 @@ Feature: Sharing Custom Groups
     And user "user0" has created a folder "/test"
     And user "user0" has created a folder "/test/sub"
     And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
       | shareWith | user1     |
       | shareType | 0         |
@@ -185,7 +185,7 @@ Feature: Sharing Custom Groups
     And user "user0" has created a folder "/test"
     And user "user0" has created a folder "/test/sub"
     And user "user0" has shared file "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
       | shareWith | user1     |
       | shareType | 0         |
@@ -202,7 +202,7 @@ Feature: Sharing Custom Groups
     And user "user0" has shared file "/PARENT/parent.txt" with group "customgroup_sharing-group"
     And user "user0" has stored etag of element "/PARENT"
     And user "user1" has stored etag of element "/"
-    When user "user1" deletes the last share using the API
+    When user "user1" deletes the last share using the sharing API
     Then the etag of element "/" of user "user1" should have changed
     And the etag of element "/PARENT" of user "user0" should not have changed
 
@@ -213,9 +213,9 @@ Feature: Sharing Custom Groups
     And user "user0" has created a custom group called "sharing-group"
     And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
-    When user "user0" updates the last share using the API with
+    When user "user0" updates the last share using the sharing API with
       | permissions | 0 |
-    And user "user0" updates the last share using the API with
+    And user "user0" updates the last share using the sharing API with
       | permissions | 31 |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"

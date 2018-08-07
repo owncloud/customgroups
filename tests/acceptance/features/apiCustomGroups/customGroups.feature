@@ -2,7 +2,7 @@
 Feature: Custom Groups
 
   Background:
-    Given using api version "1"
+    Given using OCS API version "1"
     And using new dav path
 
   Scenario: Create a custom group
