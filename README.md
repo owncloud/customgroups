@@ -3,6 +3,8 @@
 This apps makes it possible for users to create their own custom groups and manage their members.
 It is then possible to share files or folders with these groups.
 
+Trigger CI.
+
 ## QA metrics on master branch:
 
 [![Build Status](https://travis-ci.org/owncloud/customgroups.svg?branch=master)](https://travis-ci.org/owncloud/customgroups/branches)
