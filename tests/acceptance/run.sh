@@ -5,7 +5,7 @@ mkdir -p output
 composer install
 
 OC_PATH=../../../../
-CORE_INT_TESTS_PATH=tests/acceptance/
+TESTING_APP_DATA_PATH=apps/testing/data/
 
 OCC=${OC_PATH}occ
 
@@ -25,7 +25,7 @@ echo $PHPPID
 export TEST_SERVER_URL="http://localhost:$PORT"
 
 #Set up personalized skeleton
-$OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$CORE_INT_TESTS_PATH""skeleton"
+$OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$TESTING_APP_DATA_PATH""apiSkeleton"
 
 #Enable needed app
 $OCC app:enable files_external
