@@ -1,8 +1,6 @@
 default:
   autoload:
-    #- %paths.base%/../../../../../build/acceptance/features/bootstrap
-    #- %paths.base%/../features/bootstrap
-     - %paths.base%/../vendor/autoload.php
+    - %paths.base%/../features/bootstrap
 
   suites:
     apiCustomGroups:

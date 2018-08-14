@@ -1,7 +1,7 @@
 # Tests
 
-PHPUNIT="$(shell pwd)"/lib/composer/phpunit/phpunit/phpunit
-OCULAR=$(shell pwd)/lib/composer/scrutinizer/ocular/bin/ocular
+PHPUNIT=$(OWNCLOUD_PATH)/lib/composer/phpunit/phpunit/phpunit
+OCULAR=$(OWNCLOUD_PATH)/lib/composer/scrutinizer/ocular/bin/ocular
 KARMA=$(NODE_PREFIX)/node_modules/.bin/karma
 JSHINT=$(NODE_PREFIX)/node_modules/.bin/jshint
 
@@ -66,7 +66,8 @@ test-upload-coverage: $(OCULAR) $(clover_xml)
 
 .PHONY: test-acceptance
 test-acceptance: test-syntax-php
-	cd tests/acceptance && OCC="$(OCC)" ./run.sh
+	$(OCC) app:enable $(app_name)
+	cd $(OWNCLOUD_PATH)/tests/acceptance && OCC="$(OCC)" ./run.sh -c ../../apps/customgroups/tests/acceptance/config/behat.yml
 
 .PHONY: test-js
 test-js: $(bower_deps) $(KARMA) js-templates test-syntax-js
