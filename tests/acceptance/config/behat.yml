@@ -8,11 +8,13 @@ default:
         - %paths.base%/../features/apiCustomGroups
       contexts:
         - CustomGroupsContext:
+        - FeatureContext:
             baseUrl:  http://localhost:8080
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
             ocPath: apps/testing/api/v1/occ
+
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
