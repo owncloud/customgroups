@@ -43,7 +43,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 */
 	private $sabreResponse;
 
-	/** @var array */
+	/**
+	 * @var array
+	 */
 	private $createdCustomGroups = [];
 
 	/**
@@ -55,7 +57,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return void
 	 */
-	public function userCreatesACustomGroup($user, $groupName){
+	public function userCreatesACustomGroup($user, $groupName) {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
@@ -64,7 +66,9 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$response = $e->getResponse();
-			if ($response->getStatusCode() === 401 || $response->getStatusCode() >= 500) {
+			if ($response->getStatusCode() === 401
+				|| $response->getStatusCode() >= 500
+			) {
 				throw $e;
 			}
 		}
@@ -81,7 +85,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return void
 	 */
-	public function userDeletesACustomGroup($user, $groupName){
+	public function userDeletesACustomGroup($user, $groupName) {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
@@ -98,18 +102,20 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * Retrieve all custom groups
 	 *
-	 * @param $user
+	 * @param string $user
 	 *
 	 * @return array
 	 * @throws ClientHttpException
 	 */
-	public function getCustomGroups($user){
+	public function getCustomGroups($user) {
 		$client = $this->featureContext->getSabreClient($user);
 		$properties = [
 						'{http://owncloud.org/ns}display-name'
 					  ];
 		$appPath = '/customgroups/groups/';
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $this->featureContext->getDavPath() . $appPath;
+		$fullUrl
+			= $this->featureContext->getBaseUrl() . '/'
+			. $this->featureContext->getDavPath() . $appPath;
 		$sabreResponse = $client->propfind($fullUrl, $properties, 1);
 		return $sabreResponse;
 	}
@@ -122,16 +128,20 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 * @throws ClientHttpException
 	 */
-	public function customGroupShouldExist($customGroup){
+	public function customGroupShouldExist($customGroup) {
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
-		foreach($customGroupsList as $customGroupPath => $customGroupName) {
-			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $customGroup)){
+		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
+			if ((!empty($customGroupName))
+				&& (array_values($customGroupName)[0] == $customGroup)
+			) {
 				$exists = true;
 			}
 		}
-		if (!$exists){
-			PHPUnit_Framework_Assert::fail("$customGroup" . " is not in propfind answer");
+		if (!$exists) {
+			PHPUnit_Framework_Assert::fail(
+				"$customGroup is not in propfind answer"
+			);
 		}
 	}
 
@@ -144,17 +154,21 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 * @throws ClientHttpException
 	 */
-	public function customGroupExistsWithDisplayName($customGroup, $displayName){
+	public function customGroupExistsWithDisplayName($customGroup, $displayName) {
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
-		foreach($customGroupsList as $customGroupPath => $customGroupName) {
-			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $displayName)){
+		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
+			if ((!empty($customGroupName))
+				&& (array_values($customGroupName)[0] == $displayName)
+			) {
 				$exists = true;
 				break;
 			}
 		}
-		if (!$exists){
-			PHPUnit_Framework_Assert::fail("$customGroup" . " is not in propfind answer");
+		if (!$exists) {
+			PHPUnit_Framework_Assert::fail(
+				"$customGroup is not in propfind answer"
+			);
 		}
 	}
 
@@ -166,16 +180,20 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 * @throws ClientHttpException
 	 */
-	public function customGroupShouldNotExist($customGroup){
+	public function customGroupShouldNotExist($customGroup) {
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
-		foreach($customGroupsList as $customGroupPath => $customGroupName) {
-			if ((!empty($customGroupName)) && (array_values($customGroupName)[0] == $customGroup)){
+		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
+			if ((!empty($customGroupName))
+				&& (array_values($customGroupName)[0] == $customGroup)
+			) {
 				$exists = true;
 			}
 		}
-		if ($exists){
-			PHPUnit_Framework_Assert::fail("$customGroup" . " is in propfind answer");
+		if ($exists) {
+			PHPUnit_Framework_Assert::fail(
+				"$customGroup is in propfind answer"
+			);
 		}
 	}
 
@@ -189,11 +207,15 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return bool
 	 * @throws ClientException
 	 */
-	public function sendProppatchToCustomGroup($user, $customGroup, $properties = null){
+	public function sendProppatchToCustomGroup(
+		$user, $customGroup, $properties = null
+	) {
 		$client = $this->featureContext->getSabreClient($user);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $this->featureContext->getDavPath() . $appPath . $customGroup;
+		$fullUrl
+			= $this->featureContext->getBaseUrl() . '/'
+			. $this->featureContext->getDavPath() . $appPath . $customGroup;
 		try {
 			return $client->proppatch($fullUrl, $properties, 1);
 		} catch (ClientHttpException $e) {
@@ -216,11 +238,16 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return bool
 	 * @throws ClientException
 	 */
-	public function sendProppatchToCustomGroupMember($userRequesting, $customGroup, $userRequested, $properties = null){
+	public function sendProppatchToCustomGroupMember(
+		$userRequesting, $customGroup, $userRequested, $properties = null
+	) {
 		$client = $this->featureContext->getSabreClient($userRequesting);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $this->featureContext->getDavPath() . $appPath . $customGroup . '/' . $userRequested;
+		$fullUrl
+			= $this->featureContext->getBaseUrl() . '/'
+			. $this->featureContext->getDavPath()
+			. $appPath . $customGroup . '/' . $userRequested;
 		try {
 			return $client->proppatch($fullUrl, $properties, 1);
 		} catch (ClientHttpException $e) {
@@ -242,11 +269,15 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 * @throws ClientException
 	 */
-	public function userChangedRoleOfMember($userRequesting, $userRequested, $role, $customGroup) {
+	public function userChangedRoleOfMember(
+		$userRequesting, $userRequested, $role, $customGroup
+	) {
 		$properties = [
 						'{http://owncloud.org/ns}role' => $role
 					  ];
-		$this->sendProppatchToCustomGroupMember($userRequesting, $customGroup, $userRequested, $properties);
+		$this->sendProppatchToCustomGroupMember(
+			$userRequesting, $customGroup, $userRequested, $properties
+		);
 	}
 
 	/**
@@ -275,14 +306,16 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return array|null
 	 */
-	public function getCustomGroupMembers($user, $group){
+	public function getCustomGroupMembers($user, $group) {
 		$client = $this->featureContext->getSabreClient($user);
 		$client->setThrowExceptions(true);
 		$properties = [
 						'{http://owncloud.org/ns}role'
 					  ];
 		$appPath = '/customgroups/groups/' . $group;
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $this->featureContext->getDavPath() . $appPath;
+		$fullUrl
+			= $this->featureContext->getBaseUrl() . '/'
+			. $this->featureContext->getDavPath() . $appPath;
 		try {
 			$response = $client->propfind($fullUrl, $properties, 1);
 			return $response;
@@ -303,12 +336,16 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return mixed
 	 * @throws ClientHttpException
 	 */
-	public function getUserRoleInACustomGroup($userRequesting, $userRequested, $group){
+	public function getUserRoleInACustomGroup(
+		$userRequesting, $userRequested, $group
+	) {
 		$client = $this->featureContext->getSabreClient($userRequesting);
 		$properties = [
 						'{http://owncloud.org/ns}role'
 					  ];
-		$userPath = $this->featureContext->getDavPath() .'/customgroups/groups/' . $group . '/' . $userRequested;
+		$userPath
+			= $this->featureContext->getDavPath()
+			. '/customgroups/groups/' . $group . '/' . $userRequested;
 		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $userPath;
 		$response = $client->propfind($fullUrl, $properties, 1);
 		return $response['/' . $userPath]['{http://owncloud.org/ns}role'];
@@ -324,8 +361,10 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 * @throws ClientHttpException
 	 */
-	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup){
-		$currentRole = $this->getUserRoleInACustomGroup('admin', $user, $customGroup);
+	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup) {
+		$currentRole = $this->getUserRoleInACustomGroup(
+			'admin', $user, $customGroup
+		);
 		PHPUnit_Framework_Assert::assertEquals($role, $currentRole);
 	}
 
@@ -333,21 +372,27 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @Then the members of :customGroup requested by user :user should be
 	 *
 	 * @param \Behat\Gherkin\Node\TableNode|null $memberList
-	 * @param string $customGroup
 	 * @param string $user
+	 * @param string $customGroup
 	 *
 	 * @return void
 	 */
-	public function usersAreMemberOfCustomGroup($memberList, $user, $customGroup){
+	public function usersAreMemberOfCustomGroup(
+		$memberList, $user, $customGroup
+	) {
 		$appPath = '/customgroups/groups/';
 		if ($memberList instanceof \Behat\Gherkin\Node\TableNode) {
 			$members = $memberList->getRows();
 			$membersSimplified = $this->featureContext->simplifyArray($members);
 			$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
 			foreach ($membersSimplified as $member) {
-				$memberPath = '/' . $this->featureContext->getDavPath() . $appPath . $customGroup . '/' . $member;
-				if (!array_key_exists($memberPath, $respondedArray)){
-					PHPUnit_Framework_Assert::fail("$member path" . " is not in report answer");
+				$memberPath
+					= '/' . $this->featureContext->getDavPath()
+					. $appPath . $customGroup . '/' . $member;
+				if (!array_key_exists($memberPath, $respondedArray)) {
+					PHPUnit_Framework_Assert::fail(
+						"$member path is not in report answer"
+					);
 				}
 			}
 		}
@@ -356,14 +401,16 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * @Then user :user should not be able to get members of custom group :customGroup
 	 *
-	 * @param string $user
 	 * @param string $customGroup
+	 * @param string $user
 	 *
 	 * @return void
 	 */
-	public function tryingToGetMembersOfCustomGroup($customGroup, $user){
+	public function tryingToGetMembersOfCustomGroup($customGroup, $user) {
 		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
-		PHPUnit_Framework_Assert::assertEquals($this->sabreResponse->getStatus(), 403);
+		PHPUnit_Framework_Assert::assertEquals(
+			$this->sabreResponse->getStatus(), 403
+		);
 		PHPUnit_Framework_Assert::assertEmpty($respondedArray);
 	}
 
@@ -377,9 +424,12 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return void
 	 */
-	public function addMemberOfCustomGroup($userRequesting, $userRequested, $customGroup){
+	public function addMemberOfCustomGroup(
+		$userRequesting, $userRequested, $customGroup
+	) {
 		try {
-			$userPath = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
+			$userPath
+				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 			$response = $this->featureContext->makeDavRequest(
 				$userRequesting, "PUT", $userPath, null, null, "uploads"
 			);
@@ -400,9 +450,12 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return void
 	 */
-	public function removeMemberOfCustomGroup($userRequesting, $userRequested, $customGroup){
+	public function removeMemberOfCustomGroup(
+		$userRequesting, $userRequested, $customGroup
+	) {
 		try {
-			$userPath = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
+			$userPath
+				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 			$response = $this->featureContext->makeDavRequest(
 				$userRequesting, "DELETE", $userPath, null, null, "uploads"
 			);
@@ -416,18 +469,20 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * retrieve all custom groups which the user is a member of
 	 *
-	 * @param $userRequesting
-	 * @param $userRequested
+	 * @param string $userRequesting
+	 * @param string $userRequested
 	 *
 	 * @return array|null
 	 */
-	public function getCustomGroupsOfAUser($userRequesting, $userRequested){
+	public function getCustomGroupsOfAUser($userRequesting, $userRequested) {
 		$client = $this->featureContext->getSabreClient($userRequesting);
 		$client->setThrowExceptions(true);
 		$properties = [
 						'{http://owncloud.org/ns}role'
 					  ];
-		$userPath = $this->featureContext->getDavPath() .'/customgroups/users/' . $userRequested;
+		$userPath
+			= $this->featureContext->getDavPath()
+			. '/customgroups/users/' . $userRequested;
 		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $userPath;
 		try {
 			return $client->propfind($fullUrl, $properties, 1);
@@ -447,17 +502,26 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @return void
 	 */
-
-	public function customGroupsWhichAUserIsMemberOfAre($customGroupList, $userRequested, $userRequesting){
+	public function customGroupsWhichAUserIsMemberOfAre(
+		$customGroupList, $userRequested, $userRequesting
+	) {
 		$appPath = '/customgroups/users/';
 		if ($customGroupList instanceof \Behat\Gherkin\Node\TableNode) {
 			$customGroups = $customGroupList->getRows();
-			$customGroupsSimplified = $this->featureContext->simplifyArray($customGroups);
-			$respondedArray = $this->getCustomGroupsOfAUser($userRequesting, $userRequested);
+			$customGroupsSimplified = $this->featureContext->simplifyArray(
+				$customGroups
+			);
+			$respondedArray = $this->getCustomGroupsOfAUser(
+				$userRequesting, $userRequested
+			);
 			foreach ($customGroupsSimplified as $customGroup) {
-				$groupPath = '/' . $this->featureContext->getDavPath() . $appPath . $userRequested . '/' . $customGroup . '/';
-				if (!array_key_exists($groupPath, $respondedArray)){
-					PHPUnit_Framework_Assert::fail("$customGroup path" . " is not in propfind answer");
+				$groupPath
+					= '/' . $this->featureContext->getDavPath()
+					. $appPath . $userRequested . '/' . $customGroup . '/';
+				if (!array_key_exists($groupPath, $respondedArray)) {
+					PHPUnit_Framework_Assert::fail(
+						"$customGroup path" . " is not in propfind answer"
+					);
 				}
 			}
 		}
@@ -486,11 +550,14 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * @BeforeScenario
 	 * @AfterScenario
+	 *
+	 * @return void
 	 */
-	public function cleanupCustomGroups()
-	{
-		foreach($this->createdCustomGroups as $customGroup) {
-			$this->userDeletesACustomGroup($this->featureContext->getAdminUsername(), $customGroup);
+	public function cleanupCustomGroups() {
+		foreach ($this->createdCustomGroups as $customGroup) {
+			$this->userDeletesACustomGroup(
+				$this->featureContext->getAdminUsername(), $customGroup
+			);
 		}
 	}
 }
