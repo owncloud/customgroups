@@ -133,7 +133,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$exists = false;
 		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
 			if ((!empty($customGroupName))
-				&& (array_values($customGroupName)[0] == $customGroup)
+				&& (\array_values($customGroupName)[0] == $customGroup)
 			) {
 				$exists = true;
 			}
@@ -159,7 +159,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$exists = false;
 		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
 			if ((!empty($customGroupName))
-				&& (array_values($customGroupName)[0] == $displayName)
+				&& (\array_values($customGroupName)[0] == $displayName)
 			) {
 				$exists = true;
 				break;
@@ -185,7 +185,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 		$exists = false;
 		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
 			if ((!empty($customGroupName))
-				&& (array_values($customGroupName)[0] == $customGroup)
+				&& (\array_values($customGroupName)[0] == $customGroup)
 			) {
 				$exists = true;
 			}
@@ -389,7 +389,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 				$memberPath
 					= '/' . $this->featureContext->getDavPath()
 					. $appPath . $customGroup . '/' . $member;
-				if (!array_key_exists($memberPath, $respondedArray)) {
+				if (!\array_key_exists($memberPath, $respondedArray)) {
 					PHPUnit_Framework_Assert::fail(
 						"$member path is not in report answer"
 					);
@@ -518,7 +518,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 				$groupPath
 					= '/' . $this->featureContext->getDavPath()
 					. $appPath . $userRequested . '/' . $customGroup . '/';
-				if (!array_key_exists($groupPath, $respondedArray)) {
+				if (!\array_key_exists($groupPath, $respondedArray)) {
 					PHPUnit_Framework_Assert::fail(
 						"$customGroup path" . " is not in propfind answer"
 					);
