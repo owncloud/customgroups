@@ -141,7 +141,8 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	public function testDeleteAsAdmin() {
-		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+		$this->setCurrentUserMemberInfo($memberInfo);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
@@ -154,6 +155,13 @@ class MembershipNodeTest extends \Test\TestCase {
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			);
+
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $searchAdmins)
+			->willReturn([$memberInfo]);
 
 		$called = array();
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::removeUserFromGroup', function ($event) use (&$called) {
@@ -173,11 +181,19 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 */
 	public function testDeleteAsAdminFailed() {
-		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+		$this->setCurrentUserMemberInfo($memberInfo);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(false);
+
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $searchAdmins)
+			->willReturn([$memberInfo]);
 
 		$this->node->delete();
 	}
@@ -239,6 +255,13 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
 
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $searchAdmins)
+			->willReturn([['user_id' => 'adminuser']]);
+
 		// no notification in this case
 		$this->helper->expects($this->never())
 			->method('notifyUserRemoved');
@@ -270,6 +293,13 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('removeFromGroup')
 			->with(self::NODE_USER, 1)
 			->willReturn(true);
+
+		$searchAdmins = new Search();
+		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
+		$this->handler->expects($this->once())
+			->method('getGroupMembers')
+			->with(1, $searchAdmins)
+			->willReturn([['user_id' => 'adminuser']]);
 
 		$this->node->delete();
 	}
