@@ -62,6 +62,8 @@ matrix:
       env: DB=mysql;TEST=test-php;CORE_BRANCH=master
     - php: 5.6
       env: DB=mysql;TEST=test-php
+    - php: 7.2
+      env: DB=mysql;TEST=test-php
     # PHP unit tests with pgSQL
     - php: 7.1
       env: DB=pgsql;TEST=test-php;CORE_BRANCH=master
