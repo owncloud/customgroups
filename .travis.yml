@@ -40,6 +40,10 @@ before_install:
   - ./occ status
   - ./occ app:list
 
+install:
+- sh -c "if [ '$TEST' = 'test-acceptance' ]; then git clone https://github.com/owncloud/testing.git apps/testing; fi"
+- sh -c "if [ '$TEST' = 'test-acceptance' ]; then php occ app:enable testing; fi"
+
 script:
   - cd apps/$APP_NAME/
   - make $TEST
