@@ -20,7 +20,6 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Sabre\HTTP\ClientException;
 use Sabre\HTTP\ClientHttpException;
@@ -32,7 +31,7 @@ require_once 'bootstrap.php';
 /**
  * Custom Groups context.
  */
-class CustomGroupsContext implements Context, SnippetAcceptingContext {
+class CustomGroupsContext implements Context {
 	/**
 	 * @var FeatureContext
 	 */
@@ -205,7 +204,6 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 	 * @param array|null $properties
 	 *
 	 * @return bool
-	 * @throws ClientException
 	 */
 	public function sendProppatchToCustomGroup(
 		$user, $customGroup, $properties = null
@@ -217,7 +215,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			= $this->featureContext->getBaseUrl() . '/'
 			. $this->featureContext->getDavPath() . $appPath . $customGroup;
 		try {
-			return $client->proppatch($fullUrl, $properties, 1);
+			return $client->proppatch($fullUrl, $properties);
 		} catch (ClientHttpException $e) {
 			$this->sabreResponse = $e->getResponse();
 			return false;
@@ -249,7 +247,7 @@ class CustomGroupsContext implements Context, SnippetAcceptingContext {
 			. $this->featureContext->getDavPath()
 			. $appPath . $customGroup . '/' . $userRequested;
 		try {
-			return $client->proppatch($fullUrl, $properties, 1);
+			return $client->proppatch($fullUrl, $properties);
 		} catch (ClientHttpException $e) {
 			// 4xx and 5xx responses cause an exception
 			$this->sabreResponse = $e->getResponse();
