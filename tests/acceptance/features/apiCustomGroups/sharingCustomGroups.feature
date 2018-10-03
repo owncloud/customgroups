@@ -72,7 +72,7 @@ Feature: Sharing Custom Groups
       | uid_owner         | user0          |
       | storage_id        | home::user0    |
       | file_parent       | A_NUMBER       |
-      | displayname_owner | user0          |
+      | displayname_owner | User Zero      |
       | mimetype          | text/plain     |
 
   Scenario: Sharee can see the custom group share
