@@ -152,7 +152,10 @@ class GroupsCollection implements IExtendedCollection {
 		// add current user as admin
 		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
 
-		$event = new GenericEvent(null, ['groupName' => $name, 'user' => $this->helper->getUserId()]);
+		$event = new GenericEvent(null, [
+			'groupName' => $name,
+			'groupId' => $groupId,
+			'user' => $this->helper->getUserId()]);
 		$this->dispatcher->dispatch('\OCA\CustomGroups::addGroupAndUser', $event);
 	}
 

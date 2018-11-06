@@ -378,6 +378,14 @@ class MembershipHelperTest extends \Test\TestCase {
 
 		$this->assertSame('\OCA\CustomGroups::changeRoleInGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('user', $called[1]);
+		$this->assertEquals('anotheruser', $called[1]->getArgument('user'));
+		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('roleNumber', $called[1]);
+		$this->assertEquals(0, $called[1]->getArgument('roleNumber'));
+		$this->assertArrayHasKey('roleDisaplayName', $called[1]);
+		$this->assertEquals('Member', $called[1]->getArgument('roleDisaplayName'));
 	}
 
 	public function canCreateRolesProvider() {

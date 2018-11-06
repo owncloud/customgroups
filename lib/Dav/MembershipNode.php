@@ -137,14 +137,37 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		if ($currentUserId !== $userId) {
 			// only notify when the removal was done by another user
 			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
+			/**
+			 * This event is deprecated. The keys of the event array are not using camel case.
+			 */
 			$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
 			$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
+			/**
+			 * The new event which has camel case for arguments in event array.
+			 */
+			$newEvent = new GenericEvent(null, [
+				'user' => $userId,
+				'groupName' => $this->groupInfo['display_name'],
+				'groupId' => $groupId]);
+			$this->dispatcher->dispatch('customGroups.removeUserFromGroup', $newEvent);
 		}
 
 		//Send dispatcher event if the removal is self
 		if ($currentUserId === $userId) {
+			/**
+			 * This event is deprecated, 'user' should be used instead of 'userId'
+			 * as key for event argument
+			 */
 			$event = new GenericEvent(null, ['userId' => $userId, 'groupName' => $this->groupInfo['display_name']]);
 			$this->dispatcher->dispatch('\OCA\CustomGroups::leaveFromGroup', $event);
+			/**
+			 * From now on use this event 'customGroups.leaveFromGroup'
+			 */
+			$newEvent = new GenericEvent(null, [
+				'user' => $userId,
+				'groupName' => $this->groupInfo['display_name'],
+				'groupId' => $groupId]);
+			$this->dispatcher->dispatch('customGroups.leaveFromGroup', $newEvent);
 		}
 	}
 
