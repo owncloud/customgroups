@@ -45,8 +45,6 @@ $(build_dir)/$(app_name): deps $(build_rules) $(all_src) js-templates
 		-name demos -o \
 		-name doc -o \
 		-name travis -o \
-		-name .bower.json -o \
-		-name bower.json -o \
 		-name package.json -o \
 		-name testem.json -o \
 		-iname \*.sh -o \

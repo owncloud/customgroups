@@ -70,10 +70,10 @@ test-acceptance: test-syntax-php
 	cd $(OWNCLOUD_PATH)/tests/acceptance && OCC="$(OCC)" ./run.sh -c ../../apps/customgroups/tests/acceptance/config/behat.yml
 
 .PHONY: test-js
-test-js: $(bower_deps) $(KARMA) js-templates test-syntax-js
+test-js: $(js_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js --single-run
 
-test-js-debug: $(bower_deps) $(KARMA) js-templates test-syntax-js
+test-js-debug: $(js_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js
 
 $(PHPUNIT): $(composer_dev_deps)

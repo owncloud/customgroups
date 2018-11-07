@@ -33,5 +33,5 @@ clean-templates:
 #
 .PHONY: watch
 watch: $(nodejs_deps)
-	$(NPM) --prefix $(NODE_PREFIX) run watch
+	cd $(NODE_PREFIX) && $(YARN) run watch
 
