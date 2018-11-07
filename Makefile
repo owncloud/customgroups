@@ -23,6 +23,17 @@ help_rules=help-base
 
 tools_path=$(shell pwd)/tools
 
+# bin file definitions
+PHPUNIT=php -d zend.enable_gc=0  vendor/bin/phpunit
+PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "./vendor/bin/phpunit"
+PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/owncloud-codestyle/vendor/bin/php-cs-fixer
+
+.DEFAULT_GOAL := help
+
+# start with displaying help
+help:
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
 .PHONY: all
 all: help-hint dist
 
@@ -53,3 +64,52 @@ clean: $(clean_rules)
 .PHONY: test
 test: $(test_rules)
 
+
+##
+## Tests
+##--------------------------------------
+
+.PHONY: test-php-unit
+test-php-unit:             ## Run php unit tests
+test-php-unit: vendor/bin/phpunit
+	$(PHPUNIT) --configuration ./tests/unit/phpunit.xml --testsuite unit
+
+.PHONY: test-php-unit-dbg
+test-php-unit-dbg:         ## Run php unit tests using phpdbg
+test-php-unit-dbg: vendor/bin/phpunit
+	$(PHPUNITDBG) --configuration ./tests/unit/phpunit.xml --testsuite unit
+
+.PHONY: test-php-style
+test-php-style:            ## Run php-cs-fixer and check owncloud code-style
+test-php-style: vendor-bin/owncloud-codestyle/vendor
+	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes --dry-run
+
+.PHONY: test-php-style-fix
+test-php-style-fix:        ## Run php-cs-fixer and fix code style issues
+test-php-style-fix: vendor-bin/owncloud-codestyle/vendor
+	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes
+
+.PHONY: test-acceptance-api
+test-acceptance-api:       ## Run API acceptance tests
+test-acceptance-api: vendor/bin/phpunit
+	../../tests/acceptance/run.sh --type api
+
+#
+# Dependency management
+#--------------------------------------
+
+composer.lock: composer.json
+	@echo composer.lock is not up to date.
+
+vendor: composer.lock
+	composer install --no-dev
+
+vendor/bin/phpunit: composer.lock
+	composer install
+
+vendor/bamarni/composer-bin-plugin: composer.lock
+	composer install
+
+
+vendor-bin/owncloud-codestyle/composer.lock: vendor-bin/owncloud-codestyle/composer.json
+	@echo owncloud-codestyle composer.lock is not up to date.

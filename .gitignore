@@ -53,3 +53,7 @@ js/vendor
 tools/*
 js/templates/*.handlebars.js
 tests/unit/results
+vendor/
+vendor-bin/**/composer.lock
+
+.php_cs.cache
