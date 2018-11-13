@@ -58,7 +58,7 @@ Feature: Sharing Custom Groups
     And user "user0" gets the info of the last share using the sharing API
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And the share fields of the last share should include
+    And the fields of the last response should include
       | id                | A_NUMBER       |
       | item_type         | file           |
       | item_source       | A_NUMBER       |
