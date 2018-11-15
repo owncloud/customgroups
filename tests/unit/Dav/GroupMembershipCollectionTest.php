@@ -182,6 +182,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('groupId', $called[1]);
+		$this->assertEquals(1, $called[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -268,7 +271,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		if (isset($calledEvent)) {
 			$this->assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
 			$this->assertTrue($calledEvent[1] instanceof GenericEvent);
+			$this->assertArrayHasKey('oldGroupName', $calledEvent[1]);
+			$this->assertEquals('Group One', $calledEvent[1]->getArgument('oldGroupName'));
+			$this->assertArrayHasKey('newGroupName', $calledEvent[1]);
+			$this->assertEquals('Group Renamed', $calledEvent[1]->getArgument('newGroupName'));
+			$this->assertArrayHasKey('groupId', $calledEvent[1]);
+			$this->assertEquals(1, $calledEvent[1]->getArgument('groupId'));
 		}
+
 		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
@@ -336,7 +346,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
 		$this->assertArrayHasKey('user',$called[1]);
+		$this->assertEquals('nodeuser', $called[1]->getArgument('user'));
+		$this->assertArrayHasKey('groupId', $called[1]);
+		$this->assertEquals(1, $called[1]->getArgument('groupId'));
 	}
 
 	/**

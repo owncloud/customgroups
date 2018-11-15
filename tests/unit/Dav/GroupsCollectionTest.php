@@ -235,6 +235,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertArrayHasKey('user', $called[1]);
+		$this->assertArrayHasKey('groupId', $called[1]);
+		$this->assertEquals('group1', $called[1]->getArgument('groupName'));
+		$this->assertEquals('user1', $called[1]->getArgument('user'));
+		$this->assertEquals(1, $called[1]->getArgument('groupId'));
 
 		$this->assertEquals(202, $mkCol->getResult()[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}

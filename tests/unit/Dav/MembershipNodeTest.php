@@ -91,7 +91,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->willReturn($user);
 
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
-			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved'])
+			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved', 'isTheOnlyAdmin'])
 			->setConstructorArgs([
 				$this->handler,
 				$this->userSession,
@@ -156,9 +156,14 @@ class MembershipNodeTest extends \Test\TestCase {
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			);
 
+		$this->helper->expects($this->once())
+			->method('isTheOnlyAdmin')
+			->with(1, self::NODE_USER)
+			->willReturn(false);
+
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->once())
+		$this->handler->expects($this->any())
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([$memberInfo]);
@@ -168,6 +173,11 @@ class MembershipNodeTest extends \Test\TestCase {
 			$called[] = '\OCA\CustomGroups::removeUserFromGroup';
 			array_push($called, $event);
 		});
+		$newCalled = array();
+		\OC::$server->getEventDispatcher()->addListener('customGroups.removeUserFromGroup', function ($event) use (&$newCalled) {
+			$newCalled[] = 'customGroups.removeUserFromGroup';
+			$newCalled[] = $event;
+		});
 
 		$this->node->delete();
 
@@ -175,6 +185,13 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('user_displayName', $called[1]);
 		$this->assertArrayHasKey('group_displayName',$called[1]);
+		$this->assertEquals('customGroups.removeUserFromGroup', $newCalled[0]);
+		$this->assertArrayHasKey('user', $newCalled[1]);
+		$this->assertEquals(self::NODE_USER, $newCalled[1]->getArgument('user'));
+		$this->assertArrayHasKey('groupName', $newCalled[1]);
+		$this->assertEquals('Group One', $newCalled[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('groupId', $newCalled[1]);
+		$this->assertEquals(1, $newCalled[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -190,7 +207,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->once())
+		$this->handler->expects($this->any())
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([$memberInfo]);
@@ -266,7 +283,32 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->helper->expects($this->never())
 			->method('notifyUserRemoved');
 
+		$deprecatedLeaveFromGroup = [];
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::leaveFromGroup', function ($event) use (&$deprecatedLeaveFromGroup) {
+			$deprecatedLeaveFromGroup[] = '\OCA\CustomGroups::leaveFromGroup';
+			$deprecatedLeaveFromGroup[] = $event;
+		});
+
+		$newLeaveFromGroup = [];
+		\OC::$server->getEventDispatcher()->addListener('customGroups.leaveFromGroup', function ($event) use (&$newLeaveFromGroup) {
+			$newLeaveFromGroup[] = 'customGroups.leaveFromGroup';
+			$newLeaveFromGroup[] = $event;
+		});
 		$node->delete();
+		$this->assertEquals('\OCA\CustomGroups::leaveFromGroup', $deprecatedLeaveFromGroup[0]);
+		$this->assertInstanceOf(GenericEvent::class, $deprecatedLeaveFromGroup[1]);
+		$this->assertArrayHasKey('userId', $deprecatedLeaveFromGroup[1]);
+		$this->assertEquals('nodeuser', $deprecatedLeaveFromGroup[1]->getArgument('userId'));
+		$this->assertArrayHasKey('groupName', $deprecatedLeaveFromGroup[1]);
+		$this->assertEquals('Group One', $deprecatedLeaveFromGroup[1]->getArgument('groupName'));
+		$this->assertEquals('customGroups.leaveFromGroup', $newLeaveFromGroup[0]);
+		$this->assertInstanceOf(GenericEvent::class, $newLeaveFromGroup[1]);
+		$this->assertArrayHasKey('user', $newLeaveFromGroup[1]);
+		$this->assertEquals('nodeuser', $newLeaveFromGroup[1]->getArgument('user'));
+		$this->assertArrayHasKey('groupName', $newLeaveFromGroup[1]);
+		$this->assertEquals('Group One', $newLeaveFromGroup[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('groupId', $newLeaveFromGroup[1]);
+		$this->assertEquals(1, $newLeaveFromGroup[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -296,7 +338,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->once())
+		$this->handler->expects($this->any())
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([['user_id' => 'adminuser']]);
@@ -468,9 +510,6 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::CURRENT_USER)
 			->willReturn(true);
 
-		$this->handler->expects($this->never())
-			->method('setGroupMemberInfo');
-
 		$searchAdmin = new Search(); 
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
@@ -480,6 +519,9 @@ class MembershipNodeTest extends \Test\TestCase {
 			->willReturn([
 				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			]);
+		$this->handler
+			->method('setGroupMemberInfo')
+			->willReturn(false);
 
 		$propPatch = new PropPatch([MembershipNode::PROPERTY_ROLE => Roles::DAV_ROLE_MEMBER]);
 		$this->node->propPatch($propPatch);

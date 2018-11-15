@@ -266,7 +266,12 @@ class MembershipHelper {
 		} elseif ($memberInfo['role'] === Roles::BACKEND_ROLE_ADMIN) {
 			$roleName = "Group owner";
 		}
-		$event = new GenericEvent(null, ['user' => $targetUserId, 'groupName' => $groupInfo['display_name'], 'roleNumber' => $memberInfo['role'], 'roleDisaplayName' => $roleName]);
+		$event = new GenericEvent(null, [
+			'user' => $targetUserId,
+			'groupName' => $groupInfo['display_name'],
+			'roleNumber' => $memberInfo['role'],
+			'roleDisaplayName' => $roleName,
+			'groupId' => $memberInfo['group_id']]);
 		$this->dispatcher->dispatch('\OCA\CustomGroups::changeRoleInGroup', $event);
 	}
 
