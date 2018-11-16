@@ -92,7 +92,7 @@ test-php-style-fix: vendor-bin/owncloud-codestyle/vendor
 .PHONY: test-acceptance-api
 test-acceptance-api:       ## Run API acceptance tests
 test-acceptance-api: vendor/bin/phpunit
-	../../tests/acceptance/run.sh --type api
+	../../tests/acceptance/run.sh --remote --type api
 
 #
 # Dependency management
