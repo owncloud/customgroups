@@ -56,7 +56,7 @@ test-codecheck-deprecations:
 .PHONY: test-php
 test-php: $(PHPUNIT) test-syntax-php
 	$(OCC) app:enable $(app_name)
-	$(PHPUNIT) --configuration tests/unit/phpunit.xml $(phpunit_args)
+	$(PHPUNIT) --configuration phpunit.xml $(phpunit_args)
 
 $(clover_xml): test-php
 
