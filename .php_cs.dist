@@ -8,7 +8,7 @@ $config
 	->exclude('l10n')
 	->exclude('vendor')
 	->exclude('vendor-bin')
-	->exclude('c3.php')
+	->notPath('/^c3.php/')
 	->in(__DIR__);
 
 return $config;
