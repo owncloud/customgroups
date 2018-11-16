@@ -5,7 +5,9 @@ $config = new OC\CodingStandard\Config();
 $config
 	->setUsingCache(true)
 	->getFinder()
+	->exclude('build')
 	->exclude('l10n')
+	->exclude('lib/composer')
 	->exclude('vendor')
 	->exclude('vendor-bin')
 	->exclude('lib/composer')
@@ -13,4 +15,3 @@ $config
 	->in(__DIR__);
 
 return $config;
-

@@ -161,8 +161,8 @@ services:
 
 matrix:
   include:
-    # oc code style check
-    - PHP_VERSION: 7.1
+    # owncloud-coding-standard
+    - PHP_VERSION: 7.2
       TEST_SUITE: owncloud-coding-standard
 
     # js-tests
