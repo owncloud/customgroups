@@ -28,7 +28,6 @@ use OCA\CustomGroups\Dav\Roles;
  * @package OCA\CustomGroups\Tests\unit\Dav
  */
 class RolesTest extends \Test\TestCase {
-
 	public function testBackendToDavMappings() {
 		$this->assertEquals('member', Roles::backendToDav(0));
 		$this->assertEquals('admin', Roles::backendToDav(1));

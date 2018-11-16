@@ -115,7 +115,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$count = 30;
 		for ($i = 0; $i < $count; $i++) {
 			$num = (string)$i;
-			if (strlen($num) === 1) {
+			if (\strlen($num) === 1) {
 				// doing this for a correct display_name sort because
 				// usually 1 comes before 10 in DB sorts...
 				$num = '0' . $num;
@@ -198,7 +198,6 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals('my_group_3', $results[1]['uri']);
 		$this->assertEquals('One', $results[1]['display_name']);
 		$this->assertEquals($group3Id, $results[1]['group_id']);
-
 	}
 
 	public function testAddToGroup() {

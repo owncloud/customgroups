@@ -41,6 +41,4 @@ class SettingsSection implements ISection {
 	public function getName() {
 		return $this->l->t('Custom Groups');
 	}
-
 }
-

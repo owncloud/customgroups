@@ -222,13 +222,13 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 */
 	public function getProperties($properties) {
 		$result = [];
-		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_ROLE, $properties)) {
 			$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->memberInfo['role']);
 		}
-		if ($properties === null || in_array(self::PROPERTY_USER_ID, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_USER_ID, $properties)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
 		}
-		if ($properties === null || in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties)) {
 			// FIXME: extremely inefficient as it will query the display name
 			// for each user individually
 			$user = $this->helper->getUser($this->memberInfo['user_id']);
@@ -280,5 +280,4 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 
 		return $result;
 	}
-
 }

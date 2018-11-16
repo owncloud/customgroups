@@ -39,7 +39,7 @@ class SettingsPanelTest extends \Test\TestCase {
 	}
 
 	public function testGetPriority() {
-		$this->assertTrue(is_integer($this->panel->getPriority()));
+		$this->assertTrue(\is_integer($this->panel->getPriority()));
 	}
 
 	public function testGetPanel() {

@@ -25,7 +25,6 @@ namespace OCA\CustomGroups;
  * Group backend for custom groups for integration with core
  */
 class CustomGroupsBackend implements \OCP\GroupInterface {
-
 	const GROUP_ID_PREFIX = 'customgroup_';
 
 	/**
@@ -65,7 +64,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function inGroup($uid, $gid) {
 		$uri = $this->extractUri($gid);
-		if (is_null($uri)) {
+		if ($uri === null) {
 			return false;
 		}
 
@@ -80,7 +79,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function getUserGroups($uid) {
 		$memberInfos = $this->handler->getUserMemberships($uid, null);
-		return array_map(function ($memberInfo) {
+		return \array_map(function ($memberInfo) {
 			return $this->formatGroupId($memberInfo['uri']);
 		}, $memberInfos);
 	}
@@ -97,7 +96,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function getGroups($search = '', $limit = -1, $offset = 0) {
 		$groups = $this->handler->searchGroups(new Search($search, $offset, $limit));
-		return array_map(function ($groupInfo) {
+		return \array_map(function ($groupInfo) {
 			return $this->formatGroupId($groupInfo['uri']);
 		}, $groups);
 	}
@@ -109,7 +108,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return bool true if the group exists, false otherwise
 	 */
 	public function groupExists($gid) {
-		return !is_null($this->getGroupDetails($gid));
+		return $this->getGroupDetails($gid) !== null;
 	}
 
 	/**
@@ -120,12 +119,12 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function getGroupDetails($gid) {
 		$uri = $this->extractUri($gid);
-		if (is_null($uri)) {
+		if ($uri === null) {
 			return null;
 		}
 
 		$group = $this->handler->getGroupByUri($uri);
-		if (is_null($group)) {
+		if ($group === null) {
 			return null;
 		}
 		return [
@@ -145,19 +144,19 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0) {
 		$uri = $this->extractUri($gid);
-		if (is_null($uri)) {
+		if ($uri === null) {
 			return [];
 		}
 
 		$group = $this->handler->getGroupByUri($uri);
-		if (is_null($group)) {
+		if ($group === null) {
 			return null;
 		}
 
 		// not exposed to regular user management
 		$search = new Search($search, $offset, $limit);
 		$memberInfo = $this->handler->getGroupMembers($group['group_id'], $search);
-		return array_map(function ($memberInfo) {
+		return \array_map(function ($memberInfo) {
 			return $memberInfo['user_id'];
 		}, $memberInfo);
 	}
@@ -170,13 +169,13 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 	 * @return string|null extracted uri or null if the format did not match
 	 */
 	private function extractUri($gid) {
-		$len = strlen(self::GROUP_ID_PREFIX);
-		$prefixPart = substr($gid, 0, $len);
+		$len = \strlen(self::GROUP_ID_PREFIX);
+		$prefixPart = \substr($gid, 0, $len);
 		if ($prefixPart !== self::GROUP_ID_PREFIX) {
 			return null;
 		}
 
-		$uri = substr($gid, $len);
+		$uri = \substr($gid, $len);
 
 		if ($uri === '') {
 			// invalid id

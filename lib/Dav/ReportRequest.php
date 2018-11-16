@@ -80,7 +80,7 @@ class ReportRequest implements XmlDeserializable {
 	 * @param Reader $reader
 	 * @return mixed
 	 */
-	static function xmlDeserialize(Reader $reader) {
+	public static function xmlDeserialize(Reader $reader) {
 		$request = new ReportRequest();
 
 		$elems = (array)$reader->parseInnerTree([
@@ -88,7 +88,7 @@ class ReportRequest implements XmlDeserializable {
 			'{http://owncloud.org/ns}search' => KeyValue::class,
 		]);
 
-		if (!is_array($elems)) {
+		if (!\is_array($elems)) {
 			$elems = [];
 		}
 
@@ -97,7 +97,7 @@ class ReportRequest implements XmlDeserializable {
 
 		foreach ($elems as $elem) {
 			switch ($elem['name']) {
-				case '{http://owncloud.org/ns}search' :
+				case '{http://owncloud.org/ns}search':
 					$value = $elem['value'];
 					$search = new Search();
 					if (isset($value['{http://owncloud.org/ns}pattern'])) {
@@ -110,8 +110,8 @@ class ReportRequest implements XmlDeserializable {
 						$search->setOffset((int)$value['{http://owncloud.org/ns}offset']);
 					}
 					break;
-				case '{DAV:}prop' :
-					$properties = array_keys($elem['value']);
+				case '{DAV:}prop':
+					$properties = \array_keys($elem['value']);
 					break;
 			}
 		}

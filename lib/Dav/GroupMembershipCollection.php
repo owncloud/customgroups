@@ -165,13 +165,13 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 */
 	public function getProperties($properties) {
 		$result = [];
-		if ($properties === null || in_array(self::PROPERTY_DISPLAY_NAME, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_DISPLAY_NAME, $properties)) {
 			$result[self::PROPERTY_DISPLAY_NAME] = $this->groupInfo['display_name'];
 		}
-		if ($properties === null || in_array(self::PROPERTY_GROUP_ID, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_GROUP_ID, $properties)) {
 			$result[self::PROPERTY_GROUP_ID] = $this->groupInfo['group_id'];
 		}
-		if ($properties === null || in_array(self::PROPERTY_ROLE, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_ROLE, $properties)) {
 			// role is only set if the group info was queried from a specific user
 			if (isset($this->groupInfo['role'])) {
 				$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->groupInfo['role']);
@@ -197,7 +197,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		// check if the user name actually exists
 		$user = $this->helper->getUser($userId);
 		// not existing user or mismatch user casing
-		if (is_null($user) || $userId !== $user->getUID()) {
+		if ($user === null || $userId !== $user->getUID()) {
 			throw new PreconditionFailed("The user \"$userId\" does not exist");
 		}
 
@@ -242,7 +242,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new Forbidden("No permission to list members of group \"$groupId\"");
 		}
 		$memberInfo = $this->groupsHandler->getGroupMemberInfo($groupId, $userId);
-		if (is_null($memberInfo)) {
+		if ($memberInfo === null) {
 			throw new NotFound(
 				"User with id \"$userId\" is not member of group with uri \"$groupId\""
 			);
@@ -267,7 +267,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new Forbidden("No permission to list members of group \"$groupId\"");
 		}
 		$members = $this->groupsHandler->getGroupMembers($groupId, $search);
-		return array_map(function ($memberInfo) {
+		return \array_map(function ($memberInfo) {
 			return $this->createCustomGroupMemberNode($memberInfo);
 		}, $members);
 	}
