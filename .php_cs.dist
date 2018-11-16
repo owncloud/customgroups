@@ -5,11 +5,12 @@ $config = new OC\CodingStandard\Config();
 $config
 	->setUsingCache(true)
 	->getFinder()
+	->exclude('build')
 	->exclude('l10n')
+	->exclude('lib/composer')
 	->exclude('vendor')
 	->exclude('vendor-bin')
 	->notPath('/^c3.php/')
 	->in(__DIR__);
 
 return $config;
-
