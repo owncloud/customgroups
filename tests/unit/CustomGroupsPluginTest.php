@@ -247,4 +247,3 @@ class CustomGroupsPluginTest extends \Test\TestCase {
 		$this->assertFalse($this->plugin->onReport(CustomGroupsPlugin::REPORT_NAME, $reportRequest, '/' . $reportTargetPath));
 	}
 }
-

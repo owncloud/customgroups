@@ -29,7 +29,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
  * Database handler for custom groups
  */
 class CustomGroupsDatabaseHandler {
-
 	const ROLE_MEMBER = 0;
 	const ROLE_ADMIN = 1;
 
@@ -44,7 +43,7 @@ class CustomGroupsDatabaseHandler {
 	 * Logger
 	 *
 	 * @var ILogger
-	 */ 
+	 */
 	private $logger;
 
 	/**
@@ -219,7 +218,7 @@ class CustomGroupsDatabaseHandler {
 		$qb = $this->dbConn->getQueryBuilder();
 		$cursor = $qb->select(['group_id', 'uri', 'display_name'])
 			->from('custom_group')
-			->where($qb->expr()->eq($qb->createFunction('LOWER(`display_name`)'), $qb->createNamedParameter(strtolower($displayName))))
+			->where($qb->expr()->eq($qb->createFunction('LOWER(`display_name`)'), $qb->createNamedParameter(\strtolower($displayName))))
 			->execute();
 
 		$results = $cursor->fetchAll();
@@ -453,7 +452,7 @@ class CustomGroupsDatabaseHandler {
 	private function applySearch(IQueryBuilder $qb, $search, $property = null) {
 		if ($search !== null) {
 			if ($search->getPattern() !== null && $property !== null) {
-				$likeString = '%' . $this->dbConn->escapeLikeParameter(strtolower($search->getPattern())) . '%';
+				$likeString = '%' . $this->dbConn->escapeLikeParameter(\strtolower($search->getPattern())) . '%';
 				$qb->andWhere($qb->expr()->like($qb->createFunction('LOWER(`' . $property . '`)'), $qb->createNamedParameter($likeString)));
 			}
 

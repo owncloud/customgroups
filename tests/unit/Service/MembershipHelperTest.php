@@ -40,7 +40,6 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  * @package OCA\CustomGroups\Tests\unit\Service
  */
 class MembershipHelperTest extends \Test\TestCase {
-
 	const CURRENT_USER = 'currentuser';
 
 	/**
@@ -365,10 +364,10 @@ class MembershipHelperTest extends \Test\TestCase {
 			->method('notify')
 			->with($notification);
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::changeRoleInGroup', function ($event) use (&$called) {
 			$called[] = '\OCA\CustomGroups::changeRoleInGroup';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
 		$this->helper->notifyUserRoleChange(
 			'anotheruser',
@@ -403,7 +402,6 @@ class MembershipHelperTest extends \Test\TestCase {
 	 * @dataProvider canCreateRolesProvider
 	 */
 	public function testCanCreateGroups($role, $restrictToSubAdmins, $expectedResult) {
-
 		$this->config->expects($this->once())
 			->method('getAppValue')
 			->with('customgroups', 'only_subadmin_can_create', 'false')

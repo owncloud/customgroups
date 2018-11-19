@@ -67,7 +67,7 @@ class Roles {
 		throw new \InvalidArgumentException("Invalid backend role \"$backendRole\"");
 	}
 
-	function __construct() {
+	public function __construct() {
 		$this->mapping = [
 			self::BACKEND_ROLE_MEMBER => self::DAV_ROLE_MEMBER,
 			self::BACKEND_ROLE_ADMIN => self::DAV_ROLE_ADMIN,
@@ -79,7 +79,7 @@ class Roles {
 	}
 
 	public function getReverseMapping() {
-		return array_flip($this->mapping);
+		return \array_flip($this->mapping);
 	}
 
 	private static function getInstance() {

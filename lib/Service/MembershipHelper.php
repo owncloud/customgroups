@@ -175,7 +175,7 @@ class MembershipHelper {
 			return true;
 		}
 		$memberInfo = $this->getUserMemberInfo($groupId);
-		return (!is_null($memberInfo) && $memberInfo['role']);
+		return ($memberInfo !== null && $memberInfo['role']);
 	}
 
 	/**
@@ -195,7 +195,7 @@ class MembershipHelper {
 	 */
 	public function isUserMember($groupId) {
 		$memberInfo = $this->getUserMemberInfo($groupId);
-		return (!is_null($memberInfo));
+		return ($memberInfo !== null);
 	}
 
 	/**
@@ -209,7 +209,7 @@ class MembershipHelper {
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 		$groupAdmins = $this->groupsHandler->getGroupMembers($groupId, $searchAdmins);
-		if (count($groupAdmins) > 1) {
+		if (\count($groupAdmins) > 1) {
 			return false;
 		}
 		if ($groupAdmins[0]['user_id'] !== $userId) {
@@ -261,7 +261,7 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
-		if($memberInfo['role'] === Roles::BACKEND_ROLE_MEMBER) {
+		if ($memberInfo['role'] === Roles::BACKEND_ROLE_MEMBER) {
 			$roleName = "Member";
 		} elseif ($memberInfo['role'] === Roles::BACKEND_ROLE_ADMIN) {
 			$roleName = "Group owner";
@@ -328,7 +328,7 @@ class MembershipHelper {
 		$targetUserGroups = $this->groupManager->getUserGroupIds($this->userManager->get($targetUserId));
 
 		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup, $targetUserGroups)) {
+			if (\in_array($userGroup, $targetUserGroups)) {
 				return true;
 			}
 		}
