@@ -55,10 +55,9 @@ Feature: Sharing Custom Groups
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "user0" updates the last share using the sharing API with
       | permissions | 1 |
-    And user "user0" gets the info of the last share using the sharing API
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And the fields of the last response should include
+    And the response when user "user0" gets the info of the last share should include
       | id                | A_NUMBER       |
       | item_type         | file           |
       | item_source       | A_NUMBER       |
