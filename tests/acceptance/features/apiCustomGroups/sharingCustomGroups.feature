@@ -175,7 +175,7 @@ Feature: Sharing Custom Groups
       | shareType | 0         |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And as "user1" the folder "/sub" should exist
+    And as "user1" folder "/sub" should exist
 
   Scenario: Sharing subfolder when parent already shared with custom group of sharer
     Given as user "admin"
@@ -191,7 +191,7 @@ Feature: Sharing Custom Groups
       | shareType | 0         |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And as "user1" the folder "/sub" should exist
+    And as "user1" folder "/sub" should exist
 
   Scenario: Unshare from self using custom groups
     Given as user "admin"
