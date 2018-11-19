@@ -36,7 +36,6 @@ use OCP\IUserManager;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class PageControllerTest extends \Test\TestCase {
-
 	const CURRENT_USER = 'currentuser';
 
 	/**
@@ -172,7 +171,7 @@ class PageControllerTest extends \Test\TestCase {
 				['user_id' => 'user3'],
 			]);
 
-		$allUsersChunks = array_chunk($allUsers, 20);
+		$allUsersChunks = \array_chunk($allUsers, 20);
 		// first page
 		$this->userManager->expects($this->at(0))
 			->method('find')
@@ -256,7 +255,7 @@ class PageControllerTest extends \Test\TestCase {
 			]);
 		$this->userManager->expects($this->once())
 			->method('find')
-			->with(strtolower($searchPattern), 150, 0)
+			->with(\strtolower($searchPattern), 150, 0)
 			->willReturn([$user1, $user2, $userone, $memberone, $membertwo]);
 
 		$response = $this->pageController->searchUsers('group1', $searchPattern, 150);
@@ -290,7 +289,7 @@ class PageControllerTest extends \Test\TestCase {
 				['user_id' => 'user3'],
 			]);
 
-		$allUsersChunks = array_chunk($allUsers, 20);
+		$allUsersChunks = \array_chunk($allUsers, 20);
 		$this->userManager->expects($this->at(0))
 			->method('find')
 			->with('user one', 20, 0)
@@ -375,11 +374,11 @@ class PageControllerTest extends \Test\TestCase {
 			$allUsers['user' . $i] = $this->makeUser('user' . $i, 'User ' . $i);
 		}
 
-		$group1Users = array_chunk($allUsers, 52)[0];
-		$group1UsersChunks = array_chunk($group1Users, 20);
+		$group1Users = \array_chunk($allUsers, 52)[0];
+		$group1UsersChunks = \array_chunk($group1Users, 20);
 
-		$group2Users = array_chunk($allUsers, 50)[1];
-		$group2UsersChunks = array_chunk($group2Users, 20);
+		$group2Users = \array_chunk($allUsers, 50)[1];
+		$group2UsersChunks = \array_chunk($group2Users, 20);
 
 		return [
 			[
@@ -399,9 +398,9 @@ class PageControllerTest extends \Test\TestCase {
 			[
 				$allUsers, [
 					// first group: user1 to user10
-					['group1', 'us', 20, 0, array_chunk($allUsers, 10)[0]],
+					['group1', 'us', 20, 0, \array_chunk($allUsers, 10)[0]],
 					// second group: user11 to user20
-					['group2', 'us', 20, 0, array_chunk($allUsers, 10)[1]],
+					['group2', 'us', 20, 0, \array_chunk($allUsers, 10)[1]],
 					// third group empty
 					['group3', 'us', 20, 0, ['user21' => $allUsers['user21']]],
 				],
@@ -491,8 +490,8 @@ class PageControllerTest extends \Test\TestCase {
 		$this->groupManager->expects($this->any())
 			->method('findUsersInGroup')
 			->will($this->returnValueMap([
-				['group1', strtolower($searchPattern), 150, 0, ['user1' => $user1, 'user2' => $user2]],
-				['group2', strtolower($searchPattern), 150, 0, ['user2' => $user2, 'user3' => $user3, 'userone' => $userone]],
+				['group1', \strtolower($searchPattern), 150, 0, ['user1' => $user1, 'user2' => $user2]],
+				['group2', \strtolower($searchPattern), 150, 0, ['user2' => $user2, 'user3' => $user3, 'userone' => $userone]],
 			]));
 
 		$this->handler->expects($this->once())
@@ -538,7 +537,7 @@ class PageControllerTest extends \Test\TestCase {
 			->with($currentUser)
 			->willReturn(['group1', 'group2']);
 
-		$allUsersChunk = array_chunk($allUsers, 20);
+		$allUsersChunk = \array_chunk($allUsers, 20);
 
 		$this->groupManager->expects($this->any())
 			->method('findUsersInGroup')

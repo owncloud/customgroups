@@ -34,6 +34,7 @@ use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Xml\Element\Response;
 use Sabre\DAV\Xml\Response\MultiStatus;
 use Sabre\DAV\PropFind;
+
 /**
  * Sabre plugin to handle custom groups
  */
@@ -79,8 +80,8 @@ class CustomGroupsPlugin extends ServerPlugin {
 		$this->server = $server;
 
 		$uri = $this->server->getRequestUri();
-		$uri = '/' . trim($uri) . '/';
-		if (strpos($uri, '/customgroups/') === false) {
+		$uri = '/' . \trim($uri) . '/';
+		if (\strpos($uri, '/customgroups/') === false) {
 			return;
 		}
 

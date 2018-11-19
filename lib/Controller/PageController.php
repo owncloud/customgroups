@@ -83,7 +83,7 @@ class PageController extends Controller {
 	 */
 	public function index() {
 		// TODO: cache or add to info.xml ?
-		$modules = json_decode(file_get_contents(__DIR__ . '/../../js/modules.json'));
+		$modules = \json_decode(\file_get_contents(__DIR__ . '/../../js/modules.json'));
 		return new TemplateResponse($this->appName, 'index', [
 			'modules' => $modules
 		]);
@@ -102,7 +102,7 @@ class PageController extends Controller {
 	private function searchByMembershipGroup($customGroupId, $pattern, $limit, $exactMatch) {
 		$results = [];
 
-		$customGroupMemberIds = array_map(function($entry) {
+		$customGroupMemberIds = \array_map(function ($entry) {
 			return $entry['user_id'];
 		}, $this->handler->getGroupMembers($customGroupId));
 
@@ -115,7 +115,7 @@ class PageController extends Controller {
 
 				// merge and deduplicate relevant results
 				foreach ($usersTmp as $user) {
-					if (count($results) >= $limit) {
+					if (\count($results) >= $limit) {
 						// shortcut
 						break;
 					}
@@ -128,18 +128,18 @@ class PageController extends Controller {
 					$uid = $user->getUID();
 
 					// filter out existing members
-					if (in_array($uid, $customGroupMemberIds)) {
+					if (\in_array($uid, $customGroupMemberIds)) {
 						continue;
 					}
 
 					// deduplicate results using associative array
 					$results[$uid] = $user;
 				}
-				$offset += count($usersTmp);
-			} while (count($results) < $limit && count($usersTmp) >= $limit);
+				$offset += \count($usersTmp);
+			} while (\count($results) < $limit && \count($usersTmp) >= $limit);
 		}
 
-		return array_values($results);
+		return \array_values($results);
 	}
 
 	/**
@@ -151,16 +151,16 @@ class PageController extends Controller {
 	 *
 	 * @return bool true if exact match, false otherwise
 	 */
-	private function isExactMatch($user, $pattern)  {
+	private function isExactMatch($user, $pattern) {
 		return
 			// Check if the uid is the same
-			strtolower($user->getUID()) === $pattern
+			\strtolower($user->getUID()) === $pattern
 			// Check if exact display name
-			|| strtolower($user->getDisplayName()) === $pattern
+			|| \strtolower($user->getDisplayName()) === $pattern
 			// Check if exact first email
-			|| strtolower($user->getEMailAddress()) === $pattern
+			|| \strtolower($user->getEMailAddress()) === $pattern
 			// Check for exact search term matches (when mail attributes configured as search terms + no enumeration)
-			|| in_array($pattern, array_map('strtolower', $user->getSearchTerms()));
+			|| \in_array($pattern, \array_map('strtolower', $user->getSearchTerms()));
 	}
 
 	/**
@@ -218,13 +218,12 @@ class PageController extends Controller {
 				$totalResults[] = $result;
 				$totalResultCount++;
 			}
-			$resultsCount = count($results);
+			$resultsCount = \count($results);
 			$internalOffset += $resultsCount;
 		} while ($totalResultCount < $limit && $resultsCount >= $internalLimit);
 
 		return $totalResults;
 	}
-
 
 	/**
 	 * @NoCSRFRequired
@@ -239,10 +238,10 @@ class PageController extends Controller {
 			$shareeEnumerationGroupMembers = false;
 		}
 
-		$pattern = strtolower($pattern);
+		$pattern = \strtolower($pattern);
 
 		$groupInfo = $this->handler->getGroupByUri($group);
-		if (is_null($groupInfo)) {
+		if ($groupInfo === null) {
 			return new DataResponse(
 				[
 					'message' => (string)$this->l10n->t('Group with uri "%s" not found', [$group])
@@ -258,7 +257,7 @@ class PageController extends Controller {
 			$results = $this->searchForNewMembers($groupInfo['group_id'], $pattern, $limit, !$shareeEnumeration);
 		}
 
-		$results = array_map(function (IUser $entry) {
+		$results = \array_map(function (IUser $entry) {
 			return [
 				'userId' => $entry->getUID(),
 				'displayName' => $entry->getDisplayName()

@@ -161,5 +161,4 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 			$this->backend->usersInGroup(self::GROUP_ID_PREFIX . 'one', 'ser', 10, 5)
 		);
 	}
-
 }

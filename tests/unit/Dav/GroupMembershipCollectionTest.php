@@ -109,7 +109,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->userManager->method('get')->will(
 			$this->returnValueMap([
 				[self::NODE_USER, $this->nodeUser],
-				[strtoupper(self::NODE_USER), $this->nodeUser],
+				[\strtoupper(self::NODE_USER), $this->nodeUser],
 				[self::CURRENT_USER, $this->currentUser],
 			]));
 
@@ -171,10 +171,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->with('customgroup_group1')
 			->willReturn($group);
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {
 			$called[] = '\OCA\CustomGroups::deleteGroup';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
 
 		$this->node->delete();
@@ -248,10 +248,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->willReturn(true);
 
 		if ($called) {
-			$calledEvent = array();
-			\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::updateGroupName', function ($event) use (&$calledEvent){
+			$calledEvent = [];
+			\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::updateGroupName', function ($event) use (&$calledEvent) {
 				$calledEvent[] = '\OCA\CustomGroups::updateGroupName';
-				array_push($calledEvent, $event);
+				\array_push($calledEvent, $event);
 			});
 			$this->handler->expects($this->at(1))
 				->method('updateGroup')
@@ -335,10 +335,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
 			);
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addUserToGroup', function ($event) use (&$called) {
 			$called[] = '\OCA\CustomGroups::addUserToGroup';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
 
 		$this->node->createFile(self::NODE_USER);
@@ -347,7 +347,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('user',$called[1]);
+		$this->assertArrayHasKey('user', $called[1]);
 		$this->assertEquals('nodeuser', $called[1]->getArgument('user'));
 		$this->assertArrayHasKey('groupId', $called[1]);
 		$this->assertEquals(1, $called[1]->getArgument('groupId'));
@@ -510,7 +510,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$membershipsMap = [
 			[1, self::NODE_USER, ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]],
 		];
-		if (!is_null($currentMemberInfo)) {
+		if ($currentMemberInfo !== null) {
 			$membershipsMap[] = [1, self::CURRENT_USER, $currentMemberInfo];
 		}
 

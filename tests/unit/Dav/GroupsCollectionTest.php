@@ -220,10 +220,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->method('addToGroup')
 			->with('user1', 1, true);
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addGroupAndUser', function ($event) use (&$called) {
 			$called[] = '\OCA\CustomGroups::addGroupAndUser';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
 
 		$mkCol = new MkCol([], [
@@ -256,10 +256,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->with('Group One')
 			->will($this->returnValue([['duplicate']]));
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('addGroupAndUser', function ($event) use (&$called) {
 			$called[] = 'addGroupAndUser';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
 
 		$mkCol = new MkCol([], [

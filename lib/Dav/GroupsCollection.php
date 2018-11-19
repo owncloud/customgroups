@@ -135,7 +135,7 @@ class GroupsCollection implements IExtendedCollection {
 
 	/**
 	 * Creates a group node with the given name and display name
-	 * 
+	 *
 	 * @param string $name group uri
 	 * @param string $displayName group display name
 	 */
@@ -145,7 +145,7 @@ class GroupsCollection implements IExtendedCollection {
 		}
 
 		$groupId = $this->groupsHandler->createGroup($name, $displayName);
-		if (is_null($groupId)) {
+		if ($groupId === null) {
 			throw new MethodNotAllowed("Group with uri \"$name\" already exists");
 		}
 
@@ -168,7 +168,7 @@ class GroupsCollection implements IExtendedCollection {
 	 */
 	public function getChild($name) {
 		$group = $this->groupsHandler->getGroupByUri($name);
-		if (is_null($group)) {
+		if ($group === null) {
 			throw new NotFound("Group with uri \"$name\" not found");
 		}
 		return $this->createMembershipsCollection($group);
@@ -194,7 +194,7 @@ class GroupsCollection implements IExtendedCollection {
 		} else {
 			$allGroups = $this->groupsHandler->getGroups($search);
 		}
-		return array_map(function ($groupInfo) {
+		return \array_map(function ($groupInfo) {
 			return $this->createMembershipsCollection($groupInfo);
 		}, $allGroups);
 	}
@@ -206,7 +206,7 @@ class GroupsCollection implements IExtendedCollection {
 	 * @return boolean true if the group exists, false otherwise
 	 */
 	public function childExists($name) {
-		return !is_null($this->groupsHandler->getGroupByUri($name));
+		return $this->groupsHandler->getGroupByUri($name) !== null;
 	}
 
 	/**

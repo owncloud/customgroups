@@ -24,7 +24,7 @@ namespace OCA\CustomGroups;
 use OCP\AppFramework\App;
 
 class Application extends App {
-	public function __construct (array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('customgroups', $urlParams);
 	}
 
@@ -41,9 +41,9 @@ class Application extends App {
 	 */
 	public function registerNotifier() {
 		$manager = $this->getContainer()->getServer()->getNotificationManager();
-		$manager->registerNotifier(function() use ($manager) {
+		$manager->registerNotifier(function () use ($manager) {
 			return $this->getContainer()->query('\OCA\CustomGroups\Notifier');
-		}, function() {
+		}, function () {
 			$l = \OC::$server->getL10N('customgroups');
 			return [
 				'id' => 'customgroups',

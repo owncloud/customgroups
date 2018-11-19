@@ -41,7 +41,6 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class MembershipNodeTest extends \Test\TestCase {
-
 	const CURRENT_USER = 'currentuser';
 	const NODE_USER = 'nodeuser';
 
@@ -168,12 +167,12 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(1, $searchAdmins)
 			->willReturn([$memberInfo]);
 
-		$called = array();
+		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::removeUserFromGroup', function ($event) use (&$called) {
 			$called[] = '\OCA\CustomGroups::removeUserFromGroup';
-			array_push($called, $event);
+			\array_push($called, $event);
 		});
-		$newCalled = array();
+		$newCalled = [];
 		\OC::$server->getEventDispatcher()->addListener('customGroups.removeUserFromGroup', function ($event) use (&$newCalled) {
 			$newCalled[] = 'customGroups.removeUserFromGroup';
 			$newCalled[] = $event;
@@ -184,7 +183,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->assertSame('\OCA\CustomGroups::removeUserFromGroup', $called[0]);
 		$this->assertTrue($called[1] instanceof GenericEvent);
 		$this->assertArrayHasKey('user_displayName', $called[1]);
-		$this->assertArrayHasKey('group_displayName',$called[1]);
+		$this->assertArrayHasKey('group_displayName', $called[1]);
 		$this->assertEquals('customGroups.removeUserFromGroup', $newCalled[0]);
 		$this->assertArrayHasKey('user', $newCalled[1]);
 		$this->assertEquals(self::NODE_USER, $newCalled[1]->getArgument('user'));
@@ -352,7 +351,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	public function testDeleteSelfAsLastAdmin() {
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$searchAdmin = new Search(); 
+		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->any())
@@ -378,7 +377,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::NODE_USER)
 			->willReturn(true);
 
-		$searchAdmin = new Search(); 
+		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->any())
@@ -483,7 +482,7 @@ class MembershipNodeTest extends \Test\TestCase {
 				->method('notifyUserRoleChange');
 		}
 
-		$searchAdmin = new Search(); 
+		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->any())
@@ -510,7 +509,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->with(self::CURRENT_USER)
 			->willReturn(true);
 
-		$searchAdmin = new Search(); 
+		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->any())
@@ -541,7 +540,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->handler->expects($this->never())
 			->method('setGroupMemberInfo');
 
-		$searchAdmin = new Search(); 
+		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->any())
