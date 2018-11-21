@@ -63,6 +63,24 @@ pipeline:
       matrix:
         TEST_SUITE: owncloud-coding-standard
 
+  codecheck-test:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - su-exec www-data make test-codecheck
+    when:
+      matrix:
+        TEST_SUITE: codecheck
+
+  codecheck-deprecations-test:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - su-exec www-data make test-codecheck-deprecations
+    when:
+      matrix:
+        TEST_SUITE: codecheck-deprecations
+
   phpunit-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
@@ -164,6 +182,18 @@ matrix:
     # oc code style check
     - PHP_VERSION: 7.1
       TEST_SUITE: owncloud-coding-standard
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: codecheck
+      NEED_SERVER: true
+      NEED_INSTALL_APP: true
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: codecheck-deprecations
+      NEED_SERVER: true
+      NEED_INSTALL_APP: true
 
     # js-tests
     - PHP_VERSION: 7.1
