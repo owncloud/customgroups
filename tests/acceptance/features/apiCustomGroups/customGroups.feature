@@ -7,14 +7,14 @@ Feature: Custom Groups
 
   Scenario: Create a custom group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     When user "user0" creates a custom group called "group0" using the API
     Then the HTTP status code should be "201"
     And custom group "group0" should exist
 
   Scenario: Create an already existing custom group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     When user "user0" creates a custom group called "group0" using the API
@@ -22,7 +22,7 @@ Feature: Custom Groups
 
   Scenario: Delete a custom group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" deletes a custom group called "group0" using the API
     Then the HTTP status code should be "204"
@@ -30,7 +30,7 @@ Feature: Custom Groups
 
   Scenario: Rename a custom group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     When user "user0" renames custom group "group0" as "renamed-group0" using the API
@@ -38,8 +38,8 @@ Feature: Custom Groups
 
   Scenario: A non-admin member cannot rename its custom group
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
@@ -48,22 +48,22 @@ Feature: Custom Groups
 
   Scenario: Get members of a group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     When user "user0" creates a custom group called "group0" using the API
     Then the members of "group0" requested by user "user0" should be
       | user0 |
 
   Scenario: Creator of a custom group becames admin automatically
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     When user "user0" creates a custom group called "group0" using the API
     Then user "user0" should be an admin of custom group "group0"
 
   Scenario: Creator of a custom group can add members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "member2" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "member2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "member1" a member of custom group "group0" using the API
     And user "user0" makes user "member2" a member of custom group "group0" using the API
@@ -74,9 +74,9 @@ Feature: Custom Groups
 
   Scenario: A non-admin member of a custom group cannot add members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "member2" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "member2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "member1" makes user "member2" a member of custom group "group0" using the API
@@ -87,18 +87,18 @@ Feature: Custom Groups
 
   Scenario: A non-member of a custom group cannot list its members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "not-member" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "not-member" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "member1" a member of custom group "group0" using the API
     Then user "not-member" should not be able to get members of custom group "group0"
 
   Scenario: A custom group member can list members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "member2" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "member2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "member1" a member of custom group "group0" using the API
     And user "user0" makes user "member2" a member of custom group "group0" using the API
@@ -109,8 +109,8 @@ Feature: Custom Groups
 
   Scenario: A non-admin member of a custom group cannot delete a custom group
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "member1" a member of custom group "group0" using the API
     And user "member1" deletes a custom group called "group0" using the API
@@ -119,9 +119,9 @@ Feature: Custom Groups
 
   Scenario: Creator of a custom group can remove members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "member2" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "member2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has made user "member1" a member of custom group "group0"
     And user "user0" has made user "member2" a member of custom group "group0"
@@ -132,9 +132,9 @@ Feature: Custom Groups
 
   Scenario: A non-admin member of a custom group cannot remove members
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
-    And user "member2" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
+    And user "member2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has made user "member1" a member of custom group "group0"
     And user "user0" has made user "member2" a member of custom group "group0"
@@ -147,8 +147,8 @@ Feature: Custom Groups
 
   Scenario: Group owner cannot remove self if no other admin exists in the group
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "user0" removes membership of user "user0" from custom group "group0" using the API
@@ -159,8 +159,8 @@ Feature: Custom Groups
 
   Scenario: A member of a custom group can leave the custom group himself
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "member1" removes membership of user "member1" from custom group "group0" using the API
@@ -170,8 +170,8 @@ Feature: Custom Groups
 
   Scenario: A user can list his groups
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has created a custom group called "group1"
     And user "user0" has created a custom group called "group2"
@@ -185,8 +185,8 @@ Feature: Custom Groups
 
   Scenario: Change role of a member of a group
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
@@ -195,8 +195,8 @@ Feature: Custom Groups
 
   Scenario: Create a custom group and let another user as admin
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
@@ -207,9 +207,9 @@ Feature: Custom Groups
 
   Scenario: Superadmin can do everything
     Given as user "admin"
-    And user "user0" has been created
-    And user "user1" has been created
-    And user "user2" has been created
+    And user "user0" has been created with default attributes
+    And user "user1" has been created with default attributes
+    And user "user2" has been created with default attributes
     And user "admin" has created a custom group called "group0"
     And user "admin" has created a custom group called "group1"
     And user "admin" has deleted a custom group called "group1"
@@ -228,8 +228,8 @@ Feature: Custom Groups
 
   Scenario: Superadmin can add a user to any custom group
     Given as user "admin"
-    And user "user0" has been created
-    And user "user1" has been created
+    And user "user0" has been created with default attributes
+    And user "user1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "admin" makes user "user1" a member of custom group "group0" using the API
     Then the HTTP status code should be "201"
@@ -239,17 +239,17 @@ Feature: Custom Groups
 
   Scenario: Superadmin can rename any custom group
     Given as user "admin"
-    And user "user0" has been created
-    And user "user1" has been created
+    And user "user0" has been created with default attributes
+    And user "user1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "admin" renames custom group "group0" as "renamed-group0" using the API
     Then custom group "group0" should exist with display name "renamed-group0"
 
   Scenario: A member converted to group owner can do the same as group owner
     Given as user "admin"
-    And user "user0" has been created
-    And user "user1" has been created
-    And user "user2" has been created
+    And user "user0" has been created with default attributes
+    And user "user1" has been created with default attributes
+    And user "user2" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And user "user0" has created a custom group called "group1"
     And user "user0" has made user "user1" a member of custom group "group0"
@@ -269,8 +269,8 @@ Feature: Custom Groups
 
   Scenario: A group owner cannot remove his own admin permissions if there is no other owner in the group
     Given as user "admin"
-    And user "user0" has been created
-    And user "member1" has been created
+    And user "user0" has been created with default attributes
+    And user "member1" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
@@ -279,7 +279,7 @@ Feature: Custom Groups
 
   Scenario: A non-existing user cannot be added to a custom group
     Given as user "admin"
-    And user "user0" has been created
+    And user "user0" has been created with default attributes
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "non-existing-user" a member of custom group "group0" using the API
     Then the HTTP status code should be "412"
