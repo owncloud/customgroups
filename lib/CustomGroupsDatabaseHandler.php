@@ -219,6 +219,7 @@ class CustomGroupsDatabaseHandler {
 		$cursor = $qb->select(['group_id', 'uri', 'display_name'])
 			->from('custom_group')
 			->where($qb->expr()->eq($qb->createFunction('LOWER(`display_name`)'), $qb->createNamedParameter(\strtolower($displayName))))
+			->orderBy('display_name', 'ASC')
 			->execute();
 
 		$results = $cursor->fetchAll();
