@@ -4,25 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.4.0]
+
+## Changed
+
+- Set max version to 10 because core platform is switching to Semver
+
+## Fixed
+
+- Sort groups when requested from DB, fixes Oracle - [#187](https://github.com/owncloud/customgroups/issues/187)
+- Fix double encoding when displaying group name to delete - [#165](https://github.com/owncloud/customgroups/pull/165)
+- PHP 7.2 support - [#164](https://github.com/owncloud/customgroups/pull/164)
 
 ## [0.3.6] - 2018-01-11
 
 ## Fixed
+
 - restrict autocomplete results when sharing restrictions in place [#117](https://github.com/owncloud/customgroups/pull/117)
 
 ## [0.3.5] - 2017-09-15
 
 ### Added
+
 - Adding more dispatcher events for the app - [#94](https://github.com/owncloud/customgroups/issues/94) [#103](https://github.com/owncloud/customgroups/issues/103)
 
 ### Changed
+
 - Add option to prevent duplicate display names - [#82](https://github.com/owncloud/customgroups/issues/82)
 - Use event names with namespace - [#102](https://github.com/owncloud/customgroups/issues/102)
 - Set min version to 10.0.3 - [#98](https://github.com/owncloud/customgroups/issues/98)
 - Align package.json versions with core - [#101](https://github.com/owncloud/customgroups/issues/101)
 
 ### Fixed
+
 - Deleting a custom group now properly deletes associated shares [#92](https://github.com/owncloud/customgroups/pull/92)
 - Fix member search in member sidebar to use all search fields - [#106](https://github.com/owncloud/customgroups/issues/106)
 - Fix closing sidebar, reset selection - [#96](https://github.com/owncloud/customgroups/issues/96)
@@ -80,7 +94,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.3.6...master
+[0.4.0]: https://github.com/owncloud/customgroups/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/owncloud/customgroups/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/owncloud/customgroups/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/owncloud/customgroups/compare/v0.3.1...v0.3.4
