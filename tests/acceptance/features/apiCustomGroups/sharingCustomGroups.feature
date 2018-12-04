@@ -107,8 +107,8 @@ Feature: Sharing Custom Groups
     And user "user2" has been created with default attributes
     And user "user1" has created a custom group called "group1"
     And user "user1" has made user "user2" a member of custom group "group1"
-    And user "user0" has created a folder "/common"
-    And user "user0" has created a folder "/common/sub"
+    And user "user0" has created folder "/common"
+    And user "user0" has created folder "/common/sub"
     And user "user0" has shared folder "common" with group "customgroup_group1"
     And user "user1" has shared file "textfile0.txt" with user "user2"
     And user "user1" has moved file "/textfile0.txt" to "/common/textfile0.txt"
@@ -138,9 +138,9 @@ Feature: Sharing Custom Groups
     And user "user2" has been created with default attributes
     And user "user1" has created a custom group called "group1"
     And user "user1" has made user "user2" a member of custom group "group1"
-    And user "user0" has created a folder "/TMP"
+    And user "user0" has created folder "/TMP"
     And user "user0" has shared folder "TMP" with group "customgroup_group1"
-    And user "user1" has created a folder "/myFOLDER"
+    And user "user1" has created folder "/myFOLDER"
     And user "user1" has moved file "/TMP" to "/myFOLDER/myTMP"
     When the administrator deletes user "user2" using the provisioning API
     Then user "user1" should see the following elements
@@ -165,8 +165,8 @@ Feature: Sharing Custom Groups
     And user "user0" has been created with default attributes
     And user "user1" has been created with default attributes
     And user "user1" has created a custom group called "sharing-group"
-    And user "user0" has created a folder "/test"
-    And user "user0" has created a folder "/test/sub"
+    And user "user0" has created folder "/test"
+    And user "user0" has created folder "/test/sub"
     And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
@@ -181,8 +181,8 @@ Feature: Sharing Custom Groups
     And user "user0" has been created with default attributes
     And user "user1" has been created with default attributes
     And user "user0" has created a custom group called "sharing-group"
-    And user "user0" has created a folder "/test"
-    And user "user0" has created a folder "/test/sub"
+    And user "user0" has created folder "/test"
+    And user "user0" has created folder "/test/sub"
     And user "user0" has shared file "/test" with group "customgroup_sharing-group"
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
