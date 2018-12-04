@@ -8,11 +8,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [0.4.0] - 2018-12-03
 
-## Changed
+### Changed
 
 - Set max version to 10 because core platform is switching to Semver
 
-## Fixed
+### Fixed
 
 - Sort groups when requested from DB, fixes Oracle - [#187](https://github.com/owncloud/customgroups/issues/187)
 - Fix double encoding when displaying group name to delete - [#165](https://github.com/owncloud/customgroups/pull/165)
@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [0.3.6] - 2018-01-11
 
-## Fixed
+### Fixed
 
 - restrict autocomplete results when sharing restrictions in place [#117](https://github.com/owncloud/customgroups/pull/117)
 
