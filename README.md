@@ -5,7 +5,7 @@ It is then possible to share files or folders with these groups.
 
 ## QA metrics on master branch:
 
-[![Build Status](https://travis-ci.org/owncloud/customgroups.svg?branch=master)](https://travis-ci.org/owncloud/customgroups/branches)
+[![Build Status](https://drone.owncloud.com/api/badges/owncloud/customgroups/status.svg?branch=master)](https://drone.owncloud.com/owncloud/customgroups)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
 
