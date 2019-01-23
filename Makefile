@@ -23,11 +23,14 @@ help_rules=help-base
 
 tools_path=$(shell pwd)/tools
 
+acceptance_test_deps=vendor-bin/behat/vendor
+
 # bin file definitions
 PHPUNIT=php -d zend.enable_gc=0  vendor/bin/phpunit
 PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "./lib/composer/phpunit/phpunit/phpunit"
 PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/owncloud-codestyle/vendor/bin/php-cs-fixer
 PHP_CODESNIFFER=vendor-bin/php_codesniffer/vendor/bin/phpcs
+BEHAT_BIN=vendor-bin/behat/vendor/bin/behat
 
 .DEFAULT_GOAL := help
 
@@ -60,7 +63,11 @@ help-hint:
 help: $(help_rules)
 
 .PHONY: clean
-clean: $(clean_rules)
+clean: clean-deps $(clean_rules)
+
+.PHONY: clean-deps
+clean-deps:
+	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
 
 .PHONY: test
 test: $(test_rules)
@@ -93,8 +100,8 @@ test-php-style-fix: vendor-bin/owncloud-codestyle/vendor
 
 .PHONY: test-acceptance-api
 test-acceptance-api:       ## Run API acceptance tests
-test-acceptance-api: vendor/bin/phpunit
-	../../tests/acceptance/run.sh --remote --type api
+test-acceptance-api: $(acceptance_test_deps)
+	BEHAT_BIN=$(BEHAT_BIN) ../../tests/acceptance/run.sh --remote --type api
 
 #
 # Dependency management
@@ -123,3 +130,9 @@ vendor-bin/php_codesniffer/vendor: vendor/bamarni/composer-bin-plugin vendor-bin
 
 vendor-bin/php_codesniffer/composer.lock: vendor-bin/php_codesniffer/composer.json
 	@echo php_codesniffer composer.lock is not up to date.
+
+vendor-bin/behat/vendor: vendor/bamarni/composer-bin-plugin vendor-bin/behat/composer.lock
+	composer bin behat install --no-progress
+
+vendor-bin/behat/composer.lock: vendor-bin/behat/composer.json
+	@echo behat composer.lock is not up to date.
