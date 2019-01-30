@@ -268,7 +268,12 @@
 						OC.Notification.showTemporary(t('customgroups', 'A group with this name already exists'));
 						return;
 					}
-					OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
+					if (response.status === 422) {
+						OC.Notification.showTemporary(t('customgroups', "The group name can not be empty or start with space. The group name should at least have 2 characters"));
+					}
+					if (response.status === 403) {
+						OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
+					}
 				}
 			});
 		},
