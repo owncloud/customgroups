@@ -21,6 +21,7 @@
 
 namespace OCA\CustomGroups\Dav;
 
+use OCA\CustomGroups\Exception\ValidationException;
 use Sabre\DAV\IExtendedCollection;
 use Sabre\DAV\MkCol;
 use Sabre\DAV\Exception\NotFound;
@@ -119,6 +120,21 @@ class GroupsCollection implements IExtendedCollection {
 	public function createExtendedCollection($name, Mkcol $mkCol) {
 		if (!$this->helper->canCreateGroups()) {
 			throw new Forbidden('No permission to create groups');
+		}
+
+		/** Group name cannot be empty */
+		if (($name === '') || ($name === null)) {
+			throw new ValidationException('Can not create empty group');
+		}
+
+		/** Group name must be at least 2 character long */
+		if (\strlen($name) < 2) {
+			throw new ValidationException('The group name should be at least 2 characters long.');
+		}
+
+		/** Group name should not start with space */
+		if ($name[0] === ' ') {
+			throw new ValidationException('The group name can not start with space');
 		}
 
 		$displayName = $name;

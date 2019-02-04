@@ -22,6 +22,7 @@ namespace OCA\CustomGroups\Tests\unit\Dav;
 
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Exception\ValidationException;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -266,6 +267,43 @@ class GroupsCollectionTest extends \Test\TestCase {
 			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group One'
 		]);
 		$this->collection->createExtendedCollection('group1', $mkCol);
+	}
+
+	public function providesTestCreateException() {
+		return [
+			['', 'empty'],
+			[null, 'empty'],
+			[' abc', 'starts with space'],
+			['a', 'only one char'],
+		];
+	}
+
+	/**
+	 * @dataProvider providesTestCreateException
+	 * @expectedException \OCA\CustomGroups\Exception\ValidationException
+	 */
+	public function testCreateGroupExceptions($groupName, $displayName) {
+		$mkCol = new MkCol([], [
+			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => $displayName
+		]);
+		$this->collection->createExtendedCollection($groupName, $mkCol);
+	}
+
+	/**
+	 * Test the status code.
+	 * @dataProvider providesTestCreateException
+	 * @throws ValidationException
+	 */
+	public function testCreateGroupExceptionsStatusCode($groupName, $displayName) {
+		$mkCol = new MkCol([], [
+			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => $displayName
+		]);
+
+		try {
+			$this->collection->createExtendedCollection($groupName, $mkCol);
+		} catch (ValidationException $exception) {
+			$this->assertEquals(422, $exception->getHTTPCode());
+		}
 	}
 
 	/**
