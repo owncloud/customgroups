@@ -6,6 +6,7 @@ OC.L10N.register(
     "Could not rename group" : "Grupi sâu riemÃ«rtua dot",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Jeni i sigurt se doni tÃ« fshihet grupi \"{groupName}\" ?",
     "Confirm deletion of group" : "Ripohoni fshirje grupi",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Emri i grupit s’mund të jetë i zbrazët ose të fillojë me një hapësirë. Emri i grupit duhet të ketë të paktën 2 shenja",
     "Could not create group" : "Grupi sâu krijua dot",
     "Administrator" : "Përgjegjës",
     "Group owner" : "I zoti i grupit",

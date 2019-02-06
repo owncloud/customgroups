@@ -6,6 +6,7 @@ OC.L10N.register(
     "Could not rename group" : "No se pudo renombrar al grupo",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Está seguro que desea eliminar el grupo \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirmar eliminación del grupo",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "El nombre del grupo no puede estar vacío o iniciarse con un espacio. Este debe poseer al menos 2 caracteres.",
     "Could not create group" : "No se pudo crear el grupo",
     "Administrator" : "Administrador",
     "Group owner" : "Propietario del grupo",
