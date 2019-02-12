@@ -1,5 +1,10 @@
 # Makefile
 
+COMPOSER_BIN := $(shell command -v composer 2> /dev/null)
+ifndef COMPOSER_BIN
+    $(error composer is not available on your system, please install composer)
+endif
+
 OWNCLOUD_PATH=$(CURDIR)/../..
 OCC=$(OWNCLOUD_PATH)/occ
 
