@@ -28,6 +28,7 @@ clean-deps: clean-composer clean-js clean-nodejs
 .PHONY: clean-composer
 clean-composer:
 	rm -Rf $(composer_deps)/
+	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
 
 .PHONY: clean-js
 clean-js:
