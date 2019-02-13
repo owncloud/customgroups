@@ -70,10 +70,6 @@ help: $(help_rules)
 .PHONY: clean
 clean: clean-deps $(clean_rules)
 
-.PHONY: clean-deps
-clean-deps:
-	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
-
 .PHONY: test
 test: $(test_rules)
 
