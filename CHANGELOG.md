@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [0.4.1]
 
+### Added
+
+- Add validation for group creation - [#197](https://github.com/owncloud/customgroups/issues/197)
+
 ## [0.4.0] - 2018-12-03
 
 ### Changed
