@@ -6,6 +6,7 @@ OC.L10N.register(
     "Could not rename group" : "ไม่สามารถเปลี่ยนชื่อกลุ่มได้",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "คุณแน่ใจหรือว่าต้องการลบกลุ่ม \"{groupName}\" ?",
     "Confirm deletion of group" : "ยืนยันการลบกลุ่ม",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "ชื่อกลุ่มต้องไม่ว่างเปล่าหรือขึ้นต้นด้วยช่องว่างและต้องมีอย่างน้อย 2 ตัวอักษร",
     "Could not create group" : "ไม่สามารถสร้างกลุ่ม",
     "Administrator" : "ผู้ดูแลระบบ",
     "Group owner" : "เจ้าของกลุ่ม",
