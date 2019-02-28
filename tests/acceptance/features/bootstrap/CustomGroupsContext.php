@@ -21,6 +21,7 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Sabre\DAV\Client as SClient;
 use Sabre\HTTP\ClientException;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\ResponseInterface;
@@ -46,6 +47,25 @@ class CustomGroupsContext implements Context {
 	 * @var array
 	 */
 	private $createdCustomGroups = [];
+
+	/**
+	 * returns a Sabre client
+	 *
+	 * @param string $user
+	 *
+	 * @return SClient
+	 */
+	public function getSabreClient($user) {
+		$settings = [
+			'baseUri' => $this->featureContext->getBaseUrl() . "/",
+			'userName' => $user,
+			'password' => $this->featureContext->getPasswordForUser($user),
+			'authType' => SClient::AUTH_BASIC
+		];
+		$client = new SClient($settings);
+		$client->addCurlSetting(CURLOPT_SSL_VERIFYPEER, false);
+		return $client;
+	}
 
 	/**
 	 * @When user :user creates a custom group called :groupName using the API
@@ -107,7 +127,7 @@ class CustomGroupsContext implements Context {
 	 * @throws ClientHttpException
 	 */
 	public function getCustomGroups($user) {
-		$client = $this->featureContext->getSabreClient($user);
+		$client = $this->getSabreClient($user);
 		$properties = [
 						'{http://owncloud.org/ns}display-name'
 					  ];
@@ -208,7 +228,7 @@ class CustomGroupsContext implements Context {
 	public function sendProppatchToCustomGroup(
 		$user, $customGroup, $properties = null
 	) {
-		$client = $this->featureContext->getSabreClient($user);
+		$client = $this->getSabreClient($user);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
 		$fullUrl
@@ -239,7 +259,7 @@ class CustomGroupsContext implements Context {
 	public function sendProppatchToCustomGroupMember(
 		$userRequesting, $customGroup, $userRequested, $properties = null
 	) {
-		$client = $this->featureContext->getSabreClient($userRequesting);
+		$client = $this->getSabreClient($userRequesting);
 		$client->setThrowExceptions(true);
 		$appPath = '/customgroups/groups/';
 		$fullUrl
@@ -305,7 +325,7 @@ class CustomGroupsContext implements Context {
 	 * @return array|null
 	 */
 	public function getCustomGroupMembers($user, $group) {
-		$client = $this->featureContext->getSabreClient($user);
+		$client = $this->getSabreClient($user);
 		$client->setThrowExceptions(true);
 		$properties = [
 						'{http://owncloud.org/ns}role'
@@ -337,7 +357,7 @@ class CustomGroupsContext implements Context {
 	public function getUserRoleInACustomGroup(
 		$userRequesting, $userRequested, $group
 	) {
-		$client = $this->featureContext->getSabreClient($userRequesting);
+		$client = $this->getSabreClient($userRequesting);
 		$properties = [
 						'{http://owncloud.org/ns}role'
 					  ];
@@ -473,7 +493,7 @@ class CustomGroupsContext implements Context {
 	 * @return array|null
 	 */
 	public function getCustomGroupsOfAUser($userRequesting, $userRequested) {
-		$client = $this->featureContext->getSabreClient($userRequesting);
+		$client = $this->getSabreClient($userRequesting);
 		$client->setThrowExceptions(true);
 		$properties = [
 						'{http://owncloud.org/ns}role'

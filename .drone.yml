@@ -110,7 +110,7 @@ pipeline:
       - TEST_SERVER_URL=http://owncloud
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
-    comands:
+    commands:
       - make test-acceptance-api
     when:
       matrix:
