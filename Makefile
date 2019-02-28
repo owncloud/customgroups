@@ -31,8 +31,8 @@ tools_path=$(shell pwd)/tools
 acceptance_test_deps=vendor-bin/behat/vendor
 
 # bin file definitions
-PHPUNIT=php -d zend.enable_gc=0  vendor/bin/phpunit
-PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "./lib/composer/phpunit/phpunit/phpunit"
+PHPUNIT=php -d zend.enable_gc=0  "$(PWD)/../../lib/composer/bin/phpunit"
+PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "$(PWD)/../../lib/composer/bin/phpunit"
 PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/owncloud-codestyle/vendor/bin/php-cs-fixer
 PHP_CODESNIFFER=vendor-bin/php_codesniffer/vendor/bin/phpcs
 BEHAT_BIN=vendor-bin/behat/vendor/bin/behat
@@ -80,12 +80,12 @@ test: $(test_rules)
 
 .PHONY: test-php-unit
 test-php-unit: ## Run php unit tests
-test-php-unit: vendor/bin/phpunit
+test-php-unit:
 	$(PHPUNIT) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-unit-dbg
 test-php-unit-dbg: ## Run php unit tests using phpdbg
-test-php-unit-dbg: vendor/bin/phpunit
+test-php-unit-dbg:
 	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-style
@@ -113,9 +113,6 @@ composer.lock: composer.json
 
 vendor: composer.lock
 	composer install --no-dev
-
-vendor/bin/phpunit: composer.lock
-	composer install
 
 vendor/bamarni/composer-bin-plugin: composer.lock
 	composer install
