@@ -41,7 +41,7 @@ BEHAT_BIN=vendor-bin/behat/vendor/bin/behat
 
 # start with displaying help
 help:
-	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//' | sed -e 's/  */ /' | column -t -s :
 
 .PHONY: all
 all: help-hint dist
@@ -79,28 +79,28 @@ test: $(test_rules)
 ##--------------------------------------
 
 .PHONY: test-php-unit
-test-php-unit:             ## Run php unit tests
+test-php-unit: ## Run php unit tests
 test-php-unit: vendor/bin/phpunit
 	$(PHPUNIT) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-unit-dbg
-test-php-unit-dbg:         ## Run php unit tests using phpdbg
+test-php-unit-dbg: ## Run php unit tests using phpdbg
 test-php-unit-dbg: vendor/bin/phpunit
 	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-style
-test-php-style:            ## Run php-cs-fixer and check owncloud code-style
+test-php-style: ## Run php-cs-fixer and check owncloud code-style
 test-php-style: vendor-bin/owncloud-codestyle/vendor vendor-bin/php_codesniffer/vendor
 	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes --dry-run
 	$(PHP_CODESNIFFER) --runtime-set ignore_warnings_on_exit --standard=phpcs.xml tests/acceptance
 
 .PHONY: test-php-style-fix
-test-php-style-fix:        ## Run php-cs-fixer and fix code style issues
+test-php-style-fix: ## Run php-cs-fixer and fix code style issues
 test-php-style-fix: vendor-bin/owncloud-codestyle/vendor
 	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes
 
 .PHONY: test-acceptance-api
-test-acceptance-api:       ## Run API acceptance tests
+test-acceptance-api: ## Run API acceptance tests
 test-acceptance-api: $(acceptance_test_deps)
 	BEHAT_BIN=$(BEHAT_BIN) ../../tests/acceptance/run.sh --remote --type api
 

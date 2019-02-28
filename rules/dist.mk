@@ -1,21 +1,16 @@
-# Deps
-# Build and dist rules
+##
+## Build and dist rules
+##--------------------------------------
 
-help_rules+=help-dist
 clean_rules+=clean-build
 
-.PHONY: help-dist
-help-dist:
-	@echo -e "Building:\n"
-	@echo -e "dist\t\tto build the distribution folder and tarball $(app_name).tar.gz"
-	@echo -e "clean\t\tto clean everything"
-	@echo
-
 .PHONY: clean-build
+clean-build: ## Clean the build directory
 clean-build:
 	rm -Rf $(build_dir)
 
 .PHONY: dist
+dist: ## Build the distribution folder and tarball customgroups.tar.gz
 dist: $(build_dir)/$(app_name).tar.gz
 
 $(build_dir)/$(app_name).tar.gz: $(build_dir)/$(app_name) $(signature_file)
