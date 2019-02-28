@@ -1,84 +1,94 @@
-# Tests
+##
+## Tests
+##--------------------------------------
 
-PHPUNIT=$(OWNCLOUD_PATH)/lib/composer/phpunit/phpunit/phpunit
-OCULAR=$(OWNCLOUD_PATH)/lib/composer/scrutinizer/ocular/bin/ocular
+# bin file definitions
 KARMA=$(NODE_PREFIX)/node_modules/.bin/karma
 JSHINT=$(NODE_PREFIX)/node_modules/.bin/jshint
+PHPUNIT=php -d zend.enable_gc=0  "$(PWD)/../../lib/composer/bin/phpunit"
+PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "$(PWD)/../../lib/composer/bin/phpunit"
+PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/owncloud-codestyle/vendor/bin/php-cs-fixer
+PHP_CODESNIFFER=vendor-bin/php_codesniffer/vendor/bin/phpcs
+BEHAT_BIN=vendor-bin/behat/vendor/bin/behat
 
-test_rules+=test-codecheck test-codecheck-deprecations test-php test-js
+test_rules+=test-php-style test-codecheck test-codecheck-deprecations test-js test-php-unit test-acceptance-api
 clean_rules+=clean-deps
-help_rules+=help-test
-
-tests_unit_results=tests/unit/results
-clover_xml=$(tests_unit_results)/clover.xml
-phpunit_args=--log-junit $(tests_unit_results)/results.xml
-ifndef NOCOVERAGE # env variable
-phpunit_args+=--coverage-clover $(clover_xml) --coverage-html $(tests_unit_results)/coverage-html
-endif
-
-.PHONY: help-test
-help-test:
-	@echo -e "Testing:\n"
-	@echo -e "test\t\t\tto run all test suites"
-	@echo -e "test-syntax\t\tto run syntax checks"
-	@echo -e "test-codecheck\t\tto run the code checker"
-	@echo -e "test-php\t\tto run PHP test suites"
-	@echo -e "test-acceptance\tto run acceptance tests"
-	@echo -e "test-js\t\t\tto run JS test suites (single run)"
-	@echo -e "test-js-debug\t\tto run JS test and watch for changes"
-	@echo
-
-.PHONY: clean-test
-clean-test:
-	rm -Rf $(tests_unit_results)
 
 .PHONY: test-syntax
-test-syntax: test-syntax-php test-syntax-js
-
-.PHONY: test-syntax-php
-test-syntax-php:
-	for F in $(shell find . -name \*.php | grep -v -e 'lib/composer' -e 'vendor'); do \
-		php -l "$$F" > /dev/null || exit $?; \
-	done
+test-syntax: ## Run syntax checks
+test-syntax: test-syntax-js
 
 .PHONY: test-syntax-js
+test-syntax-js: ## Run JS syntax checks
 test-syntax-js: $(JSHINT)
 	-$(JSHINT) --config .jshintrc --exclude-path .gitignore js tests/js
 
 .PHONY: test-codecheck
-test-codecheck: test-syntax-php
+test-codecheck: ## Run the app code checker
+test-codecheck:
 	$(OCC) app:check-code $(app_name) -c private -c strong-comparison
 
 .PHONY: test-codecheck-deprecations
+test-codecheck-deprecations: ## Run the app code deprecation checker
 test-codecheck-deprecations:
 	$(OCC) app:check-code $(app_name) -c deprecation
 
-.PHONY: test-php
-test-php: $(PHPUNIT) test-syntax-php
-	$(OCC) app:enable $(app_name)
-	$(PHPUNIT) --configuration phpunit.xml $(phpunit_args)
-
-$(clover_xml): test-php
-
-.PHONY: test-upload-coverage
-test-upload-coverage: $(OCULAR) $(clover_xml)
-	$(OCULAR) code-coverage:upload --format=php-clover $(clover_xml)
-
-.PHONY: test-acceptance
-test-acceptance: test-syntax-php
-	$(OCC) app:enable $(app_name)
-	cd $(OWNCLOUD_PATH)/tests/acceptance && OCC="$(OCC)" ./run.sh -c ../../apps/customgroups/tests/acceptance/config/behat.yml
-
 .PHONY: test-js
+test-js: ## run JS test suites (single run)
 test-js: $(js_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js --single-run
 
+test-js-debug: run JS test suites and watch for changes
 test-js-debug: $(js_deps) $(KARMA) js-templates test-syntax-js
 	$(KARMA) start tests/js/karma.config.js
-
-$(PHPUNIT): $(composer_dev_deps)
-$(OCULAR): $(composer_dev_deps)
 
 $(KARMA): $(nodejs_deps)
 $(JSHINT): $(nodejs_deps)
 
+.PHONY: test-php-unit
+test-php-unit: ## Run php unit tests
+test-php-unit:
+	$(PHPUNIT) --configuration ./phpunit.xml --testsuite unit
+
+.PHONY: test-php-unit-dbg
+test-php-unit-dbg: ## Run php unit tests using phpdbg
+test-php-unit-dbg:
+	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite unit
+
+.PHONY: test-php-style
+test-php-style: ## Run php-cs-fixer and check owncloud code-style
+test-php-style: vendor-bin/owncloud-codestyle/vendor vendor-bin/php_codesniffer/vendor
+	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes --dry-run
+	$(PHP_CODESNIFFER) --runtime-set ignore_warnings_on_exit --standard=phpcs.xml tests/acceptance
+
+.PHONY: test-php-style-fix
+test-php-style-fix: ## Run php-cs-fixer and fix code style issues
+test-php-style-fix: vendor-bin/owncloud-codestyle/vendor
+	$(PHP_CS_FIXER) fix -v --diff --diff-format udiff --allow-risky yes
+
+.PHONY: test-acceptance-api
+test-acceptance-api: ## Run API acceptance tests
+test-acceptance-api: $(acceptance_test_deps)
+	BEHAT_BIN=$(BEHAT_BIN) ../../tests/acceptance/run.sh --remote --type api
+
+#
+# Dependency management
+#--------------------------------------
+
+vendor-bin/owncloud-codestyle/vendor: vendor/bamarni/composer-bin-plugin vendor-bin/owncloud-codestyle/composer.lock
+	composer bin owncloud-codestyle install --no-progress
+
+vendor-bin/owncloud-codestyle/composer.lock: vendor-bin/owncloud-codestyle/composer.json
+	@echo owncloud-codestyle composer.lock is not up to date.
+
+vendor-bin/php_codesniffer/vendor: vendor/bamarni/composer-bin-plugin vendor-bin/php_codesniffer/composer.lock
+	composer bin php_codesniffer install --no-progress
+
+vendor-bin/php_codesniffer/composer.lock: vendor-bin/php_codesniffer/composer.json
+	@echo php_codesniffer composer.lock is not up to date.
+
+vendor-bin/behat/vendor: vendor/bamarni/composer-bin-plugin vendor-bin/behat/composer.lock
+	composer bin behat install --no-progress
+
+vendor-bin/behat/composer.lock: vendor-bin/behat/composer.json
+	@echo behat composer.lock is not up to date.
