@@ -128,7 +128,14 @@ class GroupsCollection implements IExtendedCollection {
 		}
 
 		/** Group name must be at least 2 character long */
-		if (\strlen($name) < 2) {
+		if (\mb_strlen($name, 'UTF-8') < 2) {
+			throw new ValidationException('The group name should be at least 2 characters long.');
+		}
+
+		/**
+		 * A special case where index is appended with the group name
+		 */
+		if ((\mb_strlen($name, 'UTF-8') === 2) && \is_numeric($name[1])) {
 			throw new ValidationException('The group name should be at least 2 characters long.');
 		}
 
