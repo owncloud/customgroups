@@ -605,4 +605,24 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function testCreateDirectory() {
 		$this->node->createDirectory('somedir');
 	}
+
+	public function providesUpdateDisplayNameValidateException() {
+		return [
+			[''],
+			[null],
+			['a'],
+			[' a'],
+			['á'],
+			[' áé']
+		];
+	}
+
+	/**
+	 * @dataProvider providesUpdateDisplayNameValidateException
+	 * @param string $groupName
+	 * @expectedException \OCA\CustomGroups\Exception\ValidationException
+	 */
+	public function testUpdateDisplayNameValidatException($groupName) {
+		$this->node->updateDisplayName($groupName);
+	}
 }

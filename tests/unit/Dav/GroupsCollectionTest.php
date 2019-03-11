@@ -275,6 +275,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 			[null, 'empty'],
 			[' abc', 'starts with space'],
 			['a', 'only one char'],
+			['á', 'one char multibyte'],
+			['.', 'single dot']
 		];
 	}
 
