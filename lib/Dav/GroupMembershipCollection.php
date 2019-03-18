@@ -22,6 +22,7 @@
 namespace OCA\CustomGroups\Dav;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Exception\ValidationException;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\NotFound;
@@ -292,9 +293,26 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Returns 403 status code if the current user has insufficient permissions.
 	 *
 	 * @param string $displayName display name to set
-	 * @return boolean|int true or status code
+	 * @return bool|int or status code
+	 * @throws ValidationException when group name is empty or starts with a space or less than 2 chars long
 	 */
 	public function updateDisplayName($displayName) {
+		if (($displayName === '') || ($displayName === null)) {
+			throw new ValidationException('Can not rename to empty group');
+		}
+
+		/**
+		 * Verify if the character length is less than 2 or if its multibyte string, then
+		 * verify if the multibyte character length is less than 2.
+		 */
+		if (\mb_strlen($displayName, 'UTF-8') < 2) {
+			throw new ValidationException("The group name should be at least 2 characters long.");
+		}
+
+		if ($displayName[0] === ' ') {
+			throw new ValidationException('The group name can not start with space');
+		}
+
 		if (!$this->helper->isUserAdmin($this->groupInfo['group_id'])) {
 			return 403;
 		}

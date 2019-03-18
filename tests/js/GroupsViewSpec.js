@@ -374,7 +374,7 @@ describe('GroupsView test', function() {
 				expect($groupEl.find('input').length).toEqual(0);
 
 				expect(notificationStub.calledOnce).toEqual(true);
-				expect(notificationStub.calledWith('A group with this name already exists')).toEqual(true);
+				expect(notificationStub.calledWith('The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists')).toEqual(true);
 
 				notificationStub.restore();
 			});
