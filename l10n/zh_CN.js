@@ -2,10 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "自定义组",
-    "A group with this name already exists" : "已有同名的组",
     "Could not rename group" : "无法重命名群组",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "确定要删除组 \"{groupName}\" 吗？",
     "Confirm deletion of group" : "群组删除确认",
+    "A group with this name already exists" : "已有同名的组",
     "Could not create group" : "无法创建群组",
     "Administrator" : "管理员",
     "Group owner" : "组的拥有者",

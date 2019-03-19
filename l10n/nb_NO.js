@@ -2,10 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Tilpassede grupper",
-    "A group with this name already exists" : "Det finnes allerede en gruppe med det navnet",
     "Could not rename group" : "Klarte ikke å gi gruppa nytt navn",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Er du sikker på at du vil slette gruppen \"{groupName}\"?",
     "Confirm deletion of group" : "Bekreft sletting av gruppe",
+    "A group with this name already exists" : "Det finnes allerede en gruppe med det navnet",
     "Could not create group" : "Kunne ikke opprette gruppe",
     "Administrator" : "Administrator",
     "Group owner" : "Gruppeeier",

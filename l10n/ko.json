@@ -1,9 +1,9 @@
 { "translations": {
     "Custom Groups" : "사용자 정의 그룹",
-    "A group with this name already exists" : "이 이름의 그룹이 이미 있습니다.",
     "Could not rename group" : "그룹 이름을 바꿀 수 없음",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "그룹 \"{groupName}\"을(를) 삭제하시겠습니까?",
     "Confirm deletion of group" : "그룹 삭제 확인",
+    "A group with this name already exists" : "이 이름의 그룹이 이미 있습니다.",
     "Could not create group" : "그룹을 만들 수 없음",
     "Administrator" : "관리자",
     "Group owner" : "그룹 소유자",

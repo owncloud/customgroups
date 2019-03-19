@@ -2,10 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Egyedi csoportok",
-    "A group with this name already exists" : "Ezzel a névvel már létezik csoport",
     "Could not rename group" : "A csoport nem nevezhető át",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Biztos benne, hogy törölni szeretné a \"{groupName}\" csoportot?",
     "Confirm deletion of group" : "Csoport törlésének megerősítése",
+    "A group with this name already exists" : "Ezzel a névvel már létezik csoport",
     "Could not create group" : "A csoport létrehozása sikertelen",
     "Administrator" : "Adminisztrátor",
     "Group owner" : "Csoportgazda",

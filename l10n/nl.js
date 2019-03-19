@@ -2,10 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Maatwerk groepen",
-    "A group with this name already exists" : "Er bestaat al een groep met die naam",
     "Could not rename group" : "Kon groep niet hernoemen",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Weet je zeker dat je de groep \"{groupName}\" wilt verwijderen?",
     "Confirm deletion of group" : "Bevestig verwijderen van groep",
+    "A group with this name already exists" : "Er bestaat al een groep met die naam",
     "Could not create group" : "Kon groep niet aanmaken",
     "Administrator" : "Beheerder",
     "Group owner" : "Groepseigenaar",

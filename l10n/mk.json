@@ -1,9 +1,9 @@
 { "translations": {
     "Custom Groups" : "Прилагодени групи",
-    "A group with this name already exists" : "Друга група со ова име веќе постои",
     "Could not rename group" : "Неможе да се преименува групата",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Дали сте сигурни дека сакате да ја избришете друпата \"{groupName}\" ?",
     "Confirm deletion of group" : "Потврдете бришење на групата",
+    "A group with this name already exists" : "Друга група со ова име веќе постои",
     "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Името на групата неможе да биде празно или да започнува со празно место. Името на групата треба да содржи најмалку 2 каратери",
     "Could not create group" : "Неможе да се креира група",
     "Administrator" : "Администратор",

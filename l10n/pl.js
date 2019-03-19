@@ -2,10 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Własna grupa",
-    "A group with this name already exists" : "Grupa o tej nazwie już istnieje",
     "Could not rename group" : "Nie można zmienić nazwy grupy",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Czy na pewno chcesz usunąć grupę \"{groupName}\" ?",
     "Confirm deletion of group" : "Potwierdź usunięcie grupy",
+    "A group with this name already exists" : "Grupa o tej nazwie już istnieje",
     "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Nazwa grupy nie może być pusta ani zaczynać się od spacji. Nazwa grupy musi się składać z przynajmniej 2 znaków.",
     "Could not create group" : "Nie można stworzyć grupy",
     "Administrator" : "Administrator",
