@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Пользовательские группы",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Имя группы не может быть пустым или начинаться с пробела. В имени группы должно быть хотя бы 2 символа. Или тщательно проверьте, не существует ли уже группа с этим именем",
     "Could not rename group" : "Не удалось переименовать группу",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Вы уверены, что хотите удалить группу \"{groupName}\"?",
     "Confirm deletion of group" : "Подтвердите удаление группы",

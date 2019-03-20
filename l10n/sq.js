@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Grupe Vetjake",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Emri i grupit s’mund të jetë i zbrazët apo të fillojë me një hapësirë. Emri i grupit duhet të përmbajë të paktën 2 shenja. Ose, mundësisht, shihni për një grup me këtë emër që ekziston tashmë",
     "Could not rename group" : "Grupi sâu riemÃ«rtua dot",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Jeni i sigurt se doni tÃ« fshihet grupi \"{groupName}\" ?",
     "Confirm deletion of group" : "Ripohoni fshirje grupi",
