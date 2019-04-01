@@ -29,10 +29,10 @@ use OCA\CustomGroups\Dav\GroupMembershipCollection;
 use OCA\CustomGroups\Dav\MembershipNode;
 
 class CustomGroupsPluginTest extends \Test\TestCase {
-	/** @var \Sabre\DAV\Server|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \Sabre\DAV\Server|\PHPUnit\Framework\MockObject\MockObject */
 	private $server;
 
-	/** @var \Sabre\DAV\Tree|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \Sabre\DAV\Tree|\PHPUnit\Framework\MockObject\MockObject */
 	private $tree;
 
 	/** @var  \OCP\IUserSession */
