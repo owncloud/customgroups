@@ -158,7 +158,7 @@ class CustomGroupsContext implements Context {
 			}
 		}
 		if (!$exists) {
-			PHPUnit_Framework_Assert::fail(
+			PHPUnit\Framework\Assert::fail(
 				"$customGroup is not in propfind answer"
 			);
 		}
@@ -185,7 +185,7 @@ class CustomGroupsContext implements Context {
 			}
 		}
 		if (!$exists) {
-			PHPUnit_Framework_Assert::fail(
+			PHPUnit\Framework\Assert::fail(
 				"$customGroup is not in propfind answer"
 			);
 		}
@@ -210,7 +210,7 @@ class CustomGroupsContext implements Context {
 			}
 		}
 		if ($exists) {
-			PHPUnit_Framework_Assert::fail(
+			PHPUnit\Framework\Assert::fail(
 				"$customGroup is in propfind answer"
 			);
 		}
@@ -383,7 +383,7 @@ class CustomGroupsContext implements Context {
 		$currentRole = $this->getUserRoleInACustomGroup(
 			'admin', $user, $customGroup
 		);
-		PHPUnit_Framework_Assert::assertEquals($role, $currentRole);
+		PHPUnit\Framework\Assert::assertEquals($role, $currentRole);
 	}
 
 	/**
@@ -408,7 +408,7 @@ class CustomGroupsContext implements Context {
 					= '/' . $this->featureContext->getDavPath()
 					. $appPath . $customGroup . '/' . $member;
 				if (!\array_key_exists($memberPath, $respondedArray)) {
-					PHPUnit_Framework_Assert::fail(
+					PHPUnit\Framework\Assert::fail(
 						"$member path is not in report answer"
 					);
 				}
@@ -426,10 +426,10 @@ class CustomGroupsContext implements Context {
 	 */
 	public function tryingToGetMembersOfCustomGroup($customGroup, $user) {
 		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
-		PHPUnit_Framework_Assert::assertEquals(
+		PHPUnit\Framework\Assert::assertEquals(
 			$this->sabreResponse->getStatus(), 403
 		);
-		PHPUnit_Framework_Assert::assertEmpty($respondedArray);
+		PHPUnit\Framework\Assert::assertEmpty($respondedArray);
 	}
 
 	/**
@@ -537,7 +537,7 @@ class CustomGroupsContext implements Context {
 					= '/' . $this->featureContext->getDavPath()
 					. $appPath . $userRequested . '/' . $customGroup . '/';
 				if (!\array_key_exists($groupPath, $respondedArray)) {
-					PHPUnit_Framework_Assert::fail(
+					PHPUnit\Framework\Assert::fail(
 						"$customGroup path" . " is not in propfind answer"
 					);
 				}
