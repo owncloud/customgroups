@@ -2,10 +2,11 @@
 <phpunit bootstrap="../../tests/bootstrap.php"
 		 strict="true"
 		 verbose="true"
+		 failOnRisky="true"
+		 failOnWarning="true"
 		 timeoutForSmallTests="900"
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
-		 beStrictAboutTestsThatDoNotTestAnything="true"
 		>
 
 	<testsuite name='unit'>
