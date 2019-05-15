@@ -110,7 +110,7 @@ pipeline:
       - TEST_SERVER_URL=http://owncloud
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
-    comands:
+    commands:
       - make test-acceptance-api
     when:
       matrix:
@@ -180,7 +180,13 @@ services:
 matrix:
   include:
     # oc code style check
+    - PHP_VERSION: 7.0
+      TEST_SUITE: owncloud-coding-standard
+
     - PHP_VERSION: 7.1
+      TEST_SUITE: owncloud-coding-standard
+
+    - PHP_VERSION: 7.2
       TEST_SUITE: owncloud-coding-standard
 
     - PHP_VERSION: 7.1
@@ -278,6 +284,7 @@ matrix:
       NEED_SERVER: true
       NEED_INSTALL_APP: true
 
+    #API acceptance tests
     #PHP 7.0 with core stable10
     - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
