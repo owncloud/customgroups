@@ -2,10 +2,12 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "קבוצות מותאמות אישית",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "שם הקבוצה לא יכול להיות ריק או להתחיל ברווח. שם הקבוצה חייב לכלול לפחות 2 תווים. לחילופין יש לבדוק אם קיימת כבר קבוצה בשם זה",
     "Could not rename group" : "לא ניתן היה לשנות את שם הקבוצה",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "באם באמת למחוק את הקבוצה \"{groupName}\" ?",
     "Confirm deletion of group" : "אישור מחיקת קבוצה",
     "A group with this name already exists" : "קבוצה עם שם זה כבר קיימת",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "שם הקבוצה לא יכול להיות ריק או להתחיל ברווח. שם הקבוצה חייב לכלול לפחות 2 תווים.",
     "Could not create group" : "לא ניתן היה ליצור את הקבוצה",
     "Administrator" : "מנהל",
     "Group owner" : "אחראי קבוצה",
