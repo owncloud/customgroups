@@ -2,6 +2,7 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "กำหนดกลุ่มเอง",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "ชื่อกลุ่มควรมีอย่างน้อย 2 ตัวอักษรห้ามเว้นว่างหรือขึ้นต้นด้วยช่องว่างหรือใช้ชื่อกลุ่มซ้ำกับชื่อกลุ่มที่มีอยู่แล้ว",
     "Could not rename group" : "ไม่สามารถเปลี่ยนชื่อกลุ่มได้",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "คุณแน่ใจหรือว่าต้องการลบกลุ่ม \"{groupName}\" ?",
     "Confirm deletion of group" : "ยืนยันการลบกลุ่ม",
