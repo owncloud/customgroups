@@ -7,7 +7,7 @@ Feature: Sharing Custom Groups
 
   Scenario: Check that skeleton is properly set
     Given as user "admin"
-    And user "user0" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
     Then user "user0" should see the following elements
       | /FOLDER/           |
       | /PARENT/           |
@@ -21,9 +21,9 @@ Feature: Sharing Custom Groups
 
   Scenario: Creating a share with a custom group
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
-    And user "member1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
+    And user "member1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user1" has made user "member1" a member of custom group "sharing-group"
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
@@ -35,8 +35,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Creating a new share with user who already received a share through their custom group
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
@@ -48,8 +48,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Keep custom group permissions in sync
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
@@ -76,8 +76,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Sharee can see the custom group share
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     When user "user1" sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
@@ -87,8 +87,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Share of folder and sub-folder to same user
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "/PARENT" with user "user1"
     When user "user0" shares file "/PARENT/CHILD" with group "customgroup_group1" using the sharing API
@@ -102,9 +102,9 @@ Feature: Sharing Custom Groups
 
   Scenario: Share a file by multiple channels
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
-    And user "user2" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
+    And user "user2" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user1" has made user "user2" a member of custom group "group1"
     And user "user0" has created folder "/common"
@@ -120,8 +120,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Delete all custom group shares
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
@@ -133,9 +133,9 @@ Feature: Sharing Custom Groups
 
   Scenario: Keep user custom group shares
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
-    And user "user2" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
+    And user "user2" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "group1"
     And user "user1" has made user "user2" a member of custom group "group1"
     And user "user0" has created folder "/TMP"
@@ -148,7 +148,7 @@ Feature: Sharing Custom Groups
 
   Scenario: Sharing again an own file while belonging to a custom group
     Given as user "admin"
-    And user "user0" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
     And user "user0" has created a custom group called "sharing-group"
     And group "sharing-group" has been created
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
@@ -162,8 +162,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Sharing subfolder when parent already shared
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
@@ -178,8 +178,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Sharing subfolder when parent already shared with custom group of sharer
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user0" has created a custom group called "sharing-group"
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
@@ -194,8 +194,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Unshare from self using custom groups
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user0" has created a custom group called "sharing-group"
     And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared file "/PARENT/parent.txt" with group "customgroup_sharing-group"
@@ -207,8 +207,8 @@ Feature: Sharing Custom Groups
 
   Scenario: Increasing permissions is allowed for owner
     Given as user "admin"
-    And user "user0" has been created with default attributes
-    And user "user1" has been created with default attributes
+    And user "user0" has been created with default attributes and skeleton files
+    And user "user1" has been created with default attributes and skeleton files
     And user "user0" has created a custom group called "sharing-group"
     And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
