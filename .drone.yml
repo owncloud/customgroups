@@ -17,6 +17,19 @@ pipeline:
       matrix:
         NEED_SERVER: true
 
+  install-testrunner:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - git clone -b stable10 --depth=1 https://github.com/owncloud/core.git /var/www/owncloud/testrunner
+      - cp -r /var/www/owncloud/apps/customgroups /var/www/owncloud/testrunner/apps/
+      - cd /var/www/owncloud/testrunner
+      - make install-composer-deps
+      - make vendor-bin-deps
+    when:
+      matrix:
+        NEED_TARBALL: true
+
   install-app:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
@@ -27,7 +40,7 @@ pipeline:
       - php occ a:e testing
       - php occ a:l
       - php occ config:system:set trusted_domains 1 --value=owncloud
-      - php occ log:manage --level 0
+      - php occ log:manage --level 2
     when:
       matrix:
         NEED_INSTALL_APP: true
@@ -37,8 +50,14 @@ pipeline:
     pull: true
     commands:
       - chown www-data /var/www/owncloud -R
-      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-      - chmod +x /var/www/owncloud/tests/acceptance/run.sh
+      - if [ "${NEED_TARBALL}" = "true" ];
+        then
+        chmod 777 /var/www/owncloud/testrunner/tests/acceptance/filesForUpload -R;
+        chmod +x /var/www/owncloud/testrunner/tests/acceptance/run.sh;
+        else
+        chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R;
+        chmod +x /var/www/owncloud/tests/acceptance/run.sh;
+        fi
     when:
       matrix:
         NEED_SERVER: true
@@ -110,6 +129,7 @@ pipeline:
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
     commands:
+      - if [ "${NEED_TARBALL}" = "true" ]; then cd /var/www/owncloud/testrunner/apps/customgroups; fi
       - make test-acceptance-api
     when:
       matrix:
@@ -343,3 +363,14 @@ matrix:
       DB_NAME: owncloud
       NEED_SERVER: true
       NEED_INSTALL_APP: true
+
+    # Owncloud Tarball
+    - PHP_VERSION: 7.2
+      OC_VERSION: 10.2.1
+      TEST_SUITE: api-acceptance
+      BEHAT_SUITE: apiCustomGroups
+      DB_TYPE: mysql
+      DB_NAME: owncloud
+      NEED_SERVER: true
+      NEED_INSTALL_APP: true
+      NEED_TARBALL: true
