@@ -29,7 +29,7 @@ Feature: Sharing Custom Groups
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
-      | shareType | 1                         |
+      | shareType | group                     |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -54,7 +54,7 @@ Feature: Sharing Custom Groups
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "user0" updates the last share using the sharing API with
-      | permissions | 1 |
+      | permissions | read |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the response when user "user0" gets the info of the last share should include
@@ -64,7 +64,7 @@ Feature: Sharing Custom Groups
       | share_type        | 1              |
       | file_source       | A_NUMBER       |
       | file_target       | /textfile0.txt |
-      | permissions       | 1              |
+      | permissions       | read           |
       | stime             | A_NUMBER       |
       | storage           | A_NUMBER       |
       | mail_send         | 0              |
@@ -213,8 +213,8 @@ Feature: Sharing Custom Groups
     And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
     When user "user0" updates the last share using the sharing API with
-      | permissions | 0 |
+      | permissions | read |
     And user "user0" updates the last share using the sharing API with
-      | permissions | 31 |
+      | permissions | all |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
