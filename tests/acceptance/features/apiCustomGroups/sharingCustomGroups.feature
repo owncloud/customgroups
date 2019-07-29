@@ -26,7 +26,7 @@ Feature: Sharing Custom Groups
     And user "member1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user1" has made user "member1" a member of custom group "sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
       | shareType | group                     |
@@ -39,7 +39,7 @@ Feature: Sharing Custom Groups
     And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt |
       | shareWith | user1       |
       | shareType | user        |
@@ -153,7 +153,7 @@ Feature: Sharing Custom Groups
     And group "sharing-group" has been created
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
     And user "user0" deletes the last share using the sharing API
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
       | shareType | group                     |
@@ -168,7 +168,7 @@ Feature: Sharing Custom Groups
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
     And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | /test/sub |
       | shareWith | user1     |
       | shareType | user      |
@@ -184,7 +184,7 @@ Feature: Sharing Custom Groups
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
     And user "user0" has shared file "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | /test/sub |
       | shareWith | user1     |
       | shareType | user      |
