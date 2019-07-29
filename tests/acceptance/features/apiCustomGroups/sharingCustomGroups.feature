@@ -26,10 +26,10 @@ Feature: Sharing Custom Groups
     And user "member1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user1" has made user "member1" a member of custom group "sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
-      | shareType | 1                         |
+      | shareType | group                     |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -39,10 +39,10 @@ Feature: Sharing Custom Groups
     And user "user1" has been created with default attributes and skeleton files
     And user "user1" has created a custom group called "sharing-group"
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt |
       | shareWith | user1       |
-      | shareType | 0           |
+      | shareType | user        |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -54,17 +54,17 @@ Feature: Sharing Custom Groups
     And user "user0" has shared file "textfile0.txt" with group "customgroup_group1"
     And user "user1" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "user0" updates the last share using the sharing API with
-      | permissions | 1 |
+      | permissions | read |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the response when user "user0" gets the info of the last share should include
       | id                | A_NUMBER       |
       | item_type         | file           |
       | item_source       | A_NUMBER       |
-      | share_type        | 1              |
+      | share_type        | group          |
       | file_source       | A_NUMBER       |
       | file_target       | /textfile0.txt |
-      | permissions       | 1              |
+      | permissions       | read           |
       | stime             | A_NUMBER       |
       | storage           | A_NUMBER       |
       | mail_send         | 0              |
@@ -153,10 +153,10 @@ Feature: Sharing Custom Groups
     And group "sharing-group" has been created
     And user "user0" has shared file "welcome.txt" with group "customgroup_sharing-group"
     And user "user0" deletes the last share using the sharing API
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
-      | shareType | 1                         |
+      | shareType | group                     |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -168,10 +168,10 @@ Feature: Sharing Custom Groups
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
     And user "user0" has shared folder "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | /test/sub |
       | shareWith | user1     |
-      | shareType | 0         |
+      | shareType | user      |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "user1" folder "/sub" should exist
@@ -184,10 +184,10 @@ Feature: Sharing Custom Groups
     And user "user0" has created folder "/test"
     And user "user0" has created folder "/test/sub"
     And user "user0" has shared file "/test" with group "customgroup_sharing-group"
-    When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
+    When user "user0" creates a share using the sharing API with settings
       | path      | /test/sub |
       | shareWith | user1     |
-      | shareType | 0         |
+      | shareType | user      |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "user1" folder "/sub" should exist
@@ -213,8 +213,8 @@ Feature: Sharing Custom Groups
     And user "user0" has made user "user1" a member of custom group "sharing-group"
     And user "user0" has shared folder "/FOLDER" with group "customgroup_sharing-group"
     When user "user0" updates the last share using the sharing API with
-      | permissions | 0 |
+      | permissions | read |
     And user "user0" updates the last share using the sharing API with
-      | permissions | 31 |
+      | permissions | all |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
