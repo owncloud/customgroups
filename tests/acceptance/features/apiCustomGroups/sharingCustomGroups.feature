@@ -42,7 +42,7 @@ Feature: Sharing Custom Groups
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt |
       | shareWith | user1       |
-      | shareType | 0           |
+      | shareType | user        |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -61,7 +61,7 @@ Feature: Sharing Custom Groups
       | id                | A_NUMBER       |
       | item_type         | file           |
       | item_source       | A_NUMBER       |
-      | share_type        | 1              |
+      | share_type        | group          |
       | file_source       | A_NUMBER       |
       | file_target       | /textfile0.txt |
       | permissions       | read           |
@@ -156,7 +156,7 @@ Feature: Sharing Custom Groups
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
-      | shareType | 1                         |
+      | shareType | group                     |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
 
@@ -171,7 +171,7 @@ Feature: Sharing Custom Groups
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
       | shareWith | user1     |
-      | shareType | 0         |
+      | shareType | user      |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "user1" folder "/sub" should exist
@@ -187,7 +187,7 @@ Feature: Sharing Custom Groups
     When user "user0" sends HTTP method "POST" to OCS API endpoint "/apps/files_sharing/api/v1/shares" with body
       | path      | /test/sub |
       | shareWith | user1     |
-      | shareType | 0         |
+      | shareType | user      |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "user1" folder "/sub" should exist
