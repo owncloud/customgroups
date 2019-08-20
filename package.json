@@ -24,7 +24,7 @@
     "karma-phantomjs-launcher": "*",
     "npm-watch": "*",
     "phantomjs-prebuilt": "*",
-    "sinon": "^2.0.0",
+    "sinon": "^7.4.1",
     "underscore": "1.8.3"
   },
   "engine": "node >= 6.9",
