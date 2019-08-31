@@ -201,8 +201,9 @@ Feature: Sharing Custom Groups
     And user "user0" has shared file "/PARENT/parent.txt" with group "customgroup_sharing-group"
     And user "user0" has stored etag of element "/PARENT"
     And user "user1" has stored etag of element "/"
-    When user "user1" deletes the last share using the sharing API
-    Then the etag of element "/" of user "user1" should have changed
+    When user "user1" unshares file "parent.txt" using the WebDAV API
+    Then the HTTP status code should be "204"
+    And the etag of element "/" of user "user1" should have changed
     And the etag of element "/PARENT" of user "user0" should not have changed
 
   Scenario: Increasing permissions is allowed for owner
