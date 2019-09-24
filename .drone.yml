@@ -1114,7 +1114,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: apiCustomGroups-10.2.1-mariadb10.2-php7.0
+name: apiCustomGroups-latest-mariadb10.2-php7.0
 
 platform:
   os: linux
@@ -1136,7 +1136,7 @@ steps:
     db_type: mysql
     db_username: owncloud
     exclude: apps/customgroups
-    version: 10.2.1
+    version: latest
 
 - name: install-testrunner
   pull: always
@@ -1260,6 +1260,6 @@ depends_on:
 - phpunit-php7.3-mariadb10.2
 - phpunit-php7.3-postgres9.4
 - apiCustomGroups-master-mariadb10.2-php7.0
-- apiCustomGroups-10.2.1-mariadb10.2-php7.0
+- apiCustomGroups-latest-mariadb10.2-php7.0
 
 ...
