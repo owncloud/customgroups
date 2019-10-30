@@ -2,10 +2,12 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Maatwerk groepen",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "De groepsnaam mag niet leeg zijn of beginnen met een spatie. De groepsnaam moet minstens 2 tekens lang zijn. Controleer of de groepsnaam nog niet bestaat.",
     "Could not rename group" : "Kon groep niet hernoemen",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Weet je zeker dat je de groep \"{groupName}\" wilt verwijderen?",
     "Confirm deletion of group" : "Bevestig verwijderen van groep",
     "A group with this name already exists" : "Er bestaat al een groep met die naam",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "De groepsnaam mag niet leeg zijn of beginnen met een spatie. De groepsnaam moet minstens 2 tekens lang zijn.",
     "Could not create group" : "Kon groep niet aanmaken",
     "Administrator" : "Beheerder",
     "Group owner" : "Groepseigenaar",
