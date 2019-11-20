@@ -21,15 +21,30 @@
 
 namespace OCA\CustomGroups;
 
+use OCP\IConfig;
+use OCP\IGroupManager;
+use OCP\IUser;
+use OCP\IUserSession;
 use OCP\Settings\ISettings;
 use OCP\Template;
 use OCA\CustomGroups\Service\MembershipHelper;
 
 class SettingsPanel implements ISettings {
+	/** @var MembershipHelper */
 	private $helper;
+	/** @var IGroupManager */
+	private $groupManager;
+	/** @var IUserSession */
+	private $userSession;
+	/** @var IConfig */
+	private $config;
 
-	public function __construct(MembershipHelper $helper) {
+	public function __construct(MembershipHelper $helper, IGroupManager $groupManager,
+								IUserSession $userSession, IConfig $config) {
 		$this->helper = $helper;
+		$this->groupManager = $groupManager;
+		$this->userSession = $userSession;
+		$this->config = $config;
 	}
 
 	public function getPanel() {
@@ -46,6 +61,27 @@ class SettingsPanel implements ISettings {
 	}
 
 	public function getSectionID() {
+		/**
+		 * Check if this app should be shown or not if the user belongs to the disallowed
+		 * groups in system config. If the user belongs to the disallowed groups
+		 * in system config, then lets not show this app in the personal settings
+		 * page of the user.
+		 */
+		$user = $this->userSession->getUser();
+		$disallowedGroups = $this->config->getSystemValue('customgroups.disallowed-groups', null);
+		if ($user !== null && $disallowedGroups !== null) {
+			foreach ($disallowedGroups as $disallowedGroup) {
+				$group = $this->groupManager->get($disallowedGroup);
+				if ($group === null) {
+					continue;
+				}
+
+				if ($this->groupManager->isInGroup($user->getUID(), $group->getGID())) {
+					return '';
+				}
+			}
+		}
+
 		return 'customgroups';
 	}
 }
