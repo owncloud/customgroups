@@ -106,7 +106,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->collection = new GroupsCollection(
 			$this->createMock(IGroupManager::class),
 			$this->handler,
-			$this->helper
+			$this->helper,
+			$this->config
 		);
 	}
 
@@ -157,8 +158,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->createMock(IGroupManager::class),
 			$this->handler,
 			$this->helper,
+			$this->config,
 			'user1'
 		);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
 		$this->handler->expects($this->never())->method('getGroups');
 		$this->handler->expects($this->at(0))
 			->method('getUserMemberships')
@@ -184,6 +188,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->createMock(IGroupManager::class),
 			$this->handler,
 			$this->helper,
+			$this->config,
 			'user1'
 		);
 		$this->handler->expects($this->never())->method('getGroups');
@@ -320,7 +325,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->collection = new GroupsCollection(
 			$this->createMock(IGroupManager::class),
 			$this->handler,
-			$helper
+			$helper,
+			$this->config
 		);
 
 		$this->handler->expects($this->never())

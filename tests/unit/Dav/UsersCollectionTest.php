@@ -70,6 +70,9 @@ class UsersCollectionTest extends \Test\TestCase {
 	 */
 	private $userSession;
 
+	/** @var IConfig */
+	private $config;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
@@ -82,6 +85,8 @@ class UsersCollectionTest extends \Test\TestCase {
 		$user->method('getUID')->willReturn(self::USER);
 		$this->userSession->method('getUser')->willReturn($user);
 
+		$this->config = $this->createMock(IConfig::class);
+
 		$this->helper = new MembershipHelper(
 			$this->handler,
 			$this->userSession,
@@ -89,13 +94,14 @@ class UsersCollectionTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->createMock(IConfig::class)
+			$this->config
 		);
 
 		$this->collection = new UsersCollection(
 			$this->createMock(IGroupManager::class),
 			$this->handler,
-			$this->helper
+			$this->helper,
+			$this->config
 		);
 	}
 

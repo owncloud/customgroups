@@ -74,13 +74,16 @@ class MembershipNodeTest extends \Test\TestCase {
 	 */
 	private $userSession;
 
+	/** @var IConfig */
+	private $config;
+
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		// currently logged in user
 		$user = $this->createMock(IUser::class);
@@ -98,7 +101,7 @@ class MembershipNodeTest extends \Test\TestCase {
 				$this->groupManager,
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
-				$this->createMock(IConfig::class)
+				$this->config
 			])
 			->getMock();
 
@@ -141,6 +144,12 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	public function testDeleteAsAdmin() {
 		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
 		$this->setCurrentUserMemberInfo($memberInfo);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
@@ -198,6 +207,11 @@ class MembershipNodeTest extends \Test\TestCase {
 	 */
 	public function testDeleteAsAdminFailed() {
 		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
 		$this->setCurrentUserMemberInfo($memberInfo);
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
@@ -219,6 +233,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 */
 	public function testDeleteAsNonAdmin() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 		$this->handler->expects($this->never())
 			->method('removeFromGroup');
 
@@ -245,7 +263,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->createMock(IConfig::class)
+			$this->config
 		);
 
 		$memberInfo = ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $role];
@@ -265,6 +283,11 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	public function testDeleteSelfAsNonAdmin() {
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_MEMBER);
+
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 
 		$this->handler->expects($this->once())
 			->method('removeFromGroup')
@@ -314,6 +337,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteAsNonMember() {
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 		$this->setCurrentUserMemberInfo(null);
 		$this->handler->expects($this->never())
 			->method('removeFromGroup');
@@ -325,6 +352,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * Super admin can delete any member
 	 */
 	public function testDeleteAsSuperAdmin() {
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 		$this->setCurrentUserMemberInfo(null);
 		$this->groupManager->method('isAdmin')
 			->with(self::CURRENT_USER)
@@ -349,6 +380,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteSelfAsLastAdmin() {
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$searchAdmin = new Search();
@@ -371,6 +406,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteLastAdminAsSuperAdmin() {
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_MEMBER);
 
 		$this->groupManager->method('isAdmin')
@@ -453,6 +492,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @dataProvider adminSetFlagProvider
 	 */
 	public function testSetProperties($isSuperAdmin, $currentUserRole, $roleToSet, $statusCode, $called) {
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
 		if ($currentUserRole !== null) {
 			$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => $currentUserRole]);
 		} else {
@@ -505,6 +548,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * Cannot remove admin perms from last admin
 	 */
 	public function testUnsetSelfAdminWhenLastAdmin() {
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 		$this->groupManager->method('isAdmin')
 			->with(self::CURRENT_USER)
 			->willReturn(true);
@@ -535,6 +582,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * Cannot remove admin perms from last admin
 	 */
 	public function testUnsetdminWhenLastAdminAsSuperAdmin() {
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
 		$this->handler->expects($this->never())

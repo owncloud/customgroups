@@ -173,6 +173,9 @@ class MembershipHelperTest extends \Test\TestCase {
 	 * @dataProvider isUserAdminDataProvider
 	 */
 	public function testIsUserAdmin($isSuperAdmin, $memberInfo, $expectedResult) {
+		$this->config->method('getSystemValue')
+			->with('customgroups.disallow-admin-access-all', false)
+			->willReturn(false);
 		$this->groupManager->expects($this->once())
 			->method('isAdmin')
 			->with(self::CURRENT_USER)
@@ -184,6 +187,19 @@ class MembershipHelperTest extends \Test\TestCase {
 			->willReturn($memberInfo);
 
 		$this->assertEquals($expectedResult, $this->helper->isUserAdmin('group1'));
+	}
+
+	public function testDenyAdminAccess() {
+		$this->config->method('getSystemValue')
+			->with('customgroups.disallow-admin-access-all', false)
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->with(self::CURRENT_USER)
+			->willReturn(true);
+		$this->handler->method('getGroup')
+			->with('group1')
+			->willReturn(['role' => CustomGroupsDatabaseHandler::ROLE_MEMBER, 'display_name' => 'group1']);
+		$this->assertFalse($this->helper->isUserAdmin('group1'));
 	}
 
 	public function isUserMemberDataProvider() {
