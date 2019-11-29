@@ -22,6 +22,7 @@
 namespace OCA\CustomGroups\Dav;
 
 use OCA\CustomGroups\Exception\ValidationException;
+use OCP\IConfig;
 use Sabre\DAV\IExtendedCollection;
 use Sabre\DAV\MkCol;
 use Sabre\DAV\Exception\NotFound;
@@ -60,6 +61,9 @@ class GroupsCollection implements IExtendedCollection {
 	 */
 	private $helper;
 
+	/** @var IConfig */
+	private $config;
+
 	/**
 	 * User id for which to use memberships or null for all groups
 	 *
@@ -73,20 +77,25 @@ class GroupsCollection implements IExtendedCollection {
 	private $dispatcher;
 
 	/**
-	 * Constructor
+	 * GroupsCollection constructor.
 	 *
+	 * @param IGroupManager $groupManager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
-	 * @param MembershipHelper $helper helper
+	 * @param MembershipHelper $helper
+	 * @param IConfig $config
+	 * @param string|null $userId
 	 */
 	public function __construct(
 		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
 		MembershipHelper $helper,
+		IConfig $config,
 		$userId = null
 	) {
 		$this->groupManager = $groupManager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
+		$this->config = $config;
 		$this->userId = $userId;
 
 		$this->dispatcher = \OC::$server->getEventDispatcher();
@@ -215,7 +224,12 @@ class GroupsCollection implements IExtendedCollection {
 		if ($this->userId !== null) {
 			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {
-			$allGroups = $this->groupsHandler->getGroups($search);
+			$disallowAdminAccessAll = $this->config->getSystemValue('customgroups.disallow-admin-access-all', false);
+			if ($disallowAdminAccessAll) {
+				$allGroups = $this->groupsHandler->getUserMemberships($this->helper->getUserId(), $search);
+			} else {
+				$allGroups = $this->groupsHandler->getGroups($search);
+			}
 		}
 		return \array_map(function ($groupInfo) {
 			return $this->createMembershipsCollection($groupInfo);

@@ -170,11 +170,26 @@ class MembershipHelper {
 	 * @return boolean true if the user can administrate, false otherwise
 	 */
 	public function isUserAdmin($groupId) {
-		// ownCloud admin is always admin of any custom group
-		if ($this->isUserSuperAdmin()) {
+		$isCurrentUserAdmin = $this->isUserSuperAdmin();
+		$memberInfo = $this->getUserMemberInfo($groupId);
+		if ($isCurrentUserAdmin) {
+			$denyAdminAccessAll = $this->config->getSystemValue('customgroups.disallow-admin-access-all', false);
+			/**
+			 * If system config customgroups.disallow-admin-access-all is set to true
+			 * then ownCloud admin is denied from the groups which it is not the
+			 * owner of or member of. It's also denied from the display name and editing members
+			 * of the group which its not not allowed to.
+			 */
+			if ($denyAdminAccessAll) {
+				return ($memberInfo !== null && $memberInfo['role']);
+			}
+			/**
+			 * If customgroups.disallow-admin-access-all is not set then ownCloud admin
+			 * has access to all (which is default behaviour)
+			 */
 			return true;
 		}
-		$memberInfo = $this->getUserMemberInfo($groupId);
+
 		return ($memberInfo !== null && $memberInfo['role']);
 	}
 

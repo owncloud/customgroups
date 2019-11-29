@@ -21,6 +21,7 @@
 
 namespace OCA\CustomGroups\Dav;
 
+use OCP\IConfig;
 use Sabre\DAV\ICollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use Sabre\DAV\Exception\NotFound;
@@ -48,25 +49,31 @@ class UsersCollection implements ICollection {
 	 */
 	private $helper;
 
+	/** @var IConfig */
+	private $config;
+
 	/**
 	 * @var IGroupManager
 	 */
 	private $groupManager;
 
 	/**
-	 * Constructor
+	 * UsersCollection constructor.
 	 *
+	 * @param IGroupManager $groupManager
 	 * @param CustomGroupsDatabaseHandler $groupsHandler custom groups handler
 	 * @param MembershipHelper $helper
+	 * @param IConfig $config
 	 */
 	public function __construct(
 		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper
+		MembershipHelper $helper, IConfig $config
 	) {
 		$this->groupManager = $groupManager;
 		$this->groupsHandler = $groupsHandler;
 		$this->helper = $helper;
+		$this->config = $config;
 	}
 
 	/**
@@ -105,6 +112,7 @@ class UsersCollection implements ICollection {
 				$this->groupManager,
 				$this->groupsHandler,
 				$this->helper,
+				$this->config,
 				$name
 			);
 		}

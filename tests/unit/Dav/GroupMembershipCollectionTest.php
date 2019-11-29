@@ -94,7 +94,6 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
@@ -161,6 +160,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	public function testDeleteAsAdmin() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 
 		$group = $this->createMock(IGroup::class);
 		$group->expects($this->once())
@@ -192,6 +195,12 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testDeleteAsNonAdmin() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+		$this->handler->method('getGroup')
+			->willReturn(['display_name' => 'group1']);
 
 		$this->handler->expects($this->never())
 			->method('deleteGroup');
@@ -204,6 +213,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testDeleteAsNonMember() {
 		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->handler->expects($this->never())
 			->method('deleteGroup');
@@ -236,6 +249,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testSetProperties($isSuperAdmin, $currentUserRole, $statusCode, $called) {
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
 
 		if ($currentUserRole !== null) {
 			$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => $currentUserRole]);
@@ -253,7 +270,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				$calledEvent[] = '\OCA\CustomGroups::updateGroupName';
 				\array_push($calledEvent, $event);
 			});
-			$this->handler->expects($this->at(1))
+			$this->handler->expects($this->once())
 				->method('updateGroup')
 				->with(1, 'group1', 'Group Renamed')
 				->willReturn(true);
@@ -284,6 +301,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	public function testSetDisplayNameNoDuplicates() {
 		$this->setCurrentUserSuperAdmin(true);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 
 		$this->helper->expects($this->once())
 			->method('isGroupDisplayNameAvailable')
@@ -323,6 +344,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
 		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with(self::NODE_USER, 1, false)
@@ -361,6 +387,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
 		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with(self::NODE_USER, 1, false)
@@ -377,6 +408,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
 		$this->handler->expects($this->never())
 			->method('addToGroup');
 
@@ -391,6 +427,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
 		$this->handler->expects($this->never())
 			->method('addToGroup');
 
@@ -402,6 +443,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testAddMemberAsNonAdmin() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->handler->expects($this->never())
 			->method('addToGroup');
@@ -415,6 +461,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function testAddMemberAsNonMember() {
 		$this->setCurrentUserMemberInfo(null);
 
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
 		$this->handler->expects($this->never())
 			->method('addToGroup');
 
@@ -426,6 +477,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->config->method('getAppValue')
 			->with('core', 'shareapi_only_share_with_group_members', 'no')
@@ -445,6 +500,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	public function testAddMemberWithShareToMemberRestrictionAndCommonGroup() {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
 
 		$this->config->method('getAppValue')
 			->with('core', 'shareapi_only_share_with_group_members', 'no')
@@ -482,6 +541,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testIsMemberAsNonMember() {
 		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->node->childExists(self::NODE_USER);
 	}
@@ -496,6 +559,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				[self::NODE_USER, 1, true],
 				['user3', 1, false],
 			]));
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->assertTrue($this->node->childExists(self::NODE_USER));
 		$this->assertFalse($this->node->childExists('user3'));
@@ -514,6 +582,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			$membershipsMap[] = [1, self::CURRENT_USER, $currentMemberInfo];
 		}
 
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+
 		$this->handler->expects($this->any())
 			->method('getGroupMemberInfo')
 			->will($this->returnValueMap($membershipsMap));
@@ -529,6 +602,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testGetMemberAsNonMember() {
 		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->node->getChild(self::NODE_USER);
 	}
@@ -539,6 +616,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function testGetMembers($isSuperAdmin, $currentMemberInfo) {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
 
 		$this->handler->expects($this->any())
 			->method('getGroupMembers')
@@ -562,6 +644,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testSearchMembers($isSuperAdmin, $currentMemberInfo) {
 		$search = new Search('us', 16, 256);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
 
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
@@ -588,6 +675,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	public function testGetMembersAsNonMember() {
 		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
 
 		$this->node->getChildren();
 	}
