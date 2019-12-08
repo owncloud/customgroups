@@ -41,7 +41,7 @@ class CustomGroupsPluginTest extends \Test\TestCase {
 	/** @var CustomGroupsPlugin */
 	private $plugin;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->tree = $this->getMockBuilder('\Sabre\DAV\Tree')
 			->disableOriginalConstructor()

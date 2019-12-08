@@ -37,7 +37,7 @@ class SettingsPanelTest extends \Test\TestCase {
 	/** @var IConfig | \PHPUnit\Framework\MockObject\MockObject */
 	private $config;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->helper = $this->createMock(MembershipHelper::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);

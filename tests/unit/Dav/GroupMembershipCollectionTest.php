@@ -91,7 +91,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 */
 	private $nodeUser;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->userManager = $this->createMock(IUserManager::class);
