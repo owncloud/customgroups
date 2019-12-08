@@ -68,7 +68,7 @@ class PageControllerTest extends \Test\TestCase {
 	 */
 	private $groupManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->config = $this->createMock(IConfig::class);

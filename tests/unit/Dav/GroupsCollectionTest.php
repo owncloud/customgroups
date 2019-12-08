@@ -78,7 +78,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	 */
 	private $config;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->handler->expects($this->never())->method('getGroup');

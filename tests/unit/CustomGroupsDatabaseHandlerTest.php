@@ -49,14 +49,14 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 	 */
 	private $logger;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->connection = \OC::$server->getDatabaseConnection();
 		$this->logger = $this->createMock(ILogger::class);
 		$this->handler = new CustomGroupsDatabaseHandler($this->connection, $this->logger);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->delete('custom_group_member')->execute();
 		$qb->delete('custom_group')->execute();
