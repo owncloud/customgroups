@@ -13,6 +13,8 @@
         "rdx/behat-variables": "^1.2",
         "sensiolabs/behat-page-object-extension": "^2.0",
         "symfony/translation": "^3.4",
+        "sabre/dav": "^4.0",
+        "sabre/xml": "^2.1",
         "guzzlehttp/guzzle": "^5.3",
         "phpunit/phpunit": "^7.5"
     }
