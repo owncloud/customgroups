@@ -111,16 +111,18 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testListUsers() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->getChildren();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateUser() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->createDirectory('user1');
 	}
 
@@ -131,9 +133,10 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\Forbidden
 	 */
 	public function testGetAnotherUser() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->collection->getChild('another');
 	}
 
@@ -153,23 +156,26 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->setName('x');
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testDelete() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->delete();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateFile() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->createFile('somefile.txt');
 	}
 }

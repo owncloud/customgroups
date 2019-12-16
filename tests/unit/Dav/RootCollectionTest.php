@@ -59,9 +59,10 @@ class RootCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\NotFound
 	 */
 	public function testGetNonExisting() {
+		$this->expectException(\Sabre\DAV\Exception\NotFound::class);
+
 		$this->collection->getChild('somethingelse');
 	}
 }
