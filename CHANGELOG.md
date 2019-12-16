@@ -4,7 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.5.0]
+
+### Added
+
+- Deny admin access when system config is set - [#273](https://github.com/owncloud/customgroups/issues/273)
+- Add Support for PHP 7.3 - [#226](https://github.com/owncloud/customgroups/issues/226)
+
+### Fixed
+
+- App should only be shown if it is whitelisted for guests - [#271](https://github.com/owncloud/customgroups/issues/271)
+- [Security] Bump tar from 2.2.1 to 2.2.2 - [#238](https://github.com/owncloud/customgroups/issues/238)
+- [Security] Bump extend from 3.0.1 to 3.0.2 - [#230](https://github.com/owncloud/customgroups/issues/230)
+- [Security] Bump fstream from 1.0.11 to 1.0.12 - [#232](https://github.com/owncloud/customgroups/issues/232)
+- [Security] Bump mixin-deep from 1.3.0 to 1.3.2 - [#235](https://github.com/owncloud/customgroups/issues/235)
+- [Security] Bump sshpk from 1.13.1 to 1.16.1 - [#236](https://github.com/owncloud/customgroups/issues/236)
+- [Security] Bump stringstream from 0.0.5 to 0.0.6 - [#237](https://github.com/owncloud/customgroups/issues/237)
+
+### Changed
+
+- Drop Support for PHP 7.0 - [#275](https://github.com/owncloud/customgroups/issues/275)
 
 ## [0.4.1] - 2019-05-16
 
@@ -102,6 +121,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.5.0...master
+[0.5.0]: https://github.com/owncloud/customgroups/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/owncloud/customgroups/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/owncloud/customgroups/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/owncloud/customgroups/compare/v0.3.5...v0.3.6
