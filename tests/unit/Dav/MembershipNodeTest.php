@@ -203,9 +203,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 */
 	public function testDeleteAsAdminFailed() {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
 		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -229,9 +230,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteAsNonAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -334,9 +336,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->config->method('getSystemValue')
 			->willReturn(true);
 		$this->groupManager->method('isAdmin')
@@ -377,9 +380,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteSelfAsLastAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->config->method('getSystemValue')
 			->willReturn(true);
 		$this->groupManager->method('isAdmin')
@@ -403,9 +407,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteLastAdminAsSuperAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->config->method('getSystemValue')
 			->willReturn(true);
 		$this->groupManager->method('isAdmin')
@@ -611,9 +616,10 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->node->setName('x');
 	}
 }

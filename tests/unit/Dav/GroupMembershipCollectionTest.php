@@ -191,9 +191,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteAsNonAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -209,9 +210,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testDeleteAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(null);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -380,10 +382,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 * @dataProvider adminProvider
 	 */
 	public function testAddMemberAsAdminFails($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
@@ -401,10 +404,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 * @dataProvider adminProvider
 	 */
 	public function testAddNonExistingMemberAsAdmin($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
@@ -420,10 +424,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\PreconditionFailed
 	 * @dataProvider adminProvider
 	 */
 	public function testAddNonExistingMemberMismatchCaseAsAdmin($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
@@ -439,9 +444,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testAddMemberAsNonAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
 
 		$this->config->method('getSystemValue')
@@ -456,9 +462,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testAddMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(null);
 
 		$this->config->method('getSystemValue')
@@ -473,9 +480,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -537,9 +545,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testIsMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(null);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -598,9 +607,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testGetMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(null);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -671,9 +681,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testGetMembersAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$this->setCurrentUserMemberInfo(null);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -684,16 +695,18 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->node->setName('x');
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateDirectory() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->node->createDirectory('somedir');
 	}
 
@@ -711,9 +724,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider providesUpdateDisplayNameValidateException
 	 * @param string $groupName
-	 * @expectedException \OCA\CustomGroups\Exception\ValidationException
 	 */
 	public function testUpdateDisplayNameValidatException($groupName) {
+		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
+
 		$this->node->updateDisplayName($groupName);
 	}
 }

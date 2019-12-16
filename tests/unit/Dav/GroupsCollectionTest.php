@@ -250,9 +250,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Conflict
 	 */
 	public function testCreateGroupNoDuplicates() {
+		$this->expectException(\Sabre\DAV\Exception\Conflict::class);
+
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('user1');
 		$this->userSession->method('getUser')->willReturn($user);
@@ -287,9 +288,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 * @dataProvider providesTestCreateException
-	 * @expectedException \OCA\CustomGroups\Exception\ValidationException
 	 */
 	public function testCreateGroupExceptions($groupName, $displayName) {
+		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
+
 		$mkCol = new MkCol([], [
 			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => $displayName
 		]);
@@ -314,9 +316,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\Forbidden
 	 */
 	public function testCreateGroupNoPermission() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
 		$helper = $this->createMock(MembershipHelper::class);
 		$helper->expects($this->once())
 			->method('canCreateGroups')
@@ -338,9 +341,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateGroupAlreadyExists() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->handler->expects($this->once())
 			->method('createGroup')
 			->with('group1', 'group1')
@@ -364,9 +368,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\NotFound
 	 */
 	public function testGetGroupNonExisting() {
+		$this->expectException(\Sabre\DAV\Exception\NotFound::class);
+
 		$this->handler->expects($this->any())
 			->method('getGroupByUri')
 			->with('groupx')
@@ -388,23 +393,26 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testSetName() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->setName('x');
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testDelete() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->delete();
 	}
 
 	/**
-	 * @expectedException Sabre\DAV\Exception\MethodNotAllowed
 	 */
 	public function testCreateFile() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
 		$this->collection->createFile('somefile.txt');
 	}
 }
