@@ -309,6 +309,11 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			throw new ValidationException("The group name should be at least 2 characters long.");
 		}
 
+		/* Verify if the multibyte character length is more than 64 */
+		if (\mb_strlen($displayName, 'UTF-8') > 64) {
+			throw new ValidationException('The group name should be maximum 64 characters long.');
+		}
+
 		if ($displayName[0] === ' ') {
 			throw new ValidationException('The group name can not start with space');
 		}

@@ -113,7 +113,7 @@
 
 						// status 422 in case of validation error
 						if (response.status === 422) {
-							OC.Notification.showTemporary(t('customgroups', 'The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists'));
+							OC.Notification.showTemporary(t('customgroups', 'The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists'));
 							return;
 						} else {
 							OC.Notification.showTemporary(t('customgroups', 'Could not rename group'));
@@ -269,7 +269,7 @@
 						return;
 					}
 					if (response.status === 422) {
-						OC.Notification.showTemporary(t('customgroups', "The group name can not be empty or start with space. The group name should at least have 2 characters"));
+						OC.Notification.showTemporary(t('customgroups', "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters"));
 					}
 					if (response.status === 403) {
 						OC.Notification.showTemporary(t('customgroups', 'Could not create group'));
