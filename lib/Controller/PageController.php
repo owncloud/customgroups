@@ -252,7 +252,16 @@ class PageController extends Controller {
 
 		$results = [];
 		if ($shareWithGroupOnly || $shareeEnumerationGroupMembers) {
+			$withoutEnumResult = [];
 			$results = $this->searchByMembershipGroup($groupInfo['group_id'], $pattern, $limit, !$shareeEnumeration);
+			/**
+			 * If the results of above is not found then we need to check without enumeration
+			 * that way we do not exclude the results of exact match.
+			 */
+			if (!isset($results[0]) && !$shareWithGroupOnly) {
+				$withoutEnumResult = $this->searchForNewMembers($groupInfo['group_id'], $pattern, $limit, true);
+			}
+			$results = \array_merge($results, $withoutEnumResult);
 		} else {
 			$results = $this->searchForNewMembers($groupInfo['group_id'], $pattern, $limit, !$shareeEnumeration);
 		}
