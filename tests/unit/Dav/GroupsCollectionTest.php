@@ -282,7 +282,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 			[' abc', 'starts with space'],
 			['a', 'only one char'],
 			['á', 'one char multibyte'],
-			['.', 'single dot']
+			['.', 'single dot'],
+			['12345678911234567892123456789312345678941234567895123456789612345', 'name longer than 64 characters']
 		];
 	}
 
