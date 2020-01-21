@@ -500,14 +500,64 @@ class PageControllerTest extends \Test\TestCase {
 			->willReturn(['group_id' => 128]);
 
 		// user3 is already member so it will be filtered out of the result
-		$this->handler->expects($this->once())
+		$this->handler
 			->method('getGroupMembers')
 			->with(128)
 			->willReturn([['user_id' => 'user3']]);
 
+		$this->userManager->method('find')
+			->willReturn([]);
+
 		$response = $this->pageController->searchUsers('group1', $searchPattern, 150);
 		$data = $response->getData();
 		$this->assertTrue(isset($data['results']));
+		$this->assertEquals($expectedResults, $data['results']);
+	}
+
+	public function testSearchUsersShareWithGroupOnlyAndEnumGroupMembers() {
+		$user1 = $this->makeUser('user1', 'User One');
+		$user2 = $this->makeUser('user2', 'User Two');
+		$user3 = $this->makeUser('user3', 'User Three');
+
+		$this->config->method('getAppValue')
+			->will($this->returnValueMap([
+				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
+				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
+				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'yes'],
+			]));
+
+		$currentUser = $this->makeUser('currentuser', 'Current User');
+		$this->userSession->method('getUser')->willReturn($currentUser);
+
+		$this->groupManager->expects($this->once())
+			->method('getUserGroupIds')
+			->with($currentUser)
+			->willReturn(['group1']);
+
+		$this->groupManager->expects($this->any())
+			->method('findUsersInGroup')
+			->will($this->returnValueMap([
+				['group1', \strtolower('user3'), 150, 0, []],
+			]));
+
+		$this->handler->expects($this->once())
+			->method('getGroupByUri')
+			->with('group1')
+			->willReturn(['group_id' => 128]);
+
+		// user3 is already member so it will be filtered out of the result
+		$this->handler
+			->method('getGroupMembers')
+			->with(128)
+			->willReturn([['user_id' => 'user1'], ['user_id' => 'user2']]);
+
+		$this->userManager->method('find')
+			->willReturn([$user3]);
+
+		$response = $this->pageController->searchUsers('group1', 'user3', 150);
+		$data = $response->getData();
+		$this->assertTrue(isset($data['results']));
+		$expectedResults = [['userId' => 'user3', 'displayName' => 'User Three']];
 		$this->assertEquals($expectedResults, $data['results']);
 	}
 
