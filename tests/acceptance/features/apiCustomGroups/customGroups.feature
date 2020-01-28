@@ -258,3 +258,27 @@ Feature: Custom Groups
     And user "user0" has created a custom group called "group0"
     When user "user0" makes user "non-existing-user" a member of custom group "group0" using the API
     Then the HTTP status code should be "412"
+
+  Scenario Outline: user tries to create a custom group with name having more than 64 characters or less than 2 characters
+    Given user "user0" has been created with default attributes and without skeleton files
+    When user "user0" creates a custom group called "<customGroup>" using the API
+    Then the HTTP status code should be "422"
+    And custom group "<customGroup>" should not exist
+    Examples:
+      | customGroup                                                               |
+      | thisIsAGroupNameWhoseLengthIsGreaterThanSixtyFourCharactersWhichIsInvalid |
+      | यो समूह को नाम मा धेरै शब्द हरु छन तेसैले यो समूह अवैध हुनेछ यो समूह      |
+      | a                                                                         |
+      | य                                                                         |
+
+  Scenario Outline: user tries to create a custom group with some valid names
+    Given user "user0" has been created with default attributes and without skeleton files
+    When user "user0" creates a custom group called "<customGroup>" using the API
+    Then the HTTP status code should be "201"
+    And custom group "<customGroup>" should exist
+    Examples:
+      | customGroup  |
+      | thisIsAGroup |
+      | समूह         |
+      | ab           |
+      | hello-&#$%   |

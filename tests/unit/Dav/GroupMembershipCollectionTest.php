@@ -717,7 +717,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			['a'],
 			[' a'],
 			['á'],
-			[' áé']
+			[' áé'],
+			['12345678911234567892123456789312345678941234567895123456789612345']
 		];
 	}
 
@@ -725,7 +726,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 * @dataProvider providesUpdateDisplayNameValidateException
 	 * @param string $groupName
 	 */
-	public function testUpdateDisplayNameValidatException($groupName) {
+	public function testUpdateDisplayNameValidateException($groupName) {
 		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
 
 		$this->node->updateDisplayName($groupName);

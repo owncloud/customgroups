@@ -141,6 +141,11 @@ class GroupsCollection implements IExtendedCollection {
 			throw new ValidationException('The group name should be at least 2 characters long.');
 		}
 
+		/** Group name must be max 64 characters long */
+		if (\mb_strlen($name, 'UTF-8') > 64) {
+			throw new ValidationException('The group name should be maximum 64 characters long.');
+		}
+
 		/**
 		 * A special case where index is appended with the group name
 		 */
