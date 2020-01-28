@@ -4,8 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.5.1] - 2020-01-28
 
+### Fixed
+
+- Validation for max allowed number of chars in custom groups name - [#291](https://github.com/owncloud/customgroups/issues/291)
+- Allow user to add to group even when enumeration to group is imposed - [#293](https://github.com/owncloud/customgroups/issues/293)
+
+### Changed
+
+- [Security] Bump atob from 2.0.3 to 2.1.2 - [#228](https://github.com/owncloud/customgroups/issues/228)
+- [Security] Bump bower from 1.8.2 to 1.8.8 - [#239](https://github.com/owncloud/customgroups/issues/239)
+- [Security] Bump handlebars from 4.0.11 to 4.7.2 - [#281](https://github.com/owncloud/customgroups/issues/281), [#295](https://github.com/owncloud/customgroups/issues/295), [#297](https://github.com/owncloud/customgroups/issues/297), [#299](https://github.com/owncloud/customgroups/issues/299)
 
 ## [0.5.0] - 2019-12-20
 
@@ -124,7 +134,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.5.0...master
+[0.5.1]: https://github.com/owncloud/customgroups/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/owncloud/customgroups/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/owncloud/customgroups/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/owncloud/customgroups/compare/v0.3.6...v0.4.0
@@ -134,4 +144,3 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 [0.3.1]: https://github.com/owncloud/customgroups/compare/v0.2.0...v0.3.1
 [0.2.0]: https://github.com/owncloud/customgroups/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/owncloud/customgroups/compare/v0.1.0...v0.1.1
-
