@@ -1,11 +1,9 @@
 { "translations": {
     "Custom Groups" : "Pielāgotas grupas",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Grupas nosaukums nevar sākties ar atstarpi vai būt tukšs. Grupas nosaukumā jābūt vismaz 2 rakstzīmēm. Vai arī pārbaudiet, vai grupa ar šādu nosaukumu jau pastāv.",
     "Could not rename group" : "Grupu nevar pārsaukt",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Vai tiešām vēlaties dzēst \"{groupName}\" grupu?",
     "Confirm deletion of group" : "Apstipriniet grupas dzēšanu",
     "A group with this name already exists" : "Grupa ar šādu nosaukumu jau pastāv",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Grupas nosaukums nevar sākties ar atstarpi vai būt tukšs. Grupas nosaukumā jābūt vismaz 2 rakstzīmēm.",
     "Could not create group" : "Neizdevās izveidot grupu",
     "Administrator" : "Administrators",
     "Group owner" : "Grupas īpašnieks",

@@ -1,11 +1,9 @@
 { "translations": {
     "Custom Groups" : "Προσαρμοσμένες ομάδες",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Το όνομα της ομάδας δεν μπορεί να είναι κενό ή να ξεκινά με διάστημα. Το όνομα της ομάδας θα πρέπει να έχει τουλάχιστον 2 χαρακτήρες. Εναλλακτικά, ελέγξτε εάν υπάρχει ήδη μια ομάδα με αυτό το όνομα",
     "Could not rename group" : "Αδυναμία μετονομασίας ομάδας",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Είστε σίγουροι πως θέλετε να διαγραφεί η ομάδα \"{groupName}\" ;",
     "Confirm deletion of group" : "Επιβεβαίωση διαγραφής της ομάδας",
     "A group with this name already exists" : "Μια ομάδα με αυτό το όνομα υπάρχει ήδη",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Το όνομα της ομάδας δεν μπορεί να είναι κενό ή να ξεκινά με διάστημα. Το όνομα της ομάδας θα πρέπει να έχει τουλάχιστον 2 χαρακτήρες",
     "Could not create group" : "Αδυναμία δημιουργίας ομάδας",
     "Administrator" : "Διαχειριστής",
     "Group owner" : "Ιδιοκτήτης ομάδας",

@@ -1,11 +1,9 @@
 { "translations": {
     "Custom Groups" : "Özel Gruplar",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Grup adı boş olamaz veya boşlukla başlayamaz. Grup adında en az 2 karakter olmalıdır. Ayrıca bu ada sahip bir grubun mevcut olup olmadığını kontrol edin",
     "Could not rename group" : "Grup yeniden adlandırılamadı",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "\"{groupName}\" grubunu silmek istediğinize emin misiniz?",
     "Confirm deletion of group" : "Grup silme onayı",
     "A group with this name already exists" : "Bu isimde bir grup zaten var.",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Grup adı boş olamaz veya boşlukla başlayamaz. Grup adı en az 2 karakterden oluşmalıdır",
     "Could not create group" : "Grup oluşturulamadı",
     "Administrator" : "Yönetici",
     "Group owner" : "Grup sahibi",
