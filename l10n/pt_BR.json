@@ -1,11 +1,11 @@
 { "translations": {
     "Custom Groups" : "Grupos Personalizados",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "O nome do grupo não pode estar vazio ou começar com espaço. O nome do grupo deve ter pelo menos 2 caracteres. Ou gentilmente verifique se um grupo com este nome já existe",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "O nome do grupo não pode estar vazio ou começar com espaço. O nome do grupo deve ter pelo menos 2 caracteres ou no máximo 64 caracteres. Ou verifique se já existe um grupo com esse nome",
     "Could not rename group" : "Não foi possível renomear o grupo ",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Tem certeza de que deseja excluir o grupo {groupName} ?",
     "Confirm deletion of group" : "Confirmar exclusão do grupo",
     "A group with this name already exists" : "Um grupo com esse nome já existe",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "O nome do grupo não pode estar vazio ou começar com espaço. O nome do grupo deve ter pelo menos 2 caracteres",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters" : "O nome do grupo não pode estar vazio ou começar com espaço. O nome do grupo deve ter pelo menos 2 caracteres ou no máximo 64 caracteres",
     "Could not create group" : "Não foi possível criar o grupo",
     "Administrator" : "Administrador",
     "Group owner" : "Proprietário do grupo",

@@ -2,12 +2,10 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Sérsniðnir hópar",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters. Or kindly check if a group with this name already exists" : "Nafn á hóp má ekki vera tómt eða byrja á bili. Nafn á hóp ætti að innhalda minnst 2 stafi. Athugaðu hvort þegar sé fyrir hendi hópur með þessu nafni",
     "Could not rename group" : "Gat ekki endurnefnt hóp",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ertu viss um að þú viljir eyða hópnum \"{groupName}\" ?",
     "Confirm deletion of group" : "Staðfesta eyðingu á hóp",
     "A group with this name already exists" : "Hópur með þessu nafni er þegar til",
-    "The group name can not be empty or start with space. The group name should at least have 2 characters" : "Nafn á hóp má ekki vera tómt eða byrja á bili. Nafn á hóp ætti að innhalda minnst 2 stafi",
     "Could not create group" : "Gat ekki búið til hóp",
     "Administrator" : "Stjórnandi",
     "Group owner" : "Eigandi hóps",
