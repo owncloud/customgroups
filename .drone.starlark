@@ -694,7 +694,7 @@ def acceptance():
 	errorFound = False
 
 	default = {
-		'servers': ['daily-master-qa', 'latest'],
+		'servers': ['daily-master-qa'],
 		'browsers': ['chrome'],
 		'phpVersions': ['7.1'],
 		'databases': ['mariadb:10.2'],
