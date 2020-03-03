@@ -21,11 +21,12 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Sabre\DAV\Client as SClient;
 use Sabre\HTTP\ClientException;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\ResponseInterface;
+use TestHelpers\WebDavHelper;
 use TestHelpers\SetupHelper;
+use PHPUnit\Framework\Assert;
 
 require_once 'bootstrap.php';
 
@@ -47,25 +48,6 @@ class CustomGroupsContext implements Context {
 	 * @var array
 	 */
 	private $createdCustomGroups = [];
-
-	/**
-	 * returns a Sabre client
-	 *
-	 * @param string $user
-	 *
-	 * @return SClient
-	 */
-	public function getSabreClient($user) {
-		$settings = [
-			'baseUri' => $this->featureContext->getBaseUrl() . "/",
-			'userName' => $user,
-			'password' => $this->featureContext->getPasswordForUser($user),
-			'authType' => SClient::AUTH_BASIC
-		];
-		$client = new SClient($settings);
-		$client->addCurlSetting(CURLOPT_SSL_VERIFYPEER, false);
-		return $client;
-	}
 
 	/**
 	 * @When user :user creates a custom group called :groupName using the API
@@ -124,19 +106,30 @@ class CustomGroupsContext implements Context {
 	 * @param string $user
 	 *
 	 * @return array
-	 * @throws ClientHttpException
+	 * @throws Exception
 	 */
 	public function getCustomGroups($user) {
-		$client = $this->getSabreClient($user);
-		$properties = [
-						'{http://owncloud.org/ns}display-name'
-					  ];
+		$properties = ['oc:display-name'];
 		$appPath = '/customgroups/groups/';
-		$fullUrl
-			= $this->featureContext->getBaseUrl() . '/'
-			. $this->featureContext->getDavPath() . $appPath;
-		$sabreResponse = $client->propfind($fullUrl, $properties, 1);
-		return $sabreResponse;
+		$response = WebDavHelper::propfind(
+			$this->featureContext->getBaseUrl(),
+			$user,
+			$this->featureContext->getPasswordForUser($user),
+			$appPath,
+			$properties,
+			1,
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
+		$customGroupsXml = $this->featureContext->getResponseXml($response)->xpath('//oc:display-name');
+		Assert::assertArrayHasKey(
+			0, $customGroupsXml, "cannot find 'oc:display-name' property"
+		);
+		$customGroups = [];
+		foreach ($customGroupsXml as $group) {
+			\array_push($customGroups, [(string) $group]);
+		}
+		return $customGroups;
 	}
 
 	/**
@@ -197,7 +190,7 @@ class CustomGroupsContext implements Context {
 	 * @param string $customGroup
 	 *
 	 * @return void
-	 * @throws ClientHttpException
+	 * @throws Exception
 	 */
 	public function customGroupShouldNotExist($customGroup) {
 		$customGroupsList = $this->getCustomGroups("admin");
@@ -221,58 +214,57 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @param string $user
 	 * @param string $customGroup
-	 * @param array|null $properties
+	 * @param string $propertyName
+	 * @param string $propertyValue
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	public function sendProppatchToCustomGroup(
-		$user, $customGroup, $properties = null
+		$user, $customGroup, $propertyName, $propertyValue
 	) {
-		$client = $this->getSabreClient($user);
-		$client->setThrowExceptions(true);
-		$appPath = '/customgroups/groups/';
-		$fullUrl
-			= $this->featureContext->getBaseUrl() . '/'
-			. $this->featureContext->getDavPath() . $appPath . $customGroup;
-		try {
-			return $client->proppatch($fullUrl, $properties);
-		} catch (ClientHttpException $e) {
-			$this->sabreResponse = $e->getResponse();
-			return false;
-		} catch (ClientException $e) {
-			$this->sabreResponse = null;
-			return false;
-		}
+		$appPath = '/customgroups/groups/' . $customGroup;
+
+		$response = WebDavHelper::proppatch(
+			$this->featureContext->getBaseUrl(),
+			$user,
+			$this->featureContext->getPasswordForUser($user),
+			$appPath,
+			$propertyName,
+			$propertyValue,
+			"oc='http://owncloud.org/ns'",
+			$this->featureContext->getDavPathVersion(),
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
 	}
 
 	/**
 	 * Set property of a group member
 	 *
 	 * @param string $userRequesting
-	 * @param string $customGroup
 	 * @param string $userRequested
-	 * @param array|null $properties
+	 * @param string $propertyName
+	 * @param string $propertyValue
+	 * @param string $customGroup
 	 *
-	 * @return bool
-	 * @throws ClientException
+	 * @return void
 	 */
 	public function sendProppatchToCustomGroupMember(
-		$userRequesting, $customGroup, $userRequested, $properties = null
+		$userRequesting, $userRequested, $propertyName, $propertyValue, $customGroup
 	) {
-		$client = $this->getSabreClient($userRequesting);
-		$client->setThrowExceptions(true);
-		$appPath = '/customgroups/groups/';
-		$fullUrl
-			= $this->featureContext->getBaseUrl() . '/'
-			. $this->featureContext->getDavPath()
-			. $appPath . $customGroup . '/' . $userRequested;
-		try {
-			return $client->proppatch($fullUrl, $properties);
-		} catch (ClientHttpException $e) {
-			// 4xx and 5xx responses cause an exception
-			$this->sabreResponse = $e->getResponse();
-			return false;
-		}
+		$path = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
+		$response = WebDavHelper::proppatch(
+			$this->featureContext->getBaseUrl(),
+			$userRequesting,
+			$this->featureContext->getPasswordForUser($userRequesting),
+			$path,
+			$propertyName,
+			$propertyValue,
+			"oc='http://owncloud.org/ns'",
+			$this->featureContext->getDavPathVersion(),
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
 	}
 
 	/**
@@ -285,16 +277,12 @@ class CustomGroupsContext implements Context {
 	 * @param string $customGroup
 	 *
 	 * @return void
-	 * @throws ClientException
 	 */
 	public function userChangedRoleOfMember(
 		$userRequesting, $userRequested, $role, $customGroup
 	) {
-		$properties = [
-						'{http://owncloud.org/ns}role' => $role
-					  ];
 		$this->sendProppatchToCustomGroupMember(
-			$userRequesting, $customGroup, $userRequested, $properties
+			$userRequesting, $userRequested, 'role', $role, $customGroup
 		);
 	}
 
@@ -307,13 +295,39 @@ class CustomGroupsContext implements Context {
 	 * @param string $newName
 	 *
 	 * @return void
-	 * @throws ClientException
 	 */
 	public function userRenamedCustomGroupAs($user, $customGroup, $newName) {
-		$properties = [
-						'{http://owncloud.org/ns}display-name' => $newName
-					  ];
-		$this->sendProppatchToCustomGroup($user, $customGroup, $properties);
+		$this->sendProppatchToCustomGroup($user, $customGroup, 'display-name', $newName);
+	}
+
+	/**
+	 * takes xpath inputs and returns an associative array from the response data
+	 *
+	 * @param array $responseData
+	 * @param string $keyXpath
+	 * @param string $valueXpath
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getResponseWithKeyValue($responseData, $keyXpath, $valueXpath) {
+		$keys = [];
+		$values = [];
+		foreach ($responseData as $index => $value) {
+			$path = $responseData[$index]->xpath($keyXpath);
+			Assert::assertArrayHasKey(
+				0, $path, "cannot find '$keyXpath' property"
+			);
+			$path_i = (string)$path[$index];
+			$role = $value->xpath($valueXpath);
+			Assert::assertArrayHasKey(
+				0, $role, "cannot find '$valueXpath' property"
+			);
+			$role_i = (string)$role[$index];
+			\array_push($keys, $path_i);
+			\array_push($values, $role_i);
+		}
+		return \array_combine($keys, $values);
 	}
 
 	/**
@@ -322,51 +336,55 @@ class CustomGroupsContext implements Context {
 	 * @param string $user
 	 * @param string $group
 	 *
-	 * @return array|null
+	 * @return array
+	 * @throws Exception
 	 */
 	public function getCustomGroupMembers($user, $group) {
-		$client = $this->getSabreClient($user);
-		$client->setThrowExceptions(true);
-		$properties = [
-						'{http://owncloud.org/ns}role'
-					  ];
+		$properties = ['oc:role'];
 		$appPath = '/customgroups/groups/' . $group;
-		$fullUrl
-			= $this->featureContext->getBaseUrl() . '/'
-			. $this->featureContext->getDavPath() . $appPath;
-		try {
-			$response = $client->propfind($fullUrl, $properties, 1);
-			return $response;
-		} catch (ClientHttpException $e) {
-			// 4xx and 5xx responses cause an exception
-			$this->sabreResponse = $e->getResponse();
-			return null;
-		}
+		$response = WebDavHelper::propfind(
+			$this->featureContext->getBaseUrl(),
+			$user,
+			$this->featureContext->getPasswordForUser($user),
+			$appPath,
+			$properties,
+			1,
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
+		$responseData = $this->featureContext->getResponseXml($response)->xpath('//d:response');
+
+		return $this->getResponseWithKeyValue($responseData, '//d:href', '//oc:role');
 	}
 
 	/**
 	 * get the user's role in a custom group
 	 *
-	 * @param string $userRequesting
 	 * @param string $userRequested
 	 * @param string $group
 	 *
 	 * @return mixed
-	 * @throws ClientHttpException
 	 */
 	public function getUserRoleInACustomGroup(
-		$userRequesting, $userRequested, $group
+		$userRequested, $group
 	) {
-		$client = $this->getSabreClient($userRequesting);
-		$properties = [
-						'{http://owncloud.org/ns}role'
-					  ];
-		$userPath
-			= $this->featureContext->getDavPath()
-			. '/customgroups/groups/' . $group . '/' . $userRequested;
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $userPath;
-		$response = $client->propfind($fullUrl, $properties, 1);
-		return $response['/' . $userPath]['{http://owncloud.org/ns}role'];
+		$properties = ['oc:role'];
+		$appPath = '/customgroups/groups/' . $group . '/' . $userRequested;
+		$response = WebDavHelper::propfind(
+			$this->featureContext->getBaseUrl(),
+			$userRequested,
+			$this->featureContext->getPasswordForUser($userRequested),
+			$appPath,
+			$properties,
+			1,
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
+		$rolesXml = $this->featureContext->getResponseXml($response)->xpath('//oc:role');
+		Assert::assertArrayHasKey(
+			0, $rolesXml, "cannot find 'oc:role' property"
+		);
+		return (string) $rolesXml[0];
 	}
 
 	/**
@@ -381,7 +399,7 @@ class CustomGroupsContext implements Context {
 	 */
 	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup) {
 		$currentRole = $this->getUserRoleInACustomGroup(
-			'admin', $user, $customGroup
+			$user, $customGroup
 		);
 		PHPUnit\Framework\Assert::assertEquals($role, $currentRole);
 	}
@@ -430,9 +448,6 @@ class CustomGroupsContext implements Context {
 	 */
 	public function tryingToGetMembersOfCustomGroup($customGroup, $user) {
 		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
-		PHPUnit\Framework\Assert::assertEquals(
-			$this->sabreResponse->getStatus(), 403
-		);
 		PHPUnit\Framework\Assert::assertEmpty($respondedArray);
 	}
 
@@ -494,25 +509,27 @@ class CustomGroupsContext implements Context {
 	 * @param string $userRequesting
 	 * @param string $userRequested
 	 *
-	 * @return array|null
+	 * @return array
+	 * @throws Exception
 	 */
 	public function getCustomGroupsOfAUser($userRequesting, $userRequested) {
-		$client = $this->getSabreClient($userRequesting);
-		$client->setThrowExceptions(true);
-		$properties = [
-						'{http://owncloud.org/ns}role'
-					  ];
-		$userPath
-			= $this->featureContext->getDavPath()
-			. '/customgroups/users/' . $userRequested;
-		$fullUrl = $this->featureContext->getBaseUrl() . '/' . $userPath;
-		try {
-			return $client->propfind($fullUrl, $properties, 1);
-		} catch (ClientHttpException $e) {
-			// 4xx and 5xx responses cause an exception
-			$this->sabreResponse = $e->getResponse();
-			return null;
-		}
+		$properties = ['oc:role'];
+		$path = '/customgroups/users/' . $userRequested;
+		$response = WebDavHelper::propfind(
+			$this->featureContext->getBaseUrl(),
+			$userRequesting,
+			$this->featureContext->getPasswordForUser($userRequesting),
+			$path,
+			$properties,
+			1,
+			"customgroups"
+		);
+		$this->featureContext->setResponse($response);
+		$responseData = $this->featureContext->getResponseXml($response)->xpath('//d:response');
+		Assert::assertArrayHasKey(
+			0, $responseData, "cannot find 'd:response' property"
+		);
+		return $this->getResponseWithKeyValue($responseData, '//d:href', '//oc:role');
 	}
 
 	/**
@@ -537,8 +554,12 @@ class CustomGroupsContext implements Context {
 				$userRequesting, $userRequested
 			);
 			foreach ($customGroupsSimplified as $customGroup) {
+				$basePath = $this->featureContext->getBasePath();
+				if ($basePath !== '') {
+					$basePath .= '/';
+				}
 				$groupPath
-					= '/' . $this->featureContext->getDavPath()
+					= '/' . $basePath . $this->featureContext->getDavPath()
 					. $appPath . $userRequested . '/' . $customGroup . '/';
 				if (!\array_key_exists($groupPath, $respondedArray)) {
 					PHPUnit\Framework\Assert::fail(
