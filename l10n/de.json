@@ -1,9 +1,11 @@
 { "translations": {
     "Custom Groups" : "Benutzerdefinierte Gruppe",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Der Gruppenname darf nicht leer sein oder mit einem Leerzeichen beginnen. Der Gruppenname darf zwischen 2 und 64 Zeichen lang sein und muss eindeutig sein. ",
     "Could not rename group" : "Gruppe konnte nicht umbenannt werden",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Möchtest du die Gruppe \"{groupName}\" wirklich löschen?",
     "Confirm deletion of group" : "Bitte bestätige das Löschen der Gruppe",
     "A group with this name already exists" : "Eine Gruppe mit dem selben Namen existiert bereits.",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters" : "Der Gruppenname darf nicht leer sein oder mit einem Leerzeichen beginnen. Der Gruppenname darf zwischen 2 und 64 Zeichen lang sein.",
     "Could not create group" : "Gruppe konnte nicht erstellt werden",
     "Administrator" : "Administrator",
     "Group owner" : "Gruppenbesitzer ",
