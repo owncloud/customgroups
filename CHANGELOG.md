@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2020-02-06
+
+### Changed
+
+- Update owncloud min-version - [#308](https://github.com/owncloud/customgroups/issues/308)
+
 ## [0.5.1] - 2020-01-28
 
 ### Fixed
@@ -136,7 +142,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.5.1...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.6.0...master
+[0.6.0]: https://github.com/owncloud/customgroups/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/owncloud/customgroups/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/owncloud/customgroups/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/owncloud/customgroups/compare/v0.4.0...v0.4.1
