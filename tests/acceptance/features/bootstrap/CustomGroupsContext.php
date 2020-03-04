@@ -404,9 +404,13 @@ class CustomGroupsContext implements Context {
 			$membersSimplified = $this->featureContext->simplifyArray($members);
 			$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
 			foreach ($membersSimplified as $member) {
+				$basePath = $this->featureContext->getBasePath();
+				if ($basePath !== '') {
+					$basePath .= '/';
+				}
 				$memberPath
-					= '/' . $this->featureContext->getDavPath()
-					. $appPath . $customGroup . '/' . $member;
+					= '/' . $basePath
+					. $this->featureContext->getDavPath() . $appPath . $customGroup . '/' . $member;
 				if (!\array_key_exists($memberPath, $respondedArray)) {
 					PHPUnit\Framework\Assert::fail(
 						"$member path is not in report answer"
