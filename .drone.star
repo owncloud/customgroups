@@ -45,9 +45,6 @@ config = {
 			'suites': [
 				'apiCustomGroups'
 			],
-			'servers': [
-				'daily-master-qa'
-			],
 		},
 	}
 }
