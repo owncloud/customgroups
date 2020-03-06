@@ -158,33 +158,6 @@ class CustomGroupsContext implements Context {
 	}
 
 	/**
-	 * @Then custom group :customGroup should exist with display name :displayName
-	 *
-	 * @param string $customGroup
-	 * @param string $displayName
-	 *
-	 * @return void
-	 * @throws ClientHttpException
-	 */
-	public function customGroupExistsWithDisplayName($customGroup, $displayName) {
-		$customGroupsList = $this->getCustomGroups("admin");
-		$exists = false;
-		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
-			if ((!empty($customGroupName))
-				&& (\array_values($customGroupName)[0] == $displayName)
-			) {
-				$exists = true;
-				break;
-			}
-		}
-		if (!$exists) {
-			PHPUnit\Framework\Assert::fail(
-				"$customGroup is not in propfind answer"
-			);
-		}
-	}
-
-	/**
 	 * @Then custom group :customGroup should not exist
 	 *
 	 * @param string $customGroup
