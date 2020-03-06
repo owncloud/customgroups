@@ -31,7 +31,7 @@ Feature: Custom Groups
     And custom group "group0" should exist
     When user "user0" renames custom group "group0" as "renamed-group0" using the API
     Then the HTTP status code should be "207"
-    And custom group "group0" should exist with display name "renamed-group0"
+    And custom group "renamed-group0" should exist
 
   Scenario: A non-admin member cannot rename its custom group
     Given user "user0" has been created with default attributes and without skeleton files
@@ -41,7 +41,8 @@ Feature: Custom Groups
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "member1" renames custom group "group0" as "renamed-group0" using the API
     Then the HTTP status code should be "207"
-    And custom group "group0" should exist with display name "group0"
+    And custom group "group0" should exist
+    But custom group "renamed-group0" should not exist
 
   Scenario: Get members of a group
     Given user "user0" has been created with default attributes and without skeleton files
@@ -201,7 +202,7 @@ Feature: Custom Groups
     And user "admin" has made user "user1" a member of custom group "group0"
     And user "admin" has made user "user2" a member of custom group "group0"
     And user "admin" has renamed custom group "group0" as "renamed-group0"
-    And custom group "group0" should exist with display name "renamed-group0"
+    And custom group "renamed-group0" should exist
     And user "admin" has changed role of "user0" to admin in custom group "group0"
     And user "user0" should be an admin of custom group "group0"
     When user "admin" removes membership of user "user1" from custom group "group0" using the API
@@ -226,7 +227,7 @@ Feature: Custom Groups
     And user "user0" has created a custom group called "group0"
     When user "admin" renames custom group "group0" as "renamed-group0" using the API
     Then the HTTP status code should be "207"
-    And custom group "group0" should exist with display name "renamed-group0"
+    And custom group "renamed-group0" should exist
 
   Scenario: A member converted to group owner can do the same as group owner
     Given user "user0" has been created with default attributes and without skeleton files
@@ -241,7 +242,7 @@ Feature: Custom Groups
     And user "user1" has deleted a custom group called "group1"
     And user "user1" has made user "user2" a member of custom group "group0"
     And user "user1" has renamed custom group "group0" as "renamed-group0"
-    And custom group "group0" should exist with display name "renamed-group0"
+    And custom group "renamed-group0" should exist
     And user "user1" has changed role of "user2" to admin in custom group "group0"
     And user "user2" should be an admin of custom group "group0"
     When user "user1" removes membership of user "user0" from custom group "group0" using the API
