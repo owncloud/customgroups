@@ -30,7 +30,8 @@ Feature: Custom Groups
     And user "user0" has created a custom group called "group0"
     And custom group "group0" should exist
     When user "user0" renames custom group "group0" as "renamed-group0" using the API
-    Then custom group "group0" should exist with display name "renamed-group0"
+    Then the HTTP status code should be "207"
+    And custom group "group0" should exist with display name "renamed-group0"
 
   Scenario: A non-admin member cannot rename its custom group
     Given user "user0" has been created with default attributes and without skeleton files
@@ -39,7 +40,8 @@ Feature: Custom Groups
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "member1" renames custom group "group0" as "renamed-group0" using the API
-    Then custom group "group0" should exist with display name "group0"
+    Then the HTTP status code should be "207"
+    And custom group "group0" should exist with display name "group0"
 
   Scenario: Get members of a group
     Given user "user0" has been created with default attributes and without skeleton files
@@ -173,7 +175,8 @@ Feature: Custom Groups
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "user0" changes role of "member1" to admin in custom group "group0" using the API
-    Then user "member1" should be an admin of custom group "group0"
+    Then the HTTP status code should be "207"
+    And user "member1" should be an admin of custom group "group0"
 
   Scenario: Create a custom group and let another user as admin
     Given user "user0" has been created with default attributes and without skeleton files
@@ -183,7 +186,8 @@ Feature: Custom Groups
     And user "user0" has made user "member1" a member of custom group "group0"
     And user "user0" has changed role of "member1" to admin in custom group "group0"
     When user "user0" changes role of "user0" to member in custom group "group0" using the API
-    Then user "member1" should be an admin of custom group "group0"
+    Then the HTTP status code should be "207"
+    And user "member1" should be an admin of custom group "group0"
     And user "user0" should be a member of custom group "group0"
 
   Scenario: Superadmin can do everything
@@ -221,7 +225,8 @@ Feature: Custom Groups
     And user "user1" has been created with default attributes and without skeleton files
     And user "user0" has created a custom group called "group0"
     When user "admin" renames custom group "group0" as "renamed-group0" using the API
-    Then custom group "group0" should exist with display name "renamed-group0"
+    Then the HTTP status code should be "207"
+    And custom group "group0" should exist with display name "renamed-group0"
 
   Scenario: A member converted to group owner can do the same as group owner
     Given user "user0" has been created with default attributes and without skeleton files
@@ -251,7 +256,8 @@ Feature: Custom Groups
     And custom group "group0" should exist
     And user "user0" has made user "member1" a member of custom group "group0"
     When user "user0" changes role of "user1" to member in custom group "group0" using the API
-    Then user "user0" should be an admin of custom group "group0"
+    Then the HTTP status code should be "404"
+    And user "user0" should be an admin of custom group "group0"
 
   Scenario: A non-existing user cannot be added to a custom group
     Given user "user0" has been created with default attributes and without skeleton files
