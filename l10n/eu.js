@@ -2,10 +2,12 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Talde Pertsonalizatuak",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Talde izena ezin da hutsa izan edo hutsunearekin hasi. Talde izenak gutxienez bi karaktere behar ditu eta gehienez 64 karaktere. Bestela, izen berdina duen talderik ba oten den egiaztatu",
     "Could not rename group" : "Ezin izan da taldea berrizendatu",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ziur \"{groupName}\" taldea ezabatu nahi duzula?",
     "Confirm deletion of group" : "Baiztatu taldearen ezabatzea",
     "A group with this name already exists" : "Izen hau duen talderik ba da dagoeneko",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters" : "Talde izena ezin da hutsa izan edo hutsunearekin hasi. Talde izenak gutxienez bi karaktere behar ditu eta gehienez 64 karaktere",
     "Could not create group" : "Ezin izan da taldea sortu",
     "Administrator" : "Administratzailea",
     "Group owner" : "Taldearen jabea",
