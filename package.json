@@ -11,7 +11,7 @@
   "dependencies": {},
   "devDependencies": {
     "bower": "~1.8.8",
-    "handlebars": "^4.7.5",
+    "handlebars": "^4.7.6",
     "jasmine-core": "~2.5.2",
     "jasmine-sinon": "^0.4.0",
     "jsdoc": "~3.6.3",
