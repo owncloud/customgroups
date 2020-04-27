@@ -60,7 +60,7 @@ class SettingsPanelTest extends \Test\TestCase {
 			->method('canCreateGroups')
 			->willReturn(true);
 		$templateHtml = $this->panel->getPanel()->fetchPage();
-		$this->assertContains('<div id="customgroups" class="section" data-cancreategroups="true"></div>', $templateHtml);
+		$this->assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="true"></div>', $templateHtml);
 	}
 
 	public function testGetPanelNoCreatePerm() {
@@ -68,7 +68,7 @@ class SettingsPanelTest extends \Test\TestCase {
 			->method('canCreateGroups')
 			->willReturn(false);
 		$templateHtml = $this->panel->getPanel()->fetchPage();
-		$this->assertContains('<div id="customgroups" class="section" data-cancreategroups="false"></div>', $templateHtml);
+		$this->assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="false"></div>', $templateHtml);
 	}
 
 	public function testGuestUserNotDisplayCustomGroup() {
