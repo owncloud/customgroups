@@ -53,6 +53,7 @@ js/vendor
 tools/*
 js/templates/*.handlebars.js
 tests/unit/results
+.phpunit.result.cache
 vendor/
 vendor-bin/**/composer.lock
 
