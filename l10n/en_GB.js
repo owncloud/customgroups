@@ -2,10 +2,12 @@ OC.L10N.register(
     "customgroups",
     {
     "Custom Groups" : "Custom Groups",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists",
     "Could not rename group" : "Could not rename group",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Are you sure that you want to delete the group \"{groupName}\" ?",
     "Confirm deletion of group" : "Confirm deletion of group",
     "A group with this name already exists" : "A group with this name already exists",
+    "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters" : "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters",
     "Could not create group" : "Could not create group",
     "Administrator" : "Administrator",
     "Group owner" : "Group owner",
