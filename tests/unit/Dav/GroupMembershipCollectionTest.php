@@ -107,9 +107,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->nodeUser->method('getUID')->willReturn(self::NODE_USER);
 		$this->userManager->method('get')->will(
 			$this->returnValueMap([
-				[self::NODE_USER, $this->nodeUser],
-				[\strtoupper(self::NODE_USER), $this->nodeUser],
-				[self::CURRENT_USER, $this->currentUser],
+				[self::NODE_USER, false, $this->nodeUser],
+				[\strtoupper(self::NODE_USER), false, $this->nodeUser],
+				[self::CURRENT_USER, false, $this->currentUser],
 			]));
 
 		$this->config = $this->createMock(IConfig::class);
