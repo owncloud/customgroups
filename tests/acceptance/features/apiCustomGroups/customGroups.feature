@@ -256,8 +256,8 @@ Feature: Custom Groups
     And user "Alice" has created a custom group called "group0"
     And custom group "group0" should exist
     And user "Alice" has made user "Brian" a member of custom group "group0"
-    When user "Alice" changes role of "Brian" to member in custom group "group0" using the API
-    Then the HTTP status code should be "404"
+    When user "Alice" changes role of "Alice" to member in custom group "group0" using the API
+    Then the HTTP status code should be "207"
     And user "Alice" should be an admin of custom group "group0"
 
   Scenario: A non-existing user cannot be added to a custom group
