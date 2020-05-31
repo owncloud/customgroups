@@ -21,9 +21,9 @@ Feature: Sharing Custom Groups
   Scenario: Creating a share with a custom group
     Given user "Alice" has been created with default attributes and skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
-    And user "member1" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "sharing-group"
-    And user "Brian" has made user "member1" a member of custom group "sharing-group"
+    And user "Brian" has made user "Carol" a member of custom group "sharing-group"
     When user "Alice" creates a share using the sharing API with settings
       | path      | welcome.txt               |
       | shareWith | customgroup_sharing-group |
