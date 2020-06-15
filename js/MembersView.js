@@ -348,7 +348,10 @@
 		},
 
 		render: function() {
-			this.$el.html(this.template());
+			this.$el.html(this.template({
+				memberLabelHeader: t('customgroups', 'Member'),
+				roleLabelHeader: t('customgroups', 'Role'),
+			}));
 			this.$('[title]').tooltip();
 			this.$container = this.$('.group-member-list');
 			this._renderHeader();
