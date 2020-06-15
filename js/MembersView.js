@@ -292,9 +292,9 @@
 				displayName: member.get('userDisplayName'),
 				changeMemberRoleLabel: 
 					(member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
-					t('customergroups', 'Change role to "member"'):
-					t('customergroups', 'Change role to "group owner"'),
-				deleteLabel: t('customergroups', 'Remove member'),
+					t('customgroups', 'Change role to "member"'):
+					t('customgroups', 'Change role to "group owner"'),
+				deleteLabel: t('customgroups', 'Remove member'),
 				canAdmin: OC.isUserAdmin() || this.model.get('role') === OCA.CustomGroups.ROLE_ADMIN,
 				roleDisplayName: (member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
 					t('customgroups', 'Group owner') :
