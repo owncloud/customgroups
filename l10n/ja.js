@@ -36,6 +36,7 @@ OC.L10N.register(
     "Add member" : "メンバーを追加",
     "Leave this group" : "グループから退室",
     "Close" : "閉じる",
+    "Role" : "役職",
     "Custom groups" : "グループの編集",
     "Group with uri \"%s\" not found" : "無効なURI: グループ \"%s\" は見つかりません",
     "Added to group \"%2$s\"." : "グループ \"%2$s\" に追加しました",

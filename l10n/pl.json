@@ -39,6 +39,7 @@
     "Add member" : "Dodaj członka",
     "Leave this group" : "Opuść tę grupę",
     "Close" : "Zamknij",
+    "Role" : "Funkcja",
     "Custom groups" : "Własne grupy",
     "Group with uri \"%s\" not found" : "Grupa z adresem uri \"%s\" nie została znaleziona",
     "Added to group \"%2$s\"." : "Dodano do grupy \"%2$s\".",

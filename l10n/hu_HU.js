@@ -38,6 +38,7 @@ OC.L10N.register(
     "Add member" : "Tag hozzáadása",
     "Leave this group" : "Ez a csoport elhagyása",
     "Close" : "Bezárás",
+    "Role" : "Szerep",
     "Custom groups" : "Felhasználói csoportok",
     "Group with uri \"%s\" not found" : "\"%s\" url-lel csoport nem létezik",
     "Added to group \"%2$s\"." : "\"%2$s\" csoporthoz hozzáadva.",

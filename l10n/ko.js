@@ -39,6 +39,7 @@ OC.L10N.register(
     "Add member" : "회원 추가",
     "Leave this group" : "이 그룹 떠나기",
     "Close" : "닫기",
+    "Role" : "지위",
     "Custom groups" : "사용자 정의 그룹",
     "Group with uri \"%s\" not found" : "URI \"%s\"인 그룹을 찾을 수 없음",
     "Added to group \"%2$s\"." : "그룹 \"%2$s\"에 추가되었습니다.",

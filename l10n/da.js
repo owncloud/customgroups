@@ -38,6 +38,7 @@ OC.L10N.register(
     "Add member" : "Tilføj medlem",
     "Leave this group" : "For denne gruppe",
     "Close" : "Luk",
+    "Role" : "Rolle",
     "Custom groups" : "Brugerdefinerede grupper",
     "Group with uri \"%s\" not found" : "Gruppe med uri \"%s\" ikke fundet",
     "Added to group \"%2$s\"." : "Tilføj til gruppe \"%2$s\".",

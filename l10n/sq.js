@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "Shtoni anÃ«tar",
     "Leave this group" : "Braktiseni kÃ«tÃ« grupi",
     "Close" : "Mbylle",
+    "Role" : "Rol",
     "Custom groups" : "Grupe vetjake",
     "Group with uri \"%s\" not found" : "Sâu gjet grup me URI \"%s\"",
     "Added to group \"%2$s\"." : "U shtua te grupi \"%2$s\".",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "הוספת חבר",
     "Leave this group" : "עזיבת קבוצה זו",
     "Close" : "סגירה",
+    "Role" : "תפקיד",
     "Custom groups" : "קבוצות מותאמות אישית",
     "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה",
     "Added to group \"%2$s\"." : "נוסף לקבוצה \"%2$s\".",

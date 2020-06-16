@@ -37,6 +37,7 @@
     "Add member" : "Legg til medlem",
     "Leave this group" : "Forlat gruppen",
     "Close" : "Lukk",
+    "Role" : "Rolle",
     "Custom groups" : "Tilpassede grupper",
     "Group with uri \"%s\" not found" : "Gruppe med uri \"%s\" ikke funnet",
     "Added to group \"%2$s\"." : "Lagt til gruppen \"%2$s\".",

@@ -37,6 +37,7 @@
     "Add member" : "Lid toevoegen",
     "Leave this group" : "Verlaat deze groep",
     "Close" : "Sluiten",
+    "Role" : "Rol",
     "Custom groups" : "Aangepaste groepen",
     "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden",
     "Added to group \"%2$s\"." : "Toegevoegd aan groep \"%2$s\".",

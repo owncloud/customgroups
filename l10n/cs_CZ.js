@@ -34,6 +34,7 @@ OC.L10N.register(
     "Add member" : "Přidat člena",
     "Leave this group" : "Opustit tuhle skupinu",
     "Close" : "Zavřít",
+    "Role" : "Role",
     "Custom groups" : "Vlastní skupiny",
     "Group with uri \"%s\" not found" : "Skupina s odkazem \"%s\" nebyla nalezena",
     "Added to group \"%2$s\"." : "Přidáno do skupiny \"%2$s\".",

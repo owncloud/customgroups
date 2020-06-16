@@ -39,6 +39,7 @@ OC.L10N.register(
     "Add member" : "Dodaj člana",
     "Leave this group" : "Zapusti skupino",
     "Close" : "Zapri",
+    "Role" : "Vloga",
     "Custom groups" : "Skupine po meri",
     "Group with uri \"%s\" not found" : "Skupine z naslovom URI »%s« ni mogoče najti.",
     "Removed from group \"%2$s\"." : "Odstranjeno iz skupine \"%2$s\".",
