@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "Engadir membro",
     "Leave this group" : "Abandonar este grupo",
     "Close" : "Pechar",
+    "Role" : "Rol",
     "Custom groups" : "Grupos personalizados",
     "Group with uri \"%s\" not found" : "Non se atopa o grupo co URI «%s» ",
     "Added to group \"%2$s\"." : "Engadido ao grupo «%2$s».",
