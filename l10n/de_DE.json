@@ -38,7 +38,7 @@
     "Remove member" : "Mitglied entfernen",
     "Add member" : "Mitglied hinzufügen",
     "Leave this group" : "Gruppe verlassen",
-    "Close" : "Schliessen",
+    "Close" : "Schließen",
     "Role" : "Position",
     "Custom groups" : "Benutzerdefinierte Gruppen",
     "Group with uri \"%s\" not found" : "Die Gruppe mit der URI \"%s\" wurde nicht gefunden",
@@ -47,7 +47,7 @@
     "Removed from group \"%2$s\"." : "Aus der Gruppe \"%2$s\" entfernt.",
     "You have been removed from the group \"%2$s\" by \"%1$s\"." : "Sie wurden von \"%1$s\" aus der Gruppe \"%2$s\" entfernt.",
     "Role change in group \"%1$s\"." : "In der Gruppe \"%1$s\" wurde eine Rolle geändert.",
-    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" hat die \"%3$s\" - Rolle der Gruppe \"%2$s\" Ihnen zugewiesen.",
+    "\"%1$s\" assigned the \"%3$s\" role for the group \"%2$s\" to you." : "\"%1$s\" hat Ihnen die \"%3$s\" - Rolle der Gruppe \"%2$s\" zugewiesen.",
     "Unknown role" : "Unbekannte Rolle",
     "Only group admins are allowed to create custom groups" : "Nur Gruppen-Administratoren sind berechtigt benutzerdefinierte Gruppen zu erstellen",
     "Allow creating multiple groups with the same name" : "Das Erstellen von mehreren Gruppen mit dem selben Namen erlauben"
