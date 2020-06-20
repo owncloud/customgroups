@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "Добавить члена",
     "Leave this group" : "Покинуть эту группу",
     "Close" : "Закрыть",
+    "Role" : "Роль",
     "Custom groups" : "Пользовательские группы",
     "Group with uri \"%s\" not found" : "Не найдена группа с адресом \"%s\"",
     "Added to group \"%2$s\"." : "Добавлено в группу \"%2$s\".",
