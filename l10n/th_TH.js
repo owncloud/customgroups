@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "เพิ่มสมาชิก",
     "Leave this group" : "ออกจากกลุ่มนี้",
     "Close" : "ปิด",
+    "Role" : "กฎ",
     "Custom groups" : "กำหนดกลุ่มเอง",
     "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ ",
     "Added to group \"%2$s\"." : "เพิ่ม \"%2$s\" ลงในกลุ่มแล้ว",
