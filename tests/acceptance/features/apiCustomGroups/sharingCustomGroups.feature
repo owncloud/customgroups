@@ -67,7 +67,6 @@ Feature: Sharing Custom Groups
       | mail_send         | 0              |
       | uid_owner         | Alice          |
       | storage_id        | home::Alice    |
-      | file_parent       | A_NUMBER       |
       | displayname_owner | Alice Hansen   |
       | mimetype          | text/plain     |
 
