@@ -1833,14 +1833,14 @@ jsdoc@~3.6.3:
     underscore "~1.9.1"
 
 jshint@*:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.11.0.tgz#7f3d99820b8b653eaaec7015a563b2d8101cbbc8"
+  version "2.11.2"
+  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.11.2.tgz#10388bf33e206f3c5162b6f8829f4f4f75b57ef6"
   dependencies:
     cli "~1.0.0"
     console-browserify "1.1.x"
     exit "0.1.x"
     htmlparser2 "3.8.x"
-    lodash "~4.17.11"
+    lodash "~4.17.19"
     minimatch "~3.0.2"
     shelljs "0.3.x"
     strip-json-comments "1.0.x"
@@ -2029,9 +2029,9 @@ lodash@^3.8.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.1, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.5.0, lodash@~4.17.11:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+lodash@^4.0.1, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.5.0, lodash@~4.17.19:
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
 
 log4js@^0.6.31:
   version "0.6.38"
