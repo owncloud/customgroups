@@ -39,6 +39,7 @@ OC.L10N.register(
     "Add member" : "Προσθήκη μέλους",
     "Leave this group" : "Αποχώρηση από αυτή την ομάδα",
     "Close" : "Κλείσιμο",
+    "Role" : "Ρόλος",
     "Custom groups" : "Προσαρμοσμένες ομάδες",
     "Group with uri \"%s\" not found" : "Δεν βρέθηκε η ομάδα με uri \"%s\"",
     "Added to group \"%2$s\"." : "Προσθήκη την ομάδα \"%2$s\".",
