@@ -1833,8 +1833,8 @@ jsdoc@~3.6.3:
     underscore "~1.9.1"
 
 jshint@*:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.11.2.tgz#10388bf33e206f3c5162b6f8829f4f4f75b57ef6"
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.12.0.tgz#52e75bd058d587ef81a0e2f95e5cf18eb5dc5c37"
   dependencies:
     cli "~1.0.0"
     console-browserify "1.1.x"
