@@ -123,7 +123,7 @@ Feature: Sharing Custom Groups
     And user "Brian" sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
-    And the last share_id should not be included in the response
+    And the last share id should not be included in the response
 
   Scenario: Keep user custom group shares
     Given user "Alice" has been created with default attributes and without skeleton files
