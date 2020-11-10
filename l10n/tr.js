@@ -41,6 +41,7 @@ OC.L10N.register(
     "Add member" : "Üye ekle",
     "Leave this group" : "Bu grubu terk et",
     "Close" : "Kapat",
+    "Role" : "Rol",
     "Custom groups" : "Özel gruplar",
     "Group with uri \"%s\" not found" : "\"%s\" bağlantılı grup bulunamadı",
     "Added to group \"%2$s\"." : "\"%2$s\" grubuna eklendi.",
