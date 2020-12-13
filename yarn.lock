@@ -1663,11 +1663,11 @@ karma-jasmine@~1.1.0:
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.1.tgz#6fe840e75a11600c9d91e84b33c458e1c46a3529"
 
 karma-junit-reporter@*:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/karma-junit-reporter/-/karma-junit-reporter-1.2.0.tgz#4f9c40cedfb1a395f8aef876abf96189917c6396"
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/karma-junit-reporter/-/karma-junit-reporter-2.0.1.tgz#d34eef7f0b2fd064e0896954e8851a90cf14c8f3"
   dependencies:
     path-is-absolute "^1.0.0"
-    xmlbuilder "8.2.2"
+    xmlbuilder "12.0.0"
 
 karma-phantomjs-launcher@*:
   version "1.0.4"
@@ -3087,9 +3087,9 @@ xdg-basedir@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-4.0.0.tgz#4bc8d9984403696225ef83a1573cbbcb4e79db13"
 
-xmlbuilder@8.2.2:
-  version "8.2.2"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-8.2.2.tgz#69248673410b4ba42e1a6136551d2922335aa773"
+xmlbuilder@12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-12.0.0.tgz#e2ed675e06834a089ddfb84db96e2c2b03f78c1a"
 
 xmlcreate@^2.0.0:
   version "2.0.1"
