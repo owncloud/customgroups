@@ -6,8 +6,9 @@ It is then possible to share files or folders with these groups.
 ## QA metrics on master branch:
 
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud/customgroups/status.svg?branch=master)](https://drone.owncloud.com/owncloud/customgroups)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/owncloud/customgroups/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/owncloud/customgroups/?branch=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_customgroups&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_customgroups)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_customgroups&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_customgroups)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_customgroups&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_customgroups)
 
 ## Requirements
 
