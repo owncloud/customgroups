@@ -6,7 +6,7 @@ Feature: Sharing Custom Groups
     And using new dav path
 
   Scenario: Check that skeleton is properly set
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     Then user "Alice" should see the following elements
       | /FOLDER/           |
       | /PARENT/           |
@@ -19,7 +19,7 @@ Feature: Sharing Custom Groups
       | /welcome.txt       |
 
   Scenario: Creating a share with a custom group
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "sharing-group"
@@ -32,7 +32,7 @@ Feature: Sharing Custom Groups
     And the HTTP status code should be "200"
 
   Scenario: Creating a new share with user who already received a share through their custom group
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "sharing-group"
     And user "Alice" has shared file "welcome.txt" with group "customgroup_sharing-group"
@@ -44,7 +44,7 @@ Feature: Sharing Custom Groups
     And the HTTP status code should be "200"
 
   Scenario: Keep custom group permissions in sync
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "/FOLDER"
     And user "Brian" has created a custom group called "group1"
@@ -71,7 +71,7 @@ Feature: Sharing Custom Groups
       | mimetype          | text/plain     |
 
   Scenario: Sharee can see the custom group share
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "group1"
     And user "Alice" has shared file "textfile0.txt" with group "customgroup_group1"
@@ -81,7 +81,7 @@ Feature: Sharing Custom Groups
     And the last share_id should be included in the response
 
   Scenario: Share of folder and sub-folder to same user
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "/FOLDER"
     And user "Brian" has created a custom group called "group1"
@@ -97,7 +97,7 @@ Feature: Sharing Custom Groups
 
   Scenario: Share a file by multiple channels
     Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Brian" has been created with default attributes and skeleton files
+    And user "Brian" has been created with default attributes and small skeleton files
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "group1"
     And user "Brian" has made user "Carol" a member of custom group "group1"
@@ -113,7 +113,7 @@ Feature: Sharing Custom Groups
       | /common/sub/textfile0.txt |
 
   Scenario: Delete all custom group shares
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created a custom group called "group1"
     And user "Alice" has shared file "textfile0.txt" with group "customgroup_group1"
@@ -141,7 +141,7 @@ Feature: Sharing Custom Groups
 
   Scenario: Sharing again an own file while belonging to a custom group
     Given as user "admin"
-    And user "Alice" has been created with default attributes and skeleton files
+    And user "Alice" has been created with default attributes and small skeleton files
     And user "Alice" has created a custom group called "sharing-group"
     And group "sharing-group" has been created
     And user "Alice" has shared file "welcome.txt" with group "customgroup_sharing-group"
@@ -184,7 +184,7 @@ Feature: Sharing Custom Groups
     And as "Brian" folder "/sub" should exist
 
   Scenario: Unshare from self using custom groups
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created a custom group called "sharing-group"
     And user "Alice" has made user "Brian" a member of custom group "sharing-group"
@@ -197,7 +197,7 @@ Feature: Sharing Custom Groups
     And the etag of element "/PARENT" of user "Alice" should not have changed
 
   Scenario: Increasing permissions is allowed for owner
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created a custom group called "sharing-group"
     And user "Alice" has made user "Brian" a member of custom group "sharing-group"
