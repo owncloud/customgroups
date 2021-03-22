@@ -25,6 +25,10 @@
 
 		className: 'member-input-view',
 
+		events: {
+			'click .action-add-bulk': '_onAddBulk'
+		},
+
 		template: function(data) {
 			return OCA.CustomGroups.Templates.membersInput(data);
 		},
@@ -49,7 +53,9 @@
 		 */
 		render: function() {
 			this.$el.html(this.template({
-				placeholderText: t('customgroups', 'Add user to this group')
+				placeholderText: t('customgroups', 'Add user to this group'),
+				addBulkLabel: t('customgroups', 'Add bulk users'),
+				addBulkUsersText: t('customgroups', 'Enter each user to add to this group on a separate line (Syntax: <user-id>[,<display-name>])'),
 			}));
 
 			this.$field = this.$('input');
@@ -62,6 +68,8 @@
 				source: _.bind(this.autocompleteHandler, this),
 				select: _.bind(this._onSelect, this)
 			}).data('ui-autocomplete')._renderItem = _.bind(this.autocompleteRenderItem, this);
+
+			this.$bulkUsersList = this.$('#bulk-users-list');
 
 			this.delegateEvents();
 		},
@@ -154,6 +162,16 @@
 				displayName: s.item.displayName
 			});
 			$(e.target).val(s.item.userId).blur();
+		},
+
+		_onAddBulk: function(ev) {
+			ev.preventDefault();
+			var usersList = this.$bulkUsersList.val().split("\n").filter(function (el) {
+				return el != null && el != "";
+			});
+			this.trigger('add-bulk', {
+				usersList: usersList
+			});
 		}
 	});
 
@@ -161,4 +179,3 @@
 	OCA.CustomGroups.MembersInputView = MembersInputView;
 
 })(OC);
-
