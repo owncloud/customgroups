@@ -23,7 +23,8 @@
 			'click .close': '_onClose',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
-			'click .action-leave-group': '_onClickLeaveGroup'
+			'click .action-leave-group': '_onClickLeaveGroup',
+			'click .action-import-csv': '_onClickImportCsv',
 		},
 
 		initialize: function(model) {
@@ -53,7 +54,8 @@
 				this,
 				'_onDeleteMember',
 				'_onChangeMemberRole',
-				'_onClickLeaveGroup'
+				'_onClickLeaveGroup',
+				'_onClickImportCsv',
 			);
 		},
 
@@ -86,6 +88,11 @@
 		_onEndRequest: function() {
 			this._toggleLoading(false);
 			this.$('.empty').toggleClass('hidden', !!this.collection.length);
+		},
+
+		_onClickImportCsv: function () {
+			// TODO: upload csv
+			//  curl -X POST -H "Content-Type: text/csv" http://own.cloud/remote.php/dav/customgroups/groups/test -uadmin  -d "edgar, admin"
 		},
 
 		_onClickLeaveGroup: function() {
@@ -320,7 +327,11 @@
 				newMemberPlaceholder: t('customgroups', 'Add member'),
 				newMemberSubmitLabel: t('customgroups', 'Add member'),
 				leaveGroupLabel: t('customgroups', 'Leave this group'),
+				exportCsvLabel: t('customgroups', 'Export as CSV'),
+				importCsvLabel: t('customgroups', 'Import as CSV'),
 				closeLabel: t('customgroups', 'Close'),
+				downloadUrl: this.collection.url() + '?export',
+
 				// super admin might not be member
 				// not having a role means not being a member
 				userIsMember: !_.isUndefined(this.model.get('role')),

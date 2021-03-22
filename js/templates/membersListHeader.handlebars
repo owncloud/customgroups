@@ -2,6 +2,10 @@
 	<span class="avatar"></span>
 	<span class="group-name-title-display">{{groupName}}</span>
 </div>
+{{#if canAdmin}}
+<a class="button" href="{{downloadUrl}}">{{exportCsvLabel}}</a>
+<input class="action-import-csv" type="button" value="{{importCsvLabel}}" />
+{{/if}}
 {{#if userIsMember}}
 <input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
 {{/if}}
