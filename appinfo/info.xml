@@ -42,6 +42,8 @@ Sharing with a Custom Group is as easy and quick as always. Just click on the sh
 	<sabre>
 		<plugins>
 			<plugin>OCA\CustomGroups\Dav\CustomGroupsPlugin</plugin>
+			<plugin>OCA\CustomGroups\Dav\CSVExportPlugin</plugin>
+			<plugin>OCA\CustomGroups\Dav\CSVImportPlugin</plugin>
 		</plugins>
 		<collections>
 			<collection>OCA\CustomGroups\Dav\RootCollection</collection>

@@ -233,7 +233,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Returns a membership node
 	 *
 	 * @param string $userId user id
-	 * @return CustomGroupMemberNode membership node
+	 * @return MembershipNode membership node
 	 * @throws NotFound if the given user has no membership in this group
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
@@ -346,9 +346,9 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Creates a membership node based on the given membership info.
 	 *
 	 * @param array $memberInfo membership info
-	 * @return CustomGroupMemberNode membership node
+	 * @return MembershipNode membership node
 	 */
-	private function createCustomGroupMemberNode(array $memberInfo) {
+	private function createCustomGroupMemberNode(array $memberInfo): MembershipNode {
 		return new MembershipNode(
 			$memberInfo,
 			$memberInfo['user_id'],
