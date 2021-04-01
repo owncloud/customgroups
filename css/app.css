@@ -42,15 +42,6 @@
 	opacity: .5;
 }
 
-#customgroups .sidebar .group-name-title {
-	float: left;
-}
-
-#customgroups .sidebar .action-leave-group {
-	float: right;
-	margin-right: 35px;
-}
-
 #customgroups .sidebar .add-member-container {
 	clear: both;
 }
@@ -98,4 +89,20 @@
 	overflow: hidden;
 	line-height: 32px;
 	vertical-align: middle;
+}
+
+.custom-group-buttons {
+	margin-top: 5px;
+}
+
+#custom-group-import-elem {
+	display: none;
+}
+
+.custom-group-import-label {
+	cursor: pointer;
+}
+
+.custom-group-import-form {
+	display: inline;
 }
