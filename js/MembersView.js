@@ -24,7 +24,7 @@
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
 			'click .action-leave-group': '_onClickLeaveGroup',
-			'click .action-import-csv': '_onClickImportCsv',
+			'change #custom-group-import-elem': '_onChangeCsvInput',
 		},
 
 		initialize: function(model) {
@@ -55,7 +55,7 @@
 				'_onDeleteMember',
 				'_onChangeMemberRole',
 				'_onClickLeaveGroup',
-				'_onClickImportCsv',
+				'_onChangeCsvInput',
 			);
 		},
 
@@ -90,9 +90,34 @@
 			this.$('.empty').toggleClass('hidden', !!this.collection.length);
 		},
 
-		_onClickImportCsv: function () {
-			// TODO: upload csv
-			//  curl -X POST -H "Content-Type: text/csv" http://own.cloud/remote.php/dav/customgroups/groups/test -uadmin  -d "edgar, admin"
+		_onChangeCsvInput: function () {
+			var file = $('#custom-group-import-elem').prop('files')[0];
+			var self = this;
+
+			$.ajax({
+				url: OC.getRootPath()
+					+ '/remote.php/dav/customgroups/groups/'
+					+  encodeURIComponent(this.model.get('displayName')),
+				type: 'POST',
+				contentType: 'text/csv',
+				processData: false,
+				data: file
+			}).done(function (result) {
+				$('#custom-group-import-elem').val(null);
+
+				if ($.isEmptyObject(result)) {
+					OC.Notification.showTemporary(t('customgroups', 'No users imported'));
+					return;
+				}
+
+				self.render();
+				self.collection.reset([], {silent: true});
+				self.collection.fetch();
+
+				OC.Notification.showTemporary(t('customgroups', 'CSV file imported successfully'));
+			}).fail(function() {
+				OC.Notification.showTemporary(t('customgroups', 'CSV import failed'));
+			});
 		},
 
 		_onClickLeaveGroup: function() {
