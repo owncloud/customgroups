@@ -105,16 +105,26 @@
 			}).done(function (result) {
 				$('#custom-group-import-elem').val(null);
 
-				if ($.isEmptyObject(result)) {
-					OC.Notification.showTemporary(t('customgroups', 'No users imported'));
-					return;
-				}
+				var failedUsers = [];
+
+				$.each(result, function(user, res) {
+					if (res !== 'success') {
+						failedUsers.push(user);
+					}
+				});
 
 				self.render();
 				self.collection.reset([], {silent: true});
 				self.collection.fetch();
 
-				OC.Notification.showTemporary(t('customgroups', 'CSV file imported successfully'));
+				if (failedUsers.length) {
+					OC.dialogs.info(
+						failedUsers.join(', '),
+						t('customgroups', 'The following users were not imported')
+					);
+				} else {
+					OC.Notification.showTemporary(t('customgroups', 'All users were imported successfully'));
+				}
 			}).fail(function() {
 				OC.Notification.showTemporary(t('customgroups', 'CSV import failed'));
 			});
