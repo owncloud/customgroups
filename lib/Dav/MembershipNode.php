@@ -26,7 +26,6 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
-use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -222,13 +221,13 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	 */
 	public function getProperties($properties) {
 		$result = [];
-		if ($properties === null || \in_array(self::PROPERTY_ROLE, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_ROLE, $properties, true)) {
 			$result[self::PROPERTY_ROLE] = Roles::backendToDav($this->memberInfo['role']);
 		}
-		if ($properties === null || \in_array(self::PROPERTY_USER_ID, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_USER_ID, $properties, true)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
 		}
-		if ($properties === null || \in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties)) {
+		if ($properties === null || \in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties, true)) {
 			// FIXME: extremely inefficient as it will query the display name
 			// for each user individually
 			$user = $this->helper->getUser($this->memberInfo['user_id']);
@@ -240,6 +239,14 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			}
 		}
 		return $result;
+	}
+
+	public function getUserId(): string {
+		return $this->memberInfo['user_id'] ?? '';
+	}
+
+	public function getRole(): string {
+		return Roles::backendToDav($this->memberInfo['role']);
 	}
 
 	/**

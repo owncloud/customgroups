@@ -1,12 +1,23 @@
-<div class="group-name-title">
-	<span class="avatar"></span>
-	<span class="group-name-title-display">{{groupName}}</span>
-</div>
-{{#if userIsMember}}
-<input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
-{{/if}}
-<a class="close action-close icon-close" href="#" alt="{{closeLabel}}"></a>
+<div>
+	<div class="group-name-title">
+		<span class="avatar"></span>
+		<span class="group-name-title-display">{{groupName}}</span>
+	</div>
 
+	<a class="close action-close icon-close" href="#" title="{{closeLabel}}"></a>
+</div>
+<div class="custom-group-buttons">
+	{{#if userIsMember}}
+		<input class="action-leave-group" type="button" value="{{leaveGroupLabel}}" />
+	{{/if}}
+	{{#if canAdmin}}
+		<form class="custom-group-import-form" enctype="multipart/form-data" method="post" name="custom-group-csv-import">
+			<a class="button action-export-csv" href="{{downloadUrl}}">{{exportCsvLabel}}</a>
+			<label for="custom-group-import-elem" class="custom-group-import-label button">{{importCsvLabel}}</label>
+			<input id="custom-group-import-elem" name="csv-input" type="file" accept="text/csv" />
+		</form>
+	{{/if}}
+</div>
 {{#if canAdmin}}
-<div class="add-member-container"></div>
+	<div class="add-member-container"></div>
 {{/if}}
