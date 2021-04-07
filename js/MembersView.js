@@ -55,7 +55,7 @@
 				'_onDeleteMember',
 				'_onChangeMemberRole',
 				'_onClickLeaveGroup',
-				'_onChangeCsvInput',
+				'_onChangeCsvInput'
 			);
 		},
 
