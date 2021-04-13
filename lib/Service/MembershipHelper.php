@@ -241,7 +241,7 @@ class MembershipHelper {
 	 * @param array $groupInfo group info
 	 */
 	public function notifyUser($targetUserId, array $groupInfo) {
-		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
+		$link = $this->urlGenerator->linkToRoute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
 
 		$user = $this->getUser($this->getUserId());
 
@@ -264,7 +264,7 @@ class MembershipHelper {
 	 * @param array $memberInfo membership info
 	 */
 	public function notifyUserRoleChange($targetUserId, array $groupInfo, array $memberInfo) {
-		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
+		$link = $this->urlGenerator->linkToRoute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups', 'group' => $groupInfo['uri']]);
 		$user = $this->getUser($this->getUserId());
 
 		$notification = $this->notificationManager->createNotification();
@@ -297,7 +297,7 @@ class MembershipHelper {
 	 * @param array $groupInfo group info
 	 */
 	public function notifyUserRemoved($targetUserId, array $groupInfo) {
-		$link = $this->urlGenerator->linkToRouteAbsolute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups']);
+		$link = $this->urlGenerator->linkToRoute('settings.SettingsPage.getPersonal', ['sectionid' => 'customgroups']);
 		$user = $this->getUser($this->getUserId());
 
 		$notification = $this->notificationManager->createNotification();
