@@ -23,7 +23,8 @@
 			'click .close': '_onClose',
 			'click .action-delete-member': '_onDeleteMember',
 			'click .action-change-member-role': '_onChangeMemberRole',
-			'click .action-leave-group': '_onClickLeaveGroup'
+			'click .action-leave-group': '_onClickLeaveGroup',
+			'change #custom-group-import-elem': '_onChangeCsvInput',
 		},
 
 		initialize: function(model) {
@@ -53,7 +54,8 @@
 				this,
 				'_onDeleteMember',
 				'_onChangeMemberRole',
-				'_onClickLeaveGroup'
+				'_onClickLeaveGroup',
+				'_onChangeCsvInput'
 			);
 		},
 
@@ -86,6 +88,46 @@
 		_onEndRequest: function() {
 			this._toggleLoading(false);
 			this.$('.empty').toggleClass('hidden', !!this.collection.length);
+		},
+
+		_onChangeCsvInput: function () {
+			var file = $('#custom-group-import-elem').prop('files')[0];
+			var self = this;
+
+			$.ajax({
+				url: OC.getRootPath()
+					+ '/remote.php/dav/customgroups/groups/'
+					+  encodeURIComponent(this.model.get('displayName')),
+				type: 'POST',
+				contentType: 'text/csv',
+				processData: false,
+				data: file
+			}).done(function (result) {
+				$('#custom-group-import-elem').val(null);
+
+				var failedUsers = [];
+
+				$.each(result, function(user, res) {
+					if (res !== 'success') {
+						failedUsers.push(user);
+					}
+				});
+
+				self.render();
+				self.collection.reset([], {silent: true});
+				self.collection.fetch();
+
+				if (failedUsers.length) {
+					OC.dialogs.info(
+						failedUsers.join(', '),
+						t('customgroups', 'The following users were not imported')
+					);
+				} else {
+					OC.Notification.showTemporary(t('customgroups', 'All users were imported successfully'));
+				}
+			}).fail(function() {
+				OC.Notification.showTemporary(t('customgroups', 'CSV import failed'));
+			});
 		},
 
 		_onClickLeaveGroup: function() {
@@ -320,7 +362,11 @@
 				newMemberPlaceholder: t('customgroups', 'Add member'),
 				newMemberSubmitLabel: t('customgroups', 'Add member'),
 				leaveGroupLabel: t('customgroups', 'Leave this group'),
+				exportCsvLabel: t('customgroups', 'Export as CSV'),
+				importCsvLabel: t('customgroups', 'Import as CSV'),
 				closeLabel: t('customgroups', 'Close'),
+				downloadUrl: this.collection.url() + '?export',
+
 				// super admin might not be member
 				// not having a role means not being a member
 				userIsMember: !_.isUndefined(this.model.get('role')),
