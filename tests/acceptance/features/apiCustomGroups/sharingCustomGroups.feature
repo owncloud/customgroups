@@ -208,3 +208,90 @@ Feature: Sharing Custom Groups
       | permissions | all |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
+
+  Scenario: user shares a file to a custom group and normal group with same name
+    Given user "Alice" has been created with default attributes and small skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And group "group1" has been created
+    And user "Alice" has made user "Brian" a member of custom group "group1"
+    And user "Carol" has been added to group "group1"
+    When user "Alice" shares file "/textfile0.txt" with group "customgroup_group1" using the sharing API
+    Then  the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Brian" file "/textfile0.txt" should exist
+    When user "Alice" shares file "/textfile0.txt" with group "group1" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Carol" file "/textfile0.txt" should exist
+    And custom group "group1" should exist
+    And group "group1" should exist
+
+  Scenario: sharing sub-folder to a custom group when the main folder is already shared with a user
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And user "Alice" has made user "Carol" a member of custom group "group1"
+    And user "Alice" has created folder "/NEW-FOLDER"
+    And user "Alice" has created folder "/NEW-FOLDER/sub-folder"
+    And user "Alice" has shared folder "/NEW-FOLDER" with user "Brian"
+    When user "Alice" shares folder "/NEW-FOLDER/sub-folder" with group "customgroup_group1" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Carol" folder "/sub-folder" should exist
+
+  Scenario: sharing sub-folder to a custom group when the main folder is already shared with a normal group
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And user "Alice" has made user "Carol" a member of custom group "group1"
+    And group "grp1" has been created
+    And user "Alice" has created folder "/NEW-FOLDER"
+    And user "Alice" has created folder "/NEW-FOLDER/sub-folder"
+    And user "Alice" has shared folder "/NEW-FOLDER" with group "grp1"
+    When user "Alice" shares folder "/NEW-FOLDER/sub-folder" with group "customgroup_group1" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Carol" folder "/sub-folder" should exist
+
+
+  Scenario: sharing sub-folder to a user when the main folder is already shared with a custom group
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And user "Alice" has created folder "/NEW-FOLDER"
+    And user "Alice" has created folder "/NEW-FOLDER/sub-folder"
+    And user "Alice" has shared folder "/NEW-FOLDER" with group "customgroup_group1"
+    When user "Alice" shares folder "/NEW-FOLDER/sub-folder" with user "Brian" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Brian" folder "/sub-folder" should exist
+
+  Scenario: sharing sub-folder to a normal group when the main folder is already shared with a custom group
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And group "group1" has been created
+    And user "Brian" has been added to group "group1"
+    And user "Alice" has created folder "/NEW-FOLDER"
+    And user "Alice" has created folder "/NEW-FOLDER/sub-folder"
+    And user "Alice" has shared folder "/NEW-FOLDER" with group "customgroup_group1"
+    When user "Alice" shares folder "/NEW-FOLDER/sub-folder" with group "group1" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Brian" folder "/sub-folder" should exist
+
+  Scenario: Resharing a recieved share from custom group
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "sharing-group"
+    And user "Alice" has made user "Brian" a member of custom group "sharing-group"
+    And user "Alice" has created folder "/foldertoshare"
+    And user "Alice" has shared folder "/foldertoshare" with group "customgroup_sharing-group"
+    When user "Brian" shares folder "/foldertoshare" with user "Carol" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Carol" folder "/foldertoshare" should exist

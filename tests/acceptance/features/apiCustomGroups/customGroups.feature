@@ -289,3 +289,12 @@ Feature: Custom Groups
       | समूह         |
       | ab           |
       | hello-&#$%   |
+
+  Scenario: trying to leave an already left custom group
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has created a custom group called "group1"
+    And user "Alice" has made user "Brian" a member of custom group "group1"
+    And user "Brian" has removed membership of user "Brian" from custom group "group1"
+    When user "Brian" removes membership of user "Brian" from custom group "group1" using the API
+    Then the HTTP status code should be "403"
