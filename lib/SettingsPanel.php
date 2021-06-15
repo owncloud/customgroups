@@ -39,8 +39,12 @@ class SettingsPanel implements ISettings {
 	/** @var IConfig */
 	private $config;
 
-	public function __construct(MembershipHelper $helper, IGroupManager $groupManager,
-								IUserSession $userSession, IConfig $config) {
+	public function __construct(
+		MembershipHelper $helper,
+		IGroupManager $groupManager,
+		IUserSession $userSession,
+		IConfig $config
+	) {
 		$this->helper = $helper;
 		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;

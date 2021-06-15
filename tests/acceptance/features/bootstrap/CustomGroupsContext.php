@@ -62,7 +62,12 @@ class CustomGroupsContext implements Context {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
-				$user, "MKCOL", $appPath . $groupName, null, null, "uploads"
+				$user,
+				"MKCOL",
+				$appPath . $groupName,
+				null,
+				null,
+				"uploads"
 			);
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
@@ -90,7 +95,12 @@ class CustomGroupsContext implements Context {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
-				$user, "DELETE", $appPath . $groupName, null, null, "uploads"
+				$user,
+				"DELETE",
+				$appPath . $groupName,
+				null,
+				null,
+				"uploads"
 			);
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
@@ -123,7 +133,9 @@ class CustomGroupsContext implements Context {
 		$this->featureContext->setResponse($response);
 		$customGroupsXml = $this->featureContext->getResponseXml($response)->xpath('//oc:display-name');
 		Assert::assertArrayHasKey(
-			0, $customGroupsXml, "cannot find 'oc:display-name' property"
+			0,
+			$customGroupsXml,
+			"cannot find 'oc:display-name' property"
 		);
 		$customGroups = [];
 		foreach ($customGroupsXml as $group) {
@@ -193,7 +205,10 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function sendProppatchToCustomGroup(
-		$user, $customGroup, $propertyName, $propertyValue
+		$user,
+		$customGroup,
+		$propertyName,
+		$propertyValue
 	) {
 		$appPath = '/customgroups/groups/' . $customGroup;
 
@@ -223,7 +238,11 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function sendProppatchToCustomGroupMember(
-		$userRequesting, $userRequested, $propertyName, $propertyValue, $customGroup
+		$userRequesting,
+		$userRequested,
+		$propertyName,
+		$propertyValue,
+		$customGroup
 	) {
 		$path = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 		$response = WebDavHelper::proppatch(
@@ -252,10 +271,17 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function userChangedRoleOfMember(
-		$userRequesting, $userRequested, $role, $customGroup
+		$userRequesting,
+		$userRequested,
+		$role,
+		$customGroup
 	) {
 		$this->sendProppatchToCustomGroupMember(
-			$userRequesting, $userRequested, 'role', $role, $customGroup
+			$userRequesting,
+			$userRequested,
+			'role',
+			$role,
+			$customGroup
 		);
 	}
 
@@ -289,12 +315,16 @@ class CustomGroupsContext implements Context {
 		foreach ($responseData as $index => $value) {
 			$path = $responseData[$index]->xpath($keyXpath);
 			Assert::assertArrayHasKey(
-				0, $path, "cannot find '$keyXpath' property"
+				0,
+				$path,
+				"cannot find '$keyXpath' property"
 			);
 			$path_i = (string)$path[$index];
 			$role = $value->xpath($valueXpath);
 			Assert::assertArrayHasKey(
-				0, $role, "cannot find '$valueXpath' property"
+				0,
+				$role,
+				"cannot find '$valueXpath' property"
 			);
 			$role_i = (string)$role[$index];
 			\array_push($keys, $path_i);
@@ -339,7 +369,8 @@ class CustomGroupsContext implements Context {
 	 * @return mixed
 	 */
 	public function getUserRoleInACustomGroup(
-		$userRequested, $group
+		$userRequested,
+		$group
 	) {
 		$properties = ['oc:role'];
 		$appPath = '/customgroups/groups/' . $group . '/' . $userRequested;
@@ -355,7 +386,9 @@ class CustomGroupsContext implements Context {
 		$this->featureContext->setResponse($response);
 		$rolesXml = $this->featureContext->getResponseXml($response)->xpath('//oc:role');
 		Assert::assertArrayHasKey(
-			0, $rolesXml, "cannot find 'oc:role' property"
+			0,
+			$rolesXml,
+			"cannot find 'oc:role' property"
 		);
 		return (string) $rolesXml[0];
 	}
@@ -372,7 +405,8 @@ class CustomGroupsContext implements Context {
 	 */
 	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup) {
 		$currentRole = $this->getUserRoleInACustomGroup(
-			$user, $customGroup
+			$user,
+			$customGroup
 		);
 		PHPUnit\Framework\Assert::assertEquals($role, $currentRole);
 	}
@@ -387,7 +421,9 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function usersAreMemberOfCustomGroup(
-		$memberList, $user, $customGroup
+		$memberList,
+		$user,
+		$customGroup
 	) {
 		$appPath = '/customgroups/groups/';
 		if ($memberList instanceof \Behat\Gherkin\Node\TableNode) {
@@ -435,13 +471,20 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function addMemberOfCustomGroup(
-		$userRequesting, $userRequested, $customGroup
+		$userRequesting,
+		$userRequested,
+		$customGroup
 	) {
 		try {
 			$userPath
 				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 			$response = $this->featureContext->makeDavRequest(
-				$userRequesting, "PUT", $userPath, null, null, "uploads"
+				$userRequesting,
+				"PUT",
+				$userPath,
+				null,
+				null,
+				"uploads"
 			);
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
@@ -461,13 +504,20 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function removeMemberOfCustomGroup(
-		$userRequesting, $userRequested, $customGroup
+		$userRequesting,
+		$userRequested,
+		$customGroup
 	) {
 		try {
 			$userPath
 				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 			$response = $this->featureContext->makeDavRequest(
-				$userRequesting, "DELETE", $userPath, null, null, "uploads"
+				$userRequesting,
+				"DELETE",
+				$userPath,
+				null,
+				null,
+				"uploads"
 			);
 		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
@@ -500,7 +550,9 @@ class CustomGroupsContext implements Context {
 		$this->featureContext->setResponse($response);
 		$responseData = $this->featureContext->getResponseXml($response)->xpath('//d:response');
 		Assert::assertArrayHasKey(
-			0, $responseData, "cannot find 'd:response' property"
+			0,
+			$responseData,
+			"cannot find 'd:response' property"
 		);
 		return $this->getResponseWithKeyValue($responseData, '//d:href', '//oc:role');
 	}
@@ -515,7 +567,9 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function customGroupsWhichAUserIsMemberOfAre(
-		$customGroupList, $userRequested, $userRequesting
+		$customGroupList,
+		$userRequested,
+		$userRequesting
 	) {
 		$appPath = '/customgroups/users/';
 		if ($customGroupList instanceof \Behat\Gherkin\Node\TableNode) {
@@ -524,7 +578,8 @@ class CustomGroupsContext implements Context {
 				$customGroups
 			);
 			$respondedArray = $this->getCustomGroupsOfAUser(
-				$userRequesting, $userRequested
+				$userRequesting,
+				$userRequested
 			);
 			foreach ($customGroupsSimplified as $customGroup) {
 				$basePath = $this->featureContext->getBasePath();
@@ -572,7 +627,8 @@ class CustomGroupsContext implements Context {
 	public function cleanupCustomGroups() {
 		foreach ($this->createdCustomGroups as $customGroup) {
 			$this->userDeletesACustomGroup(
-				$this->featureContext->getAdminUsername(), $customGroup
+				$this->featureContext->getAdminUsername(),
+				$customGroup
 			);
 		}
 	}

@@ -43,8 +43,12 @@ class SettingsPanelTest extends \Test\TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->panel = new SettingsPanel($this->helper, $this->groupManager,
-			$this->userSession, $this->config);
+		$this->panel = new SettingsPanel(
+			$this->helper,
+			$this->groupManager,
+			$this->userSession,
+			$this->config
+		);
 	}
 
 	public function testGetSection() {

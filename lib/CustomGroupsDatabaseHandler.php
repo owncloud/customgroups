@@ -29,8 +29,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
  * Database handler for custom groups
  */
 class CustomGroupsDatabaseHandler {
-	const ROLE_MEMBER = 0;
-	const ROLE_ADMIN = 1;
+	public const ROLE_MEMBER = 0;
+	public const ROLE_ADMIN = 1;
 
 	/**
 	 * Database connection

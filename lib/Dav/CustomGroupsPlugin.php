@@ -39,9 +39,9 @@ use Sabre\DAV\PropFind;
  * Sabre plugin to handle custom groups
  */
 class CustomGroupsPlugin extends ServerPlugin {
-	const NS_OWNCLOUD = 'http://owncloud.org/ns';
+	public const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
-	const REPORT_NAME = '{http://owncloud.org/ns}search-query';
+	public const REPORT_NAME = '{http://owncloud.org/ns}search-query';
 
 	/**
 	 * Sabre server

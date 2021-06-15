@@ -24,6 +24,8 @@ require_once __DIR__ . '/../../../../../../tests/acceptance/features/bootstrap/b
 
 $classLoader = new \Composer\Autoload\ClassLoader();
 $classLoader->addPsr4(
-	"", __DIR__ . "/../../../../../../tests/acceptance/features/bootstrap", true
+	"",
+	__DIR__ . "/../../../../../../tests/acceptance/features/bootstrap",
+	true
 );
 $classLoader->register();

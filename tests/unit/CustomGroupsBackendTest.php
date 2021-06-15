@@ -32,7 +32,7 @@ use OCA\CustomGroups\Search;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class CustomGroupsBackendTest extends \Test\TestCase {
-	const GROUP_ID_PREFIX = CustomGroupsBackend::GROUP_ID_PREFIX;
+	public const GROUP_ID_PREFIX = CustomGroupsBackend::GROUP_ID_PREFIX;
 
 	/**
 	 * @var CustomGroupsDatabaseHandler

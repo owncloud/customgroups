@@ -38,7 +38,7 @@ use OCP\IConfig;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class UsersCollectionTest extends \Test\TestCase {
-	const USER = 'user1';
+	public const USER = 'user1';
 
 	/**
 	 * @var CustomGroupsDatabaseHandler

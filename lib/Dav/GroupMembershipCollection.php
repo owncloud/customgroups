@@ -38,11 +38,11 @@ use OCP\IGroupManager;
  * Group memberships collection for a given group
  */
 class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IProperties {
-	const NS_OWNCLOUD = 'http://owncloud.org/ns';
+	public const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
-	const PROPERTY_GROUP_ID = '{http://owncloud.org/ns}group-id';
-	const PROPERTY_DISPLAY_NAME = '{http://owncloud.org/ns}display-name';
-	const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
+	public const PROPERTY_GROUP_ID = '{http://owncloud.org/ns}group-id';
+	public const PROPERTY_DISPLAY_NAME = '{http://owncloud.org/ns}display-name';
+	public const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
 
 	/**
 	 * Custom groups handler

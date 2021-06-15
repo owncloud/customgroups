@@ -44,7 +44,8 @@ class RootCollection extends SimpleCollection {
 	public function __construct(
 		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper, IConfig $config
+		MembershipHelper $helper,
+		IConfig $config
 	) {
 		$children = [
 			new GroupsCollection(

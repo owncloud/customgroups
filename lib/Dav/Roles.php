@@ -25,11 +25,11 @@ namespace OCA\CustomGroups\Dav;
  * Roles constants and utility
  */
 class Roles {
-	const BACKEND_ROLE_MEMBER = 0;
-	const BACKEND_ROLE_ADMIN = 1;
+	public const BACKEND_ROLE_MEMBER = 0;
+	public const BACKEND_ROLE_ADMIN = 1;
 
-	const DAV_ROLE_MEMBER = 'member';
-	const DAV_ROLE_ADMIN = 'admin';
+	public const DAV_ROLE_MEMBER = 'member';
+	public const DAV_ROLE_ADMIN = 'admin';
 
 	private static $instance = null;
 
