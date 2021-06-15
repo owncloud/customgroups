@@ -36,7 +36,7 @@ use OCP\IUserManager;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class PageControllerTest extends \Test\TestCase {
-	const CURRENT_USER = 'currentuser';
+	public const CURRENT_USER = 'currentuser';
 
 	/**
 	 * @var CustomGroupsDatabaseHandler

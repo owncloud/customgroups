@@ -68,7 +68,8 @@ class UsersCollection implements ICollection {
 	public function __construct(
 		IGroupManager $groupManager,
 		CustomGroupsDatabaseHandler $groupsHandler,
-		MembershipHelper $helper, IConfig $config
+		MembershipHelper $helper,
+		IConfig $config
 	) {
 		$this->groupManager = $groupManager;
 		$this->groupsHandler = $groupsHandler;

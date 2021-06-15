@@ -43,8 +43,8 @@ use OCP\IGroup;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class GroupMembershipCollectionTest extends \Test\TestCase {
-	const CURRENT_USER = 'currentuser';
-	const NODE_USER = 'nodeuser';
+	public const CURRENT_USER = 'currentuser';
+	public const NODE_USER = 'nodeuser';
 
 	/**
 	 * @var CustomGroupsDatabaseHandler
@@ -110,7 +110,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				[self::NODE_USER, false, $this->nodeUser],
 				[\strtoupper(self::NODE_USER), false, $this->nodeUser],
 				[self::CURRENT_USER, false, $this->currentUser],
-			]));
+			])
+		);
 
 		$this->config = $this->createMock(IConfig::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)

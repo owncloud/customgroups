@@ -40,7 +40,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  * @package OCA\CustomGroups\Tests\unit\Service
  */
 class MembershipHelperTest extends \Test\TestCase {
-	const CURRENT_USER = 'currentuser';
+	public const CURRENT_USER = 'currentuser';
 
 	/**
 	 * @var CustomGroupsDatabaseHandler

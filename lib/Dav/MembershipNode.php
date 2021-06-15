@@ -33,11 +33,11 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  * Membership node
  */
 class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
-	const NS_OWNCLOUD = 'http://owncloud.org/ns';
+	public const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
-	const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
-	const PROPERTY_USER_ID = '{http://owncloud.org/ns}user-id';
-	const PROPERTY_USER_DISPLAY_NAME = '{http://owncloud.org/ns}user-display-name';
+	public const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
+	public const PROPERTY_USER_ID = '{http://owncloud.org/ns}user-id';
+	public const PROPERTY_USER_DISPLAY_NAME = '{http://owncloud.org/ns}user-display-name';
 
 	/**
 	 * Custom groups handler

@@ -25,7 +25,7 @@ namespace OCA\CustomGroups;
  * Group backend for custom groups for integration with core
  */
 class CustomGroupsBackend implements \OCP\GroupInterface {
-	const GROUP_ID_PREFIX = 'customgroup_';
+	public const GROUP_ID_PREFIX = 'customgroup_';
 
 	/**
 	 * Custom groups handler
