@@ -4,8 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - XXXX-XX-XX
+## [0.6.2] - 2021-06-23
 
+### Added
+
+- Implement UI and client handling for CSV import -  [#415](https://github.com/owncloud/customgroups/pull/415)
+- feat: export and import group members as csv - [#409](https://github.com/owncloud/customgroups/issues/409)
+
+### Fixed
+
+- Fix wrong UI messages when changing your own group role as admin - [#445](https://github.com/owncloud/customgroups/issues/445)
+- Improve UI when trying the change the role of a group admin - [#443](https://github.com/owncloud/customgroups/issues/443)
+- Use group id for csv import - [#442](https://github.com/owncloud/customgroups/issues/442)
+- Change absolute notification URL to a relative one - [#419](https://github.com/owncloud/customgroups/issues/419)
 
 ## [0.6.1] - 2021-03-05
 
@@ -151,7 +162,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.6.1...master
+[0.6.2]: https://github.com/owncloud/customgroups/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/owncloud/customgroups/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/owncloud/customgroups/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/owncloud/customgroups/compare/v0.5.0...v0.5.1
