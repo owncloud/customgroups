@@ -212,7 +212,7 @@
 					$field.prop('disabled', false);
 					$field.val('').focus();
 				}
-			}
+			};
 
 			for (var userEntry of usersList) {
 				var userData = this._splitUserEntry(userEntry);
