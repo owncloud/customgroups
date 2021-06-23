@@ -1,0 +1,45 @@
+{
+  "name": "owncloud-customgroups-dev",
+  "version": "0.1.0",
+  "author": {
+    "name": "Vincent Petry",
+    "email": "pvince81@owncloud.com"
+  },
+  "private": true,
+  "homepage": "https://github.com/owncloud/",
+  "contributors": [],
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "~1.8.12",
+    "handlebars": "^4.7.7",
+    "jasmine-core": "~3.7.1",
+    "jasmine-sinon": "^0.4.0",
+    "jsdoc": "~3.6.6",
+    "jshint": "*",
+    "karma": "~1.5.0",
+    "karma-coverage": "*",
+    "karma-jasmine": "~1.1.0",
+    "karma-jasmine-sinon": "^1.0.4",
+    "karma-junit-reporter": "*",
+    "karma-phantomjs-launcher": "*",
+    "npm-watch": "*",
+    "phantomjs-prebuilt": "*",
+    "sinon": "^7.4.2",
+    "underscore": "1.13.1"
+  },
+  "engine": "node >= 6.9",
+  "scripts": {
+    "build": "make js-templates",
+    "watch": "npm-watch",
+    "test": "node_modules/.bin/karma start tests/js/karma.config.js --single-run"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "js/templates/*.{js,handlebars}"
+      ],
+      "ignore": "**/*.handlebars.js",
+      "extensions": "js,handlebars"
+    }
+  }
+}

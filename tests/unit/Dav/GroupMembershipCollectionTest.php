@@ -1,0 +1,735 @@
+<?php
+/**
+ * @author Vincent Petry <pvince81@owncloud.com>
+ *
+ * @copyright Copyright (c) 2016, ownCloud GmbH
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+namespace OCA\CustomGroups\Tests\unit\Dav;
+
+use OCA\CustomGroups\Dav\GroupMembershipCollection;
+use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCP\IUserManager;
+use OCP\IUserSession;
+use OCP\IUser;
+use Sabre\DAV\PropPatch;
+use OCA\CustomGroups\Dav\MembershipNode;
+use OCA\CustomGroups\Service\MembershipHelper;
+use OCP\IGroupManager;
+use OCA\CustomGroups\Search;
+use OCP\IURLGenerator;
+use OCP\Notification\IManager;
+use OCP\IConfig;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use OCA\CustomGroups\Dav\Roles;
+use OCP\IGroup;
+
+/**
+ * Class GroupMembershipCollectionTest
+ *
+ * @package OCA\CustomGroups\Tests\Unit
+ */
+class GroupMembershipCollectionTest extends \Test\TestCase {
+	public const CURRENT_USER = 'currentuser';
+	public const NODE_USER = 'nodeuser';
+
+	/**
+	 * @var CustomGroupsDatabaseHandler
+	 */
+	private $handler;
+
+	/**
+	 * @var GroupMembershipCollection
+	 */
+	private $node;
+
+	/**
+	 * @var MembershipHelper
+	 */
+	private $helper;
+
+	/**
+	 * @var IUserManager
+	 */
+	private $userManager;
+
+	/**
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
+	/**
+	 * @var IUserSession
+	 */
+	private $userSession;
+
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
+	/**
+	 * @var IUser
+	 */
+	private $currentUser;
+
+	/**
+	 * @var IUser
+	 */
+	private $nodeUser;
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->userSession = $this->createMock(IUserSession::class);
+
+		// currently logged in user
+		$this->currentUser = $this->createMock(IUser::class);
+		$this->currentUser->method('getUID')->willReturn(self::CURRENT_USER);
+		$this->userSession->method('getUser')->willReturn($this->currentUser);
+
+		$this->nodeUser = $this->createMock(IUser::class);
+		$this->nodeUser->method('getUID')->willReturn(self::NODE_USER);
+		$this->userManager->method('get')->will(
+			$this->returnValueMap([
+				[self::NODE_USER, false, $this->nodeUser],
+				[\strtoupper(self::NODE_USER), false, $this->nodeUser],
+				[self::CURRENT_USER, false, $this->currentUser],
+			])
+		);
+
+		$this->config = $this->createMock(IConfig::class);
+		$this->helper = $this->getMockBuilder(MembershipHelper::class)
+			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
+			->setConstructorArgs([
+				$this->handler,
+				$this->userSession,
+				$this->userManager,
+				$this->groupManager,
+				$this->createMock(IManager::class),
+				$this->createMock(IURLGenerator::class),
+				$this->config
+			])
+			->getMock();
+
+		$this->node = new GroupMembershipCollection(
+			['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
+			$this->groupManager,
+			$this->handler,
+			$this->helper
+		);
+	}
+
+	/**
+	 * Sets a user's member info, for testing
+	 *
+	 * @param array $memberInfo user member info
+	 */
+	private function setCurrentUserMemberInfo($memberInfo) {
+		$this->handler->expects($this->any())
+			->method('getGroupMemberInfo')
+			->with(1, self::CURRENT_USER)
+			->willReturn($memberInfo);
+	}
+
+	private function setCurrentUserSuperAdmin($isSuperAdmin) {
+		$this->groupManager->expects($this->any())
+			->method('isAdmin')
+			->with(self::CURRENT_USER)
+			->willReturn($isSuperAdmin);
+	}
+
+	public function testBase() {
+		$this->assertEquals('group1', $this->node->getName());
+		$this->assertNull($this->node->getLastModified());
+	}
+
+	public function testDeleteAsAdmin() {
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+
+		$group = $this->createMock(IGroup::class);
+		$group->expects($this->once())
+			->method('delete');
+
+		$this->groupManager->expects($this->once())
+			->method('get')
+			->with('customgroup_group1')
+			->willReturn($group);
+
+		$called = [];
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::deleteGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::deleteGroup';
+			\array_push($called, $event);
+		});
+
+		$this->node->delete();
+
+		$this->assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('groupId', $called[1]);
+		$this->assertEquals(1, $called[1]->getArgument('groupId'));
+	}
+
+	/**
+	 */
+	public function testDeleteAsNonAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+		$this->handler->method('getGroup')
+			->willReturn(['display_name' => 'group1']);
+
+		$this->handler->expects($this->never())
+			->method('deleteGroup');
+
+		$this->node->delete();
+	}
+
+	/**
+	 */
+	public function testDeleteAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->handler->expects($this->never())
+			->method('deleteGroup');
+
+		$this->node->delete();
+	}
+
+	public function testGetProperties() {
+		$props = $this->node->getProperties(null);
+		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		$props = $this->node->getProperties([GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+	}
+
+	public function adminSetFlagProvider() {
+		return [
+			// admin can change display name
+			[false, Roles::BACKEND_ROLE_ADMIN, 200, true],
+			// non-admin cannot change anything
+			[false, Roles::BACKEND_ROLE_MEMBER, 403, false],
+			// non-member cannot change anything
+			[false, null, 403, false],
+			// super-admin non-member can change anything
+			[false, Roles::BACKEND_ROLE_ADMIN, 200, true],
+		];
+	}
+
+	/**
+	 * @dataProvider adminSetFlagProvider
+	 */
+	public function testSetProperties($isSuperAdmin, $currentUserRole, $statusCode, $called) {
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		if ($currentUserRole !== null) {
+			$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => $currentUserRole]);
+		} else {
+			$this->setCurrentUserMemberInfo(null);
+		}
+
+		$this->helper->expects($this->any())
+			->method('isGroupDisplayNameAvailable')
+			->willReturn(true);
+
+		if ($called) {
+			$calledEvent = [];
+			\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::updateGroupName', function ($event) use (&$calledEvent) {
+				$calledEvent[] = '\OCA\CustomGroups::updateGroupName';
+				\array_push($calledEvent, $event);
+			});
+			$this->handler->expects($this->once())
+				->method('updateGroup')
+				->with(1, 'group1', 'Group Renamed')
+				->willReturn(true);
+		} else {
+			$this->handler->expects($this->never())
+				->method('updateGroup');
+		}
+
+		$propPatch = new PropPatch([GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group Renamed']);
+		$this->node->propPatch($propPatch);
+
+		$propPatch->commit();
+		$this->assertEmpty($propPatch->getRemainingMutations());
+		$result = $propPatch->getResult();
+		if (isset($calledEvent)) {
+			$this->assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
+			$this->assertTrue($calledEvent[1] instanceof GenericEvent);
+			$this->assertArrayHasKey('oldGroupName', $calledEvent[1]);
+			$this->assertEquals('Group One', $calledEvent[1]->getArgument('oldGroupName'));
+			$this->assertArrayHasKey('newGroupName', $calledEvent[1]);
+			$this->assertEquals('Group Renamed', $calledEvent[1]->getArgument('newGroupName'));
+			$this->assertArrayHasKey('groupId', $calledEvent[1]);
+			$this->assertEquals(1, $calledEvent[1]->getArgument('groupId'));
+		}
+
+		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+	}
+
+	public function testSetDisplayNameNoDuplicates() {
+		$this->setCurrentUserSuperAdmin(true);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+
+		$this->helper->expects($this->once())
+			->method('isGroupDisplayNameAvailable')
+			->willReturn(false);
+
+		$this->handler->expects($this->never())
+			->method('updateGroup');
+
+		$propPatch = new PropPatch([GroupMembershipCollection::PROPERTY_DISPLAY_NAME => 'Group Renamed']);
+		$this->node->propPatch($propPatch);
+
+		$propPatch->commit();
+		$this->assertEmpty($propPatch->getRemainingMutations());
+		$result = $propPatch->getResult();
+		$this->assertEquals(409, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+	}
+
+	public function rolesProvider() {
+		return [
+			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]],
+			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]],
+			[true, null],
+		];
+	}
+
+	public function adminProvider() {
+		return [
+			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]],
+			[true, null],
+		];
+	}
+
+	/**
+	 * @dataProvider adminProvider
+	 */
+	public function testAddMemberAsAdmin($isSuperAdmin, $currentMemberInfo) {
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->handler->expects($this->once())
+			->method('addToGroup')
+			->with(self::NODE_USER, 1, false)
+			->willReturn(true);
+
+		$this->helper->expects($this->once())
+			->method('notifyUser')
+			->with(
+				self::NODE_USER,
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One', 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
+			);
+
+		$called = [];
+		\OC::$server->getEventDispatcher()->addListener('\OCA\CustomGroups::addUserToGroup', function ($event) use (&$called) {
+			$called[] = '\OCA\CustomGroups::addUserToGroup';
+			\array_push($called, $event);
+		});
+
+		$this->node->createFile(self::NODE_USER);
+
+		$this->assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
+		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertArrayHasKey('groupName', $called[1]);
+		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
+		$this->assertArrayHasKey('user', $called[1]);
+		$this->assertEquals('nodeuser', $called[1]->getArgument('user'));
+		$this->assertArrayHasKey('groupId', $called[1]);
+		$this->assertEquals(1, $called[1]->getArgument('groupId'));
+	}
+
+	/**
+	 * @dataProvider adminProvider
+	 */
+	public function testAddMemberAsAdminFails($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->handler->expects($this->once())
+			->method('addToGroup')
+			->with(self::NODE_USER, 1, false)
+			->willReturn(false);
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	/**
+	 * @dataProvider adminProvider
+	 */
+	public function testAddNonExistingMemberAsAdmin($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile('userunexist');
+	}
+
+	/**
+	 * @dataProvider adminProvider
+	 */
+	public function testAddNonExistingMemberMismatchCaseAsAdmin($isSuperAdmin, $currentMemberInfo) {
+		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
+
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile('USER2');
+	}
+
+	/**
+	 */
+	public function testAddMemberAsNonAdmin() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	/**
+	 */
+	public function testAddMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(null);
+
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	/**
+	 */
+	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->config->method('getAppValue')
+			->with('core', 'shareapi_only_share_with_group_members', 'no')
+			->willReturn('yes');
+
+		$this->groupManager->method('getUserGroupIds')
+			->will($this->returnValueMap([
+				[$this->currentUser, null, ['group1', 'group2']],
+				[$this->nodeUser, null, ['group3', 'group4']],
+			]));
+
+		$this->handler->expects($this->never())
+			->method('addToGroup');
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	public function testAddMemberWithShareToMemberRestrictionAndCommonGroup() {
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+
+		$this->config->method('getAppValue')
+			->with('core', 'shareapi_only_share_with_group_members', 'no')
+			->willReturn('yes');
+
+		$this->groupManager->method('getUserGroupIds')
+			->will($this->returnValueMap([
+				[$this->currentUser, null, ['group1', 'group2']],
+				[$this->nodeUser, null, ['group1', 'group4']],
+			]));
+
+		$this->handler->expects($this->once())
+			->method('addToGroup')
+			->with(self::NODE_USER, 1, false)
+			->willReturn(true);
+
+		$this->node->createFile(self::NODE_USER);
+	}
+
+	public function testIsMember() {
+		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
+		$this->handler->expects($this->any())
+			->method('inGroup')
+			->will($this->returnValueMap([
+				[self::NODE_USER, 1, true],
+				['user3', 1, false],
+			]));
+
+		$this->assertTrue($this->node->childExists(self::NODE_USER));
+		$this->assertFalse($this->node->childExists('user3'));
+	}
+
+	/**
+	 */
+	public function testIsMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->node->childExists(self::NODE_USER);
+	}
+
+	public function testIsMemberAsNonMemberButSuperAdmin() {
+		$this->setCurrentUserSuperAdmin(true);
+		$this->setCurrentUserMemberInfo(null);
+
+		$this->handler->expects($this->any())
+			->method('inGroup')
+			->will($this->returnValueMap([
+				[self::NODE_USER, 1, true],
+				['user3', 1, false],
+			]));
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->assertTrue($this->node->childExists(self::NODE_USER));
+		$this->assertFalse($this->node->childExists('user3'));
+	}
+
+	/**
+	 * @dataProvider rolesProvider
+	 */
+	public function testGetMember($isSuperAdmin, $currentMemberInfo) {
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$membershipsMap = [
+			[1, self::NODE_USER, ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]],
+		];
+		if ($currentMemberInfo !== null) {
+			$membershipsMap[] = [1, self::CURRENT_USER, $currentMemberInfo];
+		}
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn(true);
+
+		$this->handler->expects($this->any())
+			->method('getGroupMemberInfo')
+			->will($this->returnValueMap($membershipsMap));
+
+		$memberInfo = $this->node->getChild(self::NODE_USER);
+
+		$this->assertInstanceOf(MembershipNode::class, $memberInfo);
+		$this->assertEquals(self::NODE_USER, $memberInfo->getName());
+	}
+
+	/**
+	 */
+	public function testGetMemberAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->node->getChild(self::NODE_USER);
+	}
+
+	/**
+	 * @dataProvider rolesProvider
+	 */
+	public function testGetMembers($isSuperAdmin, $currentMemberInfo) {
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->handler->expects($this->any())
+			->method('getGroupMembers')
+			->with(1, null)
+			->willReturn([
+				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
+				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],
+			]);
+
+		$memberInfos = $this->node->getChildren();
+
+		$this->assertCount(2, $memberInfos);
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);
+		$this->assertEquals(self::NODE_USER, $memberInfos[0]->getName());
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[1]);
+		$this->assertEquals('user3', $memberInfos[1]->getName());
+	}
+
+	/**
+	 * @dataProvider rolesProvider
+	 */
+	public function testSearchMembers($isSuperAdmin, $currentMemberInfo) {
+		$search = new Search('us', 16, 256);
+
+		$this->config->method('getSystemValue')
+			->willReturn(false);
+		$this->groupManager->method('isAdmin')
+			->willReturn($isSuperAdmin);
+
+		$this->setCurrentUserMemberInfo($currentMemberInfo);
+		$this->setCurrentUserSuperAdmin($isSuperAdmin);
+
+		$this->handler->expects($this->any())
+			->method('getGroupMembers')
+			->with(1, $search)
+			->willReturn([
+				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
+				['group_id' => 1, 'user_id' => 'user3', 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER],
+			]);
+
+		$memberInfos = $this->node->search($search);
+
+		$this->assertCount(2, $memberInfos);
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);
+		$this->assertEquals(self::NODE_USER, $memberInfos[0]->getName());
+		$this->assertInstanceOf(MembershipNode::class, $memberInfos[1]);
+		$this->assertEquals('user3', $memberInfos[1]->getName());
+	}
+
+	/**
+	 */
+	public function testGetMembersAsNonMember() {
+		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
+		$this->setCurrentUserMemberInfo(null);
+		$this->config->method('getSystemValue')
+			->willReturn(true);
+		$this->groupManager->method('isAdmin')
+			->willReturn(false);
+
+		$this->node->getChildren();
+	}
+
+	/**
+	 */
+	public function testSetName() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
+		$this->node->setName('x');
+	}
+
+	/**
+	 */
+	public function testCreateDirectory() {
+		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
+
+		$this->node->createDirectory('somedir');
+	}
+
+	public function providesUpdateDisplayNameValidateException() {
+		return [
+			[''],
+			[null],
+			['a'],
+			[' a'],
+			['á'],
+			[' áé'],
+			['12345678911234567892123456789312345678941234567895123456789612345']
+		];
+	}
+
+	/**
+	 * @dataProvider providesUpdateDisplayNameValidateException
+	 * @param string $groupName
+	 */
+	public function testUpdateDisplayNameValidateException($groupName) {
+		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
+
+		$this->node->updateDisplayName($groupName);
+	}
+}

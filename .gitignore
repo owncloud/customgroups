@@ -57,6 +57,7 @@ vendor/
 vendor-bin/**/composer.lock
 
 .php_cs.cache
+.php-cs-fixer.cache
 
 # SonarCloud scanner
 .scannerwork

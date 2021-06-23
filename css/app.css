@@ -108,3 +108,19 @@
 	line-height: 32px;
 	vertical-align: middle;
 }
+
+.custom-group-buttons {
+	margin-top: 5px;
+}
+
+#custom-group-import-elem {
+	display: none;
+}
+
+.custom-group-import-label {
+	cursor: pointer;
+}
+
+.custom-group-import-form {
+	display: inline;
+}
