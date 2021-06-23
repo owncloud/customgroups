@@ -1,0 +1,24 @@
+default:
+  autoload:
+    - '%paths.base%/../features/bootstrap'
+
+  suites:
+    apiCustomGroups:
+      paths:
+        - '%paths.base%/../features/apiCustomGroups'
+      contexts:
+        - CustomGroupsContext:
+        - FeatureContext:
+            baseUrl:  http://localhost:8080
+            adminUsername: admin
+            adminPassword: admin
+            regularUserPassword: 123456
+            ocPath: apps/testing/api/v1/occ
+        - WebDavPropertiesContext:
+
+  extensions:
+    jarnaiz\JUnitFormatter\JUnitFormatterExtension:
+      filename: report.xml
+      outputDir: '%paths.base%/../output/'
+
+    Cjm\Behat\StepThroughExtension: ~
