@@ -303,9 +303,15 @@
 					},
 					error: function(model, response) {
 						if (response.status === 403) {
-							OC.Notification.showTemporary(t('customgroups', 'Cannot leave group without an administrator'));
+							OC.Notification.showTemporary(t('customgroups', 'Cannot change role without another administrator'));
 						} else {
-							OC.Notification.showTemporary(t('customgroups', 'Could not delete member'));
+							OC.Notification.showTemporary(t('customgroups', 'Could not change role'));
+						}
+
+						if (rerender) {
+							self.render();
+							self.collection.reset([], {silent: true});
+							self.collection.fetch();
 						}
 					}
 				});
