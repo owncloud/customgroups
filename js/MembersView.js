@@ -256,7 +256,8 @@
 				}
 			};
 
-			for (var userEntry of usersList) {
+			for (i = 0; i < usersList.length; ++i) {
+				var userEntry = usersList[i];
 				var userData = this._splitUserEntry(userEntry);
 
 				this.collection.create({

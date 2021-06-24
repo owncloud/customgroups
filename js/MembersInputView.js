@@ -167,7 +167,7 @@
 		_onAddBulk: function(ev) {
 			ev.preventDefault();
 			var usersList = this.$bulkUsersList.val().split("\n").filter(function (el) {
-				return el != null && el != "";
+				return el !== null && el !== "";
 			});
 			this.trigger('add-bulk', {
 				usersList: usersList
