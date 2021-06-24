@@ -97,7 +97,7 @@
 			$.ajax({
 				url: OC.getRootPath()
 					+ '/remote.php/dav/customgroups/groups/'
-					+  encodeURIComponent(this.model.get('displayName')),
+					+  encodeURIComponent(this.model.get('id')),
 				type: 'POST',
 				contentType: 'text/csv',
 				processData: false,
