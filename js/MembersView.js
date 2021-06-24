@@ -320,8 +320,8 @@
 			// changing own permissions ?
 			if (model.id === OC.getCurrentUser().uid) {
 				OC.dialogs.confirm(
-						t('customgroups', 'Are you sure that you want to remove your own administrator permissions for the group "{name}" ?', {name: this.model.get('displayName')}),
-						t('customgroups', 'Confirm removal of member'),
+						t('customgroups', 'Are you sure that you want to change your own permissions for the group "{name}" ?', {name: this.model.get('displayName')}),
+						t('customgroups', 'Confirm role change'),
 					function confirmCallback(confirmation) {
 						if (confirmation) {
 							action(true);
