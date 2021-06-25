@@ -31,8 +31,6 @@ OC.L10N.register(
     "Could not add user to group" : "Δεν είναι δυνατή η προσθήκη του χρήστη στην ομάδα",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Είστε σίγουροι πως θέλετε να αφαιρέσετε το μέλος \"{name}\" ;",
     "Confirm removal of member" : "Επιβεβαίωση αφαίρεσης του μέλους",
-    "Could not delete member" : "Αδυναμία διαγραφής μέλους",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Είστε σίγουροι ότι θέλετε να αφαιρέσετε τα δικαιώματα σας ως διαχειριστής της ομάδα  \"{name}\" ;",
     "Change role to \"member\"" : "Αλλαγή ρόλου σε \"μέλος\"",
     "Change role to \"group owner\"" : "Αλλαγή ρόλου σε \"ιδιοκτήτη ομάδας\"",
     "Remove member" : "Αφαίρεση μέλους",

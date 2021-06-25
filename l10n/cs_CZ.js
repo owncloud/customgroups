@@ -28,8 +28,6 @@ OC.L10N.register(
     "Could not add user to group" : "Nemůžete přidat uživatele do skupiny",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Jste si jisti, že chcete odebrat člena \"{name}\" ?",
     "Confirm removal of member" : "Potvrďte odebrání člena",
-    "Could not delete member" : "Nemůžete odebrat člena",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Jste si jisti, že chcete odebrat své administrátorské oprávnění pro tuto skupinu \"{name}\" ?",
     "Remove member" : "Odebrat člena",
     "Add member" : "Přidat člena",
     "Leave this group" : "Opustit tuhle skupinu",

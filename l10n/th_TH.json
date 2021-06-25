@@ -34,8 +34,6 @@
     "Could not add user to group" : "ไม่สามารถเพิ่มผู้ใช้ไปยังกลุ่ม",
     "Are you sure that you want to remove the member \"{name}\" ?" : "คุณแน่ใจหรือว่าต้องการลบสมาชิก \"{name}\" ?",
     "Confirm removal of member" : "ยืนยันการลบสมาชิก",
-    "Could not delete member" : "ไม่สามารถลบสมาชิกได้",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "คุณแน่ใจหรือว่าต้องการลบสิทธิ์ของผู้ดูแลระบบของคุณสำหรับกลุ่ม \"{name}\"",
     "Change role to \"member\"" : "เปลี่ยนบทบาทเป็น \"สมาชิก\"",
     "Change role to \"group owner\"" : "เปลี่ยนบทบาทเป็น \"เจ้าของกลุ่ม\"",
     "Remove member" : "ลบสมาชิก",

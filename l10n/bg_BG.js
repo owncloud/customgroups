@@ -33,8 +33,6 @@ OC.L10N.register(
     "Could not add user to group" : "Не можа да бъде добавен потребител към групата",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Сигурни ли сте, че искате да премахнете члена \"{name}\" ?",
     "Confirm removal of member" : "Потвърдете премахването на члена",
-    "Could not delete member" : "Членът не може да бъде изтрит",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Сигурни ли сте, че искате да премахнете собствените си администраторски разрешения за групата \"{name}\" ?",
     "Change role to \"member\"" : "Промяна на ролята на \"член\"",
     "Change role to \"group owner\"" : "Промяна на ролята на „собственик на групата“",
     "Remove member" : "Премахване на член",

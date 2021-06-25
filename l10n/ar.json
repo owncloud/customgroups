@@ -31,8 +31,6 @@
     "Could not add user to group" : "لا يمكن إضافة مستخدم إلى المجموعة",
     "Are you sure that you want to remove the member \"{name}\" ?" : "هل تريد بالتأكيد إزالة العضو \"{name}\" ؟",
     "Confirm removal of member" : "تأكيد إزالة العضو",
-    "Could not delete member" : "لا يمكن حذف العضو",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "هل تريد بالتأكيد إزالة أذونات المسؤول الخاصة بك لمجموعة \"{name}\" ؟",
     "Change role to \"member\"" : "تغيير دورك إلى \"عضو\"",
     "Change role to \"group owner\"" : "تغيير دورك إلى \"مالك المجموعة\"",
     "Remove member" : "إزالة عضو",

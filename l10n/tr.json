@@ -31,8 +31,6 @@
     "Could not add user to group" : "Kullanıcı gruba eklenemedi",
     "Are you sure that you want to remove the member \"{name}\" ?" : "\"{name}\" üyesini kaldırmak istediğinizden emin misiniz?",
     "Confirm removal of member" : "Üyenin kaldırılmasını onayla",
-    "Could not delete member" : "Üye silinemedi",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "\"{name}\" grubu için kendi yönetici izinlerinizi kaldırmak istediğinizden emin misiniz?",
     "Change role to \"member\"" : "Rolü \"üye\" olarak değiştir",
     "Change role to \"group owner\"" : "Rolü \"grup sahibi\" olarak değiştir",
     "Remove member" : "Üyeyi kaldır",
