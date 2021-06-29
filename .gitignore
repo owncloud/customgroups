@@ -51,6 +51,7 @@ node_modules
 lib/composer
 js/vendor
 tools/*
+# js/templates/*.handlebars.js
 tests/unit/results
 .phpunit.result.cache
 vendor/
