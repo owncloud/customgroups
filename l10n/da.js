@@ -30,8 +30,6 @@ OC.L10N.register(
     "Could not add user to group" : "Kunne ikke tilføje bruger til gruppe",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Er du sikker på, at du vil fjerne medlem \"{name}\"?",
     "Confirm removal of member" : "Bekræft fjernelse af medlem",
-    "Could not delete member" : "Kunne ikke slette medlem",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Er du sikker på, at du vil fjerne dine administratorrettigheder for gruppe \"{name}\"?",
     "Change role to \"member\"" : "Skift rolle til \"medlem\"",
     "Change role to \"group owner\"" : "Skift rolle til \"gruppeejer\"",
     "Remove member" : "Fjern medlem",

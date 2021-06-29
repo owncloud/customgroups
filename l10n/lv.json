@@ -31,8 +31,6 @@
     "Could not add user to group" : "Neizdevās pievienot lietotāju grupai",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Vai tiešām vēlaties noņemt biedru \"{name}\"?",
     "Confirm removal of member" : "Apstiprināt grupas biedra noņemšanu",
-    "Could not delete member" : "Neizdevās dzēst biedru",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Vai tiešām vēlaties noņemt savas administratora atļaujas grupai \"{name}\"?",
     "Change role to \"member\"" : "Nomainīt lomu uz \"biedrs\"",
     "Change role to \"group owner\"" : "Nomainīt lomu uz \"grupas īpašnieks\"",
     "Remove member" : "Noņemt biedru",

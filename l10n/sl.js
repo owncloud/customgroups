@@ -31,8 +31,6 @@ OC.L10N.register(
     "Could not add user to group" : "Ni mogoče dodati uporabnika v skupino",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Ali ste prepričani, da želite odstraniti člana »{name}«?",
     "Confirm removal of member" : "Potrdi odstranitev člana",
-    "Could not delete member" : "Ni mogoče izbrisati člana",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ali ste prepričani, da želite odstraniti skrbniška dovoljenja za skupino »{name}« ?",
     "Change role to \"member\"" : "Spremeni vlogo v »člana«",
     "Change role to \"group owner\"" : "Spremeni vlogo v »lastnik skupine«",
     "Remove member" : "Odstrani člana",

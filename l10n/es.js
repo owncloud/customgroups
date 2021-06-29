@@ -36,8 +36,6 @@ OC.L10N.register(
     "Could not add user to group" : "No puedo añadir el usuario al grupo",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Está seguro que desea remover el miembro \"{name}\" ?",
     "Confirm removal of member" : "Confirmar eliminación del miembro",
-    "Could not delete member" : "No se pudo eliminar el miembro",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "¿Esta seguro de que desea eliminar sus permisos de administrador del grupo \"{name}\" ?",
     "Change role to \"member\"" : "Cambiar el rol a \"Miembro\"",
     "Change role to \"group owner\"" : "Cambiar el rol a \"Propietario del grupo\"",
     "Remove member" : "Eliminar miembro",

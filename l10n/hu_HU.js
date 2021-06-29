@@ -31,7 +31,6 @@ OC.L10N.register(
     "Could not add user to group" : "A csoporthoz nem adható hozzá felhasználó",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Biztosan el akarja távolítani \"{name}\" tagot?",
     "Confirm removal of member" : "Tag eltávolításának megerősítése",
-    "Could not delete member" : "Tag nem törölhető",
     "Change role to \"member\"" : "Szerep módosítása \"tagra\"",
     "Change role to \"group owner\"" : "Szerep módosítása \"csoportgazdára\"",
     "Remove member" : "Tag eltávolítása",

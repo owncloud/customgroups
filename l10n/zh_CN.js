@@ -31,8 +31,6 @@ OC.L10N.register(
     "Could not add user to group" : "无法把用户添加到组",
     "Are you sure that you want to remove the member \"{name}\" ?" : "确定要删除成员 \"{name}\" 吗？",
     "Confirm removal of member" : "移除成员确认",
-    "Could not delete member" : "无法删除成员",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "您确定要移除自己在 \"{name}\" 组的管理员权限？",
     "Change role to \"member\"" : "修改角色为“成员”",
     "Change role to \"group owner\"" : "修改角色为“组拥有者”",
     "Remove member" : "移除成员",
