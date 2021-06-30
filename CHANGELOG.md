@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] - XXXX-XX-XX
+
+
+
 ## [0.6.2] - 2021-06-23
 
 ### Added
@@ -162,6 +166,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.6.2...master
 [0.6.2]: https://github.com/owncloud/customgroups/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/owncloud/customgroups/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/owncloud/customgroups/compare/v0.5.1...v0.6.0
