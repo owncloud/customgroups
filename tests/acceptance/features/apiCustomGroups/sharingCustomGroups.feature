@@ -140,10 +140,8 @@ Feature: Sharing Custom Groups
       | /myFOLDER/myTMP/ |
 
   Scenario: Sharing again an own file while belonging to a custom group
-    Given as user "admin"
-    And user "Alice" has been created with default attributes and small skeleton files
+    Given user "Alice" has been created with default attributes and small skeleton files
     And user "Alice" has created a custom group called "sharing-group"
-    And group "sharing-group" has been created
     And user "Alice" has shared file "welcome.txt" with group "customgroup_sharing-group"
     And user "Alice" deletes the last share using the sharing API
     When user "Alice" creates a share using the sharing API with settings
