@@ -29,8 +29,6 @@
     "Could not add user to group" : "Kon gebruiker niet aan groep toevoegen",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Weet je zeker dat je de groepslid \"{name}\" wilt verwijderen?",
     "Confirm removal of member" : "Bevestig verwijderen groepslid",
-    "Could not delete member" : "Kan groepslid niet verwijderen",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Weet je zeker dat je je eigen beheerrechten op de groep \"{groupName}\" wilt verwijderen?",
     "Change role to \"member\"" : "Wijzig rol naar \"member\"",
     "Change role to \"group owner\"" : "Wijzig rol naar \"groepsbeheerder\" ",
     "Remove member" : "Verwijder lid",

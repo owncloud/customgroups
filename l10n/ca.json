@@ -31,8 +31,6 @@
     "Could not add user to group" : "No s'ha pogut afegir l'usuari al grup",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Esteu segur que voleu eliminar el membre \"{name}\"?",
     "Confirm removal of member" : "Confirmeu l'eliminació del membre",
-    "Could not delete member" : "No s'ha pogut eliminar el membre",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Esteu segur que voleu eliminar els vostres propis permisos d'administrador per al grup \"{name}\"?",
     "Change role to \"member\"" : "Canvieu el rol a \"membre\"",
     "Change role to \"group owner\"" : "Canvieu el rol a \"propietari del grup\"",
     "Remove member" : "Elimina el membre",

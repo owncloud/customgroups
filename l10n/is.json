@@ -29,8 +29,6 @@
     "Could not add user to group" : "Gat ekki bætt notandanum í hópinn",
     "Are you sure that you want to remove the member \"{name}\" ?" : "Ertu viss að þú viljir fjarlægja notandann \"{name}\" ?",
     "Confirm removal of member" : "Staðfesta fjarlægingu á meðlimi",
-    "Could not delete member" : "Gat ekki eytt meðlimi",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "Ertu viss um að þú viljir eyða kerfisstjóraheimildum þínum af hópnum \"{name}\" ?",
     "Change role to \"member\"" : "Breyta hlutverki í \"meðlimur\"",
     "Change role to \"group owner\"" : "Breyta hlutverki í \"eigandi hóps\"",
     "Remove member" : "Fjarlægja meðlim",

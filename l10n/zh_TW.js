@@ -33,8 +33,6 @@ OC.L10N.register(
     "Could not add user to group" : "無法將使用者添加到群組",
     "Are you sure that you want to remove the member \"{name}\" ?" : "您確定您要刪移除成員 \"{name}\" ?",
     "Confirm removal of member" : "確認刪除成員",
-    "Could not delete member" : "無法刪除成員",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "您確定要您移除自己的網上群組管理員權限嗎 \"{name}\" ?",
     "Change role to \"member\"" : "將角色更改為\"成員\"",
     "Change role to \"group owner\"" : "更改腳色到\"群組擁有者\"",
     "Remove member" : "移除會員",

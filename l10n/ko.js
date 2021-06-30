@@ -31,8 +31,6 @@ OC.L10N.register(
     "Could not add user to group" : "사용자를 그룹에 추가할 수 없음",
     "Are you sure that you want to remove the member \"{name}\" ?" : "그룹 회원 \"{name}\" 님을 삭제하시겠습니까?",
     "Confirm removal of member" : "회원 삭제 확인",
-    "Could not delete member" : "회원을 삭제할 수 없음",
-    "Are you sure that you want to remove your own administrator permissions for the group \"{name}\" ?" : "그룹 \"{name}\"의 관리자 권한을 스스로 삭제하시겠습니까?",
     "Change role to \"member\"" : "\"구성원\"으로 역할 변경",
     "Change role to \"group owner\"" : "\"그룹 소유자\"로 역할 변경",
     "Remove member" : "구성원 제거",
