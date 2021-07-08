@@ -16,6 +16,19 @@ default:
             ocPath: apps/testing/api/v1/occ
         - WebDavPropertiesContext:
 
+    apiShareExpPerm:
+      paths:
+        - '%paths.base%/../features/apiShareExpPerm'
+      contexts:
+        - CustomGroupsContext:
+        - FeatureContext:
+            baseUrl:  http://localhost:8080
+            adminUsername: admin
+            adminPassword: admin
+            regularUserPassword: 123456
+            ocPath: apps/testing/api/v1/occ
+        - WebDavPropertiesContext:
+
   extensions:
     jarnaiz\JUnitFormatter\JUnitFormatterExtension:
       filename: report.xml

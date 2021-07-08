@@ -43,14 +43,15 @@ config = {
 	'acceptance': {
 		'api': {
 			'suites': [
-				'apiCustomGroups'
+				'apiCustomGroups',
+				'apiShareExpPerm'
 			],
 		},
 	}
 }
 
 def main(ctx):
-	
+
 	before = beforePipelines(ctx)
 
 	coverageTests = coveragePipelines(ctx)
