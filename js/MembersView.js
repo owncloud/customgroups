@@ -239,6 +239,73 @@
 			return false;
 		},
 
+		_onAddBulkMembers: function(data) {
+			var $field = this.$('#bulk-users-list');
+			$field.prop('disabled', true);
+
+			var $loading = this.$('.member-input-view .loading-bulk');
+			$loading.removeClass('hidden');
+
+			var usersList = data.usersList;
+			var currentIndex = 0;
+			var callFinished = function() {
+				if (++currentIndex >= usersList.length) {
+					$loading.addClass('hidden');
+					$field.prop('disabled', false);
+					$field.val('').focus();
+				}
+			};
+
+			for (i = 0; i < usersList.length; ++i) {
+				var userEntry = usersList[i];
+				var userData = this._splitUserEntry(userEntry);
+
+				this.collection.create({
+					id: userData.userId,
+					userDisplayName: userData.displayName
+				},  {
+					wait: true,
+					success: function() {
+						callFinished();
+					},
+					error: function(model, response) {
+						var userId = model.id;
+						if (response.status === 412) {
+							OC.Notification.showTemporary(t(
+								'customgroups',
+								'User "{userId}" does not exist',
+								{userId: userId}
+							));
+						} else if (response.status === 409) {
+							OC.Notification.showTemporary(t(
+								'customgroups',
+								'User "{userId}" is already a member of this group',
+								{userId: userId}
+							));
+						} else {
+							OC.Notification.showTemporary(t(
+								'customgroups',
+								'Could not add user "{userId}" to this group',
+								{userId: userId}
+							));
+						}
+
+						callFinished();
+					}
+				});
+			}
+		},
+
+		_splitUserEntry: function(entry) {
+			var data = {userId: entry, displayName: entry};
+			var tokens = entry.split(",");
+			if (tokens.length >= 2) {
+				data.userId = tokens[0].trim();
+				data.displayName = tokens[1].trim();
+			}
+			return data;
+		},
+
 		_onDeleteMember: function(ev) {
 			ev.preventDefault();
 			var $row = $(ev.target).closest('.group-member');
@@ -338,7 +405,7 @@
 			return {
 				id: member.id,
 				displayName: member.get('userDisplayName'),
-				changeMemberRoleLabel: 
+				changeMemberRoleLabel:
 					(member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
 					t('customgroups', 'Change role to "member"'):
 					t('customgroups', 'Change role to "group owner"'),
@@ -394,8 +461,10 @@
 			}
 
 			this.membersInput.off('select', this._onAddMember, this);
+			this.membersInput.off('add-bulk', this._onAddBulkMembers, this);
 			this.membersInput.render();
 			this.membersInput.on('select', this._onAddMember, this);
+			this.membersInput.on('add-bulk', this._onAddBulkMembers, this);
 			this.$('.add-member-container').append(this.membersInput.$el);
 		},
 

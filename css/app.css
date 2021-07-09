@@ -42,6 +42,24 @@
 	opacity: .5;
 }
 
+#customgroups .sidebar .group-name-title {
+	float: left;
+}
+
+#customgroups .sidebar .action-leave-group {
+	float: right;
+	margin-right: 35px;
+}
+
+#customgroups .sidebar .action-add-bulk {
+	float: right;
+	margin-right: 35px;
+}
+
+#customgroups .sidebar .bulk-input-field {
+	width: calc(100% - 70px);
+}
+
 #customgroups .sidebar .add-member-container {
 	clear: both;
 }
