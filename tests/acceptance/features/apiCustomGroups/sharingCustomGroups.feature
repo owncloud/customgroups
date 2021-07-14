@@ -51,37 +51,37 @@ Feature: Sharing Custom Groups
   Scenario: Keep custom group permissions in sync
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has uploaded file with content "thisIsASharedFile" to "/filetoshare.txt"
+    And user "Alice" has uploaded file with content "thisIsASharedFile" to "/textfile0.txt"
     And user "Brian" has created folder "/FOLDER"
     And user "Brian" has created a custom group called "group1"
-    And user "Alice" has shared file "filetoshare.txt" with group "customgroup_group1"
-    And user "Brian" has moved file "/filetoshare.txt" to "/FOLDER/textfile0.txt"
+    And user "Alice" has shared file "textfile0.txt" with group "customgroup_group1"
+    And user "Brian" has moved file "/textfile0.txt" to "/FOLDER/textfile0.txt"
     When user "Alice" updates the last share using the sharing API with
       | permissions | read |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the response when user "Alice" gets the info of the last share should include
-      | id                | A_NUMBER         |
-      | item_type         | file             |
-      | item_source       | A_NUMBER         |
-      | share_type        | group            |
-      | file_source       | A_NUMBER         |
-      | file_target       | /filetoshare.txt |
-      | permissions       | read             |
-      | stime             | A_NUMBER         |
-      | storage           | A_NUMBER         |
-      | mail_send         | 0                |
-      | uid_owner         | Alice            |
-      | storage_id        | home::Alice      |
-      | displayname_owner | Alice Hansen     |
-      | mimetype          | text/plain       |
+      | id                | A_NUMBER       |
+      | item_type         | file           |
+      | item_source       | A_NUMBER       |
+      | share_type        | group          |
+      | file_source       | A_NUMBER       |
+      | file_target       | /textfile0.txt |
+      | permissions       | read           |
+      | stime             | A_NUMBER       |
+      | storage           | A_NUMBER       |
+      | mail_send         | 0              |
+      | uid_owner         | Alice          |
+      | storage_id        | home::Alice    |
+      | displayname_owner | Alice Hansen   |
+      | mimetype          | text/plain     |
 
   Scenario: Sharee can see the custom group share
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has uploaded file with content "thisIsASharedFile" to "/filetoshare.txt"
+    And user "Alice" has uploaded file with content "thisIsASharedFile" to "/textfile0.txt"
     And user "Brian" has created a custom group called "group1"
-    And user "Alice" has shared file "filetoshare.txt" with group "customgroup_group1"
+    And user "Alice" has shared file "textfile0.txt" with group "customgroup_group1"
     When user "Brian" sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares?shared_with_me=true"
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
