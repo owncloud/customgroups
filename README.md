@@ -1,6 +1,6 @@
 # ownCloud custom groups support
 
-This apps makes it possible for users to create their own custom groups and manage their members.
+This app makes it possible for users to create their own custom groups and manage their members.
 It is then possible to share files or folders with these groups.
 
 ## QA metrics on master branch:
