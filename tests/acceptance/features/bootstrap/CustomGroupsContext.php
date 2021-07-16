@@ -21,7 +21,8 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Sabre\HTTP\ClientException;
+use Behat\Gherkin\Node\TableNode;
+use GuzzleHttp\Exception\BadResponseException;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\ResponseInterface;
 use TestHelpers\WebDavHelper;
@@ -38,11 +39,6 @@ class CustomGroupsContext implements Context {
 	 * @var FeatureContext
 	 */
 	private $featureContext;
-
-	/**
-	 * @var ResponseInterface
-	 */
-	private $sabreResponse;
 
 	/**
 	 * @var array
@@ -69,7 +65,7 @@ class CustomGroupsContext implements Context {
 				null,
 				"uploads"
 			);
-		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		} catch (BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401
@@ -102,7 +98,7 @@ class CustomGroupsContext implements Context {
 				null,
 				"uploads"
 			);
-		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		} catch (BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$response = $e->getResponse();
 		}
@@ -150,7 +146,6 @@ class CustomGroupsContext implements Context {
 	 * @param string $customGroup
 	 *
 	 * @return void
-	 * @throws ClientHttpException
 	 */
 	public function customGroupShouldExist($customGroup) {
 		$customGroupsList = $this->getCustomGroups("admin");
@@ -313,7 +308,7 @@ class CustomGroupsContext implements Context {
 		$keys = [];
 		$values = [];
 		foreach ($responseData as $index => $value) {
-			$path = $responseData[$index]->xpath($keyXpath);
+			$path = $value->xpath($keyXpath);
 			Assert::assertArrayHasKey(
 				0,
 				$path,
@@ -401,7 +396,6 @@ class CustomGroupsContext implements Context {
 	 * @param string $customGroup
 	 *
 	 * @return void
-	 * @throws ClientHttpException
 	 */
 	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup) {
 		$currentRole = $this->getUserRoleInACustomGroup(
@@ -414,7 +408,7 @@ class CustomGroupsContext implements Context {
 	/**
 	 * @Then the members of :customGroup requested by user :user should be
 	 *
-	 * @param \Behat\Gherkin\Node\TableNode|null $memberList
+	 * @param TableNode|null $memberList
 	 * @param string $user
 	 * @param string $customGroup
 	 *
@@ -426,7 +420,7 @@ class CustomGroupsContext implements Context {
 		$customGroup
 	) {
 		$appPath = '/customgroups/groups/';
-		if ($memberList instanceof \Behat\Gherkin\Node\TableNode) {
+		if ($memberList instanceof TableNode) {
 			$members = $memberList->getRows();
 			$membersSimplified = $this->featureContext->simplifyArray($members);
 			$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
@@ -486,7 +480,7 @@ class CustomGroupsContext implements Context {
 				null,
 				"uploads"
 			);
-		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		} catch (BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$response = $e->getResponse();
 		}
@@ -519,7 +513,7 @@ class CustomGroupsContext implements Context {
 				null,
 				"uploads"
 			);
-		} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		} catch (BadResponseException $e) {
 			// 4xx and 5xx responses cause an exception
 			$response = $e->getResponse();
 		}
@@ -560,7 +554,7 @@ class CustomGroupsContext implements Context {
 	/**
 	 * @Then the custom groups of :userRequested requested by user :userRequesting should be
 	 *
-	 * @param \Behat\Gherkin\Node\TableNode|null $customGroupList
+	 * @param TableNode|null $customGroupList
 	 * @param string $userRequested
 	 * @param string $userRequesting
 	 *
@@ -572,7 +566,7 @@ class CustomGroupsContext implements Context {
 		$userRequesting
 	) {
 		$appPath = '/customgroups/users/';
-		if ($customGroupList instanceof \Behat\Gherkin\Node\TableNode) {
+		if ($customGroupList instanceof TableNode) {
 			$customGroups = $customGroupList->getRows();
 			$customGroupsSimplified = $this->featureContext->simplifyArray(
 				$customGroups
