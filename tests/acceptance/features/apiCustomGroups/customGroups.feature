@@ -50,7 +50,7 @@ Feature: Custom Groups
     Then the members of "group0" requested by user "Alice" should be
       | Alice |
 
-  Scenario: Creator of a custom group becames admin automatically
+  Scenario: Creator of a custom group becomes admin automatically
     Given user "Alice" has been created with default attributes and without skeleton files
     When user "Alice" creates a custom group called "group0" using the API
     Then user "Alice" should be an admin of custom group "group0"

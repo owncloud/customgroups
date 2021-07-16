@@ -134,3 +134,19 @@ Feature: Sharing Custom Groups
 
     Cheers.
     """
+
+
+  Scenario: Resharing a share received from custom group
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has shared folder "/shared" with group "customgroup_sharing-group"
+    When user "Brian" shares folder "/shared" with user "Carol" using the sharing API
+    Then the OCS status code should be "100"
+    And the HTTP status code should be "200"
+    And as "Carol" folder "/shared" should exist
+    When user "Carol" uploads file with content "some data" to "/shared/filetoshare.txt" using the WebDAV API
+    Then the HTTP status code should be "201"
+    And as "Alice" file "/shared/filetoshare.txt" should exist
+    And the content of file "/shared/filetoshare.txt" for user "Alice" should be "some data"
+    And as "Brian" file "/shared/filetoshare.txt" should exist
+    And the content of file "/shared/filetoshare.txt" for user "Brian" should be "some data"
+

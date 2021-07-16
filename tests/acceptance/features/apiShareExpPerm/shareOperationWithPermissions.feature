@@ -301,7 +301,7 @@ Feature: Sharing Custom Groups
       | 23                   | 15                  |
 
 
-  Scenario: reshare receiver can create folder/file inside the recieved folder with create permission
+  Scenario: reshare receiver can create folder/file inside the received folder with create permission
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "/shared" with group "customgroup_sharing-group" with permissions "share,read,create"
     When user "Brian" shares folder "/shared" with user "Carol" with permissions "create,read" using the sharing API
