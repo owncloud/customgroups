@@ -136,7 +136,7 @@ Feature: Sharing Custom Groups
     """
 
 
-  Scenario: Resharing a share recieved from custom group
+  Scenario: Resharing a share received from custom group
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "/shared" with group "customgroup_sharing-group"
     When user "Brian" shares folder "/shared" with user "Carol" using the sharing API
@@ -149,4 +149,4 @@ Feature: Sharing Custom Groups
     And the content of file "/shared/filetoshare.txt" for user "Alice" should be "some data"
     And as "Brian" file "/shared/filetoshare.txt" should exist
     And the content of file "/shared/filetoshare.txt" for user "Brian" should be "some data"
-    
+
