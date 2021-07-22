@@ -123,6 +123,7 @@ class CustomGroupsContext implements Context {
 			$this->featureContext->getPasswordForUser($user),
 			$appPath,
 			$properties,
+			$this->featureContext->getStepLineRef(),
 			1,
 			"customgroups"
 		);
@@ -214,6 +215,7 @@ class CustomGroupsContext implements Context {
 			$appPath,
 			$propertyName,
 			$propertyValue,
+			$this->featureContext->getStepLineRef(),
 			"oc='http://owncloud.org/ns'",
 			$this->featureContext->getDavPathVersion(),
 			"customgroups"
@@ -247,6 +249,7 @@ class CustomGroupsContext implements Context {
 			$path,
 			$propertyName,
 			$propertyValue,
+			$this->featureContext->getStepLineRef(),
 			"oc='http://owncloud.org/ns'",
 			$this->featureContext->getDavPathVersion(),
 			"customgroups"
@@ -346,6 +349,7 @@ class CustomGroupsContext implements Context {
 			$this->featureContext->getPasswordForUser($user),
 			$appPath,
 			$properties,
+			$this->featureContext->getStepLineRef(),
 			1,
 			"customgroups"
 		);
@@ -375,6 +379,7 @@ class CustomGroupsContext implements Context {
 			$this->featureContext->getPasswordForUser($userRequested),
 			$appPath,
 			$properties,
+			$this->featureContext->getStepLineRef(),
 			1,
 			"customgroups"
 		);
@@ -538,6 +543,7 @@ class CustomGroupsContext implements Context {
 			$this->featureContext->getPasswordForUser($userRequesting),
 			$path,
 			$properties,
+			$this->featureContext->getStepLineRef(),
 			1,
 			"customgroups"
 		);
