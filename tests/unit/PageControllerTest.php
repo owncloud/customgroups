@@ -160,11 +160,11 @@ class PageControllerTest extends \Test\TestCase {
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
 			]));
 
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroupByUri')
 			->with('group1')
 			->willReturn(['group_id' => 128]);
-		$this->handler->expects($this->at(1))
+		$this->handler->expects($this->once())
 			->method('getGroupMembers')
 			->with(128)
 			->willReturn([
@@ -172,16 +172,18 @@ class PageControllerTest extends \Test\TestCase {
 			]);
 
 		$allUsersChunks = \array_chunk($allUsers, 20);
-		// first page
-		$this->userManager->expects($this->at(0))
+
+		$this->userManager
+			->expects($this->exactly(2))
 			->method('find')
-			->with('us', 20, 0)
-			->willReturn($allUsersChunks[0]);
-		// second page
-		$this->userManager->expects($this->at(1))
-			->method('find')
-			->with('us', 20, 20)
-			->willReturn($allUsersChunks[1]);
+			->withConsecutive(
+				['us', 20, 0],
+				['us', 20, 20],
+			)
+			->willReturnOnConsecutiveCalls(
+				$allUsersChunks[0],
+				$allUsersChunks[1],
+			);
 
 		$response = $this->pageController->searchUsers('group1', 'us', 20);
 		$data = $response->getData();
@@ -242,11 +244,11 @@ class PageControllerTest extends \Test\TestCase {
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
 			]));
 
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroupByUri')
 			->with('group1')
 			->willReturn(['group_id' => 128]);
-		$this->handler->expects($this->at(1))
+		$this->handler->expects($this->once())
 			->method('getGroupMembers')
 			->with(128)
 			->willReturn([
@@ -278,11 +280,11 @@ class PageControllerTest extends \Test\TestCase {
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
 			]));
 
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroupByUri')
 			->with('group1')
 			->willReturn(['group_id' => 128]);
-		$this->handler->expects($this->at(1))
+		$this->handler->expects($this->once())
 			->method('getGroupMembers')
 			->with(128)
 			->willReturn([
@@ -290,14 +292,17 @@ class PageControllerTest extends \Test\TestCase {
 			]);
 
 		$allUsersChunks = \array_chunk($allUsers, 20);
-		$this->userManager->expects($this->at(0))
+		$this->userManager
+			->expects($this->exactly(2))
 			->method('find')
-			->with('user one', 20, 0)
-			->willReturn($allUsersChunks[0]);
-		$this->userManager->expects($this->at(1))
-			->method('find')
-			->with('user one', 20, 20)
-			->willReturn($allUsersChunks[1]);
+			->withConsecutive(
+				['user one', 20, 0],
+				['user one', 20, 20],
+			)
+			->willReturnOnConsecutiveCalls(
+				$allUsersChunks[0],
+				$allUsersChunks[1],
+			);
 
 		$response = $this->pageController->searchUsers('group1', 'User One', 20);
 		$data = $response->getData();
