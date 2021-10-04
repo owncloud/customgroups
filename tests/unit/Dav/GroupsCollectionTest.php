@@ -117,7 +117,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	public function testListGroups() {
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroups')
 			->with(null)
 			->will($this->returnValue([
@@ -136,7 +136,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	public function testListGroupsSearchPattern() {
 		$search = new Search('gr', 16, 256);
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroups')
 			->with($search)
 			->will($this->returnValue([
@@ -164,7 +164,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->config->method('getSystemValue')
 			->willReturn(false);
 		$this->handler->expects($this->never())->method('getGroups');
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getUserMemberships')
 			->with('user1', null)
 			->will($this->returnValue([
@@ -192,7 +192,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 			'user1'
 		);
 		$this->handler->expects($this->never())->method('getGroups');
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getUserMemberships')
 			->with('user1', $search)
 			->will($this->returnValue([
@@ -214,15 +214,15 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$user->method('getUID')->willReturn('user1');
 		$this->userSession->method('getUser')->willReturn($user);
 
-		$this->handler->expects($this->at(0))
+		$this->handler->expects($this->once())
 			->method('getGroupsByDisplayName')
 			->with('Group One')
 			->will($this->returnValue([]));
-		$this->handler->expects($this->at(1))
+		$this->handler->expects($this->once())
 			->method('createGroup')
 			->with('group1', 'Group One')
 			->will($this->returnValue(1));
-		$this->handler->expects($this->at(2))
+		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with('user1', 1, true);
 
