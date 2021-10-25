@@ -23,8 +23,6 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Exception\BadResponseException;
-use Sabre\HTTP\ClientHttpException;
-use Sabre\HTTP\ResponseInterface;
 use TestHelpers\WebDavHelper;
 use TestHelpers\SetupHelper;
 use PHPUnit\Framework\Assert;
@@ -54,7 +52,10 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userCreatesACustomGroup($user, $groupName) {
+	public function userCreatesACustomGroup(
+		string $user,
+		string $groupName
+	):void {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
@@ -87,7 +88,10 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userDeletesACustomGroup($user, $groupName) {
+	public function userDeletesACustomGroup(
+		string $user,
+		string $groupName
+	):void {
 		try {
 			$appPath = '/customgroups/groups/';
 			$response = $this->featureContext->makeDavRequest(
@@ -114,7 +118,7 @@ class CustomGroupsContext implements Context {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getCustomGroups($user) {
+	public function getCustomGroups(string $user):array {
 		$properties = ['oc:display-name'];
 		$appPath = '/customgroups/groups/';
 		$response = WebDavHelper::propfind(
@@ -148,7 +152,7 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function customGroupShouldExist($customGroup) {
+	public function customGroupShouldExist(string $customGroup):void {
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
 		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
@@ -173,7 +177,7 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 * @throws Exception
 	 */
-	public function customGroupShouldNotExist($customGroup) {
+	public function customGroupShouldNotExist(string $customGroup):void {
 		$customGroupsList = $this->getCustomGroups("admin");
 		$exists = false;
 		foreach ($customGroupsList as $customGroupPath => $customGroupName) {
@@ -201,11 +205,11 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function sendProppatchToCustomGroup(
-		$user,
-		$customGroup,
-		$propertyName,
-		$propertyValue
-	) {
+		string $user,
+		string $customGroup,
+		string $propertyName,
+		string $propertyValue
+	):void {
 		$appPath = '/customgroups/groups/' . $customGroup;
 
 		$response = WebDavHelper::proppatch(
@@ -235,12 +239,12 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function sendProppatchToCustomGroupMember(
-		$userRequesting,
-		$userRequested,
-		$propertyName,
-		$propertyValue,
-		$customGroup
-	) {
+		string $userRequesting,
+		string $userRequested,
+		string $propertyName,
+		string $propertyValue,
+		string $customGroup
+	):void {
 		$path = '/customgroups/groups/' . $customGroup . '/' . $userRequested;
 		$response = WebDavHelper::proppatch(
 			$this->featureContext->getBaseUrl(),
@@ -269,11 +273,11 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function userChangedRoleOfMember(
-		$userRequesting,
-		$userRequested,
-		$role,
-		$customGroup
-	) {
+		string $userRequesting,
+		string $userRequested,
+		string $role,
+		string $customGroup
+	):void {
 		$this->sendProppatchToCustomGroupMember(
 			$userRequesting,
 			$userRequested,
@@ -293,7 +297,11 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userRenamedCustomGroupAs($user, $customGroup, $newName) {
+	public function userRenamedCustomGroupAs(
+		string $user,
+		string $customGroup,
+		string $newName
+	):void {
 		$this->sendProppatchToCustomGroup($user, $customGroup, 'display-name', $newName);
 	}
 
@@ -307,7 +315,11 @@ class CustomGroupsContext implements Context {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getResponseWithKeyValue($responseData, $keyXpath, $valueXpath) {
+	public function getResponseWithKeyValue(
+		array $responseData,
+		string $keyXpath,
+		string $valueXpath
+	):array {
 		$keys = [];
 		$values = [];
 		foreach ($responseData as $index => $value) {
@@ -340,7 +352,10 @@ class CustomGroupsContext implements Context {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getCustomGroupMembers($user, $group) {
+	public function getCustomGroupMembers(
+		string $user,
+		string $group
+	):array {
 		$properties = ['oc:role'];
 		$appPath = '/customgroups/groups/' . $group;
 		$response = WebDavHelper::propfind(
@@ -365,12 +380,12 @@ class CustomGroupsContext implements Context {
 	 * @param string $userRequested
 	 * @param string $group
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function getUserRoleInACustomGroup(
-		$userRequested,
-		$group
-	) {
+		string $userRequested,
+		string $group
+	):string {
 		$properties = ['oc:role'];
 		$appPath = '/customgroups/groups/' . $group . '/' . $userRequested;
 		$response = WebDavHelper::propfind(
@@ -402,7 +417,11 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function checkIfUserIsAdminOfCustomGroup($user, $role, $customGroup) {
+	public function checkIfUserIsAdminOfCustomGroup(
+		string $user,
+		string $role,
+		string $customGroup
+	):void {
 		$currentRole = $this->getUserRoleInACustomGroup(
 			$user,
 			$customGroup
@@ -420,10 +439,10 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function usersAreMemberOfCustomGroup(
-		$memberList,
-		$user,
-		$customGroup
-	) {
+		?TableNode $memberList,
+		string $user,
+		string $customGroup
+	):void {
 		$appPath = '/customgroups/groups/';
 		if ($memberList instanceof TableNode) {
 			$members = $memberList->getRows();
@@ -454,7 +473,10 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function tryingToGetMembersOfCustomGroup($customGroup, $user) {
+	public function tryingToGetMembersOfCustomGroup(
+		string $customGroup,
+		string $user
+	):void {
 		$respondedArray = $this->getCustomGroupMembers($user, $customGroup);
 		PHPUnit\Framework\Assert::assertEmpty($respondedArray);
 	}
@@ -470,10 +492,10 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function addMemberOfCustomGroup(
-		$userRequesting,
-		$userRequested,
-		$customGroup
-	) {
+		string $userRequesting,
+		string $userRequested,
+		string $customGroup
+	):void {
 		try {
 			$userPath
 				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
@@ -503,10 +525,10 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function removeMemberOfCustomGroup(
-		$userRequesting,
-		$userRequested,
-		$customGroup
-	) {
+		string $userRequesting,
+		string $userRequested,
+		string $customGroup
+	):void {
 		try {
 			$userPath
 				= '/customgroups/groups/' . $customGroup . '/' . $userRequested;
@@ -534,7 +556,10 @@ class CustomGroupsContext implements Context {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getCustomGroupsOfAUser($userRequesting, $userRequested) {
+	public function getCustomGroupsOfAUser(
+		string $userRequesting,
+		string $userRequested
+	):array {
 		$properties = ['oc:role'];
 		$path = '/customgroups/users/' . $userRequested;
 		$response = WebDavHelper::propfind(
@@ -567,10 +592,10 @@ class CustomGroupsContext implements Context {
 	 * @return void
 	 */
 	public function customGroupsWhichAUserIsMemberOfAre(
-		$customGroupList,
-		$userRequested,
-		$userRequesting
-	) {
+		?TableNode $customGroupList,
+		string $userRequested,
+		string $userRequesting
+	):void {
 		$appPath = '/customgroups/users/';
 		if ($customGroupList instanceof TableNode) {
 			$customGroups = $customGroupList->getRows();
@@ -605,7 +630,7 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function setUpScenario(BeforeScenarioScope $scope) {
+	public function setUpScenario(BeforeScenarioScope $scope):void {
 		// Get the environment
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
@@ -624,7 +649,7 @@ class CustomGroupsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function cleanupCustomGroups() {
+	public function cleanupCustomGroups():void {
 		foreach ($this->createdCustomGroups as $customGroup) {
 			$this->userDeletesACustomGroup(
 				$this->featureContext->getAdminUsername(),
