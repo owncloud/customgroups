@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author Sergio Bertolin <sbertolin@owncloud.com>
  *
@@ -128,7 +128,7 @@ class CustomGroupsContext implements Context {
 			$appPath,
 			$properties,
 			$this->featureContext->getStepLineRef(),
-			1,
+			'1',
 			"customgroups"
 		);
 		$this->featureContext->setResponse($response);
@@ -365,7 +365,7 @@ class CustomGroupsContext implements Context {
 			$appPath,
 			$properties,
 			$this->featureContext->getStepLineRef(),
-			1,
+			'1',
 			"customgroups"
 		);
 		$this->featureContext->setResponse($response);
@@ -395,7 +395,7 @@ class CustomGroupsContext implements Context {
 			$appPath,
 			$properties,
 			$this->featureContext->getStepLineRef(),
-			1,
+			'1',
 			"customgroups"
 		);
 		$this->featureContext->setResponse($response);
@@ -569,7 +569,7 @@ class CustomGroupsContext implements Context {
 			$path,
 			$properties,
 			$this->featureContext->getStepLineRef(),
-			1,
+			'1',
 			"customgroups"
 		);
 		$this->featureContext->setResponse($response);
