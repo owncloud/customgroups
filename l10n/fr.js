@@ -61,4 +61,4 @@ OC.L10N.register(
     "Only group admins are allowed to create custom groups" : "Seuls les administrateurs de groupe sont autorisés à créer des groupes personnalisés",
     "Allow creating multiple groups with the same name" : "Autoriser la création de plusieurs groupes portant le même nom"
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n==0 || n==1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
