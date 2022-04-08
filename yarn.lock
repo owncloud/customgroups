@@ -1567,9 +1567,9 @@ istanbul@^0.4.0:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-jasmine-core@~3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-3.7.1.tgz#0401327f6249eac993d47bbfa18d4e8efacfb561"
+jasmine-core@~4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-4.0.1.tgz#ea4b0495d82155023bd56c25181d9f9b623f61b8"
 
 jasmine-sinon@^0.4.0:
   version "0.4.0"
