@@ -214,6 +214,17 @@ class PageController extends Controller {
 				if (isset($existingMembers[$result->getUID()])) {
 					continue;
 				}
+                                
+                                // skip if user disabled autocompletion
+                                $userAutoCompleteEnabled = $this->config->getUserValue(
+					$result->getUID(),
+					'files_sharing',
+					'allow_share_dialog_user_enumeration',
+					'yes'
+				);
+				if ($userAutoCompleteEnabled === 'no') {
+					continue;
+				}
 
 				$totalResults[] = $result;
 				$totalResultCount++;
