@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased] - XXXX-XX-XX
 
-
+- Respect sharing autocompletion personal setting - [#513](https://github.com/owncloud/customgroups/pull/513)
 
 ## [0.6.2] - 2021-06-23
 
