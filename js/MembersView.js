@@ -335,6 +335,13 @@
 		},
 
 		_formatMember: function(member) {
+			var roleDisplayName = t('customgroups', 'Member');
+			if (member.get('role') === OCA.CustomGroups.ROLE_ADMIN) {
+				roleDisplayName = t('customgroups', 'Group owner');
+			} else if (member.get('userTypeInfo') === 'guest') {
+				roleDisplayName = t('customgroups', 'Member (Guest)');
+			}
+
 			return {
 				id: member.id,
 				displayName: member.get('userDisplayName'),
@@ -344,9 +351,7 @@
 					t('customgroups', 'Change role to "group owner"'),
 				deleteLabel: t('customgroups', 'Remove member'),
 				canAdmin: OC.isUserAdmin() || this.model.get('role') === OCA.CustomGroups.ROLE_ADMIN,
-				roleDisplayName: (member.get('role') === OCA.CustomGroups.ROLE_ADMIN) ?
-					t('customgroups', 'Group owner') :
-					t('customgroups', 'Member')
+				roleDisplayName: roleDisplayName
 			};
 		},
 

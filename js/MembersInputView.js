@@ -136,7 +136,8 @@
 		autocompleteRenderItem: function($ul, item) {
 			var $item = $(this.itemTemplate({
 				displayName: item.displayName,
-				userId: item.userId
+				userId: item.userId,
+				typeInfo: item.type === 'guest' ? t('customgroups', 'Guest') : t('customgroups', 'User')
 			}));
 
 			/* jshint camelcase:false */

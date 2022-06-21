@@ -21,8 +21,11 @@
 
 namespace OCA\CustomGroups\Controller;
 
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
+use OCA\Guests\Controller\UsersController;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Constants;
 use OCP\IUser;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -59,6 +62,10 @@ class PageController extends Controller {
 	 * @var IUserManager
 	 */
 	private $userManager;
+	/**
+	 * @var GuestIntegrationHelper
+	 */
+	private $guestIntegrationHelper;
 
 	public function __construct(
 		$appName,
@@ -67,7 +74,8 @@ class PageController extends Controller {
 		IUserSession $userSession,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		CustomGroupsDatabaseHandler $handler
+		CustomGroupsDatabaseHandler $handler,
+		GuestIntegrationHelper $guestIntegrationHelper
 	) {
 		parent::__construct($appName, $request);
 		$this->handler = $handler;
@@ -75,6 +83,7 @@ class PageController extends Controller {
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->guestIntegrationHelper = $guestIntegrationHelper;
 	}
 
 	/**
@@ -280,9 +289,21 @@ class PageController extends Controller {
 		$results = \array_map(function (IUser $entry) {
 			return [
 				'userId' => $entry->getUID(),
-				'displayName' => $entry->getDisplayName()
+				'displayName' => $entry->getDisplayName(),
+				'type' => 'user'
 			];
 		}, $results);
+
+		# guest integration
+		if (!$results && $this->guestIntegrationHelper->canBeGuest($pattern)) {
+			$results = [
+				[
+					'userId' => $pattern,
+					'displayName' => "Add $pattern",
+					'type' => 'guest'
+				]
+			];
+		}
 
 		return new DataResponse(['results' => $results], Http::STATUS_OK);
 	}

@@ -22,6 +22,7 @@ namespace OCA\CustomGroups\Tests\unit\Dav;
 
 use OCA\CustomGroups\Dav\GroupMembershipCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -62,19 +63,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	private $helper;
 
 	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
-
-	/**
 	 * @var IGroupManager
 	 */
 	private $groupManager;
-
-	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
 
 	/**
 	 * @var IConfig
@@ -94,36 +85,38 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->userManager = $this->createMock(IUserManager::class);
+		$userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->userSession = $this->createMock(IUserSession::class);
+		$userSession = $this->createMock(IUserSession::class);
 
 		// currently logged in user
 		$this->currentUser = $this->createMock(IUser::class);
 		$this->currentUser->method('getUID')->willReturn(self::CURRENT_USER);
-		$this->userSession->method('getUser')->willReturn($this->currentUser);
+		$userSession->method('getUser')->willReturn($this->currentUser);
 
 		$this->nodeUser = $this->createMock(IUser::class);
 		$this->nodeUser->method('getUID')->willReturn(self::NODE_USER);
-		$this->userManager->method('get')->will(
-			$this->returnValueMap([
+		$userManager->method('get')->willReturnMap(
+			[
 				[self::NODE_USER, false, $this->nodeUser],
 				[\strtoupper(self::NODE_USER), false, $this->nodeUser],
 				[self::CURRENT_USER, false, $this->currentUser],
-			])
+			]
 		);
 
 		$this->config = $this->createMock(IConfig::class);
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
 			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
 			->setConstructorArgs([
 				$this->handler,
-				$this->userSession,
-				$this->userManager,
+				$userSession,
+				$userManager,
 				$this->groupManager,
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
-				$this->config
+				$this->config,
+				$this->guestIntegrationHelper
 			])
 			->getMock();
 
@@ -140,26 +133,26 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 *
 	 * @param array $memberInfo user member info
 	 */
-	private function setCurrentUserMemberInfo($memberInfo) {
+	private function setCurrentUserMemberInfo($memberInfo): void {
 		$this->handler->expects($this->any())
 			->method('getGroupMemberInfo')
 			->with(1, self::CURRENT_USER)
 			->willReturn($memberInfo);
 	}
 
-	private function setCurrentUserSuperAdmin($isSuperAdmin) {
+	private function setCurrentUserSuperAdmin($isSuperAdmin): void {
 		$this->groupManager->expects($this->any())
 			->method('isAdmin')
 			->with(self::CURRENT_USER)
 			->willReturn($isSuperAdmin);
 	}
 
-	public function testBase() {
+	public function testBase(): void {
 		$this->assertEquals('group1', $this->node->getName());
 		$this->assertNull($this->node->getLastModified());
 	}
 
-	public function testDeleteAsAdmin() {
+	public function testDeleteAsAdmin(): void {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 		$this->config->method('getSystemValue')
 			->willReturn(false);
@@ -184,7 +177,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->delete();
 
 		$this->assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertInstanceOf(GenericEvent::class, $called[1]);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
 		$this->assertArrayHasKey('groupId', $called[1]);
@@ -193,7 +186,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteAsNonAdmin() {
+	public function testDeleteAsNonAdmin(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
@@ -212,7 +205,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteAsNonMember() {
+	public function testDeleteAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(null);
@@ -227,14 +220,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->delete();
 	}
 
-	public function testGetProperties() {
+	public function testGetProperties(): void {
 		$props = $this->node->getProperties(null);
 		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 		$props = $this->node->getProperties([GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
-	public function adminSetFlagProvider() {
+	public function adminSetFlagProvider(): array {
 		return [
 			// admin can change display name
 			[false, Roles::BACKEND_ROLE_ADMIN, 200, true],
@@ -250,7 +243,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminSetFlagProvider
 	 */
-	public function testSetProperties($isSuperAdmin, $currentUserRole, $statusCode, $called) {
+	public function testSetProperties($isSuperAdmin, $currentUserRole, $statusCode, $called): void {
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 		$this->config->method('getSystemValue')
 			->willReturn(true);
@@ -263,7 +256,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			$this->setCurrentUserMemberInfo(null);
 		}
 
-		$this->helper->expects($this->any())
+		$this->helper
 			->method('isGroupDisplayNameAvailable')
 			->willReturn(true);
 
@@ -290,7 +283,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$result = $propPatch->getResult();
 		if (isset($calledEvent)) {
 			$this->assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
-			$this->assertTrue($calledEvent[1] instanceof GenericEvent);
+			$this->assertInstanceOf(GenericEvent::class, $calledEvent[1]);
 			$this->assertArrayHasKey('oldGroupName', $calledEvent[1]);
 			$this->assertEquals('Group One', $calledEvent[1]->getArgument('oldGroupName'));
 			$this->assertArrayHasKey('newGroupName', $calledEvent[1]);
@@ -302,7 +295,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
-	public function testSetDisplayNameNoDuplicates() {
+	public function testSetDisplayNameNoDuplicates(): void {
 		$this->setCurrentUserSuperAdmin(true);
 		$this->config->method('getSystemValue')
 			->willReturn(false);
@@ -325,7 +318,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->assertEquals(409, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
-	public function rolesProvider() {
+	public function rolesProvider(): array {
 		return [
 			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]],
 			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]],
@@ -333,7 +326,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		];
 	}
 
-	public function adminProvider() {
+	public function adminProvider(): array {
 		return [
 			[false, ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]],
 			[true, null],
@@ -343,7 +336,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminProvider
 	 */
-	public function testAddMemberAsAdmin($isSuperAdmin, $currentMemberInfo) {
+	public function testAddMemberAsAdmin($isSuperAdmin, $currentMemberInfo): void {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
@@ -373,7 +366,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->createFile(self::NODE_USER);
 
 		$this->assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertInstanceOf(GenericEvent::class, $called[1]);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
 		$this->assertArrayHasKey('user', $called[1]);
@@ -385,7 +378,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminProvider
 	 */
-	public function testAddMemberAsAdminFails($isSuperAdmin, $currentMemberInfo) {
+	public function testAddMemberAsAdminFails($isSuperAdmin, $currentMemberInfo): void {
 		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
 
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
@@ -407,7 +400,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminProvider
 	 */
-	public function testAddNonExistingMemberAsAdmin($isSuperAdmin, $currentMemberInfo) {
+	public function testAddNonExistingMemberAsAdmin($isSuperAdmin, $currentMemberInfo): void {
 		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
 
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
@@ -427,7 +420,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminProvider
 	 */
-	public function testAddNonExistingMemberMismatchCaseAsAdmin($isSuperAdmin, $currentMemberInfo) {
+	public function testAddNonExistingMemberMismatchCaseAsAdmin($isSuperAdmin, $currentMemberInfo): void {
 		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
 
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
@@ -446,7 +439,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testAddMemberAsNonAdmin() {
+	public function testAddMemberAsNonAdmin(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
@@ -464,7 +457,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testAddMemberAsNonMember() {
+	public function testAddMemberAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(null);
@@ -482,7 +475,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup() {
+	public function testAddMemberWithShareToMemberRestrictionAndNoCommonGroup(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
@@ -496,10 +489,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->willReturn('yes');
 
 		$this->groupManager->method('getUserGroupIds')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				[$this->currentUser, null, ['group1', 'group2']],
 				[$this->nodeUser, null, ['group3', 'group4']],
-			]));
+			]);
 
 		$this->handler->expects($this->never())
 			->method('addToGroup');
@@ -507,7 +500,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->createFile(self::NODE_USER);
 	}
 
-	public function testAddMemberWithShareToMemberRestrictionAndCommonGroup() {
+	public function testAddMemberWithShareToMemberRestrictionAndCommonGroup(): void {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]);
 		$this->config->method('getSystemValue')
 			->willReturn(false);
@@ -519,10 +512,10 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 			->willReturn('yes');
 
 		$this->groupManager->method('getUserGroupIds')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				[$this->currentUser, null, ['group1', 'group2']],
 				[$this->nodeUser, null, ['group1', 'group4']],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('addToGroup')
@@ -532,14 +525,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->createFile(self::NODE_USER);
 	}
 
-	public function testIsMember() {
+	public function testIsMember(): void {
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
 		$this->handler->expects($this->any())
 			->method('inGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				[self::NODE_USER, 1, true],
 				['user3', 1, false],
-			]));
+			]);
 
 		$this->assertTrue($this->node->childExists(self::NODE_USER));
 		$this->assertFalse($this->node->childExists('user3'));
@@ -547,7 +540,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testIsMemberAsNonMember() {
+	public function testIsMemberAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(null);
@@ -559,16 +552,16 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->childExists(self::NODE_USER);
 	}
 
-	public function testIsMemberAsNonMemberButSuperAdmin() {
+	public function testIsMemberAsNonMemberButSuperAdmin(): void {
 		$this->setCurrentUserSuperAdmin(true);
 		$this->setCurrentUserMemberInfo(null);
 
 		$this->handler->expects($this->any())
 			->method('inGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				[self::NODE_USER, 1, true],
 				['user3', 1, false],
-			]));
+			]);
 
 		$this->config->method('getSystemValue')
 			->willReturn(false);
@@ -582,7 +575,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider rolesProvider
 	 */
-	public function testGetMember($isSuperAdmin, $currentMemberInfo) {
+	public function testGetMember($isSuperAdmin, $currentMemberInfo): void {
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
 		$membershipsMap = [
@@ -597,9 +590,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->groupManager->method('isAdmin')
 			->willReturn(true);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMemberInfo')
-			->will($this->returnValueMap($membershipsMap));
+			->willReturnMap($membershipsMap);
 
 		$memberInfo = $this->node->getChild(self::NODE_USER);
 
@@ -609,7 +602,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testGetMemberAsNonMember() {
+	public function testGetMemberAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(null);
@@ -624,7 +617,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider rolesProvider
 	 */
-	public function testGetMembers($isSuperAdmin, $currentMemberInfo) {
+	public function testGetMembers($isSuperAdmin, $currentMemberInfo): void {
 		$this->setCurrentUserMemberInfo($currentMemberInfo);
 		$this->setCurrentUserSuperAdmin($isSuperAdmin);
 
@@ -633,7 +626,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->groupManager->method('isAdmin')
 			->willReturn($isSuperAdmin);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, null)
 			->willReturn([
@@ -653,7 +646,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider rolesProvider
 	 */
-	public function testSearchMembers($isSuperAdmin, $currentMemberInfo) {
+	public function testSearchMembers($isSuperAdmin, $currentMemberInfo): void {
 		$search = new Search('us', 16, 256);
 
 		$this->config->method('getSystemValue')
@@ -683,7 +676,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testGetMembersAsNonMember() {
+	public function testGetMembersAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(null);
@@ -697,7 +690,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testSetName() {
+	public function testSetName(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->node->setName('x');
@@ -705,13 +698,13 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateDirectory() {
+	public function testCreateDirectory(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->node->createDirectory('somedir');
 	}
 
-	public function providesUpdateDisplayNameValidateException() {
+	public function providesUpdateDisplayNameValidateException(): array {
 		return [
 			[''],
 			[null],
@@ -727,7 +720,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	 * @dataProvider providesUpdateDisplayNameValidateException
 	 * @param string $groupName
 	 */
-	public function testUpdateDisplayNameValidateException($groupName) {
+	public function testUpdateDisplayNameValidateException($groupName): void {
 		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
 
 		$this->node->updateDisplayName($groupName);

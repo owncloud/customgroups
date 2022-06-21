@@ -98,6 +98,10 @@ class MembershipHelper {
 	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
 	*/
 	private $dispatcher;
+	/**
+	 * @var GuestIntegrationHelper
+	 */
+	private $guestIntegrationHelper;
 
 	/**
 	 * Membership helper
@@ -117,7 +121,8 @@ class MembershipHelper {
 		IGroupManager $groupManager,
 		IManager $notificationManager,
 		IURLGenerator $urlGenerator,
-		IConfig $config
+		IConfig $config,
+		GuestIntegrationHelper $guestIntegrationHelper
 	) {
 		$this->groupsHandler = $groupsHandler;
 		$this->userSession = $userSession;
@@ -128,6 +133,7 @@ class MembershipHelper {
 		$this->config = $config;
 
 		$this->dispatcher = \OC::$server->getEventDispatcher();
+		$this->guestIntegrationHelper = $guestIntegrationHelper;
 	}
 
 	/**
@@ -146,7 +152,12 @@ class MembershipHelper {
 	 * @return IUser|null user object or null if user does not exist
 	 */
 	public function getUser($userId) {
-		return $this->userManager->get($userId);
+		$user = $this->userManager->get($userId);
+		if (!$user && \OC::$server->getAppManager()->isEnabledForUser('guests')) {
+			return $this->guestIntegrationHelper->createGuest($userId);
+		}
+
+		return $user;
 	}
 
 	/**
@@ -366,5 +377,14 @@ class MembershipHelper {
 		$groups = $this->groupsHandler->getGroupsByDisplayName($displayName);
 
 		return empty($groups);
+	}
+
+	public function isGuest(string $userId): bool {
+		return (bool) $this->config->getUserValue(
+			$userId,
+			'owncloud',
+			'isGuest',
+			false
+		);
 	}
 }

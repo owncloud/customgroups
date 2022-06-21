@@ -23,6 +23,7 @@ namespace OCA\CustomGroups\Tests\unit\Dav;
 use OCA\CustomGroups\Dav\GroupsCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Exception\ValidationException;
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -33,7 +34,6 @@ use OCA\CustomGroups\Search;
 use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\IConfig;
-use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sabre\DAV\MkCol;
 
@@ -59,16 +59,6 @@ class GroupsCollectionTest extends \Test\TestCase {
 	private $helper;
 
 	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
-
-	/**
-	 * @var IGroupManager
-	 */
-	private $groupManager;
-
-	/**
 	 * @var IUserSession
 	 */
 	private $userSession;
@@ -82,26 +72,28 @@ class GroupsCollectionTest extends \Test\TestCase {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
 		$this->handler->expects($this->never())->method('getGroup');
-		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
+		$userManager = $this->createMock(IUserManager::class);
+		$groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 
 		$this->config = $this->createMock(IConfig::class);
 		$this->config->method('getAppValue')
 			->with()
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['customgroups', 'allow_duplicate_names', 'false', false],
 				['customgroups', 'only_subadmin_can_create', 'false', false],
-			]));
+			]);
 
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = new MembershipHelper(
 			$this->handler,
 			$this->userSession,
-			$this->userManager,
-			$this->groupManager,
+			$userManager,
+			$groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->config
+			$this->config,
+			$this->guestIntegrationHelper
 		);
 		$this->collection = new GroupsCollection(
 			$this->createMock(IGroupManager::class),
@@ -111,19 +103,19 @@ class GroupsCollectionTest extends \Test\TestCase {
 		);
 	}
 
-	public function testBase() {
+	public function testBase(): void {
 		$this->assertEquals('groups', $this->collection->getName());
 		$this->assertNull($this->collection->getLastModified());
 	}
 
-	public function testListGroups() {
+	public function testListGroups(): void {
 		$this->handler->expects($this->once())
 			->method('getGroups')
 			->with(null)
-			->will($this->returnValue([
+			->willReturn([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
-			]));
+			]);
 
 		$nodes = $this->collection->getChildren();
 		$this->assertCount(2, $nodes);
@@ -134,15 +126,15 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
-	public function testListGroupsSearchPattern() {
+	public function testListGroupsSearchPattern(): void {
 		$search = new Search('gr', 16, 256);
 		$this->handler->expects($this->once())
 			->method('getGroups')
 			->with($search)
-			->will($this->returnValue([
+			->willReturn([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
-			]));
+			]);
 
 		$nodes = $this->collection->search($search);
 		$this->assertCount(2, $nodes);
@@ -153,7 +145,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
-	public function testListGroupsForUser() {
+	public function testListGroupsForUser(): void {
 		$collection = new GroupsCollection(
 			$this->createMock(IGroupManager::class),
 			$this->handler,
@@ -167,10 +159,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->once())
 			->method('getUserMemberships')
 			->with('user1', null)
-			->will($this->returnValue([
+			->willReturn([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
-			]));
+			]);
 
 		$nodes = $collection->getChildren();
 		$this->assertCount(2, $nodes);
@@ -181,7 +173,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
-	public function testListGroupsForUserSearchPattern() {
+	public function testListGroupsForUserSearchPattern(): void {
 		$search = new Search('gr', 16, 256);
 
 		$collection = new GroupsCollection(
@@ -195,10 +187,10 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->once())
 			->method('getUserMemberships')
 			->with('user1', $search)
-			->will($this->returnValue([
+			->willReturn([
 				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
 				['group_id' => 2, 'uri' => 'group2', 'display_name' => 'Group Two'],
-			]));
+			]);
 
 		$nodes = $collection->search($search);
 		$this->assertCount(2, $nodes);
@@ -209,7 +201,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->assertEquals('group2', $nodes[1]->getName());
 	}
 
-	public function testCreateGroup() {
+	public function testCreateGroup(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('user1');
 		$this->userSession->method('getUser')->willReturn($user);
@@ -217,11 +209,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->once())
 			->method('getGroupsByDisplayName')
 			->with('Group One')
-			->will($this->returnValue([]));
+			->willReturn([]);
 		$this->handler->expects($this->once())
 			->method('createGroup')
 			->with('group1', 'Group One')
-			->will($this->returnValue(1));
+			->willReturn(1);
 		$this->handler->expects($this->once())
 			->method('addToGroup')
 			->with('user1', 1, true);
@@ -238,7 +230,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->collection->createExtendedCollection('group1', $mkCol);
 
 		$this->assertSame('\OCA\CustomGroups::addGroupAndUser', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertInstanceOf(GenericEvent::class, $called[1]);
 		$this->assertArrayHasKey('groupName', $called[1]);
 		$this->assertArrayHasKey('user', $called[1]);
 		$this->assertArrayHasKey('groupId', $called[1]);
@@ -251,7 +243,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateGroupNoDuplicates() {
+	public function testCreateGroupNoDuplicates(): void {
 		$this->expectException(\Sabre\DAV\Exception\Conflict::class);
 
 		$user = $this->createMock(IUser::class);
@@ -261,7 +253,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->handler->expects($this->once())
 			->method('getGroupsByDisplayName')
 			->with('Group One')
-			->will($this->returnValue([['duplicate']]));
+			->willReturn([['duplicate']]);
 
 		$called = [];
 		\OC::$server->getEventDispatcher()->addListener('addGroupAndUser', function ($event) use (&$called) {
@@ -275,7 +267,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->collection->createExtendedCollection('group1', $mkCol);
 	}
 
-	public function providesTestCreateException() {
+	public function providesTestCreateException(): array {
 		return [
 			['', 'empty'],
 			[null, 'empty'],
@@ -290,7 +282,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	/**
 	 * @dataProvider providesTestCreateException
 	 */
-	public function testCreateGroupExceptions($groupName, $displayName) {
+	public function testCreateGroupExceptions($groupName, $displayName): void {
 		$this->expectException(\OCA\CustomGroups\Exception\ValidationException::class);
 
 		$mkCol = new MkCol([], [
@@ -304,7 +296,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 	 * @dataProvider providesTestCreateException
 	 * @throws ValidationException
 	 */
-	public function testCreateGroupExceptionsStatusCode($groupName, $displayName) {
+	public function testCreateGroupExceptionsStatusCode($groupName, $displayName): void {
 		$mkCol = new MkCol([], [
 			GroupMembershipCollection::PROPERTY_DISPLAY_NAME => $displayName
 		]);
@@ -318,7 +310,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateGroupNoPermission() {
+	public function testCreateGroupNoPermission(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$helper = $this->createMock(MembershipHelper::class);
@@ -343,13 +335,13 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateGroupAlreadyExists() {
+	public function testCreateGroupAlreadyExists(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->handler->expects($this->once())
 			->method('createGroup')
 			->with('group1', 'group1')
-			->will($this->returnValue(null));
+			->willReturn(null);
 		$this->handler->expects($this->never())
 			->method('addToGroup')
 			->with('user1', 1, true);
@@ -357,11 +349,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$this->collection->createDirectory('group1');
 	}
 
-	public function testGetGroup() {
+	public function testGetGroup(): void {
 		$this->handler->expects($this->any())
 			->method('getGroupByUri')
 			->with('group1')
-			->will($this->returnValue(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']));
+			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 
 		$groupNode = $this->collection->getChild('group1');
 		$this->assertInstanceOf(GroupMembershipCollection::class, $groupNode);
@@ -370,24 +362,24 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testGetGroupNonExisting() {
+	public function testGetGroupNonExisting(): void {
 		$this->expectException(\Sabre\DAV\Exception\NotFound::class);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupByUri')
 			->with('groupx')
-			->will($this->returnValue(null));
+			->willReturn(null);
 
 		$this->collection->getChild('groupx');
 	}
 
-	public function testGroupExists() {
-		$this->handler->expects($this->any())
+	public function testGroupExists(): void {
+		$this->handler
 			->method('getGroupByUri')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['group1', ['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']],
 				['group2', null],
-			]));
+			]);
 
 		$this->assertTrue($this->collection->childExists('group1'));
 		$this->assertFalse($this->collection->childExists('group2'));
@@ -395,7 +387,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testSetName() {
+	public function testSetName(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->setName('x');
@@ -403,7 +395,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDelete() {
+	public function testDelete(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->delete();
@@ -411,7 +403,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateFile() {
+	public function testCreateFile(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->createFile('somefile.txt');

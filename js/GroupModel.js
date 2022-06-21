@@ -23,7 +23,8 @@
 
 		davProperties: {
 			'displayName': NS + 'display-name',
-			'role': NS + 'role'
+			'role': NS + 'role',
+			'userTypeInfo': NS + 'user-type-info'
 		},
 
 		initialize: function() {

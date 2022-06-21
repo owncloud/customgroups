@@ -22,6 +22,7 @@ namespace OCA\CustomGroups\Tests\unit\Dav;
 
 use OCA\CustomGroups\Dav\MembershipNode;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -69,18 +70,13 @@ class MembershipNodeTest extends \Test\TestCase {
 	 */
 	private $groupManager;
 
-	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
-
 	/** @var IConfig */
 	private $config;
 
 	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->userSession = $this->createMock(IUserSession::class);
+		$userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->config = $this->createMock(IConfig::class);
@@ -88,20 +84,22 @@ class MembershipNodeTest extends \Test\TestCase {
 		// currently logged in user
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::CURRENT_USER);
-		$this->userSession->expects($this->any())
+		$userSession
 			->method('getUser')
 			->willReturn($user);
 
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
 			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved', 'isTheOnlyAdmin'])
 			->setConstructorArgs([
 				$this->handler,
-				$this->userSession,
+				$userSession,
 				$this->userManager,
 				$this->groupManager,
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
-				$this->config
+				$this->config,
+				$this->guestIntegrationHelper
 			])
 			->getMock();
 
@@ -119,19 +117,19 @@ class MembershipNodeTest extends \Test\TestCase {
 	 *
 	 * @param array $memberInfo user member info
 	 */
-	private function setCurrentUserMemberInfo($memberInfo) {
-		$this->handler->expects($this->any())
+	private function setCurrentUserMemberInfo($memberInfo): void {
+		$this->handler
 			->method('getGroupMemberInfo')
 			->with(1, self::CURRENT_USER)
 			->willReturn($memberInfo);
 	}
 
-	public function testBase() {
+	public function testBase(): void {
 		$this->assertEquals(self::NODE_USER, $this->node->getName());
 		$this->assertNull($this->node->getLastModified());
 	}
 
-	public function testNodeName() {
+	public function testNodeName(): void {
 		$node = new MembershipNode(
 			['group_id' => 1, 'uri' => 'group1', 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN],
 			'group1',
@@ -142,7 +140,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->assertEquals('group1', $node->getName());
 	}
 
-	public function testDeleteAsAdmin() {
+	public function testDeleteAsAdmin(): void {
 		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
 
 		$this->config->method('getSystemValue')
@@ -160,8 +158,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('notifyUserRemoved')
 			->with(
 				self::NODE_USER,
-				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One'],
-				['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN]
+				['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']
 			);
 
 		$this->helper->expects($this->once())
@@ -171,7 +168,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([$memberInfo]);
@@ -190,7 +187,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->node->delete();
 
 		$this->assertSame('\OCA\CustomGroups::removeUserFromGroup', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertInstanceOf(GenericEvent::class, $called[1]);
 		$this->assertArrayHasKey('user_displayName', $called[1]);
 		$this->assertArrayHasKey('group_displayName', $called[1]);
 		$this->assertEquals('customGroups.removeUserFromGroup', $newCalled[0]);
@@ -204,7 +201,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteAsAdminFailed() {
+	public function testDeleteAsAdminFailed(): void {
 		$this->expectException(\Sabre\DAV\Exception\PreconditionFailed::class);
 
 		$memberInfo = ['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_ADMIN];
@@ -221,7 +218,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([$memberInfo]);
@@ -231,7 +228,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteAsNonAdmin() {
+	public function testDeleteAsNonAdmin(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->setCurrentUserMemberInfo(['group_id' => 1, 'user_id' => self::CURRENT_USER, 'role' => CustomGroupsDatabaseHandler::ROLE_MEMBER]);
@@ -252,11 +249,12 @@ class MembershipNodeTest extends \Test\TestCase {
 	 * @param int $role admin perms for the NODE_USER
 	 * @return MembershipNode new node
 	 */
-	private function makeSelfNode($role) {
+	private function makeSelfNode($role): MembershipNode {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::NODE_USER);
 		$userSession = $this->createMock(IUserSession::class);
 		$userSession->method('getUser')->willReturn($user);
+		$guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$helper = new MembershipHelper(
 			$this->handler,
@@ -265,7 +263,8 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->config
+			$this->config,
+			$guestIntegrationHelper
 		);
 
 		$memberInfo = ['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $role];
@@ -276,14 +275,14 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->handler,
 			$helper
 		);
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMemberInfo')
 			->with(1, self::NODE_USER)
 			->willReturn($memberInfo);
 		return $node;
 	}
 
-	public function testDeleteSelfAsNonAdmin() {
+	public function testDeleteSelfAsNonAdmin(): void {
 		$node = $this->makeSelfNode(CustomGroupsDatabaseHandler::ROLE_MEMBER);
 
 		$this->config->method('getSystemValue')
@@ -337,7 +336,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteAsNonMember() {
+	public function testDeleteAsNonMember(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->config->method('getSystemValue')
@@ -354,7 +353,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * Super admin can delete any member
 	 */
-	public function testDeleteAsSuperAdmin() {
+	public function testDeleteAsSuperAdmin(): void {
 		$this->config->method('getSystemValue')
 			->willReturn(false);
 		$this->groupManager->method('isAdmin')
@@ -371,7 +370,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmins)
 			->willReturn([['user_id' => 'adminuser']]);
@@ -381,7 +380,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteSelfAsLastAdmin() {
+	public function testDeleteSelfAsLastAdmin(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->config->method('getSystemValue')
@@ -393,7 +392,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmin)
 			->willReturn([
@@ -408,7 +407,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDeleteLastAdminAsSuperAdmin() {
+	public function testDeleteLastAdminAsSuperAdmin(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->config->method('getSystemValue')
@@ -424,7 +423,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmin)
 			->willReturn([
@@ -437,7 +436,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$node->delete();
 	}
 
-	public function propsProvider() {
+	public function propsProvider(): array {
 		return [
 			[
 				MembershipNode::PROPERTY_ROLE,
@@ -459,7 +458,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * @dataProvider propsProvider
 	 */
-	public function testGetProperties($propName, $propValue, $roleValue = 0) {
+	public function testGetProperties($propName, $propValue, $roleValue = 0): void {
 		$node = new MembershipNode(
 			['group_id' => 1, 'user_id' => self::NODE_USER, 'role' => $roleValue, 'uri' => 'group1'],
 			self::NODE_USER,
@@ -474,7 +473,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->assertSame($propValue, $props[$propName]);
 	}
 
-	public function adminSetFlagProvider() {
+	public function adminSetFlagProvider(): array {
 		return [
 			// admin can change flag for others
 			[false, CustomGroupsDatabaseHandler::ROLE_ADMIN, Roles::DAV_ROLE_ADMIN, 200, true],
@@ -496,7 +495,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * @dataProvider adminSetFlagProvider
 	 */
-	public function testSetProperties($isSuperAdmin, $currentUserRole, $roleToSet, $statusCode, $called) {
+	public function testSetProperties($isSuperAdmin, $currentUserRole, $roleToSet, $statusCode, $called): void {
 		$this->config->method('getSystemValue')
 			->willReturn(false);
 		$this->groupManager->method('isAdmin')
@@ -533,7 +532,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmin)
 			->willReturn([
@@ -552,7 +551,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * Cannot remove admin perms from last admin
 	 */
-	public function testUnsetSelfAdminWhenLastAdmin() {
+	public function testUnsetSelfAdminWhenLastAdmin(): void {
 		$this->config->method('getSystemValue')
 			->willReturn(false);
 		$this->groupManager->method('isAdmin')
@@ -564,7 +563,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmin)
 			->willReturn([
@@ -586,7 +585,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * Cannot remove admin perms from last admin
 	 */
-	public function testUnsetdminWhenLastAdminAsSuperAdmin() {
+	public function testUnsetdminWhenLastAdminAsSuperAdmin(): void {
 		$this->config->method('getSystemValue')
 			->willReturn(true);
 		$this->groupManager->method('isAdmin')
@@ -599,7 +598,7 @@ class MembershipNodeTest extends \Test\TestCase {
 		$searchAdmin = new Search();
 		$searchAdmin->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMembers')
 			->with(1, $searchAdmin)
 			->willReturn([
@@ -617,7 +616,7 @@ class MembershipNodeTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testSetName() {
+	public function testSetName(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->node->setName('x');
