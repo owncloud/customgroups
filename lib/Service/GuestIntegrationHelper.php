@@ -76,6 +76,13 @@ class GuestIntegrationHelper {
 		if (!$this->mailer->validateMailAddress($email)) {
 			return false;
 		}
+
+		# in addition, make sure the domain holds at least one . so it matches the guests app logic
+		[$localPart, $domain] = explode('@', $email, 2);
+		if (\strpos($domain, '.') === false) {
+			return false;
+		}
+
 		# test if the correct guest app version is used
 		$mail = $this->getGuestMail();
 		if ($mail && !method_exists($mail, 'sendGuestPlainInviteMail')) {
