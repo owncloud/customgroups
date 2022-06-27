@@ -202,9 +202,16 @@
 			var $loading = this.$('.member-input-view .loading');
 			$loading.removeClass('hidden');
 
+			var displayName = data.displayName || userId
+			var role = null
+			if (data.type === 'guest') {
+				displayName = userId
+				role = 'guest'
+			}
 			this.collection.create({
 				id: userId,
-				userDisplayName: data.displayName || userId
+				userDisplayName: displayName,
+				userTypeInfo: role
 			},  {
 				wait: true,
 				success: function() {

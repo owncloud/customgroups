@@ -152,7 +152,8 @@
 			e.preventDefault();
 			this.trigger('select', {
 				userId: s.item.userId,
-				displayName: s.item.displayName
+				displayName: s.item.displayName,
+				type: s.item.type
 			});
 			$(e.target).val(s.item.userId).blur();
 		}

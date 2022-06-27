@@ -299,7 +299,7 @@ class PageController extends Controller {
 			$results = [
 				[
 					'userId' => $pattern,
-					'displayName' => "Add $pattern",
+					'displayName' => $pattern,
 					'type' => 'guest'
 				]
 			];
