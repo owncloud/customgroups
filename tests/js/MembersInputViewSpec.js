@@ -133,7 +133,8 @@ describe('MembersInputView test', function() {
 			expect(handler.calledOnce).toEqual(true);
 			expect(handler.getCall(0).args[0]).toEqual({
 				userId: 'user2',
-				displayName: 'User Two'
+				displayName: 'User Two',
+				type: undefined
 			});
 		});
 		
