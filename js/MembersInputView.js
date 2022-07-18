@@ -250,7 +250,7 @@
 						},
 					}).done(function (result) {
 						for (var j = 0; j < result.results.length; j++) {
-							var userToAdd = result.results[j]
+							var userToAdd = result.results[j];
 							var addUser = true;
 
 							// only add users that match exact with the search term
