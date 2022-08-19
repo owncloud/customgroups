@@ -198,7 +198,8 @@ describe('MembersView test', function() {
 			expect(collection.create.calledOnce).toEqual(true);
 			expect(collection.create.getCall(0).args[0]).toEqual({
 				id: 'newuser',
-				userDisplayName: 'new user display name'
+				userDisplayName: 'new user display name',
+				userTypeInfo: null
 			});
 
 			collection.create.yieldTo('success');

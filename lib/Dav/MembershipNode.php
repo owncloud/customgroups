@@ -38,6 +38,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	public const PROPERTY_ROLE = '{http://owncloud.org/ns}role';
 	public const PROPERTY_USER_ID = '{http://owncloud.org/ns}user-id';
 	public const PROPERTY_USER_DISPLAY_NAME = '{http://owncloud.org/ns}user-display-name';
+	public const PROPERTY_USER_TYPE_INFO = '{http://owncloud.org/ns}user-type-info';
 
 	/**
 	 * Custom groups handler
@@ -131,11 +132,11 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		)) {
 			// possibly the membership was deleted concurrently
 			throw new PreconditionFailed("Could not remove member \"$userId\" from group \"$groupId\"");
-		};
+		}
 
 		if ($currentUserId !== $userId) {
 			// only notify when the removal was done by another user
-			$this->helper->notifyUserRemoved($userId, $this->groupInfo, $this->memberInfo);
+			$this->helper->notifyUserRemoved($userId, $this->groupInfo);
 			/**
 			 * This event is deprecated. The keys of the event array are not using camel case.
 			 */
@@ -226,6 +227,9 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 		}
 		if ($properties === null || \in_array(self::PROPERTY_USER_ID, $properties, true)) {
 			$result[self::PROPERTY_USER_ID] = $this->memberInfo['user_id'];
+		}
+		if ($properties === null || \in_array(self::PROPERTY_USER_TYPE_INFO, $properties, true)) {
+			$result[self::PROPERTY_USER_TYPE_INFO] = $this->helper->isGuest($this->getUserId()) ? 'guest' : 'user';
 		}
 		if ($properties === null || \in_array(self::PROPERTY_USER_DISPLAY_NAME, $properties, true)) {
 			// FIXME: extremely inefficient as it will query the display name

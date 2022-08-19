@@ -96,8 +96,8 @@ describe('MembersInputView test', function() {
 
 			expect($li.is('li')).toEqual(true);
 			expect(avatarStub.calledOnce).toEqual(true);
-			expect($ul.find('.autocomplete-item-text').text()).toEqual('User One');
-			expect($li.find('.autocomplete-item-text').text()).toEqual('User One');
+			expect($ul.find('.autocomplete-item-text').text()).toContain('User One');
+			expect($li.find('.autocomplete-item-text').text()).toContain('User One');
 		});
 
 		it('renders tooltip error if no results', function() {
@@ -133,7 +133,8 @@ describe('MembersInputView test', function() {
 			expect(handler.calledOnce).toEqual(true);
 			expect(handler.getCall(0).args[0]).toEqual({
 				userId: 'user2',
-				displayName: 'User Two'
+				displayName: 'User Two',
+				type: undefined
 			});
 		});
 		

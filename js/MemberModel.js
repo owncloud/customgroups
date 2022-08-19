@@ -31,7 +31,8 @@
 
 		davProperties: {
 			'role': NS + 'role',
-			'userDisplayName': NS + 'user-display-name'
+			'userDisplayName': NS + 'user-display-name',
+			'userTypeInfo': NS + 'user-type-info'
 		}
 	});
 

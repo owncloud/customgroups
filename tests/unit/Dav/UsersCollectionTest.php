@@ -22,6 +22,7 @@ namespace OCA\CustomGroups\Tests\unit\Dav;
 
 use OCA\CustomGroups\Dav\UsersCollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -41,78 +42,57 @@ class UsersCollectionTest extends \Test\TestCase {
 	public const USER = 'user1';
 
 	/**
-	 * @var CustomGroupsDatabaseHandler
-	 */
-	private $handler;
-
-	/**
 	 * @var UsersCollection
 	 */
 	private $collection;
-
-	/**
-	 * @var MembershipHelper
-	 */
-	private $helper;
-
-	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
 
 	/**
 	 * @var IGroupManager
 	 */
 	private $groupManager;
 
-	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
-
-	/** @var IConfig */
-	private $config;
-
 	public function setUp(): void {
 		parent::setUp();
-		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->handler->expects($this->never())->method('getGroup');
-		$this->userSession = $this->createMock(IUserSession::class);
-		$this->userManager = $this->createMock(IUserManager::class);
+		$handler = $this->createMock(CustomGroupsDatabaseHandler::class);
+		$handler->expects($this->never())->method('getGroup');
+		$userSession = $this->createMock(IUserSession::class);
+		$userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::USER);
-		$this->userSession->method('getUser')->willReturn($user);
+		$userSession->method('getUser')->willReturn($user);
 
-		$this->config = $this->createMock(IConfig::class);
+		$config = $this->createMock(IConfig::class);
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
-		$this->helper = new MembershipHelper(
-			$this->handler,
-			$this->userSession,
-			$this->userManager,
+		$helper = new MembershipHelper(
+			$handler,
+			$userSession,
+			$userManager,
 			$this->groupManager,
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
-			$this->config
+			$config,
+			$this->guestIntegrationHelper
 		);
 
 		$this->collection = new UsersCollection(
 			$this->createMock(IGroupManager::class),
-			$this->handler,
-			$this->helper,
-			$this->config
+			$handler,
+			$helper,
+			$config
 		);
 	}
 
-	public function testBase() {
+	public function testBase(): void {
 		$this->assertEquals('users', $this->collection->getName());
 		$this->assertNull($this->collection->getLastModified());
 	}
 
 	/**
 	 */
-	public function testListUsers() {
+	public function testListUsers(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->getChildren();
@@ -120,13 +100,13 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateUser() {
+	public function testCreateUser(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->createDirectory('user1');
 	}
 
-	public function testGetCurrentUser() {
+	public function testGetCurrentUser(): void {
 		$membershipCollection = $this->collection->getChild(self::USER);
 		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
 		$this->assertEquals(self::USER, $membershipCollection->getName());
@@ -134,30 +114,30 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testGetAnotherUser() {
+	public function testGetAnotherUser(): void {
 		$this->expectException(\Sabre\DAV\Exception\Forbidden::class);
 
 		$this->collection->getChild('another');
 	}
 
-	public function testGetAnotherUserAsAdmin() {
+	public function testGetAnotherUserAsAdmin(): void {
 		$this->groupManager->method('isAdmin')->with(self::USER)->willReturn(true);
 		$membershipCollection = $this->collection->getChild('another');
 		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
 		$this->assertEquals('another', $membershipCollection->getName());
 	}
 
-	public function testUserExistsCurrent() {
+	public function testUserExistsCurrent(): void {
 		$this->assertTrue($this->collection->childExists(self::USER));
 	}
 
-	public function testUserExistsAnother() {
+	public function testUserExistsAnother(): void {
 		$this->assertFalse($this->collection->childExists('another'));
 	}
 
 	/**
 	 */
-	public function testSetName() {
+	public function testSetName(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->setName('x');
@@ -165,7 +145,7 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testDelete() {
+	public function testDelete(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->delete();
@@ -173,7 +153,7 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	/**
 	 */
-	public function testCreateFile() {
+	public function testCreateFile(): void {
 		$this->expectException(\Sabre\DAV\Exception\MethodNotAllowed::class);
 
 		$this->collection->createFile('somefile.txt');

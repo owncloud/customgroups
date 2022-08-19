@@ -87,8 +87,20 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	line-height: 32px;
 	vertical-align: middle;
+}
+
+.customgroups-autocomplete-item .autocomplete-item-displayname {
+	margin-right: 5px;
+}
+
+.customgroups-autocomplete-item .autocomplete-item-typeInfo {
+	font-size: smaller;
+	font-style: italic;
+}
+
+.customgroups-autocomplete-item .avatardiv {
+	flex-shrink: 0;
 }
 
 .custom-group-buttons {
