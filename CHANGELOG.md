@@ -4,9 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - XXXX-XX-XX
+## [0.7.0] - 2022-08-19
 
-- Respect sharing autocompletion personal setting - [#513](https://github.com/owncloud/customgroups/pull/513)
+### Added
+
+ - [#513](https://github.com/owncloud/customgroups/pull/513) - Respect sharing autocompletion personal setting
+ - [#521](https://github.com/owncloud/customgroups/pull/521) - feat: add guest invitation
+ - [#522](https://github.com/owncloud/customgroups/pull/522) - Implement batch action for inviting users to groups
+
 
 ## [0.6.2] - 2021-06-23
 
