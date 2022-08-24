@@ -20,6 +20,7 @@
  */
 namespace OCA\CustomGroups\Tests\unit\Service;
 
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCP\IUserSession;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -63,19 +64,9 @@ class MembershipHelperTest extends \Test\TestCase {
 	private $groupManager;
 
 	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
-
-	/**
 	 * @var IManager
 	 */
 	private $notificationManager;
-
-	/**
-	 * @var IURLGenerator
-	 */
-	private $urlGenerator;
 
 	/**
 	 * @var IUser
@@ -90,39 +81,41 @@ class MembershipHelperTest extends \Test\TestCase {
 	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);
-		$this->userSession = $this->createMock(IUserSession::class);
+		$userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		// swap for 10.1, method getSubAdmin is not on the interface in 10.0
 		$this->groupManager = $this->createMock(\OC\Group\Manager::class);
 		//$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->notificationManager = $this->createMock(IManager::class);
-		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->config = $this->createMock(IConfig::class);
 
 		// currently logged in user
 		$this->user = $this->createMock(IUser::class);
 		$this->user->method('getUID')->willReturn(self::CURRENT_USER);
 		$this->user->method('getDisplayName')->willReturn('User One');
-		$this->userSession->expects($this->any())
+		$userSession
 			->method('getUser')
 			->willReturn($this->user);
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$this->helper = new MembershipHelper(
 			$this->handler,
-			$this->userSession,
+			$userSession,
 			$this->userManager,
 			$this->groupManager,
 			$this->notificationManager,
-			$this->urlGenerator,
-			$this->config
+			$urlGenerator,
+			$this->config,
+			$this->guestIntegrationHelper
 		);
 	}
 
-	public function testGetUserId() {
+	public function testGetUserId(): void {
 		$this->assertEquals(self::CURRENT_USER, $this->helper->getUserId());
 	}
 
-	public function testGetUser() {
+	public function testGetUser(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('anotheruser');
 
@@ -134,7 +127,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertEquals($user, $this->helper->getUser('anotheruser'));
 	}
 
-	public function isUserAdminDataProvider() {
+	public function isUserAdminDataProvider(): array {
 		return [
 			// regular member
 			[
@@ -172,7 +165,7 @@ class MembershipHelperTest extends \Test\TestCase {
 	/**
 	 * @dataProvider isUserAdminDataProvider
 	 */
-	public function testIsUserAdmin($isSuperAdmin, $memberInfo, $expectedResult) {
+	public function testIsUserAdmin($isSuperAdmin, $memberInfo, $expectedResult): void {
 		$this->config->method('getSystemValue')
 			->with('customgroups.disallow-admin-access-all', false)
 			->willReturn(false);
@@ -181,7 +174,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with(self::CURRENT_USER)
 			->willReturn($isSuperAdmin);
 
-		$this->handler->expects($this->any())
+		$this->handler
 			->method('getGroupMemberInfo')
 			->with('group1', self::CURRENT_USER)
 			->willReturn($memberInfo);
@@ -189,7 +182,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertEquals($expectedResult, $this->helper->isUserAdmin('group1'));
 	}
 
-	public function testDenyAdminAccess() {
+	public function testDenyAdminAccess(): void {
 		$this->config->method('getSystemValue')
 			->with('customgroups.disallow-admin-access-all', false)
 			->willReturn(true);
@@ -202,7 +195,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertFalse($this->helper->isUserAdmin('group1'));
 	}
 
-	public function isUserMemberDataProvider() {
+	public function isUserMemberDataProvider(): array {
 		return [
 			// regular member
 			[
@@ -225,7 +218,7 @@ class MembershipHelperTest extends \Test\TestCase {
 	/**
 	 * @dataProvider isUserMemberDataProvider
 	 */
-	public function testIsUserMember($memberInfo, $expectedResult) {
+	public function testIsUserMember($memberInfo, $expectedResult): void {
 		$this->handler->expects($this->once())
 			->method('getGroupMemberInfo')
 			->with('group1', self::CURRENT_USER)
@@ -234,7 +227,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertEquals($expectedResult, $this->helper->isUserMember('group1'));
 	}
 
-	public function isTheOnlyAdminDataProvider() {
+	public function isTheOnlyAdminDataProvider(): array {
 		return [
 			// user is not the last admin
 			[
@@ -264,7 +257,7 @@ class MembershipHelperTest extends \Test\TestCase {
 	/**
 	 * @dataProvider isTheOnlyAdminDataProvider
 	 */
-	public function testIsTheOnlyAdmin($memberInfo, $expectedResult) {
+	public function testIsTheOnlyAdmin($memberInfo, $expectedResult): void {
 		$searchAdmins = new Search();
 		$searchAdmins->setRoleFilter(CustomGroupsDatabaseHandler::ROLE_ADMIN);
 
@@ -308,7 +301,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		return $notification;
 	}
 
-	public function testNotifyUser() {
+	public function testNotifyUser(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::CURRENT_USER);
 		$user->method('getDisplayName')->willReturn('User One');
@@ -334,7 +327,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		);
 	}
 
-	public function testNotifyUserRemoved() {
+	public function testNotifyUserRemoved(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::CURRENT_USER);
 		$user->method('getDisplayName')->willReturn('User One');
@@ -360,7 +353,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		);
 	}
 
-	public function testNotifyUserRoleChange() {
+	public function testNotifyUserRoleChange(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn(self::CURRENT_USER);
 		$user->method('getDisplayName')->willReturn('User One');
@@ -392,7 +385,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		);
 
 		$this->assertSame('\OCA\CustomGroups::changeRoleInGroup', $called[0]);
-		$this->assertTrue($called[1] instanceof GenericEvent);
+		$this->assertInstanceOf(GenericEvent::class, $called[1]);
 		$this->assertArrayHasKey('user', $called[1]);
 		$this->assertEquals('anotheruser', $called[1]->getArgument('user'));
 		$this->assertArrayHasKey('groupName', $called[1]);
@@ -403,7 +396,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertEquals('Member', $called[1]->getArgument('roleDisaplayName'));
 	}
 
-	public function canCreateRolesProvider() {
+	public function canCreateRolesProvider(): array {
 		return [
 			['ocadmin', false, true],
 			['subadmin', false, true],
@@ -417,13 +410,13 @@ class MembershipHelperTest extends \Test\TestCase {
 	/**
 	 * @dataProvider canCreateRolesProvider
 	 */
-	public function testCanCreateGroups($role, $restrictToSubAdmins, $expectedResult) {
+	public function testCanCreateGroups($role, $restrictToSubAdmins, $expectedResult): void {
 		$this->config->expects($this->once())
 			->method('getAppValue')
 			->with('customgroups', 'only_subadmin_can_create', 'false')
 			->willReturn($restrictToSubAdmins ? 'true' : 'false');
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('isAdmin')
 			->with(self::CURRENT_USER)
 			->willReturn($role === 'ocadmin');
@@ -431,19 +424,19 @@ class MembershipHelperTest extends \Test\TestCase {
 		// TODO: swap for 10.1 as 10.0 doesn't provide this interface
 		//$subadminManager = $this->createMock(ISubAdminManager::class);
 		$subadminManager = $this->createMock(\OC\SubAdmin::class);
-		$subadminManager->expects($this->any())
+		$subadminManager
 			->method('isSubAdmin')
 			->with($this->user)
 			->willReturn($role === 'subadmin');
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('getSubAdmin')
 			->willReturn($subadminManager);
 
 		$this->assertEquals($expectedResult, $this->helper->canCreateGroups());
 	}
 
-	public function testIsGroupDisplayNameAvailableWhenDuplicatesAreAllowed() {
+	public function testIsGroupDisplayNameAvailableWhenDuplicatesAreAllowed(): void {
 		$this->config->expects($this->once())
 			->method('getAppValue')
 			->with('customgroups', 'allow_duplicate_names', 'false')
@@ -455,7 +448,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
 	}
 
-	public function testIsGroupDisplayNameAvailableNoDuplicateExists() {
+	public function testIsGroupDisplayNameAvailableNoDuplicateExists(): void {
 		$this->config->expects($this->once())
 			->method('getAppValue')
 			->with('customgroups', 'allow_duplicate_names', 'false')
@@ -469,7 +462,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
 	}
 
-	public function testIsGroupDisplayNameAvailableDuplicateExists() {
+	public function testIsGroupDisplayNameAvailableDuplicateExists(): void {
 		$this->config->expects($this->once())
 			->method('getAppValue')
 			->with('customgroups', 'allow_duplicate_names', 'false')

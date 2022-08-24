@@ -21,7 +21,7 @@
 namespace OCA\CustomGroups\Tests\unit;
 
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use OCA\CustomGroups\Service\MembershipHelper;
+use OCA\CustomGroups\Service\GuestIntegrationHelper;
 use OCA\CustomGroups\Controller\PageController;
 use OCP\IRequest;
 use OCP\IUser;
@@ -75,6 +75,7 @@ class PageControllerTest extends \Test\TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$this->pageController = new PageController(
 			'customgroups',
@@ -83,7 +84,8 @@ class PageControllerTest extends \Test\TestCase {
 			$this->userSession,
 			$this->userManager,
 			$this->groupManager,
-			$this->handler
+			$this->handler,
+			$this->guestIntegrationHelper
 		);
 	}
 
@@ -108,17 +110,17 @@ class PageControllerTest extends \Test\TestCase {
 		return $user;
 	}
 
-	public function testSearchAllUsers() {
+	public function testSearchAllUsers(): void {
 		$user1 = $this->makeUser('user1', 'User One');
 		$user2 = $this->makeUser('user2', 'User Two');
 		$user3 = $this->makeUser('user3', 'User Three');
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -141,12 +143,12 @@ class PageControllerTest extends \Test\TestCase {
 		$this->assertTrue(isset($data['results']));
 		$this->assertEquals([
 			// user3 excluded because already a member
-			['userId' => 'user1', 'displayName' => 'User One'],
-			['userId' => 'user2', 'displayName' => 'User Two'],
+			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
+			['userId' => 'user2', 'displayName' => 'User Two', 'type' => 'user'],
 		], $data['results']);
 	}
 
-	public function testSearchAllUsersLimit() {
+	public function testSearchAllUsersLimit(): void {
 		$allUsers = [];
 
 		for ($i = 1; $i < 25; $i++) {
@@ -154,11 +156,11 @@ class PageControllerTest extends \Test\TestCase {
 		}
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -197,7 +199,7 @@ class PageControllerTest extends \Test\TestCase {
 				// user3 was already member and is excluded
 				continue;
 			}
-			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i];
+			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i, 'type' => 'user'];
 		}
 
 		$this->assertEquals(
@@ -206,13 +208,13 @@ class PageControllerTest extends \Test\TestCase {
 		);
 	}
 
-	public function exactSearchDataProvider() {
+	public function exactSearchDataProvider(): array {
 		$singleResult = [
-			['userId' => 'user1', 'displayName' => 'User One'],
+			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
 		];
 		$doubleResult = [
-			['userId' => 'user1', 'displayName' => 'User One'],
-			['userId' => 'userone', 'displayName' => 'User One'],
+			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
+			['userId' => 'userone', 'displayName' => 'User One', 'type' => 'user'],
 		];
 		return [
 			// partial fails
@@ -230,7 +232,7 @@ class PageControllerTest extends \Test\TestCase {
 	/**
 	 * @dataProvider exactSearchDataProvider
 	 */
-	public function testSearchAllUsersExact($searchPattern, $expectedResults) {
+	public function testSearchAllUsersExact($searchPattern, $expectedResults): void {
 		$user1 = $this->makeUser('user1', 'User One', 'test@example.com', ['meh', 'moo']);
 		$user2 = $this->makeUser('user2', 'User Two');
 		$userone = $this->makeUser('userone', 'User One'); // sometimes people have same display names
@@ -238,11 +240,11 @@ class PageControllerTest extends \Test\TestCase {
 		$membertwo = $this->makeUser('membertwo', 'Member Two'); // same name but already member
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'no'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -266,7 +268,7 @@ class PageControllerTest extends \Test\TestCase {
 		$this->assertEquals($expectedResults, $data['results']);
 	}
 
-	public function testSearchAllUsersExactLimit() {
+	public function testSearchAllUsersExactLimit(): void {
 		$allUsers = [];
 		// imagine a world where lots of people have the same names
 		for ($i = 1; $i < 25; $i++) {
@@ -274,11 +276,11 @@ class PageControllerTest extends \Test\TestCase {
 		}
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'no'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -315,7 +317,7 @@ class PageControllerTest extends \Test\TestCase {
 				// user3 was already member and is excluded
 				continue;
 			}
-			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One'];
+			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One', 'type' => 'user'];
 		}
 
 		$this->assertEquals(
@@ -324,17 +326,17 @@ class PageControllerTest extends \Test\TestCase {
 		);
 	}
 
-	public function testSearchUsersInGroup() {
+	public function testSearchUsersInGroup(): void {
 		$user1 = $this->makeUser('user1', 'User One');
 		$user2 = $this->makeUser('user2', 'User Two');
 		$user3 = $this->makeUser('user3', 'User Three');
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'yes'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$currentUser = $this->makeUser('currentuser', 'Current User');
 		$this->userSession->method('getUser')->willReturn($currentUser);
@@ -344,12 +346,12 @@ class PageControllerTest extends \Test\TestCase {
 			->with($currentUser)
 			->willReturn(['group1', 'group2']);
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('findUsersInGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['group1', 'us', 150, 0, ['user1' => $user1, 'user2' => $user2]],
 				['group2', 'us', 150, 0, ['user2' => $user2, 'user3' => $user3]],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -367,12 +369,12 @@ class PageControllerTest extends \Test\TestCase {
 
 		$this->assertTrue(isset($data['results']));
 		$this->assertEquals([
-			['userId' => 'user1', 'displayName' => 'User One'],
-			['userId' => 'user2', 'displayName' => 'User Two'],
+			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
+			['userId' => 'user2', 'displayName' => 'User Two', 'type' => 'user'],
 		], $data['results']);
 	}
 
-	public function groupDataProvider() {
+	public function groupDataProvider(): array {
 		$allUsers = [];
 
 		for ($i = 1; $i < 100; $i++) {
@@ -416,13 +418,13 @@ class PageControllerTest extends \Test\TestCase {
 	/**
 	 * @dataProvider groupDataProvider
 	 */
-	public function testSearchUsersInGroupLimit($allUsers, $groupData) {
+	public function testSearchUsersInGroupLimit($allUsers, $groupData): void {
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'yes'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$currentUser = $this->makeUser('currentuser', 'Current User');
 		$this->userSession->method('getUser')->willReturn($currentUser);
@@ -432,9 +434,9 @@ class PageControllerTest extends \Test\TestCase {
 			->with($currentUser)
 			->willReturn(['group1', 'group2', 'group3']);
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('findUsersInGroup')
-			->will($this->returnValueMap($groupData));
+			->willReturnMap($groupData);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -459,7 +461,7 @@ class PageControllerTest extends \Test\TestCase {
 				// user3 was already member and is excluded
 				continue;
 			}
-			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i];
+			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i, 'type' => 'user'];
 		}
 
 		$this->assertEquals(
@@ -471,18 +473,18 @@ class PageControllerTest extends \Test\TestCase {
 	/**
 	 * @dataProvider exactSearchDataProvider
 	 */
-	public function testSearchUsersInGroupExact($searchPattern, $expectedResults) {
+	public function testSearchUsersInGroupExact($searchPattern, $expectedResults): void {
 		$user1 = $this->makeUser('user1', 'User One', 'test@example.com', ['meh', 'moo']);
 		$user2 = $this->makeUser('user2', 'User Two');
 		$user3 = $this->makeUser('user3', 'User Three');
 		$userone = $this->makeUser('userone', 'User One'); // sometimes people have same display names
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'yes'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'no'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$currentUser = $this->makeUser('currentuser', 'Current User');
 		$this->userSession->method('getUser')->willReturn($currentUser);
@@ -492,12 +494,12 @@ class PageControllerTest extends \Test\TestCase {
 			->with($currentUser)
 			->willReturn(['group1', 'group2']);
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('findUsersInGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['group1', \strtolower($searchPattern), 150, 0, ['user1' => $user1, 'user2' => $user2]],
 				['group2', \strtolower($searchPattern), 150, 0, ['user2' => $user2, 'user3' => $user3, 'userone' => $userone]],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -519,17 +521,17 @@ class PageControllerTest extends \Test\TestCase {
 		$this->assertEquals($expectedResults, $data['results']);
 	}
 
-	public function testSearchUsersShareWithGroupOnlyAndEnumGroupMembers() {
+	public function testSearchUsersShareWithGroupOnlyAndEnumGroupMembers(): void {
 		$user1 = $this->makeUser('user1', 'User One');
 		$user2 = $this->makeUser('user2', 'User Two');
 		$user3 = $this->makeUser('user3', 'User Three');
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'no'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'yes'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'yes'],
-			]));
+			]);
 
 		$currentUser = $this->makeUser('currentuser', 'Current User');
 		$this->userSession->method('getUser')->willReturn($currentUser);
@@ -539,11 +541,11 @@ class PageControllerTest extends \Test\TestCase {
 			->with($currentUser)
 			->willReturn(['group1']);
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('findUsersInGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['group1', \strtolower('user3'), 150, 0, []],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -562,11 +564,11 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'user3', 150);
 		$data = $response->getData();
 		$this->assertTrue(isset($data['results']));
-		$expectedResults = [['userId' => 'user3', 'displayName' => 'User Three']];
+		$expectedResults = [['userId' => 'user3', 'displayName' => 'User Three', 'type' => 'user']];
 		$this->assertEquals($expectedResults, $data['results']);
 	}
 
-	public function testSearchUsersInGroupExactLimit() {
+	public function testSearchUsersInGroupExactLimit(): void {
 		$allUsers = [];
 
 		for ($i = 1; $i < 25; $i++) {
@@ -578,11 +580,11 @@ class PageControllerTest extends \Test\TestCase {
 		}
 
 		$this->config->method('getAppValue')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['core', 'shareapi_only_share_with_group_members', 'no', 'yes'],
 				['core', 'shareapi_allow_share_dialog_user_enumeration', 'yes', 'no'],
 				['core', 'shareapi_share_dialog_user_enumeration_group_members', 'no', 'no'],
-			]));
+			]);
 
 		$currentUser = $this->makeUser('currentuser', 'Current User');
 		$this->userSession->method('getUser')->willReturn($currentUser);
@@ -594,14 +596,14 @@ class PageControllerTest extends \Test\TestCase {
 
 		$allUsersChunk = \array_chunk($allUsers, 20);
 
-		$this->groupManager->expects($this->any())
+		$this->groupManager
 			->method('findUsersInGroup')
-			->will($this->returnValueMap([
+			->willReturnMap([
 				['group1', 'user one', 20, 0, $allUsersChunk[0]],
 				['group1', 'user one', 20, 20, $allUsersChunk[1]],
 				['group1', 'user one', 20, 40, $allUsersChunk[2]],
 				['group2', 'user one', 20, 0, ['user' => $allUsers[10]]],
-			]));
+			]);
 
 		$this->handler->expects($this->once())
 			->method('getGroupByUri')
@@ -626,7 +628,7 @@ class PageControllerTest extends \Test\TestCase {
 				// user3 was already member and is excluded
 				continue;
 			}
-			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One'];
+			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One', 'type' => 'user'];
 		}
 
 		$this->assertEquals(
