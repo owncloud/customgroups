@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased] - XXXX-XX-XX
 
-- Respect sharing autocompletion personal setting - [#513](https://github.com/owncloud/customgroups/pull/513)
+
+## [0.7.0] - 2022-08-19
+
+### Added
+
+ - [#513](https://github.com/owncloud/customgroups/pull/513) - Respect sharing autocompletion personal setting
+ - [#521](https://github.com/owncloud/customgroups/pull/521) - feat: add guest invitation
+ - [#522](https://github.com/owncloud/customgroups/pull/522) - Implement batch action for inviting users to groups
+
 
 ## [0.6.2] - 2021-06-23
 
@@ -166,7 +174,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.6.2...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.7.0...master
+[0.7.0]: https://github.com/owncloud/customgroups/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/owncloud/customgroups/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/owncloud/customgroups/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/owncloud/customgroups/compare/v0.5.1...v0.6.0
