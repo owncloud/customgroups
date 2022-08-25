@@ -22,6 +22,8 @@
     "An error occurred while searching users" : "Une erreur est survenue lors de la recherche des utilisateurs",
     "No users found for {search}" : "Aucun utilisateur trouvé pour {search}",
     "An error occurred. Please try again" : "Une erreur est survenue. Merci de réessayer",
+    "Guest" : "Invité",
+    "User" : "Utilisateur",
     "The following users were not imported" : "Les utilisateurs suivants n'ont pas été importés",
     "All users were imported successfully" : "Tous les utilisateurs ont été importés avec succès",
     "CSV import failed" : "Échec de l'importation CSV",

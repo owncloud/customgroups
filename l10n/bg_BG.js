@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Възникна грешка при търсенето на потребители",
     "No users found for {search}" : "Не са открити потребители за {search}",
     "An error occurred. Please try again" : "Възникна грешка. Моля, опитайте отново",
+    "Guest" : "Гост",
+    "User" : "Потребител",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Сигурни ли сте, че искате да напуснете групата \"{name}\" ?",
     "Confirm leaving group" : "Потвърдете напускането на групата",
     "Cannot leave group without an administrator" : "Групата не може да бъде без администратор",

@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Se produjo un error mientras buscaba usuarios",
     "No users found for {search}" : "No se han encontrado usuarios para {search}",
     "An error occurred. Please try again" : "Ha ocurrido un error. Por favor inténtelo de nuevo",
+    "Guest" : "Invitado",
+    "User" : "Usuario",
     "The following users were not imported" : "Los siguientes usuarios no fueron importados",
     "All users were imported successfully" : "Todos los usuarios fueron importados exitosamente",
     "CSV import failed" : "Ocurrió un error al importar el CSV",

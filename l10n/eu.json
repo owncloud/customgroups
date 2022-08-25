@@ -22,6 +22,7 @@
     "An error occurred while searching users" : "Erabiltzaileak bilatzean errorea eman da",
     "No users found for {search}" : "Ez da erabiltzailerik aurkitu {search} bilaketan",
     "An error occurred. Please try again" : "Errorea eman da. Saiatu berriz mesedez",
+    "User" : "Erabiltzailea",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Ziur zaude \"{name}\" taldea utzi nahi duzula?",
     "Confirm leaving group" : "Baieztatu taldea uztea",
     "Cannot leave group without an administrator" : "Ezin da talderik administratzaile gabe utzi",

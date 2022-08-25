@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Ett fel inträffade under sökningen av användare",
     "No users found for {search}" : "Inga användare funna för {search}",
     "An error occurred. Please try again" : "Ett fel uppstod. Vänligen försök igen",
+    "Guest" : "Gäst",
+    "User" : "Användare",
     "The following users were not imported" : "Följande användare blev inte importerade",
     "All users were imported successfully" : "Alla användare blev importerade utan fel",
     "CSV import failed" : "CSV import misslyckades",

@@ -22,6 +22,8 @@
     "An error occurred while searching users" : "搜索使用者時發生錯誤",
     "No users found for {search}" : "沒有使用者符合 {search}",
     "An error occurred. Please try again" : "發生錯誤，請重試",
+    "Guest" : "訪客",
+    "User" : "使用者名稱",
     "The following users were not imported" : "未導入以下用戶",
     "All users were imported successfully" : "所有用戶均已成功導入",
     "CSV import failed" : "CSV 匯入失敗",

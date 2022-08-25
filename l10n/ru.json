@@ -22,6 +22,8 @@
     "An error occurred while searching users" : "При поиске пользователей произошла ошибка",
     "No users found for {search}" : "Не найдено пользователей по запросу {search}",
     "An error occurred. Please try again" : "Произошла ошибка. Попробуйте ещё раз",
+    "Guest" : "Гость",
+    "User" : "Пользователь",
     "The following users were not imported" : "Следующие пользователи не были импортированы",
     "All users were imported successfully" : "Все пользователи были импортированы успешно",
     "CSV import failed" : "Импорт CSV не удался",

@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Produciuse un erro ao buscar usuarios",
     "No users found for {search}" : "Non se atoparon usuarios para {search}",
     "An error occurred. Please try again" : "Produciuse un erro. Tenteo de novo.",
+    "Guest" : "Convidado",
+    "User" : "Usuario",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Confirma que quere abandonar o grupo «{name}»?",
     "Confirm leaving group" : "Confirmar o abandono do grupo",
     "Cannot leave group without an administrator" : "Non é posíbel deixar o grupo sen administrador",

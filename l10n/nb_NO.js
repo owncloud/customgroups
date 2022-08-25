@@ -22,6 +22,7 @@ OC.L10N.register(
     "An error occurred while searching users" : "En feil oppstod ved søking etter brukere",
     "No users found for {search}" : "Ingen brukere funnet for {search}",
     "An error occurred. Please try again" : "Det oppstod en feil. Prøv igjen",
+    "User" : "Bruker",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Er du sikker på at du vil forlate gruppen \"{name}\"?",
     "Confirm leaving group" : "Bekreft forlating av gruppe",
     "Cannot leave group without an administrator" : "Kan ikke la gruppen stå uten administrator",

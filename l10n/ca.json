@@ -22,6 +22,7 @@
     "An error occurred while searching users" : "S'ha produït un error en cercar usuaris",
     "No users found for {search}" : "No s'ha trobat cap usuari per  {search}",
     "An error occurred. Please try again" : "Hi ha hagut un error. Siusplau torna-ho a provar",
+    "User" : "Usuari",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Esteu segur que voleu deixar el grup \"{name}\"?",
     "Confirm leaving group" : "Confirmeu la sortida del grup",
     "Cannot leave group without an administrator" : "No es pot deixar el grup sense un administrador",

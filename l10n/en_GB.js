@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "An error occurred while searching users",
     "No users found for {search}" : "No users found for {search}",
     "An error occurred. Please try again" : "An error occurred. Please try again",
+    "Guest" : "Guest",
+    "User" : "User",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Are you sure that you want to leave the group \"{name}\" ?",
     "Confirm leaving group" : "Confirm leaving group",
     "Cannot leave group without an administrator" : "Cannot leave group without an administrator",

@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "搜索用户时发生错误",
     "No users found for {search}" : "没有找到 {search} 用户",
     "An error occurred. Please try again" : "发生错误。请重试。",
+    "Guest" : "访客",
+    "User" : "用户",
     "The following users were not imported" : "未导入以下用户",
     "All users were imported successfully" : "已成功导入所有用户",
     "CSV import failed" : "CSV 导入失败",

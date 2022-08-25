@@ -22,6 +22,8 @@
     "An error occurred while searching users" : "שגיאה אירעה בזמן חיפוש משתמשים",
     "No users found for {search}" : "לא אותרו משתמשים עבור {search}",
     "An error occurred. Please try again" : "אירעה שגיאה. יש לנסות שנית",
+    "Guest" : "אורח",
+    "User" : "שתמש",
     "Are you sure that you want to leave the group \"{name}\" ?" : "האם באמת ברצונך לעזוב את הקבוצה \"{name}\" ?",
     "Confirm leaving group" : "אישור עזיבת הקבוצה",
     "Cannot leave group without an administrator" : "לא ניתן לעזוב את הקבוצה ללא מנהל",

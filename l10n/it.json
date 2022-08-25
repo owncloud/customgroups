@@ -22,6 +22,8 @@
     "An error occurred while searching users" : "Si è verificato un errore durante la ricerca degli utenti",
     "No users found for {search}" : "Nessun utente trovato per {search}",
     "An error occurred. Please try again" : "Si è verificato un errore. Prova ancora",
+    "Guest" : "Ospite",
+    "User" : "Utente",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Sei sicuro di voler uscire dal gruppo \"{name}\" ?",
     "Confirm leaving group" : "Conferma l'abbandono del gruppo",
     "Cannot leave group without an administrator" : "Non puoi uscire dal gruppo senza l'amministratore",

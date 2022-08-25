@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Παρουσιάστηκε σφάλμα κατά την αναζήτηση χρηστών",
     "No users found for {search}" : "Δεν βρέθηκαν χρήστες για {search}",
     "An error occurred. Please try again" : "Παρουσιάστηκε σφάλμα. Παρακαλώ δοκιμάστε ξανά",
+    "Guest" : "Επισκέπτης",
+    "User" : "Χρήστης",
     "The following users were not imported" : "Οι ακόλουθοι χρήστες δεν εισήχθησαν",
     "All users were imported successfully" : "Όλοι οι χρήστες εισήχθησαν με επιτυχία",
     "CSV import failed" : "Αποτυχία εισαγωγής CSV",

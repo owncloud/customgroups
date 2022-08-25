@@ -22,6 +22,7 @@ OC.L10N.register(
     "An error occurred while searching users" : "A felhasználók keresése során hiba merült fel.",
     "No users found for {search}" : "{search} keresésre nem található felhasználó",
     "An error occurred. Please try again" : "Hiba történt. Kérjük, próbálja meg újra!",
+    "User" : "Felhasználó",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Biztos benne, hogy kilép a \"{name}\" csoportból?",
     "Confirm leaving group" : "Csoport elhagyásának megerősítése",
     "Cannot leave group without an administrator" : "A csoportot nem lehet elhagyni egy admin engedélye nélkül",
