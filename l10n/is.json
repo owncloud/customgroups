@@ -20,6 +20,8 @@
     "An error occurred while searching users" : "Villa kom upp við að leita að notendum",
     "No users found for {search}" : "Engir notendur fundust með {search}",
     "An error occurred. Please try again" : "Villa kom upp. Endilega reyndu aftur",
+    "Guest" : "Gestanotandi",
+    "User" : "Notandi",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Ertu viss um að þú viljir fara út úr hópnum \"{name}\" ?",
     "Confirm leaving group" : "Staðfesta að hætt sé í hóp",
     "Cannot leave group without an administrator" : "Gat ekki gengið úr hópi án kerfisstjóra",

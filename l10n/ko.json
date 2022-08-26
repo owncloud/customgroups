@@ -20,6 +20,8 @@
     "An error occurred while searching users" : "사용자를 검색하는 중 오류 발생",
     "No users found for {search}" : "{search} 사용자를 찾을 수 없음",
     "An error occurred. Please try again" : "오류가 발생했습니다. 다시 시도하십시오",
+    "Guest" : "손님",
+    "User" : "사용자 이름",
     "Are you sure that you want to leave the group \"{name}\" ?" : "그룹 \"{groupName}\"에서 떠나시겠습니까?",
     "Confirm leaving group" : "그룹 떠나기 확인",
     "Cannot leave group without an administrator" : "관리자가 없는 그룹을 떠날 수 없음",

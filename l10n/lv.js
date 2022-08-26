@@ -24,6 +24,8 @@ OC.L10N.register(
     "An error occurred while searching users" : "Radās kļūda, meklējot lietotājus",
     "No users found for {search}" : "Neviens lietotājs ar vārdu {search} netika atrasts",
     "An error occurred. Please try again" : "Radās kļūda. Lūdzu, mēģiniet vēlreiz.",
+    "Guest" : "Viesis",
+    "User" : "Lietotājs",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Vai tiešām vēlaties pamest grupu \"{name}\" ?",
     "Confirm leaving group" : "Apstiprinat izstāšanos no grupas",
     "Cannot leave group without an administrator" : "Nevar izstāties no grupas bez administratora",
