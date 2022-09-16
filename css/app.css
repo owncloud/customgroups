@@ -113,6 +113,7 @@
 
 .custom-group-import-label {
 	cursor: pointer;
+	display: inline-block;
 }
 
 .custom-group-import-form {
