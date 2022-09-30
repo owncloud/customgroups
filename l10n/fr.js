@@ -21,6 +21,8 @@ OC.L10N.register(
     "Your role" : "Votre rôle",
     "There are currently no user defined groups" : "Il n'y a actuellement aucun groupe personnel",
     "Add user to this group" : "Ajouter un utilisateur à ce groupe",
+    "Add multiple users and guests" : "Ajouter plusieurs utilisateurs et invités",
+    "No users found" : "Aucun utilisateur trouvé",
     "An error occurred while searching users" : "Une erreur est survenue lors de la recherche des utilisateurs",
     "No users found for {search}" : "Aucun utilisateur trouvé pour {search}",
     "An error occurred. Please try again" : "Une erreur est survenue. Merci de réessayer",
