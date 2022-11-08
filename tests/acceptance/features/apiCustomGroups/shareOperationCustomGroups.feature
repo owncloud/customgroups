@@ -124,6 +124,7 @@ Feature: Sharing Custom Groups
     Then the HTTP status code should be "200"
     And the downloaded content should be "some content"
 
+
   Scenario: upload a file to a shared folder as a recipient
     Given user "Alice" has shared folder "/shared" with group "customgroup_sharing-group"
     When user "Brian" uploads file "filesForUpload/textfile.txt" to "/shared/textfile.txt" using the WebDAV API

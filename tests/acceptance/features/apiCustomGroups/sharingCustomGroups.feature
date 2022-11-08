@@ -19,6 +19,7 @@ Feature: Sharing Custom Groups
       | /textfile4.txt     |
       | /welcome.txt       |
 
+
   Scenario: Creating a share with a custom group
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "thisIsASharedFile" to "/filetoshare.txt"
@@ -35,6 +36,7 @@ Feature: Sharing Custom Groups
     And as "Brian" file "filetoshare.txt" should exist
     And as "Carol" file "filetoshare.txt" should exist
 
+
   Scenario: Creating a new share with user who already received a share through their custom group
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -47,6 +49,7 @@ Feature: Sharing Custom Groups
       | shareType | user            |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
+
 
   Scenario: Keep custom group permissions in sync
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -76,6 +79,7 @@ Feature: Sharing Custom Groups
       | displayname_owner | Alice Hansen   |
       | mimetype          | text/plain     |
 
+
   Scenario: Sharee can see the custom group share
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -86,6 +90,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the last share_id should be included in the response
+
 
   Scenario: Share of folder and sub-folder to same user
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -106,6 +111,7 @@ Feature: Sharing Custom Groups
       | /CHILD/child.txt   |
     And the HTTP status code should be "200"
 
+
   Scenario: Share a file by multiple channels
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -124,6 +130,7 @@ Feature: Sharing Custom Groups
     And user "Carol" should see the following elements
       | /common/sub/textfile0.txt |
 
+
   Scenario: Delete all custom group shares
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -137,6 +144,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And the last share id should not be included in the response
+
 
   Scenario: Keep user custom group shares
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -152,6 +160,7 @@ Feature: Sharing Custom Groups
     Then user "Brian" should see the following elements
       | /myFOLDER/myTMP/ |
 
+
   Scenario: Sharing again an own file while belonging to a custom group
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "This is a test text" to "/textfile.txt"
@@ -164,6 +173,7 @@ Feature: Sharing Custom Groups
       | shareType | group                     |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
+
 
   Scenario: Sharing subfolder when parent already shared
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -180,6 +190,7 @@ Feature: Sharing Custom Groups
     And the HTTP status code should be "200"
     And as "Brian" folder "/sub" should exist
 
+
   Scenario: Sharing subfolder when parent already shared with custom group of sharer
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -194,6 +205,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "Brian" folder "/sub" should exist
+
 
   Scenario: Unshare from self using custom groups
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -210,6 +222,7 @@ Feature: Sharing Custom Groups
     And the etag of element "/" of user "Brian" should have changed
     And the etag of element "/PARENT" of user "Alice" should not have changed
 
+
   Scenario: Increasing permissions is allowed for owner
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/FOLDER"
@@ -222,6 +235,7 @@ Feature: Sharing Custom Groups
       | permissions | all |
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
+
 
   Scenario: user shares a file to a custom group and normal group with same name
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -243,6 +257,7 @@ Feature: Sharing Custom Groups
     And custom group "group1" should exist
     And group "group1" should exist
 
+
   Scenario: sharing sub-folder to a custom group when the main folder is already shared with a user
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has been created with default attributes and without skeleton files
@@ -256,6 +271,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "Carol" folder "/sub-folder" should exist
+
 
   Scenario: sharing sub-folder to a custom group when the main folder is already shared with a normal group
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -283,6 +299,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "Brian" folder "/sub-folder" should exist
+
 
   Scenario: sharing sub-folder to a normal group when the main folder is already shared with a custom group
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -322,6 +339,7 @@ Feature: Sharing Custom Groups
     And the HTTP status code should be "200"
     And as "David" folder "/foldertoshare" should exist
 
+
   Scenario: share the same file to a different user, normal group and custom group
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Brian" has been created with default attributes and without skeleton files
@@ -344,6 +362,7 @@ Feature: Sharing Custom Groups
     Then the OCS status code should be "100"
     And the HTTP status code should be "200"
     And as "David" file "/filetoshare.txt" should exist
+
 
   Scenario: share the same folder to the same user through different medium
     Given user "Alice" has been created with default attributes and without skeleton files
@@ -380,6 +399,7 @@ Feature: Sharing Custom Groups
       | file_target | /foldertoshare |
       | item_type   | folder         |
     And as "Brian" folder "/foldertoshare" should exist
+
 
   Scenario: share the same file to the same user through different medium
     Given user "Alice" has been created with default attributes and without skeleton files
