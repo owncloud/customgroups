@@ -12,6 +12,7 @@ Feature: Sharing Custom Groups
     And user "Alice" has made user "Brian" a member of custom group "sharing-group"
     And user "Alice" has created folder "/shared"
 
+
   Scenario: sharing with default expiration date enabled but not enforced for groups, user shares to custom group without specifying expireDate
     Given parameter "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     When user "Alice" shares folder "/shared" with group "customgroup_sharing-group" using the sharing API
@@ -195,6 +196,7 @@ Feature: Sharing Custom Groups
       | yes                 | yes                 | +30 days             |
       | no                  | yes                 |                      |
 
+
   Scenario Outline: sharing with default expiration date enforced for groups, user shares to custom group with different time format
     Given parameter "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And user "Alice" has uploaded file with content "thisIsASharedFile" to "/filetoshare.txt"
@@ -289,6 +291,7 @@ Feature: Sharing Custom Groups
       | yes     | yes     |
       | yes     | no      |
       | no      | no      |
+
 
   Scenario: sharing with default expiration date enforced for groups, user shares to custom group with past expiration date set
     Given parameter "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
