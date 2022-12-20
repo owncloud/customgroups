@@ -585,7 +585,7 @@ class MembershipNodeTest extends \Test\TestCase {
 	/**
 	 * Cannot remove admin perms from last admin
 	 */
-	public function testUnsetdminWhenLastAdminAsSuperAdmin(): void {
+	public function testUnsetAdminWhenLastAdminAsSuperAdmin(): void {
 		$this->config->method('getSystemValue')
 			->willReturn(true);
 		$this->groupManager->method('isAdmin')
