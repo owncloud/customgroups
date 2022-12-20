@@ -101,7 +101,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	/**
 	 * Deletes the group
 	 *
-	 * @throws Forbidden if no permisson to delete this group
+	 * @throws Forbidden if no permission to delete this group
 	 */
 	public function delete() {
 		$groupId = $this->groupInfo['group_id'];
