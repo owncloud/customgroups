@@ -298,7 +298,7 @@ class MembershipHelper {
 			'roleNumber' => $memberInfo['role'],
 			'roleDisaplayName' => $roleName,
 			'groupId' => $memberInfo['group_id']]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::changeRoleInGroup', $event);
+		$this->dispatcher->dispatch($event, '\OCA\CustomGroups::changeRoleInGroup');
 	}
 
 	/**

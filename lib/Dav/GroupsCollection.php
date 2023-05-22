@@ -193,7 +193,7 @@ class GroupsCollection implements IExtendedCollection {
 			'groupName' => $name,
 			'groupId' => $groupId,
 			'user' => $this->helper->getUserId()]);
-		$this->dispatcher->dispatch('\OCA\CustomGroups::addGroupAndUser', $event);
+		$this->dispatcher->dispatch($event, '\OCA\CustomGroups::addGroupAndUser');
 	}
 
 	/**

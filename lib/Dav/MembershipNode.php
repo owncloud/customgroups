@@ -141,7 +141,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			 * This event is deprecated. The keys of the event array are not using camel case.
 			 */
 			$event = new GenericEvent(null, ['user_displayName' => $userId, 'group_displayName' => $this->groupInfo['display_name']]);
-			$this->dispatcher->dispatch('\OCA\CustomGroups::removeUserFromGroup', $event);
+			$this->dispatcher->dispatch($event, '\OCA\CustomGroups::removeUserFromGroup');
 			/**
 			 * The new event which has camel case for arguments in event array.
 			 */
@@ -149,7 +149,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 				'user' => $userId,
 				'groupName' => $this->groupInfo['display_name'],
 				'groupId' => $groupId]);
-			$this->dispatcher->dispatch('customGroups.removeUserFromGroup', $newEvent);
+			$this->dispatcher->dispatch($newEvent, 'customGroups.removeUserFromGroup');
 		}
 
 		//Send dispatcher event if the removal is self
@@ -159,7 +159,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 			 * as key for event argument
 			 */
 			$event = new GenericEvent(null, ['userId' => $userId, 'groupName' => $this->groupInfo['display_name']]);
-			$this->dispatcher->dispatch('\OCA\CustomGroups::leaveFromGroup', $event);
+			$this->dispatcher->dispatch($event, '\OCA\CustomGroups::leaveFromGroup');
 			/**
 			 * From now on use this event 'customGroups.leaveFromGroup'
 			 */
@@ -167,7 +167,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 				'user' => $userId,
 				'groupName' => $this->groupInfo['display_name'],
 				'groupId' => $groupId]);
-			$this->dispatcher->dispatch('customGroups.leaveFromGroup', $newEvent);
+			$this->dispatcher->dispatch($newEvent, 'customGroups.leaveFromGroup');
 		}
 	}
 
