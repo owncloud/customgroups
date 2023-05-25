@@ -34,7 +34,6 @@ use OCP\IGroupManager;
  * Collection of users
  */
 class UsersCollection implements ICollection {
-
 	/**
 	 * Custom groups handler
 	 *

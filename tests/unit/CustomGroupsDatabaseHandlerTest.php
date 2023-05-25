@@ -33,7 +33,6 @@ use OCA\CustomGroups\Search;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
-
 	/**
 	 * @var IDBConnection
 	 */

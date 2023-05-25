@@ -21,14 +21,10 @@
 
 namespace OCA\CustomGroups;
 
-use OCP\IDBConnection;
-use OCP\ILogger;
-
 /**
  * Search criteria
  */
 class Search {
-
 	/**
 	 * Search pattern
 	 *

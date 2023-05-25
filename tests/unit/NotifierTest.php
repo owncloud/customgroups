@@ -33,7 +33,6 @@ use OCA\CustomGroups\Dav\Roles;
  * @package OCA\CustomGroups\Tests\Unit
  */
 class NotifierTest extends \Test\TestCase {
-
 	/**
 	 * @var Notifier
 	 */

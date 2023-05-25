@@ -22,7 +22,6 @@ use OCP\IUserSession;
  * @package OCA\CustomGrouops\Tests\unit
  */
 class SettingsPanelTest extends \Test\TestCase {
-
 	/**
 	 * @var SettingsPanel
 	 */

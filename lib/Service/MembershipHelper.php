@@ -39,7 +39,6 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  * Provides method related to the current user's membership and admin roles.
  */
 class MembershipHelper {
-
 	/**
 	 * Custom groups handler
 	 *

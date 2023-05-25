@@ -22,10 +22,8 @@
 namespace OCA\CustomGroups\Controller;
 
 use OCA\CustomGroups\Service\GuestIntegrationHelper;
-use OCA\Guests\Controller\UsersController;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Constants;
 use OCP\IUser;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -37,7 +35,6 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 
 class PageController extends Controller {
-
 	/**
 	 * @var CustomGroupsDatabaseHandler
 	 */

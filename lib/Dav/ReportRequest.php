@@ -21,21 +21,16 @@
 
 namespace OCA\CustomGroups\Dav;
 
-use Sabre\Xml\Element\Base;
 use Sabre\Xml\Element\KeyValue;
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
 use OCA\CustomGroups\Search;
-use OCP\IDBConnection;
-use OCP\ILogger;
-use OCA\CustomGroups\Dav\Roles;
 
 /**
  * Report request
  */
 class ReportRequest implements XmlDeserializable {
-
 	/**
 	 * @var string[]
 	 */
@@ -49,9 +44,6 @@ class ReportRequest implements XmlDeserializable {
 	/**
 	 * Constructs a new search
 	 *
-	 * @param string $pattern pattern or null for none
-	 * @param int $offset offset or null for none
-	 * @param int $limit limit or null for none
 	 */
 	public function __construct($properties = null, $search = null) {
 		$this->properties = $properties;

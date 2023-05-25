@@ -40,7 +40,6 @@ use OCP\IGroupManager;
  * Collection of custom groups
  */
 class GroupsCollection implements IExtendedCollection {
-
 	/**
 	 * Custom groups handler
 	 *

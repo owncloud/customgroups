@@ -33,7 +33,6 @@ use OCP\Mail\IMailer;
 use OCP\IConfig;
 
 class GuestIntegrationHelper {
-
 	/**
 	 * @var IAppManager
 	 */
