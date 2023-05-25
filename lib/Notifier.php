@@ -22,10 +22,8 @@
 namespace OCA\CustomGroups;
 
 use OCP\L10N\IFactory;
-use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCA\CustomGroups\Dav\Roles;
 use OCP\IL10N;
 

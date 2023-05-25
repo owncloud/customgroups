@@ -21,18 +21,8 @@
 
 namespace OCA\CustomGroups\Dav;
 
-use OCA\CustomGroups\CustomGroupsDatabaseHandler;
 use OCP\IUserSession;
-use OCA\CustomGroups\Search;
-use OCA\CustomGroups\Dav\ReportRequest;
-use OCA\CustomGroups\Dav\RootCollection;
-use OCA\CustomGroups\Dav\MembershipNode;
-use OCA\CustomGroups\Dav\GroupsCollection;
 use Sabre\DAV\ServerPlugin;
-use OCA\CustomGroups\Dav\CustomGroupMemberNode;
-use Sabre\DAV\Exception\BadRequest;
-use Sabre\DAV\Xml\Element\Response;
-use Sabre\DAV\Xml\Response\MultiStatus;
 use Sabre\DAV\PropFind;
 
 /**

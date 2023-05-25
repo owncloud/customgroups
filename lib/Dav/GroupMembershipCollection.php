@@ -28,7 +28,6 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
-use OCA\CustomGroups\Dav\Roles;
 use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
