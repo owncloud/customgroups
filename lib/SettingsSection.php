@@ -18,7 +18,6 @@ use OCP\IL10N;
 use OCP\Settings\ISection;
 
 class SettingsSection implements ISection {
-
 	/** @var IL10N  */
 	protected $l;
 

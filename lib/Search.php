@@ -25,7 +25,6 @@ namespace OCA\CustomGroups;
  * Search criteria
  */
 class Search {
-
 	/**
 	 * Search pattern
 	 *

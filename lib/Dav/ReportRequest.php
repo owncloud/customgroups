@@ -31,7 +31,6 @@ use OCA\CustomGroups\Search;
  * Report request
  */
 class ReportRequest implements XmlDeserializable {
-
 	/**
 	 * @var string[]
 	 */

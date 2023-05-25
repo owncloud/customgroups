@@ -35,7 +35,6 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 
 class PageController extends Controller {
-
 	/**
 	 * @var CustomGroupsDatabaseHandler
 	 */

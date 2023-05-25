@@ -28,7 +28,6 @@ use OCA\CustomGroups\Dav\Roles;
 use OCP\IL10N;
 
 class Notifier implements INotifier {
-
 	/**
 	 * @var IFactory
 	 */
