@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
  - [#578](https://github.com/owncloud/customgroups/issues/578) - [full-ci] Adjust dispatch calls for Symfony 5
+ - Minimum core version 10.11, minimum php version 7.4
  - Dependencies updated
  - Strings updated
 

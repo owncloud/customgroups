@@ -37,7 +37,8 @@ Sharing with a Custom Group is as easy and quick as always. Just click on the sh
 	</types>
 	<use-migrations>true</use-migrations>
 	<dependencies>
-		<owncloud min-version="10.4" max-version="10" />
+                <owncloud min-version="10.11" max-version="10" />
+                <php min-version="7.4" />
 	</dependencies>
 	<sabre>
 		<plugins>
