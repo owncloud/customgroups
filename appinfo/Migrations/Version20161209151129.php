@@ -19,7 +19,7 @@ class Version20161209151129 implements ISchemaMigration {
 	}
 
 	private function createGroupsTable($prefix, Schema $schema) {
-		$table = $schema->createTable("${prefix}custom_group");
+		$table = $schema->createTable("{$prefix}custom_group");
 		$table->addColumn('group_id', 'bigint', [
 			'autoincrement' => true,
 			'unsigned' => true,
@@ -40,7 +40,7 @@ class Version20161209151129 implements ISchemaMigration {
 	}
 
 	private function createMembersTable($prefix, Schema $schema) {
-		$table = $schema->createTable("${prefix}custom_group_member");
+		$table = $schema->createTable("{$prefix}custom_group_member");
 		$table->addColumn('group_id', 'bigint', [
 			'unsigned' => true,
 			'notnull' => true,
