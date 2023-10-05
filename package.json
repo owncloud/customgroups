@@ -23,7 +23,7 @@
     "karma-jasmine-sinon": "^1.0.4",
     "karma-junit-reporter": "*",
     "npm-watch": "*",
-    "sinon": "^15.2.0",
+    "sinon": "^16.1.0",
     "underscore": "1.13.6"
   },
   "engine": "node >= 6.9",
