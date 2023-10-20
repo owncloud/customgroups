@@ -228,8 +228,10 @@ class GroupsCollection implements IExtendedCollection {
 		if ($this->userId !== null) {
 			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {
+			$sessionUser = \OC::$server->getUserSession()->getUser();
+			$userIsAdmin = \OC_User::isAdminUser($sessionUser->getUID());
 			$disallowAdminAccessAll = $this->config->getSystemValue('customgroups.disallow-admin-access-all', false);
-			if ($disallowAdminAccessAll) {
+			if ($disallowAdminAccessAll || !$userIsAdmin) {
 				$allGroups = $this->groupsHandler->getUserMemberships($this->helper->getUserId(), $search);
 			} else {
 				$allGroups = $this->groupsHandler->getGroups($search);
