@@ -36,13 +36,17 @@ use OCP\Notification\IManager;
 use OCP\IConfig;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sabre\DAV\MkCol;
+use Test\Traits\UserTrait;
 
 /**
  * Class GroupsCollectionTest
  *
+ * @group DB
  * @package OCA\CustomGroups\Tests\Unit
  */
 class GroupsCollectionTest extends \Test\TestCase {
+	use UserTrait;
+
 	/**
 	 * @var CustomGroupsDatabaseHandler
 	 */
@@ -75,6 +79,11 @@ class GroupsCollectionTest extends \Test\TestCase {
 		$userManager = $this->createMock(IUserManager::class);
 		$groupManager = $this->createMock(IGroupManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
+
+		$user = $this->createUser('user1');
+		\OC::$server->getGroupManager()->createGroup('admin');
+		self::loginAsUser("user1");
+		\OC::$server->getGroupManager()->get('admin')->addUser($user);
 
 		$this->config = $this->createMock(IConfig::class);
 		$this->config->method('getAppValue')
