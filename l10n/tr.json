@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "Gruplar",
     "Custom Groups" : "Özel Gruplar",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Grup adı boş olamaz veya boşlukla başlayamaz. Grup adı en az 2, en fazla 64 karakterden oluşmalıdır. Ayrıca bu ada sahip bir grubun mevcut olup olmadığını kontrol edin",
     "Could not rename group" : "Grup yeniden adlandırılamadı",

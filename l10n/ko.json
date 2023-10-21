@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "그룹",
     "Custom Groups" : "사용자 정의 그룹",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "그룹 이름을 비우거나 공백으로 시작할 수 없습니다. 그룹 이름은 최소 2자 이상, 최대 64자 이하여야 합니다. 이 그룹 이름이 이미 존재하는지 또한 확인하십시오.",
     "Could not rename group" : "그룹 이름을 바꿀 수 없음",

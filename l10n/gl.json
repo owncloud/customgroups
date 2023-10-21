@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "Grupos",
     "Custom Groups" : "Grupos personalizados",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "O nome do grupo non pode estar baleiro ou comezar cun espazo. O nome do grupo debe ter polo menos 2 caracteres e un máximo de 64. Ou comprobe se xa existe un grupo con este nome",
     "Could not rename group" : "Non foi posíbel renomear o grupo",

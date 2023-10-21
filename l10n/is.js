@@ -1,6 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
+    "Groups" : "Hópar",
     "Custom Groups" : "Sérsniðnir hópar",
     "Could not rename group" : "Gat ekki endurnefnt hóp",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Ertu viss um að þú viljir eyða hópnum \"{groupName}\" ?",

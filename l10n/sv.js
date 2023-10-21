@@ -1,6 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
+    "Groups" : "Grupper",
     "Custom Groups" : "Anpassade grupper",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Gruppnamnet kan inte vara tomt eller börja med mellanslag. Gruppnamnet ska ha minst 2 tecken eller max 64 tecken. Eller vänligen kolla om en grupp med namnet redan finns.",
     "Could not rename group" : "Kunde inte namnge grupp",

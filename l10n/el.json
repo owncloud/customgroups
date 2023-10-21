@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "Ομάδες",
     "Custom Groups" : "Προσαρμοσμένες ομάδες",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Το όνομα της ομάδας δεν μπορεί να είναι κενό ή να ξεκινά με κενό χαρακτήρα. Το όνομα της ομάδας πρέπει να έχει τουλάχιστον 2 χαρακτήρες ή το πολύ 64 χαρακτήρες. Ή ελέγξτε αν υπάρχει ήδη ομάδα με αυτό το όνομα",
     "Could not rename group" : "Αδυναμία μετονομασίας ομάδας",

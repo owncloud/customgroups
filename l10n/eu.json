@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "Taldeak",
     "Custom Groups" : "Talde Pertsonalizatuak",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Talde izena ezin da hutsa izan edo hutsunearekin hasi. Talde izenak gutxienez bi karaktere behar ditu eta gehienez 64 karaktere. Bestela, izen berdina duen talderik ba oten den egiaztatu",
     "Could not rename group" : "Ezin izan da taldea berrizendatu",

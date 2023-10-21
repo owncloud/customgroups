@@ -1,6 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
+    "Groups" : "Grupper",
     "Custom Groups" : "Tilpassede grupper",
     "Could not rename group" : "Klarte ikke å gi gruppa nytt navn",
     "Are you sure that you want to delete the group \"{groupName}\" ?" : "Er du sikker på at du vil slette gruppen \"{groupName}\"?",

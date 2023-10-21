@@ -1,6 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
+    "Groups" : "群組",
     "Custom Groups" : "自定義群組",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "群組名稱不能為空與空格開頭。 群組名稱至少應包含2個字符或最多64個字符。 或請校驗是否已存在與該名稱的群組",
     "Could not rename group" : "無法重命名群組",

@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "群组",
     "Custom Groups" : "自定义组",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "组名不能为空或以空格开头。 组名至少应包含 2 个字符或最多 64 个字符。 或者请检查是否已存在具有此名称的组",
     "Could not rename group" : "无法重命名群组",

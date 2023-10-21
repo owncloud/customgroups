@@ -1,6 +1,7 @@
 OC.L10N.register(
     "customgroups",
     {
+    "Groups" : "Групи",
     "Custom Groups" : "Персонализирани групи",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Името на групата не може да бъде празно или да започва с интервал. Името на групата трябва да има поне 2 символа или максимум 64 символа. Или проверете дали вече не съществува група с това име",
     "Could not rename group" : "Групата не можа да бъде преименувана",
