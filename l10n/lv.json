@@ -1,4 +1,5 @@
 { "translations": {
+    "Groups" : "Grupas",
     "Custom Groups" : "Pielāgotas grupas",
     "The group name can not be empty or start with space. The group name should at least have 2 characters or maximum 64 characters. Or kindly check if a group with this name already exists" : "Grupas nosaukums nevar sākties ar atstarpi vai būt tukšs. Grupas nosaukumā jābūt vismaz 2 rakstzīmēm. Vai arī pārbaudiet, vai grupa ar šādu nosaukumu jau pastāv. Vai arī pārbaudiet, vai grupa ar šādu vārdu jau pastāv",
     "Could not rename group" : "Grupu nevar pārsaukt",
