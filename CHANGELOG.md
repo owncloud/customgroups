@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - XXXX-XX-XX
+## [0.7.2] - 2023-08-11
+
+### Changed
+
+ - [#578](https://github.com/owncloud/customgroups/issues/578) - [full-ci] Adjust dispatch calls for Symfony 5
+ - Minimum core version 10.11, minimum php version 7.4
+ - Dependencies updated
+ - Strings updated
+
+
+## [0.7.1] - 2023-09-16
+
+### Fixed
+
+ - [#536](https://github.com/owncloud/customgroups/issues/536) - Fix 'Import as CSV'-button alignment on small screens
+ - Translation updates
 
 
 ## [0.7.0] - 2022-08-19
@@ -174,7 +189,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.7.0...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.7.2...master
+[0.7.2]: https://github.com/owncloud/customgroups/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/owncloud/customgroups/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/owncloud/customgroups/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/owncloud/customgroups/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/owncloud/customgroups/compare/v0.6.0...v0.6.1
