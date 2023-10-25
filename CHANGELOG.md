@@ -1,8 +1,18 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+
+## [0.8.0] - 2023-10-25
+
+### Added
+
+ - [#603](https://github.com/owncloud/customgroups/pull/603) - Add Menu Icon
+
+### Fixed
+
+ - [#605](https://github.com/owncloud/customgroups/pull/605) - fix: prevent non-admins from retrieving all customgroups
+
 
 ## [0.7.2] - 2023-08-11
 
@@ -189,7 +199,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.7.2...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.8.0...master
+[0.8.0]: https://github.com/owncloud/customgroups/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/owncloud/customgroups/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/owncloud/customgroups/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/owncloud/customgroups/compare/v0.6.2...v0.7.0
