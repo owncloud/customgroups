@@ -95,7 +95,7 @@ class CustomGroupsDatabaseHandler {
 			->from('custom_group_member', 'm')
 			->from('custom_group', 'g')
 			->where($qb->expr()->eq('g.group_id', 'm.group_id'))
-			->where($qb->expr()->eq('uri', $qb->createNamedParameter($uri)))
+			->andWhere($qb->expr()->eq('uri', $qb->createNamedParameter($uri)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->execute();
 
