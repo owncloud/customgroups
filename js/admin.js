@@ -7,6 +7,4 @@ $(document).ready(function() {
 		}
 		OC.AppConfig.setValue('customgroups', $(this).attr('name'), value);
 	});
-
-	$('.section .icon-info').tipsy({gravity: 'w'});
 });
