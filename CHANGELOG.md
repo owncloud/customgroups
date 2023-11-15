@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
  - [#605](https://github.com/owncloud/customgroups/pull/605) - fix: prevent non-admins from retrieving all customgroups
+ - [#611](https://github.com/owncloud/customgroups/pull/611) - fix: Fix missing where clause in inGroupByUri()
 
 
 ## [0.7.2] - 2023-08-11
