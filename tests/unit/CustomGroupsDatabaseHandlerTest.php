@@ -61,19 +61,19 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$qb->delete('custom_group')->execute();
 	}
 
-	public function testCreateGroup() {
+	public function testCreateGroup(): void {
 		$this->assertNotNull($this->handler->createGroup('my_group', 'My Group'));
 		// recreating returns null
 		$this->assertNull($this->handler->createGroup('my_group', 'My Group'));
 	}
 
-	public function testCreateGroupDuplicateUri() {
+	public function testCreateGroupDuplicateUri(): void {
 		$this->assertNotNull($this->handler->createGroup('my_group', 'My Group'));
 		$this->logger->expects($this->once())->method('logException');
 		$this->assertNull($this->handler->createGroup('my_group', 'Different display name'));
 	}
 
-	public function testDeleteGroup() {
+	public function testDeleteGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertTrue($this->handler->deleteGroup($groupId));
 
@@ -82,7 +82,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertFalse($this->handler->deleteGroup($groupId));
 	}
 
-	public function testUpdateGroup() {
+	public function testUpdateGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertTrue($this->handler->updateGroup($groupId, 'meine_gruppe', 'Meine Gruppe'));
 
@@ -92,7 +92,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals('Meine Gruppe', $groupInfo['display_name']);
 	}
 
-	public function testSearchGroups() {
+	public function testSearchGroups(): void {
 		$group1Id = $this->handler->createGroup('my_group_1', 'My One Group');
 		$group2Id = $this->handler->createGroup('my_group_2', 'My Group Two');
 		$group3Id = $this->handler->createGroup('my_group_3', 'AA One');
@@ -110,7 +110,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals($group1Id, $results[1]['group_id']);
 	}
 
-	public function testSearchGroupsPagination() {
+	public function testSearchGroupsPagination(): void {
 		$count = 30;
 		for ($i = 0; $i < $count; $i++) {
 			$num = (string)$i;
@@ -134,7 +134,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertCount(25, $results);
 	}
 
-	public function testGetGroup() {
+	public function testGetGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertNotNull($groupId);
 
@@ -146,7 +146,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertNull($this->handler->getGroup(-100));
 	}
 
-	public function testGetGroupByUri() {
+	public function testGetGroupByUri(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$this->assertNotNull($groupId);
 
@@ -158,7 +158,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertNull($this->handler->getGroupByUri('unexist'));
 	}
 
-	public function testGetGroups() {
+	public function testGetGroups(): void {
 		$group1Id = $this->handler->createGroup('my_group_1', 'My One Group');
 		$group2Id = $this->handler->createGroup('my_group_2', 'My Group Two');
 		$group3Id = $this->handler->createGroup('my_group_3', 'AA One');
@@ -181,7 +181,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals($group1Id, $results[2]['group_id']);
 	}
 
-	public function testGetGroupsByDisplayName() {
+	public function testGetGroupsByDisplayName(): void {
 		$group1Id = $this->handler->createGroup('my_group_1', 'One');
 		$group2Id = $this->handler->createGroup('my_group_2', 'Two');
 		$group3Id = $this->handler->createGroup('my_group_3', 'One');
@@ -199,7 +199,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals($group3Id, $results[1]['group_id']);
 	}
 
-	public function testAddToGroup() {
+	public function testAddToGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->assertTrue($this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER));
@@ -221,7 +221,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertFalse($this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN));
 	}
 
-	public function testRemoveFromGroup() {
+	public function testRemoveFromGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
 
@@ -250,7 +250,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertFalse($this->handler->removeFromGroup('user2', $groupId));
 	}
 
-	public function testGetGroupMembersFilter() {
+	public function testGetGroupMembersFilter(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->assertTrue($this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER));
@@ -275,7 +275,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $nonAdminMembers[0]['role']);
 	}
 
-	public function testDeleteRemovesMembers() {
+	public function testDeleteRemovesMembers(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
@@ -287,7 +287,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertFalse($this->handler->inGroup('user2', $groupId));
 	}
 
-	public function testGetGroupMemberInfo() {
+	public function testGetGroupMemberInfo(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
@@ -300,7 +300,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_ADMIN, $member['role']);
 	}
 
-	public function testSetGroupMemberInfo() {
+	public function testSetGroupMemberInfo(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
@@ -317,7 +317,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertTrue($this->handler->setGroupMemberInfo($groupId, 'user1', CustomGroupsDatabaseHandler::ROLE_ADMIN));
 	}
 
-	public function testInGroup() {
+	public function testInGroup(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 
 		$this->handler->addToGroup('user2', $groupId, CustomGroupsDatabaseHandler::ROLE_MEMBER);
@@ -326,7 +326,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertFalse($this->handler->inGroup('user3', $groupId));
 	}
 
-	public function testGetUserMemberships() {
+	public function testGetUserMemberships(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
 
@@ -348,7 +348,7 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 		$this->assertEquals(CustomGroupsDatabaseHandler::ROLE_MEMBER, $groups[1]['role']);
 	}
 
-	public function testGetUserMembershipsFiltered() {
+	public function testGetUserMembershipsFiltered(): void {
 		$groupId = $this->handler->createGroup('my_group', 'My Group');
 		$groupId2 = $this->handler->createGroup('my_group2', 'My Group Two');
 
@@ -367,5 +367,15 @@ class CustomGroupsDatabaseHandlerTest extends \Test\TestCase {
 
 		$this->assertEquals($groupId, $nonAdminGroups[0]['group_id']);
 		$this->assertEquals($groupId2, $adminGroups[0]['group_id']);
+	}
+
+	public function testInGroupByUri(): void {
+		$groupId = $this->handler->createGroup('my_group', 'My Group');
+		$this->handler->createGroup('my_group2', 'My Group Two');
+
+		$this->handler->addToGroup('user1', $groupId, CustomGroupsDatabaseHandler::ROLE_ADMIN);
+
+		$this->assertTrue($this->handler->inGroupByUri('user1', 'my_group'));
+		$this->assertFalse($this->handler->inGroupByUri('user1', 'my_group2'));
 	}
 }
