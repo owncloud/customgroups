@@ -35,7 +35,7 @@ OC.L10N.register(
     "CSV import failed" : "CSV-Import fehlgeschlagen",
     "Are you sure that you want to leave the group \"{name}\" ?" : "Möchtest du die Gruppe \"{name}\" wirklich verlassen?",
     "Confirm leaving group" : "Bitte bestätige das Verlassen der Gruppe",
-    "Cannot leave group without an administrator" : "Kann Gruppe nicht ohne Administrator verlassen",
+    "Cannot leave group without an administrator" : "Kann Gruppe nicht ohne Gruppenbesitzer hinterlassen",
     "Could not leave group due to a server error" : "Konnte Gruppe aufgrund eines Serverfehlers nicht verlassen",
     "User \"{userId}\" does not exist" : "Nutzer \"{userId}\" existiert nicht",
     "User \"{userId}\" is already a member of this group" : "Nutzer \"{userId}\" ist bereits Mitglied dieser Gruppe",
