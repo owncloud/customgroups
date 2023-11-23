@@ -140,8 +140,8 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'us', 150);
 		$data = $response->getData();
 
-		$this->assertTrue(isset($data['results']));
-		$this->assertEquals([
+		self::assertTrue(isset($data['results']));
+		self::assertEquals([
 			// user3 excluded because already a member
 			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
 			['userId' => 'user2', 'displayName' => 'User Two', 'type' => 'user'],
@@ -190,8 +190,8 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'us', 20);
 		$data = $response->getData();
 
-		$this->assertTrue(isset($data['results']));
-		$this->assertCount(20, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertCount(20, $data['results']);
 
 		$expectedResults = [];
 		for ($i = 1; $i <= 21; $i++) {
@@ -202,7 +202,7 @@ class PageControllerTest extends \Test\TestCase {
 			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i, 'type' => 'user'];
 		}
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedResults,
 			$data['results']
 		);
@@ -264,8 +264,8 @@ class PageControllerTest extends \Test\TestCase {
 
 		$response = $this->pageController->searchUsers('group1', $searchPattern, 150);
 		$data = $response->getData();
-		$this->assertTrue(isset($data['results']));
-		$this->assertEquals($expectedResults, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertEquals($expectedResults, $data['results']);
 	}
 
 	public function testSearchAllUsersExactLimit(): void {
@@ -308,8 +308,8 @@ class PageControllerTest extends \Test\TestCase {
 
 		$response = $this->pageController->searchUsers('group1', 'User One', 20);
 		$data = $response->getData();
-		$this->assertTrue(isset($data['results']));
-		$this->assertCount(20, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertCount(20, $data['results']);
 
 		$expectedResults = [];
 		for ($i = 1; $i <= 21; $i++) {
@@ -320,7 +320,7 @@ class PageControllerTest extends \Test\TestCase {
 			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One', 'type' => 'user'];
 		}
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedResults,
 			$data['results']
 		);
@@ -367,8 +367,8 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'us', 150);
 		$data = $response->getData();
 
-		$this->assertTrue(isset($data['results']));
-		$this->assertEquals([
+		self::assertTrue(isset($data['results']));
+		self::assertEquals([
 			['userId' => 'user1', 'displayName' => 'User One', 'type' => 'user'],
 			['userId' => 'user2', 'displayName' => 'User Two', 'type' => 'user'],
 		], $data['results']);
@@ -452,8 +452,8 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'us', 20);
 		$data = $response->getData();
 
-		$this->assertTrue(isset($data['results']));
-		$this->assertCount(20, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertCount(20, $data['results']);
 
 		$expectedResults = [];
 		for ($i = 1; $i <= 21; $i++) {
@@ -464,7 +464,7 @@ class PageControllerTest extends \Test\TestCase {
 			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User ' . $i, 'type' => 'user'];
 		}
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedResults,
 			$data['results']
 		);
@@ -517,8 +517,8 @@ class PageControllerTest extends \Test\TestCase {
 
 		$response = $this->pageController->searchUsers('group1', $searchPattern, 150);
 		$data = $response->getData();
-		$this->assertTrue(isset($data['results']));
-		$this->assertEquals($expectedResults, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertEquals($expectedResults, $data['results']);
 	}
 
 	public function testSearchUsersShareWithGroupOnlyAndEnumGroupMembers(): void {
@@ -563,9 +563,9 @@ class PageControllerTest extends \Test\TestCase {
 
 		$response = $this->pageController->searchUsers('group1', 'user3', 150);
 		$data = $response->getData();
-		$this->assertTrue(isset($data['results']));
+		self::assertTrue(isset($data['results']));
 		$expectedResults = [['userId' => 'user3', 'displayName' => 'User Three', 'type' => 'user']];
-		$this->assertEquals($expectedResults, $data['results']);
+		self::assertEquals($expectedResults, $data['results']);
 	}
 
 	public function testSearchUsersInGroupExactLimit(): void {
@@ -619,8 +619,8 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->pageController->searchUsers('group1', 'User One', 20);
 		$data = $response->getData();
 
-		$this->assertTrue(isset($data['results']));
-		$this->assertCount(20, $data['results']);
+		self::assertTrue(isset($data['results']));
+		self::assertCount(20, $data['results']);
 
 		$expectedResults = [];
 		for ($i = 1; $i <= 21; $i++) {
@@ -631,7 +631,7 @@ class PageControllerTest extends \Test\TestCase {
 			$expectedResults[] = ['userId' => 'user' . $i, 'displayName' => 'User One', 'type' => 'user'];
 		}
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedResults,
 			$data['results']
 		);

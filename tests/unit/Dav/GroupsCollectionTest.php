@@ -113,8 +113,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 	}
 
 	public function testBase(): void {
-		$this->assertEquals('groups', $this->collection->getName());
-		$this->assertNull($this->collection->getLastModified());
+		self::assertEquals('groups', $this->collection->getName());
+		self::assertNull($this->collection->getLastModified());
 	}
 
 	public function testListGroups(): void {
@@ -127,12 +127,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 			]);
 
 		$nodes = $this->collection->getChildren();
-		$this->assertCount(2, $nodes);
+		self::assertCount(2, $nodes);
 
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
-		$this->assertEquals('group1', $nodes[0]->getName());
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
-		$this->assertEquals('group2', $nodes[1]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		self::assertEquals('group1', $nodes[0]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		self::assertEquals('group2', $nodes[1]->getName());
 	}
 
 	public function testListGroupsSearchPattern(): void {
@@ -146,12 +146,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 			]);
 
 		$nodes = $this->collection->search($search);
-		$this->assertCount(2, $nodes);
+		self::assertCount(2, $nodes);
 
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
-		$this->assertEquals('group1', $nodes[0]->getName());
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
-		$this->assertEquals('group2', $nodes[1]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		self::assertEquals('group1', $nodes[0]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		self::assertEquals('group2', $nodes[1]->getName());
 	}
 
 	public function testListGroupsForUser(): void {
@@ -174,12 +174,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 			]);
 
 		$nodes = $collection->getChildren();
-		$this->assertCount(2, $nodes);
+		self::assertCount(2, $nodes);
 
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
-		$this->assertEquals('group1', $nodes[0]->getName());
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
-		$this->assertEquals('group2', $nodes[1]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		self::assertEquals('group1', $nodes[0]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		self::assertEquals('group2', $nodes[1]->getName());
 	}
 
 	public function testListGroupsForUserSearchPattern(): void {
@@ -202,12 +202,12 @@ class GroupsCollectionTest extends \Test\TestCase {
 			]);
 
 		$nodes = $collection->search($search);
-		$this->assertCount(2, $nodes);
+		self::assertCount(2, $nodes);
 
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
-		$this->assertEquals('group1', $nodes[0]->getName());
-		$this->assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
-		$this->assertEquals('group2', $nodes[1]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[0]);
+		self::assertEquals('group1', $nodes[0]->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $nodes[1]);
+		self::assertEquals('group2', $nodes[1]->getName());
 	}
 
 	public function testCreateGroup(): void {
@@ -238,16 +238,16 @@ class GroupsCollectionTest extends \Test\TestCase {
 		]);
 		$this->collection->createExtendedCollection('group1', $mkCol);
 
-		$this->assertSame('\OCA\CustomGroups::addGroupAndUser', $called[0]);
-		$this->assertInstanceOf(GenericEvent::class, $called[1]);
-		$this->assertArrayHasKey('groupName', $called[1]);
-		$this->assertArrayHasKey('user', $called[1]);
-		$this->assertArrayHasKey('groupId', $called[1]);
-		$this->assertEquals('group1', $called[1]->getArgument('groupName'));
-		$this->assertEquals('user1', $called[1]->getArgument('user'));
-		$this->assertEquals(1, $called[1]->getArgument('groupId'));
+		self::assertSame('\OCA\CustomGroups::addGroupAndUser', $called[0]);
+		self::assertInstanceOf(GenericEvent::class, $called[1]);
+		self::assertArrayHasKey('groupName', $called[1]);
+		self::assertArrayHasKey('user', $called[1]);
+		self::assertArrayHasKey('groupId', $called[1]);
+		self::assertEquals('group1', $called[1]->getArgument('groupName'));
+		self::assertEquals('user1', $called[1]->getArgument('user'));
+		self::assertEquals(1, $called[1]->getArgument('groupId'));
 
-		$this->assertEquals(202, $mkCol->getResult()[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		self::assertEquals(202, $mkCol->getResult()[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
 	/**
@@ -313,7 +313,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 		try {
 			$this->collection->createExtendedCollection($groupName, $mkCol);
 		} catch (ValidationException $exception) {
-			$this->assertEquals(422, $exception->getHTTPCode());
+			self::assertEquals(422, $exception->getHTTPCode());
 		}
 	}
 
@@ -365,8 +365,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 			->willReturn(['group_id' => 1, 'uri' => 'group1', 'display_name' => 'Group One']);
 
 		$groupNode = $this->collection->getChild('group1');
-		$this->assertInstanceOf(GroupMembershipCollection::class, $groupNode);
-		$this->assertEquals('group1', $groupNode->getName());
+		self::assertInstanceOf(GroupMembershipCollection::class, $groupNode);
+		self::assertEquals('group1', $groupNode->getName());
 	}
 
 	/**
@@ -390,8 +390,8 @@ class GroupsCollectionTest extends \Test\TestCase {
 				['group2', null],
 			]);
 
-		$this->assertTrue($this->collection->childExists('group1'));
-		$this->assertFalse($this->collection->childExists('group2'));
+		self::assertTrue($this->collection->childExists('group1'));
+		self::assertFalse($this->collection->childExists('group2'));
 	}
 
 	/**

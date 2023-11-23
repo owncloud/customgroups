@@ -46,12 +46,12 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 	}
 
 	public function testImplementsAction() {
-		$this->assertTrue($this->backend->implementsActions(GroupInterface::GROUP_DETAILS));
-		$this->assertFalse($this->backend->implementsActions(GroupInterface::CREATE_GROUP));
-		$this->assertTrue($this->backend->implementsActions(GroupInterface::DELETE_GROUP));
-		$this->assertFalse($this->backend->implementsActions(GroupInterface::ADD_TO_GROUP));
-		$this->assertFalse($this->backend->implementsActions(GroupInterface::REMOVE_FROM_GROUP));
-		$this->assertFalse($this->backend->implementsActions(GroupInterface::COUNT_USERS));
+		self::assertTrue($this->backend->implementsActions(GroupInterface::GROUP_DETAILS));
+		self::assertFalse($this->backend->implementsActions(GroupInterface::CREATE_GROUP));
+		self::assertTrue($this->backend->implementsActions(GroupInterface::DELETE_GROUP));
+		self::assertFalse($this->backend->implementsActions(GroupInterface::ADD_TO_GROUP));
+		self::assertFalse($this->backend->implementsActions(GroupInterface::REMOVE_FROM_GROUP));
+		self::assertFalse($this->backend->implementsActions(GroupInterface::COUNT_USERS));
 	}
 
 	public function testInGroup() {
@@ -62,9 +62,9 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 				['user2', 'one', false],
 			]));
 
-		$this->assertTrue($this->backend->inGroup('user1', self::GROUP_ID_PREFIX . 'one'));
-		$this->assertFalse($this->backend->inGroup('user2', self::GROUP_ID_PREFIX . 'one'));
-		$this->assertFalse($this->backend->inGroup('user1', 'one'));
+		self::assertTrue($this->backend->inGroup('user1', self::GROUP_ID_PREFIX . 'one'));
+		self::assertFalse($this->backend->inGroup('user2', self::GROUP_ID_PREFIX . 'one'));
+		self::assertFalse($this->backend->inGroup('user1', 'one'));
 	}
 
 	public function testGetUserGroups() {
@@ -81,14 +81,14 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 				],
 			]));
 
-		$this->assertEquals(
+		self::assertEquals(
 			[
 				self::GROUP_ID_PREFIX . 'one',
 				self::GROUP_ID_PREFIX . 'two',
 			],
 			$this->backend->getUserGroups('user1')
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			[
 				self::GROUP_ID_PREFIX . 'one',
 				self::GROUP_ID_PREFIX . 'three',
@@ -106,7 +106,7 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 				['group_id' => 2, 'uri' => 'two'],
 			]));
 
-		$this->assertEquals(
+		self::assertEquals(
 			[
 				self::GROUP_ID_PREFIX . 'one',
 				self::GROUP_ID_PREFIX . 'two',
@@ -123,9 +123,9 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 				['two', null],
 			]));
 
-		$this->assertTrue($this->backend->groupExists(self::GROUP_ID_PREFIX . 'one'));
-		$this->assertFalse($this->backend->groupExists(self::GROUP_ID_PREFIX . 'two'));
-		$this->assertFalse($this->backend->groupExists(1));
+		self::assertTrue($this->backend->groupExists(self::GROUP_ID_PREFIX . 'one'));
+		self::assertFalse($this->backend->groupExists(self::GROUP_ID_PREFIX . 'two'));
+		self::assertFalse($this->backend->groupExists(1));
 	}
 
 	public function testGetGroupDetails() {
@@ -137,11 +137,11 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 			]));
 
 		$groupInfo = $this->backend->getGroupDetails(self::GROUP_ID_PREFIX . 'one');
-		$this->assertEquals(self::GROUP_ID_PREFIX . 'one', $groupInfo['gid']);
-		$this->assertEquals('Group One', $groupInfo['displayName']);
+		self::assertEquals(self::GROUP_ID_PREFIX . 'one', $groupInfo['gid']);
+		self::assertEquals('Group One', $groupInfo['displayName']);
 
-		$this->assertNull($this->backend->getGroupDetails(self::GROUP_ID_PREFIX . 'two'));
-		$this->assertNull($this->backend->getGroupDetails(1));
+		self::assertNull($this->backend->getGroupDetails(self::GROUP_ID_PREFIX . 'two'));
+		self::assertNull($this->backend->getGroupDetails(1));
 	}
 
 	public function testUsersInGroup() {
@@ -156,7 +156,7 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 				['user_id' => 'user1'],
 				['user_id' => 'user2'],
 			]);
-		$this->assertEquals(
+		self::assertEquals(
 			['user1', 'user2'],
 			$this->backend->usersInGroup(self::GROUP_ID_PREFIX . 'one', 'ser', 10, 5)
 		);

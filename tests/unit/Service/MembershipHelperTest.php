@@ -112,7 +112,7 @@ class MembershipHelperTest extends \Test\TestCase {
 	}
 
 	public function testGetUserId(): void {
-		$this->assertEquals(self::CURRENT_USER, $this->helper->getUserId());
+		self::assertEquals(self::CURRENT_USER, $this->helper->getUserId());
 	}
 
 	public function testGetUser(): void {
@@ -124,7 +124,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('anotheruser')
 			->willReturn($user);
 
-		$this->assertEquals($user, $this->helper->getUser('anotheruser'));
+		self::assertEquals($user, $this->helper->getUser('anotheruser'));
 	}
 
 	public function isUserAdminDataProvider(): array {
@@ -179,7 +179,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('group1', self::CURRENT_USER)
 			->willReturn($memberInfo);
 
-		$this->assertEquals($expectedResult, $this->helper->isUserAdmin('group1'));
+		self::assertEquals($expectedResult, $this->helper->isUserAdmin('group1'));
 	}
 
 	public function testDenyAdminAccess(): void {
@@ -192,7 +192,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->handler->method('getGroup')
 			->with('group1')
 			->willReturn(['role' => CustomGroupsDatabaseHandler::ROLE_MEMBER, 'display_name' => 'group1']);
-		$this->assertFalse($this->helper->isUserAdmin('group1'));
+		self::assertFalse($this->helper->isUserAdmin('group1'));
 	}
 
 	public function isUserMemberDataProvider(): array {
@@ -224,7 +224,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('group1', self::CURRENT_USER)
 			->willReturn($memberInfo);
 
-		$this->assertEquals($expectedResult, $this->helper->isUserMember('group1'));
+		self::assertEquals($expectedResult, $this->helper->isUserMember('group1'));
 	}
 
 	public function isTheOnlyAdminDataProvider(): array {
@@ -266,7 +266,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('group1', $searchAdmins)
 			->willReturn($memberInfo);
 
-		$this->assertEquals($expectedResult, $this->helper->isTheOnlyAdmin('group1', 'admin1'));
+		self::assertEquals($expectedResult, $this->helper->isTheOnlyAdmin('group1', 'admin1'));
 	}
 
 	private function createExpectedNotification($messageId, $messageParams) {
@@ -384,16 +384,16 @@ class MembershipHelperTest extends \Test\TestCase {
 			['group_id' => 1, 'role' => Roles::BACKEND_ROLE_MEMBER]
 		);
 
-		$this->assertSame('\OCA\CustomGroups::changeRoleInGroup', $called[0]);
-		$this->assertInstanceOf(GenericEvent::class, $called[1]);
-		$this->assertArrayHasKey('user', $called[1]);
-		$this->assertEquals('anotheruser', $called[1]->getArgument('user'));
-		$this->assertArrayHasKey('groupName', $called[1]);
-		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('roleNumber', $called[1]);
-		$this->assertEquals(0, $called[1]->getArgument('roleNumber'));
-		$this->assertArrayHasKey('roleDisaplayName', $called[1]);
-		$this->assertEquals('Member', $called[1]->getArgument('roleDisaplayName'));
+		self::assertSame('\OCA\CustomGroups::changeRoleInGroup', $called[0]);
+		self::assertInstanceOf(GenericEvent::class, $called[1]);
+		self::assertArrayHasKey('user', $called[1]);
+		self::assertEquals('anotheruser', $called[1]->getArgument('user'));
+		self::assertArrayHasKey('groupName', $called[1]);
+		self::assertEquals('Group One', $called[1]->getArgument('groupName'));
+		self::assertArrayHasKey('roleNumber', $called[1]);
+		self::assertEquals(0, $called[1]->getArgument('roleNumber'));
+		self::assertArrayHasKey('roleDisaplayName', $called[1]);
+		self::assertEquals('Member', $called[1]->getArgument('roleDisaplayName'));
 	}
 
 	public function canCreateRolesProvider(): array {
@@ -433,7 +433,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->method('getSubAdmin')
 			->willReturn($subadminManager);
 
-		$this->assertEquals($expectedResult, $this->helper->canCreateGroups());
+		self::assertEquals($expectedResult, $this->helper->canCreateGroups());
 	}
 
 	public function testIsGroupDisplayNameAvailableWhenDuplicatesAreAllowed(): void {
@@ -445,7 +445,7 @@ class MembershipHelperTest extends \Test\TestCase {
 		$this->handler->expects($this->never())
 			->method('getGroupsByDisplayName');
 
-		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
+		self::assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
 	}
 
 	public function testIsGroupDisplayNameAvailableNoDuplicateExists(): void {
@@ -459,7 +459,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('test')
 			->willReturn([]);
 
-		$this->assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
+		self::assertTrue($this->helper->isGroupDisplayNameAvailable('test'));
 	}
 
 	public function testIsGroupDisplayNameAvailableDuplicateExists(): void {
@@ -473,6 +473,6 @@ class MembershipHelperTest extends \Test\TestCase {
 			->with('test')
 			->willReturn([['duplicate']]);
 
-		$this->assertFalse($this->helper->isGroupDisplayNameAvailable('test'));
+		self::assertFalse($this->helper->isGroupDisplayNameAvailable('test'));
 	}
 }

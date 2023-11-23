@@ -148,8 +148,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 	}
 
 	public function testBase(): void {
-		$this->assertEquals('group1', $this->node->getName());
-		$this->assertNull($this->node->getLastModified());
+		self::assertEquals('group1', $this->node->getName());
+		self::assertNull($this->node->getLastModified());
 	}
 
 	public function testDeleteAsAdmin(): void {
@@ -176,12 +176,12 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->node->delete();
 
-		$this->assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
-		$this->assertInstanceOf(GenericEvent::class, $called[1]);
-		$this->assertArrayHasKey('groupName', $called[1]);
-		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('groupId', $called[1]);
-		$this->assertEquals(1, $called[1]->getArgument('groupId'));
+		self::assertSame('\OCA\CustomGroups::deleteGroup', $called[0]);
+		self::assertInstanceOf(GenericEvent::class, $called[1]);
+		self::assertArrayHasKey('groupName', $called[1]);
+		self::assertEquals('Group One', $called[1]->getArgument('groupName'));
+		self::assertArrayHasKey('groupId', $called[1]);
+		self::assertEquals(1, $called[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -222,9 +222,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 	public function testGetProperties(): void {
 		$props = $this->node->getProperties(null);
-		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		self::assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 		$props = $this->node->getProperties([GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
-		$this->assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		self::assertEquals('Group One', $props[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
 	public function adminSetFlagProvider(): array {
@@ -279,20 +279,20 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->propPatch($propPatch);
 
 		$propPatch->commit();
-		$this->assertEmpty($propPatch->getRemainingMutations());
+		self::assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
 		if (isset($calledEvent)) {
-			$this->assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
-			$this->assertInstanceOf(GenericEvent::class, $calledEvent[1]);
-			$this->assertArrayHasKey('oldGroupName', $calledEvent[1]);
-			$this->assertEquals('Group One', $calledEvent[1]->getArgument('oldGroupName'));
-			$this->assertArrayHasKey('newGroupName', $calledEvent[1]);
-			$this->assertEquals('Group Renamed', $calledEvent[1]->getArgument('newGroupName'));
-			$this->assertArrayHasKey('groupId', $calledEvent[1]);
-			$this->assertEquals(1, $calledEvent[1]->getArgument('groupId'));
+			self::assertSame('\OCA\CustomGroups::updateGroupName', $calledEvent[0]);
+			self::assertInstanceOf(GenericEvent::class, $calledEvent[1]);
+			self::assertArrayHasKey('oldGroupName', $calledEvent[1]);
+			self::assertEquals('Group One', $calledEvent[1]->getArgument('oldGroupName'));
+			self::assertArrayHasKey('newGroupName', $calledEvent[1]);
+			self::assertEquals('Group Renamed', $calledEvent[1]->getArgument('newGroupName'));
+			self::assertArrayHasKey('groupId', $calledEvent[1]);
+			self::assertEquals(1, $calledEvent[1]->getArgument('groupId'));
 		}
 
-		$this->assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		self::assertEquals($statusCode, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
 	public function testSetDisplayNameNoDuplicates(): void {
@@ -313,9 +313,9 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->node->propPatch($propPatch);
 
 		$propPatch->commit();
-		$this->assertEmpty($propPatch->getRemainingMutations());
+		self::assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
-		$this->assertEquals(409, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
+		self::assertEquals(409, $result[GroupMembershipCollection::PROPERTY_DISPLAY_NAME]);
 	}
 
 	public function rolesProvider(): array {
@@ -365,14 +365,14 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$this->node->createFile(self::NODE_USER);
 
-		$this->assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
-		$this->assertInstanceOf(GenericEvent::class, $called[1]);
-		$this->assertArrayHasKey('groupName', $called[1]);
-		$this->assertEquals('Group One', $called[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('user', $called[1]);
-		$this->assertEquals('nodeuser', $called[1]->getArgument('user'));
-		$this->assertArrayHasKey('groupId', $called[1]);
-		$this->assertEquals(1, $called[1]->getArgument('groupId'));
+		self::assertSame('\OCA\CustomGroups::addUserToGroup', $called[0]);
+		self::assertInstanceOf(GenericEvent::class, $called[1]);
+		self::assertArrayHasKey('groupName', $called[1]);
+		self::assertEquals('Group One', $called[1]->getArgument('groupName'));
+		self::assertArrayHasKey('user', $called[1]);
+		self::assertEquals('nodeuser', $called[1]->getArgument('user'));
+		self::assertArrayHasKey('groupId', $called[1]);
+		self::assertEquals(1, $called[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -534,8 +534,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				['user3', 1, false],
 			]);
 
-		$this->assertTrue($this->node->childExists(self::NODE_USER));
-		$this->assertFalse($this->node->childExists('user3'));
+		self::assertTrue($this->node->childExists(self::NODE_USER));
+		self::assertFalse($this->node->childExists('user3'));
 	}
 
 	/**
@@ -568,8 +568,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		$this->groupManager->method('isAdmin')
 			->willReturn(false);
 
-		$this->assertTrue($this->node->childExists(self::NODE_USER));
-		$this->assertFalse($this->node->childExists('user3'));
+		self::assertTrue($this->node->childExists(self::NODE_USER));
+		self::assertFalse($this->node->childExists('user3'));
 	}
 
 	/**
@@ -596,8 +596,8 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$memberInfo = $this->node->getChild(self::NODE_USER);
 
-		$this->assertInstanceOf(MembershipNode::class, $memberInfo);
-		$this->assertEquals(self::NODE_USER, $memberInfo->getName());
+		self::assertInstanceOf(MembershipNode::class, $memberInfo);
+		self::assertEquals(self::NODE_USER, $memberInfo->getName());
 	}
 
 	/**
@@ -636,11 +636,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$memberInfos = $this->node->getChildren();
 
-		$this->assertCount(2, $memberInfos);
-		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);
-		$this->assertEquals(self::NODE_USER, $memberInfos[0]->getName());
-		$this->assertInstanceOf(MembershipNode::class, $memberInfos[1]);
-		$this->assertEquals('user3', $memberInfos[1]->getName());
+		self::assertCount(2, $memberInfos);
+		self::assertInstanceOf(MembershipNode::class, $memberInfos[0]);
+		self::assertEquals(self::NODE_USER, $memberInfos[0]->getName());
+		self::assertInstanceOf(MembershipNode::class, $memberInfos[1]);
+		self::assertEquals('user3', $memberInfos[1]->getName());
 	}
 
 	/**
@@ -667,11 +667,11 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 
 		$memberInfos = $this->node->search($search);
 
-		$this->assertCount(2, $memberInfos);
-		$this->assertInstanceOf(MembershipNode::class, $memberInfos[0]);
-		$this->assertEquals(self::NODE_USER, $memberInfos[0]->getName());
-		$this->assertInstanceOf(MembershipNode::class, $memberInfos[1]);
-		$this->assertEquals('user3', $memberInfos[1]->getName());
+		self::assertCount(2, $memberInfos);
+		self::assertInstanceOf(MembershipNode::class, $memberInfos[0]);
+		self::assertEquals(self::NODE_USER, $memberInfos[0]->getName());
+		self::assertInstanceOf(MembershipNode::class, $memberInfos[1]);
+		self::assertEquals('user3', $memberInfos[1]->getName());
 	}
 
 	/**
