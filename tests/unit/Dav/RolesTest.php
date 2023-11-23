@@ -29,12 +29,12 @@ use OCA\CustomGroups\Dav\Roles;
  */
 class RolesTest extends \Test\TestCase {
 	public function testBackendToDavMappings() {
-		$this->assertEquals('member', Roles::backendToDav(0));
-		$this->assertEquals('admin', Roles::backendToDav(1));
+		self::assertEquals('member', Roles::backendToDav(0));
+		self::assertEquals('admin', Roles::backendToDav(1));
 	}
 
 	public function testDavToBackendMappings() {
-		$this->assertEquals(0, Roles::davToBackend('member'));
-		$this->assertEquals(1, Roles::davToBackend('admin'));
+		self::assertEquals(0, Roles::davToBackend('member'));
+		self::assertEquals(1, Roles::davToBackend('admin'));
 	}
 }

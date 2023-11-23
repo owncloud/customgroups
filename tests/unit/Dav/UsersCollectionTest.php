@@ -86,8 +86,8 @@ class UsersCollectionTest extends \Test\TestCase {
 	}
 
 	public function testBase(): void {
-		$this->assertEquals('users', $this->collection->getName());
-		$this->assertNull($this->collection->getLastModified());
+		self::assertEquals('users', $this->collection->getName());
+		self::assertNull($this->collection->getLastModified());
 	}
 
 	/**
@@ -108,8 +108,8 @@ class UsersCollectionTest extends \Test\TestCase {
 
 	public function testGetCurrentUser(): void {
 		$membershipCollection = $this->collection->getChild(self::USER);
-		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
-		$this->assertEquals(self::USER, $membershipCollection->getName());
+		self::assertInstanceOf(GroupsCollection::class, $membershipCollection);
+		self::assertEquals(self::USER, $membershipCollection->getName());
 	}
 
 	/**
@@ -123,16 +123,16 @@ class UsersCollectionTest extends \Test\TestCase {
 	public function testGetAnotherUserAsAdmin(): void {
 		$this->groupManager->method('isAdmin')->with(self::USER)->willReturn(true);
 		$membershipCollection = $this->collection->getChild('another');
-		$this->assertInstanceOf(GroupsCollection::class, $membershipCollection);
-		$this->assertEquals('another', $membershipCollection->getName());
+		self::assertInstanceOf(GroupsCollection::class, $membershipCollection);
+		self::assertEquals('another', $membershipCollection->getName());
 	}
 
 	public function testUserExistsCurrent(): void {
-		$this->assertTrue($this->collection->childExists(self::USER));
+		self::assertTrue($this->collection->childExists(self::USER));
 	}
 
 	public function testUserExistsAnother(): void {
-		$this->assertFalse($this->collection->childExists('another'));
+		self::assertFalse($this->collection->childExists('another'));
 	}
 
 	/**

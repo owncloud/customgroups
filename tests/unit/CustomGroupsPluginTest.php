@@ -84,7 +84,7 @@ class CustomGroupsPluginTest extends \Test\TestCase {
 			->will($this->returnValue($path));
 		$this->plugin->initialize($this->server);
 
-		$this->assertNull($this->plugin->onReport(CustomGroupsPlugin::REPORT_NAME, [], '/' . $path));
+		self::assertNull($this->plugin->onReport(CustomGroupsPlugin::REPORT_NAME, [], '/' . $path));
 	}
 
 	public function testOnReportInvalidReportName() {
@@ -100,7 +100,7 @@ class CustomGroupsPluginTest extends \Test\TestCase {
 			->will($this->returnValue($path));
 		$this->plugin->initialize($this->server);
 
-		$this->assertNull($this->plugin->onReport('{whoever}whatever', [], '/' . $path));
+		self::assertNull($this->plugin->onReport('{whoever}whatever', [], '/' . $path));
 	}
 
 	public function reportNodesDataProvider() {
@@ -244,6 +244,6 @@ class CustomGroupsPluginTest extends \Test\TestCase {
 			->method('generateMultiStatus')
 			->with($expectedMultiStatus);
 
-		$this->assertFalse($this->plugin->onReport(CustomGroupsPlugin::REPORT_NAME, $reportRequest, '/' . $reportTargetPath));
+		self::assertFalse($this->plugin->onReport(CustomGroupsPlugin::REPORT_NAME, $reportRequest, '/' . $reportTargetPath));
 	}
 }
