@@ -125,8 +125,8 @@ class MembershipNodeTest extends \Test\TestCase {
 	}
 
 	public function testBase(): void {
-		$this->assertEquals(self::NODE_USER, $this->node->getName());
-		$this->assertNull($this->node->getLastModified());
+		self::assertEquals(self::NODE_USER, $this->node->getName());
+		self::assertNull($this->node->getLastModified());
 	}
 
 	public function testNodeName(): void {
@@ -137,7 +137,7 @@ class MembershipNodeTest extends \Test\TestCase {
 			$this->handler,
 			$this->helper
 		);
-		$this->assertEquals('group1', $node->getName());
+		self::assertEquals('group1', $node->getName());
 	}
 
 	public function testDeleteAsAdmin(): void {
@@ -186,17 +186,17 @@ class MembershipNodeTest extends \Test\TestCase {
 
 		$this->node->delete();
 
-		$this->assertSame('\OCA\CustomGroups::removeUserFromGroup', $called[0]);
-		$this->assertInstanceOf(GenericEvent::class, $called[1]);
-		$this->assertArrayHasKey('user_displayName', $called[1]);
-		$this->assertArrayHasKey('group_displayName', $called[1]);
-		$this->assertEquals('customGroups.removeUserFromGroup', $newCalled[0]);
-		$this->assertArrayHasKey('user', $newCalled[1]);
-		$this->assertEquals(self::NODE_USER, $newCalled[1]->getArgument('user'));
-		$this->assertArrayHasKey('groupName', $newCalled[1]);
-		$this->assertEquals('Group One', $newCalled[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('groupId', $newCalled[1]);
-		$this->assertEquals(1, $newCalled[1]->getArgument('groupId'));
+		self::assertSame('\OCA\CustomGroups::removeUserFromGroup', $called[0]);
+		self::assertInstanceOf(GenericEvent::class, $called[1]);
+		self::assertArrayHasKey('user_displayName', $called[1]);
+		self::assertArrayHasKey('group_displayName', $called[1]);
+		self::assertEquals('customGroups.removeUserFromGroup', $newCalled[0]);
+		self::assertArrayHasKey('user', $newCalled[1]);
+		self::assertEquals(self::NODE_USER, $newCalled[1]->getArgument('user'));
+		self::assertArrayHasKey('groupName', $newCalled[1]);
+		self::assertEquals('Group One', $newCalled[1]->getArgument('groupName'));
+		self::assertArrayHasKey('groupId', $newCalled[1]);
+		self::assertEquals(1, $newCalled[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -318,20 +318,20 @@ class MembershipNodeTest extends \Test\TestCase {
 			$newLeaveFromGroup[] = $event;
 		});
 		$node->delete();
-		$this->assertEquals('\OCA\CustomGroups::leaveFromGroup', $deprecatedLeaveFromGroup[0]);
-		$this->assertInstanceOf(GenericEvent::class, $deprecatedLeaveFromGroup[1]);
-		$this->assertArrayHasKey('userId', $deprecatedLeaveFromGroup[1]);
-		$this->assertEquals('nodeuser', $deprecatedLeaveFromGroup[1]->getArgument('userId'));
-		$this->assertArrayHasKey('groupName', $deprecatedLeaveFromGroup[1]);
-		$this->assertEquals('Group One', $deprecatedLeaveFromGroup[1]->getArgument('groupName'));
-		$this->assertEquals('customGroups.leaveFromGroup', $newLeaveFromGroup[0]);
-		$this->assertInstanceOf(GenericEvent::class, $newLeaveFromGroup[1]);
-		$this->assertArrayHasKey('user', $newLeaveFromGroup[1]);
-		$this->assertEquals('nodeuser', $newLeaveFromGroup[1]->getArgument('user'));
-		$this->assertArrayHasKey('groupName', $newLeaveFromGroup[1]);
-		$this->assertEquals('Group One', $newLeaveFromGroup[1]->getArgument('groupName'));
-		$this->assertArrayHasKey('groupId', $newLeaveFromGroup[1]);
-		$this->assertEquals(1, $newLeaveFromGroup[1]->getArgument('groupId'));
+		self::assertEquals('\OCA\CustomGroups::leaveFromGroup', $deprecatedLeaveFromGroup[0]);
+		self::assertInstanceOf(GenericEvent::class, $deprecatedLeaveFromGroup[1]);
+		self::assertArrayHasKey('userId', $deprecatedLeaveFromGroup[1]);
+		self::assertEquals('nodeuser', $deprecatedLeaveFromGroup[1]->getArgument('userId'));
+		self::assertArrayHasKey('groupName', $deprecatedLeaveFromGroup[1]);
+		self::assertEquals('Group One', $deprecatedLeaveFromGroup[1]->getArgument('groupName'));
+		self::assertEquals('customGroups.leaveFromGroup', $newLeaveFromGroup[0]);
+		self::assertInstanceOf(GenericEvent::class, $newLeaveFromGroup[1]);
+		self::assertArrayHasKey('user', $newLeaveFromGroup[1]);
+		self::assertEquals('nodeuser', $newLeaveFromGroup[1]->getArgument('user'));
+		self::assertArrayHasKey('groupName', $newLeaveFromGroup[1]);
+		self::assertEquals('Group One', $newLeaveFromGroup[1]->getArgument('groupName'));
+		self::assertArrayHasKey('groupId', $newLeaveFromGroup[1]);
+		self::assertEquals(1, $newLeaveFromGroup[1]->getArgument('groupId'));
 	}
 
 	/**
@@ -468,9 +468,9 @@ class MembershipNodeTest extends \Test\TestCase {
 		);
 
 		$props = $node->getProperties(null);
-		$this->assertSame($propValue, $props[$propName]);
+		self::assertSame($propValue, $props[$propName]);
 		$props = $node->getProperties([$propName]);
-		$this->assertSame($propValue, $props[$propName]);
+		self::assertSame($propValue, $props[$propName]);
 	}
 
 	public function adminSetFlagProvider(): array {
@@ -543,9 +543,9 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->node->propPatch($propPatch);
 
 		$propPatch->commit();
-		$this->assertEmpty($propPatch->getRemainingMutations());
+		self::assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
-		$this->assertEquals($statusCode, $result[MembershipNode::PROPERTY_ROLE]);
+		self::assertEquals($statusCode, $result[MembershipNode::PROPERTY_ROLE]);
 	}
 
 	/**
@@ -577,9 +577,9 @@ class MembershipNodeTest extends \Test\TestCase {
 		$this->node->propPatch($propPatch);
 
 		$propPatch->commit();
-		$this->assertEmpty($propPatch->getRemainingMutations());
+		self::assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
-		$this->assertEquals(403, $result[MembershipNode::PROPERTY_ROLE]);
+		self::assertEquals(403, $result[MembershipNode::PROPERTY_ROLE]);
 	}
 
 	/**
@@ -609,9 +609,9 @@ class MembershipNodeTest extends \Test\TestCase {
 		$node->propPatch($propPatch);
 
 		$propPatch->commit();
-		$this->assertEmpty($propPatch->getRemainingMutations());
+		self::assertEmpty($propPatch->getRemainingMutations());
 		$result = $propPatch->getResult();
-		$this->assertEquals(403, $result[MembershipNode::PROPERTY_ROLE]);
+		self::assertEquals(403, $result[MembershipNode::PROPERTY_ROLE]);
 	}
 
 	/**

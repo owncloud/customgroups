@@ -50,12 +50,12 @@ class RootCollectionTest extends \Test\TestCase {
 
 	public function testGetGroups() {
 		$groups = $this->collection->getChild('groups');
-		$this->assertInstanceOf(GroupsCollection::class, $groups);
+		self::assertInstanceOf(GroupsCollection::class, $groups);
 	}
 
 	public function testGetUsers() {
 		$users = $this->collection->getChild('users');
-		$this->assertInstanceOf(UsersCollection::class, $users);
+		self::assertInstanceOf(UsersCollection::class, $users);
 	}
 
 	/**

@@ -51,11 +51,11 @@ class SettingsPanelTest extends \Test\TestCase {
 	}
 
 	public function testGetSection() {
-		$this->assertEquals('customgroups', $this->panel->getSectionID());
+		self::assertEquals('customgroups', $this->panel->getSectionID());
 	}
 
 	public function testGetPriority() {
-		$this->assertTrue(\is_integer($this->panel->getPriority()));
+		self::assertTrue(\is_integer($this->panel->getPriority()));
 	}
 
 	public function testGetPanel() {
@@ -63,7 +63,7 @@ class SettingsPanelTest extends \Test\TestCase {
 			->method('canCreateGroups')
 			->willReturn(true);
 		$templateHtml = $this->panel->getPanel()->fetchPage();
-		$this->assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="true"></div>', $templateHtml);
+		self::assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="true"></div>', $templateHtml);
 	}
 
 	public function testGetPanelNoCreatePerm() {
@@ -71,7 +71,7 @@ class SettingsPanelTest extends \Test\TestCase {
 			->method('canCreateGroups')
 			->willReturn(false);
 		$templateHtml = $this->panel->getPanel()->fetchPage();
-		$this->assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="false"></div>', $templateHtml);
+		self::assertStringContainsString('<div id="customgroups" class="section" data-cancreategroups="false"></div>', $templateHtml);
 	}
 
 	public function testGuestUserNotDisplayCustomGroup() {
@@ -93,6 +93,6 @@ class SettingsPanelTest extends \Test\TestCase {
 		$this->groupManager->method('isInGroup')
 			->willReturn(true);
 
-		$this->assertEquals('', $this->panel->getSectionID());
+		self::assertEquals('', $this->panel->getSectionID());
 	}
 }
