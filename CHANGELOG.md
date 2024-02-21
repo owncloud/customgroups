@@ -3,7 +3,10 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - xxxx-xx-xx
+## [0.9.0] - 2024-02-21
+
+ - [#610](https://github.com/owncloud/customgroups/pull/610) - fix: drop JavaScript function tipsy() in favor of bootstrap tooltip
+
 
 ## [0.8.0] - 2023-10-25
 
@@ -202,7 +205,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.8.0...master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.9.0...master
+[0.9.0]: https://github.com/owncloud/customgroups/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/owncloud/customgroups/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/owncloud/customgroups/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/owncloud/customgroups/compare/v0.7.0...v0.7.1
