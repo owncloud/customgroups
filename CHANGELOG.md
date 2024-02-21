@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [0.9.0] - 2024-02-21
 
  - [#610](https://github.com/owncloud/customgroups/pull/610) - fix: drop JavaScript function tipsy() in favor of bootstrap tooltip
+ - Core 10.15.0 will require this.
 
 
 ## [0.8.0] - 2023-10-25
