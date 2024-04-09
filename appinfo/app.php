@@ -19,9 +19,12 @@
  *
  */
 
+use OCA\CustomGroups\Hooks;
+
 $app = new \OCA\CustomGroups\Application();
 $app->registerGroupBackend();
 $app->registerNotifier();
+$app->getContainer()->query(Hooks::class)->register();
 
 if (!\defined('PHPUNIT') && !\OC::$CLI) {
 	$pathInfo = \OC::$server->getRequest()->getPathInfo();
