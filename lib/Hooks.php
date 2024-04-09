@@ -33,9 +33,9 @@ class Hooks {
 	}
 
 	public static function userDelete($params) {
-		$customGroupsDb = \OC::$server->query(CustomGroupsDatabaseHandler::class);
-		foreach ($customGroupsDb->getUserMemberships($params['uid'], null) as $customgroup) {
-			$customGroupsDb->removeFromGroup($params['uid'], $customgroup['group_id']);
+		$customGroupsDbHandler = \OC::$server->query(CustomGroupsDatabaseHandler::class);
+		foreach ($customGroupsDbHandler->getUserMemberships($params['uid'], null) as $customGroup) {
+			$customGroupsDbHandler->removeFromGroup($params['uid'], $customGroup['group_id']);
 		}
 	}
 }
