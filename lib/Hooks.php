@@ -35,10 +35,10 @@ class Hooks {
 	public static function userDelete($params) {
 		$customGroupsDbHandler = \OC::$server->query(CustomGroupsDatabaseHandler::class);
 		foreach ($customGroupsDbHandler->getUserMemberships($params['uid'], null) as $customGroup) {
-			$members = $customGroupsDbHandler->getGroupMembers($customgroup['group_id']);
+			$members = $customGroupsDbHandler->getGroupMembers($customGroup['group_id']);
 			if (\count($members) === 1 && $members[0]['user_id'] === $params['uid']) {
 				// removing custom group as deleted user is the only member/admin left
-				$customGroupsDbHandler->deleteGroup($customgroup['group_id']);
+				$customGroupsDbHandler->deleteGroup($customGroup['group_id']);
 			}
 			$customGroupsDbHandler->removeFromGroup($params['uid'], $customGroup['group_id']);
 		}
