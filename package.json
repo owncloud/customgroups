@@ -14,7 +14,7 @@
     "handlebars": "^4.7.8",
     "jasmine-core": "~5.1.2",
     "jasmine-sinon": "^0.4.0",
-    "jsdoc": "~4.0.2",
+    "jsdoc": "~4.0.3",
     "jshint": "*",
     "karma": "~6.4.3",
     "karma-chrome-launcher": "^3.2.0",
