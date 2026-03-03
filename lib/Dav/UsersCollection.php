@@ -24,7 +24,6 @@ namespace OCA\CustomGroups\Dav;
 use OCP\IConfig;
 use Sabre\DAV\ICollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
 use OCA\CustomGroups\Service\MembershipHelper;
@@ -101,7 +100,7 @@ class UsersCollection implements ICollection {
 	 * Returns the given user's memberships
 	 *
 	 * @param string $name user id
-	 * @return CustomGroupMembershipCollection user membership collection
+	 * @return GroupsCollection user membership collection
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChild($name) {
@@ -139,12 +138,10 @@ class UsersCollection implements ICollection {
 	public function childExists($name) {
 		try {
 			$this->getChild($name);
+			return true;
 		} catch (Forbidden $e) {
 			return false;
-		} catch (NotFound $e) {
-			return false;
 		}
-		return true;
 	}
 
 	/**
@@ -180,7 +177,7 @@ class UsersCollection implements ICollection {
 	/**
 	 * Returns null
 	 *
-	 * @return int null
+	 * @return int|null null
 	 */
 	public function getLastModified() {
 		return null;

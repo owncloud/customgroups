@@ -28,7 +28,7 @@ class CSVExportPlugin extends DAV\ServerPlugin {
 	 * @throws DAV\Exception\NotFound
 	 * @throws VObject\InvalidDataException
 	 *
-	 * @return bool
+	 * @return bool|void
 	 */
 	public function httpGet(RequestInterface $request, ResponseInterface $response) {
 		$queryParams = $request->getQueryParameters();
@@ -73,7 +73,7 @@ class CSVExportPlugin extends DAV\ServerPlugin {
 					$userInGroup->getUserId(),
 					$userInGroup->getRole(),
 				]) === false) {
-				return false;
+				return "";
 			}
 		}
 		\rewind($f);

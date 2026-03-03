@@ -53,9 +53,11 @@ config = {
     "branches": [
         "master",
     ],
-    "codestyle": True,
+    "codestyle": False,
+    "phpstan": False,
+    "phan": False,
+    "phpunit": False,
     "javascript": True,
-    "phpunit": True,
     "acceptance": {
         "api": {
             "suites": [

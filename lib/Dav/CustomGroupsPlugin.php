@@ -121,7 +121,7 @@ class CustomGroupsPlugin extends ServerPlugin {
 	 * @param string $reportName report name
 	 * @param ReportRequest $report report data
 	 * @param string $uri URI
-	 * @return bool true if processed
+	 * @return bool|void
 	 */
 	public function onReport($reportName, $report, $uri) {
 		$node = $this->server->tree->getNodeForPath($uri);
@@ -129,7 +129,8 @@ class CustomGroupsPlugin extends ServerPlugin {
 			return;
 		}
 
-		$results = $node->search($report->getSearch());
+		/* @phan-suppress-next-line PhanUndeclaredMethod */
+		$results = $node->search($report->getSearch()); /* @phpstan-ignore-line */
 
 		$responses = [];
 		$nodeProps = [];

@@ -135,9 +135,6 @@ class Search {
 	 * @param int $roleFilter role as integer
 	 */
 	public function setRoleFilter($roleFilter) {
-		if ($roleFilter === '') {
-			$roleFilter = null;
-		}
 		$this->roleFilter = $roleFilter;
 	}
 

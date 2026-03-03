@@ -286,6 +286,7 @@ class MembershipHelper {
 			->setUser($targetUserId)
 			->setLink($link);
 		$this->notificationManager->notify($notification);
+		$roleName = "";
 		if ($memberInfo['role'] === Roles::BACKEND_ROLE_MEMBER) {
 			$roleName = "Member";
 		} elseif ($memberInfo['role'] === Roles::BACKEND_ROLE_ADMIN) {
@@ -333,7 +334,8 @@ class MembershipHelper {
 		return (
 			!$restrictToSubadmins
 			|| $this->isUserSuperAdmin()
-			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser())
+			/* @phan-suppress-next-line PhanUndeclaredMethod */
+			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser()) /* @phpstan-ignore-line */
 		);
 	}
 

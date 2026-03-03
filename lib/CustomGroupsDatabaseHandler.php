@@ -74,8 +74,8 @@ class CustomGroupsDatabaseHandler {
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->execute();
 
-		$result = $cursor->fetch();
-		$cursor->closeCursor();
+		$result = $cursor->fetchAssociative();
+		$cursor->free();
 
 		return $result ? true : false;
 	}
@@ -99,8 +99,8 @@ class CustomGroupsDatabaseHandler {
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($uid)))
 			->execute();
 
-		$result = $cursor->fetch();
-		$cursor->closeCursor();
+		$result = $cursor->fetchAssociative();
+		$cursor->free();
 
 		return $result ? true : false;
 	}
@@ -115,6 +115,7 @@ class CustomGroupsDatabaseHandler {
 	 */
 	public function getUserMemberships($uid, $search = null) {
 		$qb = $this->dbConn->getQueryBuilder();
+		/* @phpstan-ignore-next-line */
 		$qb->select('m.group_id', 'm.user_id', 'm.role', 'g.uri', 'g.display_name')
 			->from('custom_group_member', 'm')
 			->from('custom_group', 'g')
@@ -127,13 +128,13 @@ class CustomGroupsDatabaseHandler {
 		$cursor = $qb->execute();
 
 		$results = [];
-		while ($row = $cursor->fetch()) {
+		while ($row = $cursor->fetchAssociative()) {
 			$result = $this->formatMemberInfo($row);
 			$result['uri'] = $row['uri'];
 			$result['display_name'] = $row['display_name'];
 			$results[] = $result;
 		}
-		$cursor->closeCursor();
+		$cursor->free();
 
 		return $results;
 	}
@@ -156,8 +157,8 @@ class CustomGroupsDatabaseHandler {
 		$this->applySearch($qb, $search, 'display_name');
 
 		$cursor = $qb->execute();
-		$groups = $cursor->fetchAll();
-		$cursor->closeCursor();
+		$groups = $cursor->fetchAllAssociative();
+		$cursor->free();
 		return $groups;
 	}
 
@@ -197,8 +198,8 @@ class CustomGroupsDatabaseHandler {
 			->from('custom_group')
 			->where($qb->expr()->eq($field, $qb->createNamedParameter($fieldValue)))
 			->execute();
-		$result = $cursor->fetch();
-		$cursor->closeCursor();
+		$result = $cursor->fetchAssociative();
+		$cursor->free();
 
 		if (!$result) {
 			return null;
@@ -222,8 +223,8 @@ class CustomGroupsDatabaseHandler {
 			->orderBy('display_name', 'ASC')
 			->execute();
 
-		$results = $cursor->fetchAll();
-		$cursor->closeCursor();
+		$results = $cursor->fetchAllAssociative();
+		$cursor->free();
 
 		return $results;
 	}
@@ -245,7 +246,7 @@ class CustomGroupsDatabaseHandler {
 	 *
 	 * @param string $uri group URI
 	 * @param string $displayName display name
-	 * @return int group id
+	 * @return int|null group id
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
 	public function createGroup($uri, $displayName = null) {
@@ -273,7 +274,7 @@ class CustomGroupsDatabaseHandler {
 	 * Deletes the group with the given id
 	 *
 	 * @param int $gid numeric group id
-	 * @return true if group was deleted, false otherwise
+	 * @return bool if group was deleted, false otherwise
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
 	public function deleteGroup($gid) {
@@ -373,10 +374,10 @@ class CustomGroupsDatabaseHandler {
 		$cursor = $qb->execute();
 
 		$results = [];
-		while ($row = $cursor->fetch()) {
+		while ($row = $cursor->fetchAssociative()) {
 			$results[] = $this->formatMemberInfo($row);
 		}
-		$cursor->closeCursor();
+		$cursor->free();
 
 		return $results;
 	}
@@ -385,8 +386,8 @@ class CustomGroupsDatabaseHandler {
 	 * Returns a specific group member info
 	 *
 	 * @param int $gid numeric group id
-	 * @param int $uid user id
-	 * @return array member info
+	 * @param string $uid user id
+	 * @return array|null member info
 	 * @throws \Doctrine\DBAL\Exception\DriverException in case of database exception
 	 */
 	public function getGroupMemberInfo($gid, $uid) {
@@ -398,8 +399,8 @@ class CustomGroupsDatabaseHandler {
 			->orderBy('user_id', 'ASC')
 			->execute();
 
-		$result = $cursor->fetchAll();
-		$cursor->closeCursor();
+		$result = $cursor->fetchAllAssociative();
+		$cursor->free();
 
 		if (empty($result)) {
 			return null;

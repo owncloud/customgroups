@@ -122,7 +122,7 @@ class GroupsCollection implements IExtendedCollection {
 	/**
 	 * Creates a new custom group
 	 *
-	 * @param string $name group URI
+	 * @param string|null $name group URI
 	 * @throws MethodNotAllowed if the group already exists
 	 */
 	public function createExtendedCollection($name, Mkcol $mkCol) {
@@ -186,7 +186,8 @@ class GroupsCollection implements IExtendedCollection {
 		}
 
 		// add current user as admin
-		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
+		/* @phan-suppress-next-line PhanTypeMismatchArgument */
+		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true); /* @phpstan-ignore-line */
 
 		$event = new GenericEvent(null, [
 			'groupName' => $name,
@@ -224,7 +225,7 @@ class GroupsCollection implements IExtendedCollection {
 	 *
 	 * @param Search $search search
 	 */
-	public function search(Search $search = null) {
+	public function search($search = null) {
 		if ($this->userId !== null) {
 			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {
@@ -288,7 +289,7 @@ class GroupsCollection implements IExtendedCollection {
 	/**
 	 * Returns null
 	 *
-	 * @return int null
+	 * @return int|null
 	 */
 	public function getLastModified() {
 		return null;

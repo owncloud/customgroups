@@ -150,7 +150,7 @@ class CustomGroupsBackend implements \OCP\GroupInterface {
 
 		$group = $this->handler->getGroupByUri($uri);
 		if ($group === null) {
-			return null;
+			return [];
 		}
 
 		// not exposed to regular user management
