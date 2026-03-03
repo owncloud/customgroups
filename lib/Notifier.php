@@ -92,7 +92,7 @@ class Notifier implements INotifier {
 			}
 			if ($notification->getMessage() === 'changed_member_role') {
 				list($user, $group, $role) = $notification->getMessageParameters();
-				$roleName = $this->formatRole($l, $role);
+				$roleName = $this->formatRole($l, (int)$role);
 				$notification->setParsedMessage(
 					$l->t('"%1$s" assigned the "%3$s" role for the group "%2$s" to you.', [$user, $group, $roleName])
 				);

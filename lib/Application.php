@@ -41,7 +41,7 @@ class Application extends App {
 	 */
 	public function registerNotifier() {
 		$manager = $this->getContainer()->getServer()->getNotificationManager();
-		$manager->registerNotifier(function () use ($manager) {
+		$manager->registerNotifier(function () {
 			return $this->getContainer()->query('\OCA\CustomGroups\Notifier');
 		}, function () {
 			$l = \OC::$server->getL10N('customgroups');

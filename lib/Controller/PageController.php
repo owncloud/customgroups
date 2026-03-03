@@ -110,7 +110,7 @@ class PageController extends Controller {
 
 		$customGroupMemberIds = \array_map(function ($entry) {
 			return $entry['user_id'];
-		}, $this->handler->getGroupMembers($customGroupId));
+		}, $this->handler->getGroupMembers((int)$customGroupId));
 
 		$userGroups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
 		foreach ($userGroups as $userGroup) {
@@ -261,7 +261,7 @@ class PageController extends Controller {
 		if ($groupInfo === null) {
 			return new DataResponse(
 				[
-					'message' => (string)$this->l10n->t('Group with uri "%s" not found', [$group])
+					'message' => "Group with uri \"$group\" not found"
 				],
 				Http::STATUS_NOT_FOUND
 			);

@@ -142,7 +142,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	/**
 	 * Returns null
 	 *
-	 * @return int null
+	 * @return int|null
 	 */
 	public function getLastModified() {
 		return null;
@@ -216,6 +216,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 			'groupId' => $groupId,
 			'user' => $userId]);
 		$this->dispatcher->dispatch($event, '\OCA\CustomGroups::addUserToGroup');
+		return null;
 	}
 
 	/**
@@ -253,7 +254,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	/**
 	 * Returns a list of all memberships
 	 *
-	 * @return CustomGroupMemberNode[] list of memberships
+	 * @return MembershipNode[] list of memberships
 	 * @throws Forbidden if the current user has insufficient permissions
 	 */
 	public function getChildren() {
@@ -291,7 +292,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 	 * Update the display name.
 	 * Returns 403 status code if the current user has insufficient permissions.
 	 *
-	 * @param string $displayName display name to set
+	 * @param string|null $displayName display name to set
 	 * @return bool|int or status code
 	 * @throws ValidationException when group name is empty or starts with a space or less than 2 chars long
 	 */

@@ -91,6 +91,7 @@ class GuestIntegrationHelper {
 		# test if domain is black listed
 		$controller = $this->getGuestUsersController();
 		if ($controller && method_exists($controller, 'isDomainBlocked')) {
+			/** @phpstan-ignore-next-line */
 			return !$controller->isDomainBlocked($email);
 		}
 		return true;
@@ -103,6 +104,7 @@ class GuestIntegrationHelper {
 		$controller = $this->getGuestUsersController();
 		$mail = $this->getGuestMail();
 		if ($controller && $mail) {
+			/** @phpstan-ignore-next-line */
 			$resp = $controller->create($userId, '');
 			if ($resp->getStatus() === 201) {
 				$user = $this->userManager->get($userId);
@@ -121,6 +123,7 @@ class GuestIntegrationHelper {
 						$uid = $this->userSession->getUser()->getUID();
 
 						// send invitation
+						/** @phpstan-ignore-next-line */
 						$mail->sendGuestPlainInviteMail(
 							$user->getUID(),
 							$uid,
@@ -136,16 +139,20 @@ class GuestIntegrationHelper {
 		return null;
 	}
 
+	/** @phpstan-ignore-next-line */
 	private function getGuestUsersController(): ?UsersController {
 		try {
+			/** @phpstan-ignore-next-line */
 			return \OC::$server->query(UsersController::class);
 		} catch (QueryException $e) {
 		}
 		return null;
 	}
 
+	/** @phpstan-ignore-next-line */
 	private function getGuestMail(): ?Mail {
 		try {
+			/** @phpstan-ignore-next-line */
 			return \OC::$server->query(Mail::class);
 		} catch (QueryException $e) {
 		}

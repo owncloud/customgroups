@@ -193,7 +193,7 @@ class MembershipNode implements \Sabre\DAV\INode, \Sabre\DAV\IProperties {
 	/**
 	 * Returns null
 	 *
-	 * @return int null
+	 * @return int|null
 	 */
 	public function getLastModified() {
 		return null;

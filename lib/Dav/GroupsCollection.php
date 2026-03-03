@@ -122,7 +122,7 @@ class GroupsCollection implements IExtendedCollection {
 	/**
 	 * Creates a new custom group
 	 *
-	 * @param string $name group URI
+	 * @param string|null $name group URI
 	 * @throws MethodNotAllowed if the group already exists
 	 */
 	public function createExtendedCollection($name, Mkcol $mkCol) {
@@ -186,6 +186,7 @@ class GroupsCollection implements IExtendedCollection {
 		}
 
 		// add current user as admin
+		/** @phpstan-ignore-next-line */
 		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
 
 		$event = new GenericEvent(null, [
@@ -288,7 +289,7 @@ class GroupsCollection implements IExtendedCollection {
 	/**
 	 * Returns null
 	 *
-	 * @return int null
+	 * @return int|null
 	 */
 	public function getLastModified() {
 		return null;
