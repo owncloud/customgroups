@@ -139,7 +139,7 @@ class UsersCollection implements ICollection {
 		try {
 			$this->getChild($name);
 			return true;
-		} catch (\Exception $e) {
+		} catch (Forbidden $e) {
 			return false;
 		}
 	}
