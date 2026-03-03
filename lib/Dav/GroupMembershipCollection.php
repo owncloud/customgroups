@@ -28,7 +28,6 @@ use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\PreconditionFailed;
-use OCA\CustomGroups\Search;
 use OCA\CustomGroups\Service\MembershipHelper;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use OCP\IGroupManager;
@@ -261,7 +260,7 @@ class GroupMembershipCollection implements \Sabre\DAV\ICollection, \Sabre\DAV\IP
 		return $this->search();
 	}
 
-	public function search(Search $search = null) {
+	public function search($search = null) {
 		$groupId = $this->groupInfo['group_id'];
 		if (!$this->helper->isUserMember($groupId)
 			&& !$this->helper->isUserAdmin($groupId)) {

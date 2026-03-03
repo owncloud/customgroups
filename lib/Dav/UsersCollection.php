@@ -24,7 +24,6 @@ namespace OCA\CustomGroups\Dav;
 use OCP\IConfig;
 use Sabre\DAV\ICollection;
 use OCA\CustomGroups\CustomGroupsDatabaseHandler;
-use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\MethodNotAllowed;
 use Sabre\DAV\Exception\Forbidden;
 use OCA\CustomGroups\Service\MembershipHelper;

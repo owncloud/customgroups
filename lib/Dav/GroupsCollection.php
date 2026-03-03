@@ -186,8 +186,8 @@ class GroupsCollection implements IExtendedCollection {
 		}
 
 		// add current user as admin
-		/** @phpstan-ignore-next-line */
-		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true);
+		/* @phan-suppress-next-line PhanTypeMismatchArgument */
+		$this->groupsHandler->addToGroup($this->helper->getUserId(), $groupId, true); /* @phpstan-ignore-line */
 
 		$event = new GenericEvent(null, [
 			'groupName' => $name,
@@ -225,7 +225,7 @@ class GroupsCollection implements IExtendedCollection {
 	 *
 	 * @param Search $search search
 	 */
-	public function search(Search $search = null) {
+	public function search($search = null) {
 		if ($this->userId !== null) {
 			$allGroups = $this->groupsHandler->getUserMemberships($this->userId, $search);
 		} else {

@@ -129,8 +129,8 @@ class CustomGroupsPlugin extends ServerPlugin {
 			return;
 		}
 
-		/* @phpstan-ignore-next-line */
-		$results = $node->search($report->getSearch());
+		/* @phan-suppress-next-line PhanUndeclaredMethod */
+		$results = $node->search($report->getSearch()); /* @phpstan-ignore-line */
 
 		$responses = [];
 		$nodeProps = [];

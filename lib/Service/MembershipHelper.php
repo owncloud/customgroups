@@ -334,8 +334,8 @@ class MembershipHelper {
 		return (
 			!$restrictToSubadmins
 			|| $this->isUserSuperAdmin()
-			/** @phpstan-ignore-next-line */
-			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser())
+			/* @phan-suppress-next-line PhanUndeclaredMethod */
+			|| $this->groupManager->getSubAdmin()->isSubAdmin($this->userSession->getUser()) /* @phpstan-ignore-line */
 		);
 	}
 
