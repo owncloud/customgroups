@@ -44,7 +44,6 @@ OC.L10N.register(
     "Close" : "סגירה",
     "Role" : "תפקיד",
     "Custom groups" : "קבוצות מותאמות אישית",
-    "Group with uri \"%s\" not found" : "קבוצה בעלת uri \"%s\" לא אותרה",
     "Added to group \"%2$s\"." : "נוסף לקבוצה \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "נוספת לקבוצה \"%2$s\" על ידי \"%1$s\".",
     "Removed from group \"%2$s\"." : "הוסר מקבוצה \"%2$s\".",

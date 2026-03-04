@@ -53,7 +53,6 @@ OC.L10N.register(
     "Close" : "Stäng",
     "Role" : "Roll",
     "Custom groups" : "Anpassade grupper",
-    "Group with uri \"%s\" not found" : "Grupp med uri \"%s\" hittades inte",
     "Added to group \"%2$s\"." : "Tillagd till gruppen \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Du har blivit tillagd till gruppen \"%2$s\" av \"%1$s\".",
     "Removed from group \"%2$s\"." : "Borttagen ifrån gruppen \"%2$s\".",

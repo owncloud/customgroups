@@ -44,7 +44,6 @@ OC.L10N.register(
     "Close" : "إغلاق",
     "Role" : "الدور",
     "Custom groups" : "مجموعات مخصصة",
-    "Group with uri \"%s\" not found" : "لم يتم العثور على مجموعة بعنوان uri \"%s\"",
     "Added to group \"%2$s\"." : "تمت الإضافة إلى مجموعة  \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "تمت إضافتك إلى المجموعة \"%2$s\" بـ \"%1$s\".",
     "Removed from group \"%2$s\"." : "تمت الإزالة من المجموعة \"%2$s\".",

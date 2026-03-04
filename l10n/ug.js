@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "ياپ",
     "Role" : "رولى",
     "Custom groups" : "ئىختىيارى گۇرۇپپىلار",
-    "Group with uri \"%s\" not found" : "Uri \"% s\" بىلەن گۇرۇپپا تېپىلمىدى",
     "Added to group \"%2$s\"." : "گۇرۇپپىغا \"% 2 $ s\" قوشۇلدى.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "سىز «% 2 $ s» گۇرۇپپىسىغا «% 1 $ s» قوشۇلدى.",
     "Removed from group \"%2$s\"." : "\"% 2 $ s\" گۇرۇپپىدىن چىقىرىۋېتىلدى.",

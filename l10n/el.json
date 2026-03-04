@@ -51,7 +51,6 @@
     "Close" : "Κλείσιμο",
     "Role" : "Ρόλος",
     "Custom groups" : "Προσαρμοσμένες ομάδες",
-    "Group with uri \"%s\" not found" : "Δεν βρέθηκε η ομάδα με uri \"%s\"",
     "Added to group \"%2$s\"." : "Προσθήκη την ομάδα \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Ο \"%1$s\" σας πρόσθεσε στην ομάδα \"%2$s\".",
     "Removed from group \"%2$s\"." : "Αφαίρεση από την ομάδα \"%2$s\".",

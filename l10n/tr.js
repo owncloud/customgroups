@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "Kapat",
     "Role" : "Rol",
     "Custom groups" : "Özel gruplar",
-    "Group with uri \"%s\" not found" : "\"%s\" bağlantılı grup bulunamadı",
     "Added to group \"%2$s\"." : "\"%2$s\" grubuna eklendi.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" tarafından \"%2$s\" grubuna eklendiniz.",
     "Removed from group \"%2$s\"." : "\"%2$s\" grubundan çıkarıldı.",

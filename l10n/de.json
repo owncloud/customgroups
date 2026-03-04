@@ -55,7 +55,6 @@
     "Close" : "Schließen",
     "Role" : "Rolle",
     "Custom groups" : "Benutzerdefinierte Gruppen",
-    "Group with uri \"%s\" not found" : "Die Gruppe mit der URL \"%s\" wurde nicht gefunden",
     "Added to group \"%2$s\"." : "Zur Gruppe \"%2$s\" hinzugefügt.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Du wurdest von \"%1$s\" zur Gruppe \"%2$s\" hinzugefügt.",
     "Removed from group \"%2$s\"." : "Aus der Gruppe \"%2$s\" entfernt.",

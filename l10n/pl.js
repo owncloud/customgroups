@@ -44,7 +44,6 @@ OC.L10N.register(
     "Close" : "Zamknij",
     "Role" : "Funkcja",
     "Custom groups" : "Własne grupy",
-    "Group with uri \"%s\" not found" : "Grupa z adresem uri \"%s\" nie została znaleziona",
     "Added to group \"%2$s\"." : "Dodano do grupy \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Zostałeś dodany do grupy \"%2$s\" przez \"%1$s\".",
     "Removed from group \"%2$s\"." : "Usunięto z grupy \"%2$s\".",

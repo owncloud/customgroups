@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "Mbylle",
     "Role" : "Rol",
     "Custom groups" : "Grupe vetjake",
-    "Group with uri \"%s\" not found" : "S’u gjet grup me URI “%s”",
     "Added to group \"%2$s\"." : "U shtua te grupi “%2$s”.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Jeni shtuar te grupi “%2$s” nga “%1$s”.",
     "Removed from group \"%2$s\"." : "U hoq prej grupit “%2$s”.",

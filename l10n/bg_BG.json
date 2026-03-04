@@ -55,7 +55,6 @@
     "Close" : "Затваряне",
     "Role" : "Роля",
     "Custom groups" : "Персонализирани групи",
-    "Group with uri \"%s\" not found" : "Група с uri \"%s\" не е намерена",
     "Added to group \"%2$s\"." : "Към групата е добавен \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Вие сте добавени в групата \"%2$s\" от \"%1$s\".",
     "Removed from group \"%2$s\"." : "От групата е премахнат \"%2$s\".",

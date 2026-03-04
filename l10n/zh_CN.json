@@ -51,7 +51,6 @@
     "Close" : "关闭",
     "Role" : "角色",
     "Custom groups" : "自定义组",
-    "Group with uri \"%s\" not found" : "未找到 URI 为 \"%s\" 的组",
     "Added to group \"%2$s\"." : "添加至组 \"%2$s\"。",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "你已被 \"%1$s\" 加入至组 \"%2$s\"。",
     "Removed from group \"%2$s\"." : "从组 \"%2$s\" 中移除。",

@@ -41,7 +41,6 @@ OC.L10N.register(
     "Close" : "Lukk",
     "Role" : "Rolle",
     "Custom groups" : "Tilpassede grupper",
-    "Group with uri \"%s\" not found" : "Gruppe med uri \"%s\" ikke funnet",
     "Added to group \"%2$s\"." : "Lagt til gruppen \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Du er blitt lagt til i gruppe \"%2$s\" av \"%1$s\".",
     "Removed from group \"%2$s\"." : "Fjernet fra gruppen \"%2$s\".",

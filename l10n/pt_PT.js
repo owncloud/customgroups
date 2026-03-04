@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "Fechar",
     "Role" : "Papel",
     "Custom groups" : "Grupos personalizados",
-    "Group with uri \"%s\" not found" : "Não foi encontrado o grupo com o URL \"%s\"",
     "Added to group \"%2$s\"." : "Adicionado ao grupo \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Foi adicionado ao grupo \"%2$s\" por \"%1$s\".",
     "Removed from group \"%2$s\"." : "Removido do grupo \"%2$s\".",

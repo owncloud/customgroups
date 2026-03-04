@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "Закрыть",
     "Role" : "Роль",
     "Custom groups" : "Пользовательские группы",
-    "Group with uri \"%s\" not found" : "Не найдена группа с адресом \"%s\"",
     "Added to group \"%2$s\"." : "Добавлено в группу \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" добавил вас в группу \"%2$s\".",
     "Removed from group \"%2$s\"." : "Удалён из группы \"%2$s\".",

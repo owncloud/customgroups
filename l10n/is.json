@@ -40,7 +40,6 @@
     "Close" : "Loka",
     "Role" : "Hlutverk",
     "Custom groups" : "Sérsniðnir hópar",
-    "Group with uri \"%s\" not found" : "Hópur með slóðina \"%s\" fannst ekki",
     "Added to group \"%2$s\"." : "Bætt í hópinn \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Þér hefur verið bætt í hópinn \"%2$s\" af \"%1$s\".",
     "Removed from group \"%2$s\"." : "Fjarlægður úr hópnum \"%2$s\".",

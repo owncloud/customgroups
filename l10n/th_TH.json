@@ -51,7 +51,6 @@
     "Close" : "ปิด",
     "Role" : "กฎ",
     "Custom groups" : "กำหนดกลุ่มเอง",
-    "Group with uri \"%s\" not found" : "ไม่พบกลุ่มที่มี url \"%s\" นี้ ",
     "Added to group \"%2$s\"." : "เพิ่ม \"%2$s\" ลงในกลุ่มแล้ว",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "คุณได้ถูกเพิ่มในกลุ่ม \"%2$s\" โดย \"%1$s\"",
     "Removed from group \"%2$s\"." : "ลบ \"%2$s\" ออกจากกลุ่มแล้ว",

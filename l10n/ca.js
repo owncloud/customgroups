@@ -43,7 +43,6 @@ OC.L10N.register(
     "Close" : "Tanca",
     "Role" : "Rol",
     "Custom groups" : "Grups personalitzats",
-    "Group with uri \"%s\" not found" : "No s'ha trobat el grup \"%s\" ",
     "Added to group \"%2$s\"." : "Afegit al grup \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Se t'ha afegit al grup \"%2$s\" per \"%1$s\".",
     "Removed from group \"%2$s\"." : "Eliminat del grup \"%2$s\".",

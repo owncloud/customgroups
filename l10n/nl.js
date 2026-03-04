@@ -42,7 +42,6 @@ OC.L10N.register(
     "Close" : "Sluiten",
     "Role" : "Rol",
     "Custom groups" : "Aangepaste groepen",
-    "Group with uri \"%s\" not found" : "Groep met uri \"%s\" niet gevonden",
     "Added to group \"%2$s\"." : "Toegevoegd aan groep \"%2$s\".",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "U bent door \"%1$s\" toegevoegd aan groep \"%2$s\".",
     "Removed from group \"%2$s\"." : "Verwijderd uit groep \"%2$s\".",

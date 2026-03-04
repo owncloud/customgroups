@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "닫기",
     "Role" : "지위",
     "Custom groups" : "사용자 정의 그룹",
-    "Group with uri \"%s\" not found" : "URI \"%s\"인 그룹을 찾을 수 없음",
     "Added to group \"%2$s\"." : "그룹 \"%2$s\"에 추가되었습니다.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" 님이 그룹 \"%2$s\"에 추가했습니다.",
     "Removed from group \"%2$s\"." : "그룹 \"%2$s\"에서 삭제되었습니다.",

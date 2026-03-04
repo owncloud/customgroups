@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "ປິດ",
     "Role" : "ບົດບາດ",
     "Custom groups" : "ກຸ່ມທີ່ກຳນົດເອງ",
-    "Group with uri \"%s\" not found" : "ບໍ່ພົບກຸ່ມທີ່ມີ URI ແມ່ນ \"%s\"",
     "Added to group \"%2$s\"." : "ໄດ້ເພີ່ມເຂົ້າກຸ່ມ \"%2$s\" ແລ້ວ.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "ທ່ານຖືກເພີ່ມເຂົ້າກຸ່ມ \"%2$s\" ໂດຍ \"%1$s\".",
     "Removed from group \"%2$s\"." : "ໄດ້ຖືກເອົາອອກຈາກກຸ່ມ \"%2$s\" ແລ້ວ.",

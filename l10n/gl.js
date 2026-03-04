@@ -44,7 +44,6 @@ OC.L10N.register(
     "Close" : "Pechar",
     "Role" : "Rol",
     "Custom groups" : "Grupos personalizados",
-    "Group with uri \"%s\" not found" : "Non se atopa o grupo co URI «%s» ",
     "Added to group \"%2$s\"." : "Engadido ao grupo «%2$s».",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "Vostede foi engadido ao grupo «%2$s» por «%1$s».",
     "Removed from group \"%2$s\"." : "Retirado do grupo «%2$s».",

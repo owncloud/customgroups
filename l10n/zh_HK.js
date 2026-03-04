@@ -53,7 +53,6 @@ OC.L10N.register(
     "Close" : "關閉",
     "Role" : "角色",
     "Custom groups" : "自定義群組",
-    "Group with uri \"%s\" not found" : "群組與uri \"%s\" 未找到",
     "Added to group \"%2$s\"." : "已添加到群組\"%2$s\"。",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "您已被添加到該群組\"%2$s\" 通過 \"%1$s\"。",
     "Removed from group \"%2$s\"." : "從群組中刪除\"%2$s\"。",

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Leave this group" : "Talde hau utzi",
     "Close" : "Itxi",
     "Custom groups" : "Talde pertsonalizatuak",
-    "Group with uri \"%s\" not found" : "\"%s\" uri-a duen taldea ez da aurkitu",
     "Added to group \"%2$s\"." : "\"%2$s\" taldera sartua",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%2$s\" taldera sartu zaitu \"%1$s\"-(e)k",
     "Removed from group \"%2$s\"." : "\"%2$s\" taldetik aterata.",

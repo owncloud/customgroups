@@ -41,7 +41,6 @@
     "Leave this group" : "Pamest šo grupu",
     "Close" : "Aizvērt",
     "Custom groups" : "Pielāgotas grupas",
-    "Group with uri \"%s\" not found" : "Grupa ar nosaukumu \"%s\" netika atrasta",
     "Added to group \"%2$s\"." : "Pievienots \"%2$s\" grupai.",
     "You have been added to the group \"%2$s\" by \"%1$s\"." : "\"%1$s\" jūs pievienoja grupai \"%2$s\" ",
     "Removed from group \"%2$s\"." : "Noņemts no grupas \"%2$s\".",
