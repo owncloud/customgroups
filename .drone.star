@@ -64,6 +64,9 @@ config = {
                 "apiCustomGroups",
                 "apiShareExpPerm",
             ],
+            "servers": [
+                "daily-master-qa",
+            ],
         },
     },
 }
