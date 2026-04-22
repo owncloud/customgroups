@@ -63,6 +63,11 @@ clean: clean-deps $(clean_rules)
 .PHONY: test
 test: $(test_rules)
 
+# Installs dependencies and does any build actions needed for the app to run in CI
+.PHONY: ci
+ci: vendor js-templates
+	@echo dependencies and build actions for CI are completed
+
 #
 # Dependency management
 #--------------------------------------
