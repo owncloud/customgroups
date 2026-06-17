@@ -26,6 +26,14 @@ use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Cjm\Behat\StepThroughExtension\ServiceContainer\StepThroughExtension;
 
+$featureContextArgs = [
+	'baseUrl' => 'http://localhost:8080',
+	'adminUsername' => 'admin',
+	'adminPassword' => 'admin',
+	'regularUserPassword' => 123456,
+	'ocPath' => 'apps/testing/api/v1/occ',
+];
+
 return (new Config())
 	->withProfile(
 		(new Profile(
@@ -44,13 +52,7 @@ return (new Config())
 					)
 					->addContext(
 						'FeatureContext',
-						[
-						'baseUrl' => 'http://localhost:8080',
-						'adminUsername' => 'admin',
-						'adminPassword' => 'admin',
-						'regularUserPassword' => 123456,
-						'ocPath' => 'apps/testing/api/v1/occ',
-						]
+						$featureContextArgs
 					)
 					->addContext(
 						'WebDavPropertiesContext'
@@ -64,13 +66,7 @@ return (new Config())
 					)
 					->addContext(
 						'FeatureContext',
-						[
-						'baseUrl' => 'http://localhost:8080',
-						'adminUsername' => 'admin',
-						'adminPassword' => 'admin',
-						'regularUserPassword' => 123456,
-						'ocPath' => 'apps/testing/api/v1/occ',
-						]
+						$featureContextArgs
 					)
 					->addContext(
 						'WebDavPropertiesContext'
