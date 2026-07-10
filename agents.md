@@ -54,6 +54,12 @@ make test-php-style-fix
 # Static analysis
 make test-php-phpstan
 
+# Test (PHP unit)
+make test-php-unit
+
+# Test (API Acceptance)
+make test-acceptance-api
+
 # Show available targets
 make help
 ```
