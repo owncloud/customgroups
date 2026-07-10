@@ -19,7 +19,7 @@ This file provides context for AI coding agents (Claude Code, GitHub Copilot, Cu
 - `img/` - App icons
 - `rules/` - Custom rules
 - `tools/` - Development tools
-- `tests/` - PHP and JS test suites
+- `tests/` - PHP, JS and acceptance test suites
 - `Makefile` - Build and test automation
 - `composer.json` - PHP dependencies
 - `package.json` - JavaScript dependencies
