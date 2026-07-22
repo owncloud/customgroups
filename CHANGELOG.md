@@ -9,12 +9,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [0.10.2] - 2026-07-22
 
 ### Changed
-- Maintenance release re-signed with the ownCloud G2 code-signing certificate for the ownCloud 11.0.0 release.
+- Re-release to correct a build error in the previous package for the ownCloud 11.0.0 release.
 
 ## [0.10.1] - 2026-07-22
 
 ### Changed
-- Maintenance release re-signed with the ownCloud G2 code-signing certificate for the ownCloud 11.0.0 release.
+- Re-release to correct a build error in the previous package for the ownCloud 11.0.0 release.
 
 ## [0.10.0] - 2026-06-29
 
