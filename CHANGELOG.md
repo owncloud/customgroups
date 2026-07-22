@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 
+## [0.10.2] - 2026-07-22
+
+### Changed
+- Maintenance release re-signed with the ownCloud G2 code-signing certificate for the ownCloud 11.0.0 release.
+
 ## [0.10.1] - 2026-07-22
 
 ### Changed
@@ -224,7 +229,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fixes spinner issues - [#47](https://github.com/owncloud/customgroups/issues/47)
 
-[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.10.1..master
+[Unreleased]: https://github.com/owncloud/customgroups/compare/v0.10.2..master
+[0.10.2]: https://github.com/owncloud/customgroups/compare/v0.10.1..v0.10.2
 [0.10.1]: https://github.com/owncloud/customgroups/compare/v0.10.0..v0.10.1
 [0.10.0]: https://github.com/owncloud/customgroups/compare/v0.9.1..v0.10.0
 [0.9.1]: https://github.com/owncloud/customgroups/compare/v0.9.0...v0.9.1
