@@ -39,6 +39,8 @@ class CustomGroupsBackendTest extends \Test\TestCase {
 	 */
 	private $handler;
 
+	private CustomGroupsBackend $backend;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->handler = $this->createMock(CustomGroupsDatabaseHandler::class);

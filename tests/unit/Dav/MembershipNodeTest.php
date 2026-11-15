@@ -88,7 +88,6 @@ class MembershipNodeTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturn($user);
 
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
 			->setMethods(['notifyUserRoleChange', 'notifyUserRemoved', 'isTheOnlyAdmin'])
 			->setConstructorArgs([
@@ -99,7 +98,7 @@ class MembershipNodeTest extends \Test\TestCase {
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
 				$this->config,
-				$this->guestIntegrationHelper
+				$this->createMock(GuestIntegrationHelper::class)
 			])
 			->getMock();
 

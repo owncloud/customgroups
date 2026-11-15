@@ -105,7 +105,6 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 		);
 
 		$this->config = $this->createMock(IConfig::class);
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = $this->getMockBuilder(MembershipHelper::class)
 			->setMethods(['notifyUser', 'isGroupDisplayNameAvailable'])
 			->setConstructorArgs([
@@ -116,7 +115,7 @@ class GroupMembershipCollectionTest extends \Test\TestCase {
 				$this->createMock(IManager::class),
 				$this->createMock(IURLGenerator::class),
 				$this->config,
-				$this->guestIntegrationHelper
+				$this->createMock(GuestIntegrationHelper::class)
 			])
 			->getMock();
 

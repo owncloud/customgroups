@@ -93,7 +93,6 @@ class GroupsCollectionTest extends \Test\TestCase {
 				['customgroups', 'only_subadmin_can_create', 'false', false],
 			]);
 
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 		$this->helper = new MembershipHelper(
 			$this->handler,
 			$this->userSession,
@@ -102,7 +101,7 @@ class GroupsCollectionTest extends \Test\TestCase {
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
 			$this->config,
-			$this->guestIntegrationHelper
+			$this->createMock(GuestIntegrationHelper::class)
 		);
 		$this->collection = new GroupsCollection(
 			$this->createMock(IGroupManager::class),

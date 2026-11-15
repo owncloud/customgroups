@@ -75,7 +75,6 @@ class PageControllerTest extends \Test\TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$this->pageController = new PageController(
 			'customgroups',
@@ -85,7 +84,7 @@ class PageControllerTest extends \Test\TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->handler,
-			$this->guestIntegrationHelper
+			$this->createMock(GuestIntegrationHelper::class)
 		);
 	}
 

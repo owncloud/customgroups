@@ -64,7 +64,6 @@ class UsersCollectionTest extends \Test\TestCase {
 		$userSession->method('getUser')->willReturn($user);
 
 		$config = $this->createMock(IConfig::class);
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$helper = new MembershipHelper(
 			$handler,
@@ -74,7 +73,7 @@ class UsersCollectionTest extends \Test\TestCase {
 			$this->createMock(IManager::class),
 			$this->createMock(IURLGenerator::class),
 			$config,
-			$this->guestIntegrationHelper
+			$this->createMock(GuestIntegrationHelper::class)
 		);
 
 		$this->collection = new UsersCollection(
