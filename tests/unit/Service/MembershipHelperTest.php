@@ -97,7 +97,6 @@ class MembershipHelperTest extends \Test\TestCase {
 		$userSession
 			->method('getUser')
 			->willReturn($this->user);
-		$this->guestIntegrationHelper = $this->createMock(GuestIntegrationHelper::class);
 
 		$this->helper = new MembershipHelper(
 			$this->handler,
@@ -107,7 +106,7 @@ class MembershipHelperTest extends \Test\TestCase {
 			$this->notificationManager,
 			$urlGenerator,
 			$this->config,
-			$this->guestIntegrationHelper
+			$this->createMock(GuestIntegrationHelper::class)
 		);
 	}
 
